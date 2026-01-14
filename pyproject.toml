@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rugby-ranking"
+version = "0.1.0"
+description = "Bayesian hierarchical models for rugby player and team ranking"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Daniel Williams" }
+]
+dependencies = [
+    "pymc>=5.10",
+    "arviz>=0.17",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "xarray>=2023.0",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "jupyter>=1.0",
+    "ipykernel>=6.0",
+    "black>=23.0",
+    "ruff>=0.1",
+]
+
+[project.scripts]
+rugby-ranking = "rugby_ranking.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["rugby_ranking"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.isort]
+known-first-party = ["rugby_ranking"]
