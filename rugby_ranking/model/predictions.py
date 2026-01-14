@@ -19,20 +19,12 @@ from rugby_ranking.model.core import RugbyModel
 from rugby_ranking.model.data import normalize_team_name
 
 
-# Average points per try-equivalent scoring opportunity
-# Try=5, Conversion~0.7*2=1.4, Penalty~0.3*3=0.9 per match
-# Roughly 5 points per successful try-scoring attack
-POINTS_PER_TRY = 5.0
+# Rugby scoring constants
+CONVERSION_RATE = 0.70  # Typical conversion success rate
+PENALTIES_PER_MATCH = 2.5  # Average penalties per team per match
 
-# Typical number of try-scoring opportunities per team per match
-# Based on observed data: ~3.5 tries per team per match average
-TRIES_PER_TEAM_PER_MATCH = 3.5
-
-# Average conversion rate
-CONVERSION_RATE = 0.70
-
-# Average penalties per match per team
-PENALTIES_PER_MATCH = 2.5
+# Number of players on field per team
+STARTERS = 15
 
 
 @dataclass
@@ -77,11 +69,15 @@ class MatchPredictor:
     """
     Generate match predictions from fitted models.
 
-    The model estimates per-player try-scoring rates. To predict match scores:
-    1. Aggregate player/team effects into a team-level try rate multiplier
-    2. Apply to baseline tries per team (~3.5)
-    3. Convert tries to points (try=5 + conversion~1.4 = 6.4 avg)
-    4. Add penalty contribution (~7.5 points per team)
+    The model estimates per-player try-scoring rates:
+        log(λ_player) = α + β_player + γ_team + θ_position + η_home
+
+    To predict match scores:
+    1. Compute expected tries per player from the model
+    2. Sum across the 15 starters to get team expected tries
+    3. Sample actual tries from Poisson
+    4. Convert to points (try=5 + conversion~1.4 = 6.4 avg)
+    5. Add penalty contribution
     """
 
     def __init__(self, model: RugbyModel, trace: az.InferenceData | None = None):
@@ -90,6 +86,26 @@ class MatchPredictor:
 
         if self.trace is None:
             raise ValueError("No trace available. Fit the model first.")
+
+        # Pre-compute average position effects for teams-only predictions
+        self._compute_position_averages()
+
+    def _compute_position_averages(self):
+        """Pre-compute average position effects for teams-only predictions."""
+        posterior = self.trace.posterior
+
+        # Get theta_position - shape is (chain, draw, n_positions) or (chain, draw, n_score_types, n_positions)
+        theta = posterior["theta_position"].values
+
+        # Handle both single and joint model shapes
+        if theta.ndim == 4:
+            # Joint model: (chain, draw, n_score_types, n_positions)
+            # For now, use first score type (tries)
+            theta = theta[:, :, 0, :]
+
+        # Average position effect across posterior (for positions 1-15)
+        # Shape: (n_positions,)
+        self._theta_mean = theta.mean(axis=(0, 1))[:STARTERS]
 
     def predict_teams_only(
         self,
@@ -122,59 +138,92 @@ class MatchPredictor:
 
         # Extract posterior samples
         posterior = self.trace.posterior
-        n_total = posterior["alpha"].values.size
+
+        # Handle both scalar and array alpha (single vs joint model)
+        alpha_vals = posterior["alpha"].values
+        if alpha_vals.ndim == 3:
+            # Joint model: shape (chain, draw, n_score_types) - use first (tries)
+            alpha_flat = alpha_vals[:, :, 0].flatten()
+        else:
+            alpha_flat = alpha_vals.flatten()
+
+        n_total = len(alpha_flat)
         sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
-        # Flatten and sample
-        gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
-        eta_flat = posterior["eta_home"].values.flatten()
+        # Flatten and sample from posterior
+        gamma_vals = posterior["gamma_team_season"].values
+        # Handle joint model where gamma might have different structure
+        if "gamma_team_season_raw" in posterior:
+            # Joint model uses raw + scaling
+            gamma_raw = posterior["gamma_team_season_raw"].values
+            sigma_team = posterior["sigma_team"].values
+            lambda_team = posterior["lambda_team"].values
+            # Compute effective gamma for tries (index 0)
+            gamma_flat = (sigma_team[:, :, None] * lambda_team[:, :, 0:1] * gamma_raw).reshape(-1, gamma_raw.shape[-1])
+        else:
+            gamma_flat = gamma_vals.reshape(-1, gamma_vals.shape[-1])
+
+        theta_vals = posterior["theta_position"].values
+        if theta_vals.ndim == 4:
+            # Joint model: (chain, draw, n_score_types, n_positions) - use tries
+            theta_flat = theta_vals[:, :, 0, :].reshape(-1, theta_vals.shape[-1])
+        else:
+            theta_flat = theta_vals.reshape(-1, theta_vals.shape[-1])
+
+        eta_vals = posterior["eta_home"].values
+        if eta_vals.ndim == 3:
+            # Joint model: (chain, draw, n_score_types) - use tries
+            eta_flat = eta_vals[:, :, 0].flatten()
+        else:
+            eta_flat = eta_vals.flatten()
+
         sigma_player_flat = posterior["sigma_player"].values.flatten()
 
+        # Sample from posterior
+        alpha = alpha_flat[sample_idx]
         gamma = gamma_flat[sample_idx]
+        theta = theta_flat[sample_idx]
         eta_home = eta_flat[sample_idx]
         sigma_player = sigma_player_flat[sample_idx]
 
-        # Team effects (relative to average team)
+        # Team effects
         home_team_effect = gamma[:, home_idx]
         away_team_effect = gamma[:, away_idx]
 
-        # For teams-only prediction, add uncertainty for unknown player composition
-        # This represents variation in which players actually play
-        player_uncertainty = np.random.normal(0, sigma_player * 0.5, size=n_samples)
+        # Compute expected tries for each team by summing across all 15 positions
+        # For each position, expected tries = exp(alpha + gamma_team + theta_position + eta_home + player_uncertainty)
+        # Since we don't know specific players, we marginalize over average player (beta ~ N(0, sigma_player))
 
-        # Compute team strength multipliers (exponentiated random effects)
-        # These multiply the baseline try rate
-        home_multiplier = np.exp(home_team_effect + eta_home + player_uncertainty)
-        away_multiplier = np.exp(away_team_effect + np.random.normal(0, sigma_player * 0.5, size=n_samples))
+        home_tries_expected = np.zeros(n_samples)
+        away_tries_expected = np.zeros(n_samples)
 
-        # Expected tries for each team
-        home_tries_expected = TRIES_PER_TEAM_PER_MATCH * home_multiplier
-        away_tries_expected = TRIES_PER_TEAM_PER_MATCH * away_multiplier
+        for pos in range(STARTERS):
+            # Player uncertainty for unknown player at this position
+            player_noise_home = np.random.normal(0, sigma_player)
+            player_noise_away = np.random.normal(0, sigma_player)
 
-        # Sample actual tries (Poisson)
+            # Log-rate for this position
+            # Note: theta[:, pos] gives position effect for position pos+1 (0-indexed)
+            home_log_rate = alpha + home_team_effect + theta[:, pos] + eta_home + player_noise_home
+            away_log_rate = alpha + away_team_effect + theta[:, pos] + player_noise_away
+
+            # Expected tries for this position (rate, not count)
+            home_tries_expected += np.exp(home_log_rate)
+            away_tries_expected += np.exp(away_log_rate)
+
+        # Sample actual tries (Poisson) - sum of independent Poissons
         home_tries = np.random.poisson(home_tries_expected)
         away_tries = np.random.poisson(away_tries_expected)
 
         # Convert to points
-        # Tries: 5 points each
-        # Conversions: ~70% success rate, 2 points each
-        # Penalties: add baseline amount with some variance
         home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
         away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
 
         home_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
         away_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
 
-        home_scores = (
-            home_tries * 5 +
-            home_conversions * 2 +
-            home_penalties * 3
-        )
-        away_scores = (
-            away_tries * 5 +
-            away_conversions * 2 +
-            away_penalties * 3
-        )
+        home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
+        away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
 
         return self._build_prediction(home_team, away_team, home_scores, away_scores)
 
@@ -211,39 +260,98 @@ class MatchPredictor:
 
         # Extract posterior samples
         posterior = self.trace.posterior
-        n_total = posterior["alpha"].values.size
+
+        # Handle both scalar and array alpha (single vs joint model)
+        alpha_vals = posterior["alpha"].values
+        if alpha_vals.ndim == 3:
+            alpha_flat = alpha_vals[:, :, 0].flatten()
+        else:
+            alpha_flat = alpha_vals.flatten()
+
+        n_total = len(alpha_flat)
         sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
-        gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
-        beta_flat = posterior["beta_player"].values.reshape(-1, posterior["beta_player"].shape[-1])
-        theta_flat = posterior["theta_position"].values.reshape(-1, posterior["theta_position"].shape[-1])
-        eta_flat = posterior["eta_home"].values.flatten()
+        # Get gamma (team effects)
+        if "gamma_team_season_raw" in posterior:
+            gamma_raw = posterior["gamma_team_season_raw"].values
+            sigma_team = posterior["sigma_team"].values
+            lambda_team = posterior["lambda_team"].values
+            gamma_flat = (sigma_team[:, :, None] * lambda_team[:, :, 0:1] * gamma_raw).reshape(-1, gamma_raw.shape[-1])
+        else:
+            gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
 
+        # Get beta (player effects)
+        if "beta_player_raw" in posterior:
+            beta_raw = posterior["beta_player_raw"].values
+            sigma_player = posterior["sigma_player"].values
+            lambda_player = posterior["lambda_player"].values
+            beta_flat = (sigma_player[:, :, None] * lambda_player[:, :, 0:1] * beta_raw).reshape(-1, beta_raw.shape[-1])
+        else:
+            beta_flat = posterior["beta_player"].values.reshape(-1, posterior["beta_player"].shape[-1])
+
+        # Get theta (position effects)
+        theta_vals = posterior["theta_position"].values
+        if theta_vals.ndim == 4:
+            theta_flat = theta_vals[:, :, 0, :].reshape(-1, theta_vals.shape[-1])
+        else:
+            theta_flat = theta_vals.reshape(-1, theta_vals.shape[-1])
+
+        # Get eta_home
+        eta_vals = posterior["eta_home"].values
+        if eta_vals.ndim == 3:
+            eta_flat = eta_vals[:, :, 0].flatten()
+        else:
+            eta_flat = eta_vals.flatten()
+
+        sigma_player_flat = posterior["sigma_player"].values.flatten()
+
+        # Sample from posterior
+        alpha = alpha_flat[sample_idx]
         gamma = gamma_flat[sample_idx]
         beta = beta_flat[sample_idx]
         theta = theta_flat[sample_idx]
         eta_home = eta_flat[sample_idx]
+        sigma_player = sigma_player_flat[sample_idx]
 
-        # Compute lineup strength for each team
-        home_effect = self._compute_lineup_effect(
-            home_lineup, home_ts_idx, gamma, beta, theta, eta_home, is_home=True
-        )
-        away_effect = self._compute_lineup_effect(
-            away_lineup, away_ts_idx, gamma, beta, theta, eta_home, is_home=False
-        )
+        # Team effects
+        home_team_effect = gamma[:, home_ts_idx]
+        away_team_effect = gamma[:, away_ts_idx]
 
-        # Convert to try multipliers
-        home_multiplier = np.exp(home_effect)
-        away_multiplier = np.exp(away_effect)
+        # Compute expected tries by summing across lineup
+        home_tries_expected = np.zeros(n_samples)
+        away_tries_expected = np.zeros(n_samples)
 
-        # Expected tries
-        home_tries_expected = TRIES_PER_TEAM_PER_MATCH * home_multiplier
-        away_tries_expected = TRIES_PER_TEAM_PER_MATCH * away_multiplier
+        for pos in range(1, STARTERS + 1):
+            # Get player effect for this position (or use noise if unknown)
+            if pos in home_lineup and home_lineup[pos] in self.model._player_ids:
+                home_player_idx = self.model._player_ids[home_lineup[pos]]
+                home_player_effect = beta[:, home_player_idx]
+            else:
+                # Unknown player - sample from prior
+                home_player_effect = np.random.normal(0, sigma_player)
 
-        # Sample tries and convert to points
+            if pos in away_lineup and away_lineup[pos] in self.model._player_ids:
+                away_player_idx = self.model._player_ids[away_lineup[pos]]
+                away_player_effect = beta[:, away_player_idx]
+            else:
+                away_player_effect = np.random.normal(0, sigma_player)
+
+            # Position effect (0-indexed)
+            pos_effect = theta[:, pos - 1]
+
+            # Log-rate for this position
+            home_log_rate = alpha + home_team_effect + home_player_effect + pos_effect + eta_home
+            away_log_rate = alpha + away_team_effect + away_player_effect + pos_effect
+
+            # Expected tries for this position
+            home_tries_expected += np.exp(home_log_rate)
+            away_tries_expected += np.exp(away_log_rate)
+
+        # Sample actual tries (Poisson)
         home_tries = np.random.poisson(home_tries_expected)
         away_tries = np.random.poisson(away_tries_expected)
 
+        # Convert to points
         home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
         away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
 
@@ -254,49 +362,6 @@ class MatchPredictor:
         away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
 
         return self._build_prediction(home_team, away_team, home_scores, away_scores)
-
-    def _compute_lineup_effect(
-        self,
-        lineup: dict[int, str],
-        team_season_idx: int,
-        gamma: np.ndarray,
-        beta: np.ndarray,
-        theta: np.ndarray,
-        eta_home: np.ndarray,
-        is_home: bool,
-    ) -> np.ndarray:
-        """Compute aggregate team effect from lineup."""
-        n_samples = len(gamma)
-
-        # Team-season effect
-        effect = gamma[:, team_season_idx].copy()
-
-        # Home advantage
-        if is_home:
-            effect += eta_home
-
-        # Sum player contributions (for starting XV, positions 1-15)
-        n_players_counted = 0
-        for position, player_name in lineup.items():
-            if position > 15:  # Only count starters for team strength
-                continue
-
-            if player_name in self.model._player_ids:
-                player_idx = self.model._player_ids[player_name]
-                effect += beta[:, player_idx]
-                n_players_counted += 1
-
-            # Position effect
-            if 1 <= position <= 23:
-                effect += theta[:, position - 1]
-
-        # Average over counted players (if any)
-        if n_players_counted > 0:
-            # Don't divide - we want the sum of player effects
-            # But we should normalize by typical lineup size for comparability
-            pass  # Keep raw sum
-
-        return effect
 
     def _build_prediction(
         self,
