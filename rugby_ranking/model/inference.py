@@ -179,8 +179,6 @@ class ModelFitter:
             # Sample from approximate posterior
             trace = approx.sample(n_samples)
 
-        # Convert to InferenceData
-        trace = az.from_pymc3(trace)
 
         self.trace = trace
         self.rugby_model.trace = trace

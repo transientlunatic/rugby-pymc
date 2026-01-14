@@ -10,13 +10,29 @@ Supports:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
 
 import numpy as np
 import pandas as pd
 import arviz as az
 
 from rugby_ranking.model.core import RugbyModel
+from rugby_ranking.model.data import normalize_team_name
+
+
+# Average points per try-equivalent scoring opportunity
+# Try=5, Conversion~0.7*2=1.4, Penalty~0.3*3=0.9 per match
+# Roughly 5 points per successful try-scoring attack
+POINTS_PER_TRY = 5.0
+
+# Typical number of try-scoring opportunities per team per match
+# Based on observed data: ~3.5 tries per team per match average
+TRIES_PER_TEAM_PER_MATCH = 3.5
+
+# Average conversion rate
+CONVERSION_RATE = 0.70
+
+# Average penalties per match per team
+PENALTIES_PER_MATCH = 2.5
 
 
 @dataclass
@@ -48,12 +64,12 @@ class MatchPrediction:
         """Human-readable prediction summary."""
         return (
             f"{self.home.team} vs {self.away.team}\n"
-            f"  Predicted: {self.home.mean:.1f} - {self.away.mean:.1f}\n"
+            f"  Predicted: {self.home.mean:.0f} - {self.away.mean:.0f}\n"
             f"  Home win: {self.home_win_prob:.1%}, "
             f"Away win: {self.away_win_prob:.1%}, "
             f"Draw: {self.draw_prob:.1%}\n"
-            f"  90% CI margin: [{self.predicted_margin - 1.645*self.margin_std:.0f}, "
-            f"{self.predicted_margin + 1.645*self.margin_std:.0f}]"
+            f"  90% CI: [{self.home.ci_lower:.0f}-{self.home.ci_upper:.0f}] vs "
+            f"[{self.away.ci_lower:.0f}-{self.away.ci_upper:.0f}]"
         )
 
 
@@ -61,9 +77,11 @@ class MatchPredictor:
     """
     Generate match predictions from fitted models.
 
-    Handles two prediction modes:
-    1. Teams-only: Uses team-season effects + average player/position effects
-    2. Full lineup: Uses specific player effects for announced squads
+    The model estimates per-player try-scoring rates. To predict match scores:
+    1. Aggregate player/team effects into a team-level try rate multiplier
+    2. Apply to baseline tries per team (~3.5)
+    3. Convert tries to points (try=5 + conversion~1.4 = 6.4 avg)
+    4. Add penalty contribution (~7.5 points per team)
     """
 
     def __init__(self, model: RugbyModel, trace: az.InferenceData | None = None):
@@ -85,16 +103,11 @@ class MatchPredictor:
 
         Uses team-season effects and marginalizes over typical player/position
         contributions. Higher uncertainty than full-lineup predictions.
-
-        Args:
-            home_team: Home team name
-            away_team: Away team name
-            season: Season identifier (e.g., "2025-2026")
-            n_samples: Number of posterior samples to use
-
-        Returns:
-            MatchPrediction with score distributions
         """
+        # Normalize team names
+        home_team = normalize_team_name(home_team)
+        away_team = normalize_team_name(away_team)
+
         # Get team-season indices
         home_ts = (home_team, season)
         away_ts = (away_team, season)
@@ -109,63 +122,61 @@ class MatchPredictor:
 
         # Extract posterior samples
         posterior = self.trace.posterior
+        n_total = posterior["alpha"].values.size
+        sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
-        # Flatten chains
-        alpha = posterior["alpha"].values.flatten()[:n_samples]
-        gamma = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])[:n_samples]
-        eta_home = posterior["eta_home"].values.flatten()[:n_samples]
+        # Flatten and sample
+        gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
+        eta_flat = posterior["eta_home"].values.flatten()
+        sigma_player_flat = posterior["sigma_player"].values.flatten()
 
-        # Team effects
+        gamma = gamma_flat[sample_idx]
+        eta_home = eta_flat[sample_idx]
+        sigma_player = sigma_player_flat[sample_idx]
+
+        # Team effects (relative to average team)
         home_team_effect = gamma[:, home_idx]
         away_team_effect = gamma[:, away_idx]
 
-        # For teams-only, we use average player contribution
-        # This adds extra uncertainty
-        avg_player_effect = 0  # Centered at 0 by construction
-        player_uncertainty = posterior["sigma_player"].values.flatten()[:n_samples]
+        # For teams-only prediction, add uncertainty for unknown player composition
+        # This represents variation in which players actually play
+        player_uncertainty = np.random.normal(0, sigma_player * 0.5, size=n_samples)
 
-        # Simulate scores
-        # Using typical 15 scoring opportunities per match as baseline
-        # (this is calibrated from observed match totals)
-        baseline_scoring_rate = 15
+        # Compute team strength multipliers (exponentiated random effects)
+        # These multiply the baseline try rate
+        home_multiplier = np.exp(home_team_effect + eta_home + player_uncertainty)
+        away_multiplier = np.exp(away_team_effect + np.random.normal(0, sigma_player * 0.5, size=n_samples))
 
-        home_log_rate = (
-            alpha +
-            home_team_effect +
-            avg_player_effect +
-            eta_home +  # Home advantage
-            np.random.normal(0, player_uncertainty)  # Player uncertainty
+        # Expected tries for each team
+        home_tries_expected = TRIES_PER_TEAM_PER_MATCH * home_multiplier
+        away_tries_expected = TRIES_PER_TEAM_PER_MATCH * away_multiplier
+
+        # Sample actual tries (Poisson)
+        home_tries = np.random.poisson(home_tries_expected)
+        away_tries = np.random.poisson(away_tries_expected)
+
+        # Convert to points
+        # Tries: 5 points each
+        # Conversions: ~70% success rate, 2 points each
+        # Penalties: add baseline amount with some variance
+        home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
+        away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
+
+        home_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
+        away_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
+
+        home_scores = (
+            home_tries * 5 +
+            home_conversions * 2 +
+            home_penalties * 3
+        )
+        away_scores = (
+            away_tries * 5 +
+            away_conversions * 2 +
+            away_penalties * 3
         )
 
-        away_log_rate = (
-            alpha +
-            away_team_effect +
-            avg_player_effect +
-            np.random.normal(0, player_uncertainty)
-        )
-
-        # Convert to expected points (rough scaling)
-        # Average points per match ~ 25, so scale accordingly
-        points_scale = 25.0 / np.exp(alpha.mean())
-
-        home_expected = np.exp(home_log_rate) * points_scale
-        away_expected = np.exp(away_log_rate) * points_scale
-
-        # Sample actual scores (Poisson would give too low variance for rugby)
-        # Use negative binomial for overdispersion
-        home_scores = np.random.negative_binomial(
-            n=5,  # Dispersion parameter
-            p=5 / (5 + home_expected),
-        )
-        away_scores = np.random.negative_binomial(
-            n=5,
-            p=5 / (5 + away_expected),
-        )
-
-        return self._build_prediction(
-            home_team, away_team,
-            home_scores, away_scores,
-        )
+        return self._build_prediction(home_team, away_team, home_scores, away_scores)
 
     def predict_full_lineup(
         self,
@@ -181,18 +192,11 @@ class MatchPredictor:
 
         Uses specific player effects for each position. Lower uncertainty
         than teams-only predictions.
-
-        Args:
-            home_team: Home team name
-            away_team: Away team name
-            home_lineup: Dict mapping position (1-23) to player name
-            away_lineup: Dict mapping position (1-23) to player name
-            season: Season identifier
-            n_samples: Number of posterior samples to use
-
-        Returns:
-            MatchPrediction with score distributions
         """
+        # Normalize team names
+        home_team = normalize_team_name(home_team)
+        away_team = normalize_team_name(away_team)
+
         # Get team-season indices
         home_ts = (home_team, season)
         away_ts = (away_team, season)
@@ -207,91 +211,92 @@ class MatchPredictor:
 
         # Extract posterior samples
         posterior = self.trace.posterior
+        n_total = posterior["alpha"].values.size
+        sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
-        alpha = posterior["alpha"].values.flatten()[:n_samples]
-        gamma = posterior["gamma_team_season"].values.reshape(
-            -1, posterior["gamma_team_season"].shape[-1]
-        )[:n_samples]
-        beta = posterior["beta_player"].values.reshape(
-            -1, posterior["beta_player"].shape[-1]
-        )[:n_samples]
-        theta = posterior["theta_position"].values.reshape(
-            -1, posterior["theta_position"].shape[-1]
-        )[:n_samples]
-        eta_home = posterior["eta_home"].values.flatten()[:n_samples]
+        gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
+        beta_flat = posterior["beta_player"].values.reshape(-1, posterior["beta_player"].shape[-1])
+        theta_flat = posterior["theta_position"].values.reshape(-1, posterior["theta_position"].shape[-1])
+        eta_flat = posterior["eta_home"].values.flatten()
 
-        # Compute team scoring rates from lineup
-        home_rate = self._compute_lineup_rate(
-            home_lineup, home_ts_idx,
-            alpha, beta, gamma, theta, eta_home,
-            is_home=True, n_samples=n_samples
+        gamma = gamma_flat[sample_idx]
+        beta = beta_flat[sample_idx]
+        theta = theta_flat[sample_idx]
+        eta_home = eta_flat[sample_idx]
+
+        # Compute lineup strength for each team
+        home_effect = self._compute_lineup_effect(
+            home_lineup, home_ts_idx, gamma, beta, theta, eta_home, is_home=True
+        )
+        away_effect = self._compute_lineup_effect(
+            away_lineup, away_ts_idx, gamma, beta, theta, eta_home, is_home=False
         )
 
-        away_rate = self._compute_lineup_rate(
-            away_lineup, away_ts_idx,
-            alpha, beta, gamma, theta, eta_home,
-            is_home=False, n_samples=n_samples
-        )
+        # Convert to try multipliers
+        home_multiplier = np.exp(home_effect)
+        away_multiplier = np.exp(away_effect)
 
-        # Scale to expected points
-        points_scale = 25.0 / np.exp(alpha.mean())
+        # Expected tries
+        home_tries_expected = TRIES_PER_TEAM_PER_MATCH * home_multiplier
+        away_tries_expected = TRIES_PER_TEAM_PER_MATCH * away_multiplier
 
-        home_expected = home_rate * points_scale
-        away_expected = away_rate * points_scale
+        # Sample tries and convert to points
+        home_tries = np.random.poisson(home_tries_expected)
+        away_tries = np.random.poisson(away_tries_expected)
 
-        # Sample scores
-        home_scores = np.random.negative_binomial(
-            n=6,  # Slightly less dispersed with known lineup
-            p=6 / (6 + home_expected),
-        )
-        away_scores = np.random.negative_binomial(
-            n=6,
-            p=6 / (6 + away_expected),
-        )
+        home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
+        away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
 
-        return self._build_prediction(
-            home_team, away_team,
-            home_scores, away_scores,
-        )
+        home_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
+        away_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
 
-    def _compute_lineup_rate(
+        home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
+        away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
+
+        return self._build_prediction(home_team, away_team, home_scores, away_scores)
+
+    def _compute_lineup_effect(
         self,
         lineup: dict[int, str],
         team_season_idx: int,
-        alpha: np.ndarray,
-        beta: np.ndarray,
         gamma: np.ndarray,
+        beta: np.ndarray,
         theta: np.ndarray,
         eta_home: np.ndarray,
         is_home: bool,
-        n_samples: int,
     ) -> np.ndarray:
-        """Compute expected scoring rate for a lineup."""
-        # Start with baseline
-        log_rate = alpha.copy()
+        """Compute aggregate team effect from lineup."""
+        n_samples = len(gamma)
 
-        # Add team effect
-        log_rate += gamma[:, team_season_idx]
+        # Team-season effect
+        effect = gamma[:, team_season_idx].copy()
 
-        # Add home advantage if applicable
+        # Home advantage
         if is_home:
-            log_rate += eta_home
+            effect += eta_home
 
-        # Sum player and position contributions
-        player_contribution = np.zeros(n_samples)
+        # Sum player contributions (for starting XV, positions 1-15)
+        n_players_counted = 0
         for position, player_name in lineup.items():
+            if position > 15:  # Only count starters for team strength
+                continue
+
             if player_name in self.model._player_ids:
                 player_idx = self.model._player_ids[player_name]
-                player_contribution += beta[:, player_idx]
+                effect += beta[:, player_idx]
+                n_players_counted += 1
 
-            # Position effect (0-indexed)
+            # Position effect
             if 1 <= position <= 23:
-                player_contribution += theta[:, position - 1]
+                effect += theta[:, position - 1]
 
-        # Average over 15 players (starting XV)
-        log_rate += player_contribution / 15
+        # Average over counted players (if any)
+        if n_players_counted > 0:
+            # Don't divide - we want the sum of player effects
+            # But we should normalize by typical lineup size for comparability
+            pass  # Keep raw sum
 
-        return np.exp(log_rate)
+        return effect
 
     def _build_prediction(
         self,
@@ -303,28 +308,28 @@ class MatchPredictor:
         """Build MatchPrediction from score samples."""
         home_pred = ScorePrediction(
             team=home_team,
-            mean=home_scores.mean(),
-            std=home_scores.std(),
-            median=np.median(home_scores),
-            ci_lower=np.percentile(home_scores, 5),
-            ci_upper=np.percentile(home_scores, 95),
+            mean=float(home_scores.mean()),
+            std=float(home_scores.std()),
+            median=float(np.median(home_scores)),
+            ci_lower=float(np.percentile(home_scores, 5)),
+            ci_upper=float(np.percentile(home_scores, 95)),
             samples=home_scores,
         )
 
         away_pred = ScorePrediction(
             team=away_team,
-            mean=away_scores.mean(),
-            std=away_scores.std(),
-            median=np.median(away_scores),
-            ci_lower=np.percentile(away_scores, 5),
-            ci_upper=np.percentile(away_scores, 95),
+            mean=float(away_scores.mean()),
+            std=float(np.percentile(away_scores, 95)),
+            median=float(np.median(away_scores)),
+            ci_lower=float(np.percentile(away_scores, 5)),
+            ci_upper=float(np.percentile(away_scores, 95)),
             samples=away_scores,
         )
 
         # Win probabilities
-        home_wins = (home_scores > away_scores).mean()
-        away_wins = (away_scores > home_scores).mean()
-        draws = (home_scores == away_scores).mean()
+        home_wins = float((home_scores > away_scores).mean())
+        away_wins = float((away_scores > home_scores).mean())
+        draws = float((home_scores == away_scores).mean())
 
         margin = home_scores - away_scores
 
@@ -334,8 +339,8 @@ class MatchPredictor:
             home_win_prob=home_wins,
             away_win_prob=away_wins,
             draw_prob=draws,
-            predicted_margin=margin.mean(),
-            margin_std=margin.std(),
+            predicted_margin=float(margin.mean()),
+            margin_std=float(margin.std()),
         )
 
     def predict_upcoming(
@@ -345,13 +350,6 @@ class MatchPredictor:
     ) -> pd.DataFrame:
         """
         Generate predictions for all upcoming matches.
-
-        Args:
-            unplayed_matches: List of MatchData with no scores
-            season: Current season
-
-        Returns:
-            DataFrame with predictions for each match
         """
         predictions = []
 

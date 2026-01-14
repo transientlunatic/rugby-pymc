@@ -21,6 +21,50 @@ import numpy as np
 import pandas as pd
 
 
+# Team name normalization mapping
+# Maps variant names to canonical names
+TEAM_NAME_ALIASES = {
+    # URC/Celtic teams with variants
+    "Glasgow ": "Glasgow Warriors",
+    "Glasgow": "Glasgow Warriors",
+    "Edinburgh": "Edinburgh Rugby",
+    "Leinster": "Leinster Rugby",
+    "Munster": "Munster Rugby",
+    "Ulster": "Ulster Rugby",
+    "Connacht": "Connacht Rugby",
+    "Cardiff": "Cardiff Rugby",
+    "Cardiff Blues": "Cardiff Rugby",
+    "Dragons": "Dragons RFC",
+    "Benetton": "Benetton Rugby",
+    "Zebre": "Zebre Parma",
+    # South African teams
+    "Sharks": "Hollywoodbets Sharks",
+    "Lions": "Emirates Lions",
+    "Stormers": "DHL Stormers",
+    "Blue Bulls": "Vodacom Bulls",
+    # Premiership teams (common variants)
+    "Northampton": "Northampton Saints",
+    "Leicester": "Leicester Tigers",
+    "Bath": "Bath Rugby",
+    "Sale": "Sale Sharks",
+    "Exeter": "Exeter Chiefs",
+    "Harlequins": "Harlequins",
+    "Wasps": "Wasps",
+    "Saracens": "Saracens",
+    "Newcastle": "Newcastle Falcons",
+    "Worcester": "Worcester Warriors",
+    "Bristol": "Bristol Bears",
+    "Gloucester": "Gloucester Rugby",
+    "London Irish": "London Irish",
+}
+
+
+def normalize_team_name(name: str) -> str:
+    """Normalize team name to canonical form."""
+    name = name.strip()
+    return TEAM_NAME_ALIASES.get(name, name)
+
+
 @dataclass
 class PlayerMatchObservation:
     """A single player's participation in a single match."""
@@ -178,7 +222,7 @@ class MatchDataset:
                 except (ValueError, AttributeError, TypeError):
                     date = datetime.now()
 
-                # Handle team as dict or string
+                # Handle team as dict or string, then normalize
                 home_team = home.get("team", "Unknown") if isinstance(home, dict) else "Unknown"
                 away_team = away.get("team", "Unknown") if isinstance(away, dict) else "Unknown"
 
@@ -186,6 +230,10 @@ class MatchDataset:
                     home_team = home_team.get("name", "Unknown")
                 if isinstance(away_team, dict):
                     away_team = away_team.get("name", "Unknown")
+
+                # Normalize team names
+                home_team = normalize_team_name(home_team)
+                away_team = normalize_team_name(away_team)
 
                 match_data = MatchData(
                     match_id=f"{competition}_{season}_{i}",
@@ -246,14 +294,20 @@ class MatchDataset:
 
                 stadium = stadiums.get(match_idx, "") if isinstance(stadiums, dict) else ""
 
+                # Extract and normalize team names
+                home_team = home.get("team", "Unknown") if isinstance(home, dict) else "Unknown"
+                away_team = away.get("team", "Unknown") if isinstance(away, dict) else "Unknown"
+                home_team = normalize_team_name(home_team)
+                away_team = normalize_team_name(away_team)
+
                 match = MatchData(
                     match_id=match_id,
                     date=date,
                     season=season,
                     competition=competition,
                     stadium=stadium,
-                    home_team=home.get("team", "Unknown") if isinstance(home, dict) else "Unknown",
-                    away_team=away.get("team", "Unknown") if isinstance(away, dict) else "Unknown",
+                    home_team=home_team,
+                    away_team=away_team,
                     home_score=home_score,
                     away_score=away_score,
                     home_lineup=home.get("lineup", {}) if isinstance(home, dict) else {},
@@ -275,10 +329,11 @@ class MatchDataset:
                 continue
 
     def _index_team(self, team_name: str) -> int:
-        """Get or create a unique index for a team."""
-        if team_name not in self._team_index:
-            self._team_index[team_name] = len(self._team_index)
-        return self._team_index[team_name]
+        """Get or create a unique index for a team (normalized)."""
+        normalized = normalize_team_name(team_name)
+        if normalized not in self._team_index:
+            self._team_index[normalized] = len(self._team_index)
+        return self._team_index[normalized]
 
     def _index_players_from_lineup(self, lineup: dict) -> None:
         """Index all players from a lineup."""
@@ -311,7 +366,12 @@ class MatchDataset:
     def _count_scoring_events(
         self, player_name: str, scores: list[dict]
     ) -> dict[str, int]:
-        """Count scoring events for a player."""
+        """
+        Count scoring events for a player.
+
+        Handles both full name matching (recent data) and surname-only matching
+        (older data where scores use surnames but lineups have full names).
+        """
         counts = {"tries": 0, "conversions": 0, "penalties": 0, "drop_goals": 0}
 
         type_mapping = {
@@ -322,11 +382,32 @@ class MatchDataset:
             "dropgoal": "drop_goals",
         }
 
+        # Extract surname for fallback matching
+        # Handle compound surnames like "van der Merwe"
+        name_parts = player_name.split()
+        if len(name_parts) >= 2:
+            # Check for compound surname prefixes
+            compound_prefixes = {"van", "de", "du", "le", "o'", "mc", "mac"}
+            if name_parts[-2].lower() in compound_prefixes:
+                surname = " ".join(name_parts[-2:])
+            else:
+                surname = name_parts[-1]
+        else:
+            surname = player_name
+
         for score in scores:
-            if score.get("player") == player_name:
-                score_type = score.get("type", "").lower()
-                if score_type in type_mapping:
-                    counts[type_mapping[score_type]] += 1
+            scorer = score.get("player", "")
+            score_type = score.get("type", "").lower()
+
+            if score_type not in type_mapping:
+                continue
+
+            # Try exact match first (recent data format)
+            if scorer == player_name:
+                counts[type_mapping[score_type]] += 1
+            # Fallback: surname match (older data format)
+            elif scorer.lower() == surname.lower():
+                counts[type_mapping[score_type]] += 1
 
         return counts
 
