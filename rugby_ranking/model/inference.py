@@ -37,6 +37,8 @@ class InferenceConfig:
     # VI settings
     vi_n_iterations: int = 50000
     vi_method: Literal["advi", "fullrank_advi"] = "advi"
+    vi_use_minibatch: bool = False
+    vi_minibatch_size: int = 1024
 
     # Caching
     cache_dir: Path = Path("~/.cache/rugby_ranking").expanduser()

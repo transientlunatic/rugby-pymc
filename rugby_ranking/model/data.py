@@ -49,6 +49,8 @@ TEAM_NAME_ALIASES = {
     "Bulls": "Vodacom Bulls",
     # Premiership teams (common variants)
     "Northampton": "Northampton Saints",
+    "Newcastle Falcons": "Newcastle",
+    "Newcastle Red Bulls": "Newcastle",
     "Leicester": "Leicester Tigers",
     "Bath": "Bath Rugby",
     "Sale": "Sale Sharks",
@@ -61,6 +63,14 @@ TEAM_NAME_ALIASES = {
     "Bristol": "Bristol Bears",
     "Gloucester": "Gloucester Rugby",
     "London Irish": "London Irish",
+    # French Teams
+    "Lyon O.U.": "Lyon",
+    "Racing": "Racing 92",
+    "Stade Francais Paris": "Stade Francais",
+    "Clermont Auvergne": "Clermont",
+    "Bordeaux-Beg": "Bordeaux-Begles",
+    "Castres Olympique": "Castres",
+    "Biarritz Olympique": "Biarritz",
 }
 
 

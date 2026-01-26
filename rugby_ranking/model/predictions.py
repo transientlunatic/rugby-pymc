@@ -151,7 +151,6 @@ class MatchPredictor:
         sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
         # Flatten and sample from posterior
-        gamma_vals = posterior["gamma_team_season"].values
         # Handle joint model where gamma might have different structure
         if "gamma_team_season_raw" in posterior:
             # Joint model uses raw + scaling
@@ -161,6 +160,7 @@ class MatchPredictor:
             # Compute effective gamma for tries (index 0)
             gamma_flat = (sigma_team[:, :, None] * lambda_team[:, :, 0:1] * gamma_raw).reshape(-1, gamma_raw.shape[-1])
         else:
+            gamma_vals = posterior["gamma_team_season"].values
             gamma_flat = gamma_vals.reshape(-1, gamma_vals.shape[-1])
 
         theta_vals = posterior["theta_position"].values
@@ -177,7 +177,19 @@ class MatchPredictor:
         else:
             eta_flat = eta_vals.flatten()
 
-        sigma_player_flat = posterior["sigma_player"].values.flatten()
+        # Handle separate kicking/try-scoring effects
+        # IMPORTANT: We need the effective sigma for tries, not the raw sigma_player
+        # In the joint model: beta_player[tries] = sigma_player * lambda_player[tries] * beta_player_raw
+        if "sigma_player_try" in posterior:
+            sigma_player_flat = posterior["sigma_player_try"].values.flatten()
+            # For separate effects, sigma_player_try is already the effective sigma for tries
+        elif "lambda_player" in posterior:
+            # Joint model with loading factors - compute effective sigma for tries
+            sigma_raw = posterior["sigma_player"].values
+            lambda_tries = posterior["lambda_player"].values[:, :, 0]  # tries is index 0
+            sigma_player_flat = (sigma_raw * lambda_tries).flatten()
+        else:
+            sigma_player_flat = posterior["sigma_player"].values.flatten()
 
         # Sample from posterior
         alpha = alpha_flat[sample_idx]
@@ -280,13 +292,21 @@ class MatchPredictor:
         else:
             gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
 
-        # Get beta (player effects)
-        if "beta_player_raw" in posterior:
+        # Get beta (player effects) - for tries, use try-scoring effect if separate effects enabled
+        if "beta_player_try_raw" in posterior:
+            # Separate kicking/try-scoring effects - use try effect
+            beta_raw = posterior["beta_player_try_raw"].values
+            sigma_player = posterior["sigma_player_try"].values
+            lambda_player = posterior["lambda_player_try"].values
+            beta_flat = (sigma_player[:, :, None] * lambda_player[:, :, 0:1] * beta_raw).reshape(-1, beta_raw.shape[-1])
+        elif "beta_player_raw" in posterior:
+            # Single player effect (original joint model)
             beta_raw = posterior["beta_player_raw"].values
             sigma_player = posterior["sigma_player"].values
             lambda_player = posterior["lambda_player"].values
             beta_flat = (sigma_player[:, :, None] * lambda_player[:, :, 0:1] * beta_raw).reshape(-1, beta_raw.shape[-1])
         else:
+            # Single score type model
             beta_flat = posterior["beta_player"].values.reshape(-1, posterior["beta_player"].shape[-1])
 
         # Get theta (position effects)
@@ -303,7 +323,19 @@ class MatchPredictor:
         else:
             eta_flat = eta_vals.flatten()
 
-        sigma_player_flat = posterior["sigma_player"].values.flatten()
+        # Handle separate kicking/try-scoring effects
+        # IMPORTANT: We need the effective sigma for tries, not the raw sigma_player
+        # In the joint model: beta_player[tries] = sigma_player * lambda_player[tries] * beta_player_raw
+        if "sigma_player_try" in posterior:
+            sigma_player_flat = posterior["sigma_player_try"].values.flatten()
+            # For separate effects, sigma_player_try is already the effective sigma for tries
+        elif "lambda_player" in posterior:
+            # Joint model with loading factors - compute effective sigma for tries
+            sigma_raw = posterior["sigma_player"].values
+            lambda_tries = posterior["lambda_player"].values[:, :, 0]  # tries is index 0
+            sigma_player_flat = (sigma_raw * lambda_tries).flatten()
+        else:
+            sigma_player_flat = posterior["sigma_player"].values.flatten()
 
         # Sample from posterior
         alpha = alpha_flat[sample_idx]
@@ -384,7 +416,7 @@ class MatchPredictor:
         away_pred = ScorePrediction(
             team=away_team,
             mean=float(away_scores.mean()),
-            std=float(np.percentile(away_scores, 95)),
+            std=float(away_scores.std()),
             median=float(np.median(away_scores)),
             ci_lower=float(np.percentile(away_scores, 5)),
             ci_upper=float(np.percentile(away_scores, 95)),
@@ -437,6 +469,7 @@ class MatchPredictor:
                     "away_win_prob": pred.away_win_prob,
                     "draw_prob": pred.draw_prob,
                     "predicted_margin": pred.predicted_margin,
+                    "margin_std": pred.margin_std,
                 })
             except ValueError as e:
                 print(f"Skipping {match.match_id}: {e}")

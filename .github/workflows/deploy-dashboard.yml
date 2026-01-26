@@ -1,0 +1,79 @@
+name: Deploy Dashboard to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'dashboard/**'
+      - 'rugby_ranking/**'
+      - 'export_dashboard_data.py'
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly Sunday 2am UTC
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Checkout Rugby-Data
+        uses: actions/checkout@v4
+        with:
+          repository: transientlunatic/Rugby-Data
+          path: Rugby-Data
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pymc arviz pandas numpy
+
+      - name: Generate dashboard data
+        run: |
+          python export_dashboard_data.py
+        continue-on-error: false
+
+      - name: Verify data files
+        run: |
+          echo "Checking generated files..."
+          ls -lh dashboard/data/
+          if [ ! -f dashboard/data/summary.json ]; then
+            echo "Error: summary.json not generated"
+            exit 1
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dashboard
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy dashboard: ${{ github.event.head_commit.message }}'
+
+      - name: Summary
+        run: |
+          echo "### Dashboard Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Dashboard deployed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Live URL**: https://transientlunatic.github.io/rugby-ranking/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Data Files**:" >> $GITHUB_STEP_SUMMARY
+          ls -lh dashboard/data/ | tail -n +2 | awk '{print "- " $9 ": " $5}' >> $GITHUB_STEP_SUMMARY

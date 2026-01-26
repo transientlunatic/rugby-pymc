@@ -23,7 +23,11 @@ df = dataset.to_dataframe(played_only=True)
 
 # Build and fit model
 model = RugbyModel()
-model.build(df, score_type="tries")
+# For joint model with separate kicking/try-scoring effects (default):
+model.build_joint(df)
+
+# Or for single score type:
+# model.build(df, score_type="tries")
 
 fitter = ModelFitter(model)
 trace = fitter.fit_vi()  # Fast (~5 min)
@@ -92,6 +96,9 @@ log(λ) = α + β_player + γ_team_season + θ_position + η_home + log(exposure
 
 Where:
 - **β_player**: Intrinsic player ability (follows player across teams)
+  - When `separate_kicking_effect=True` (default), uses separate effects:
+    - **β_player_try**: Try-scoring ability (used for tries)
+    - **β_player_kick**: Kicking ability (used for conversions, penalties, drop goals)
 - **γ_team_season**: Team system effect (coaching, tactics, squad quality)
 - **θ_position**: Positional base rate (wings score more tries than props)
 - **η_home**: Home advantage
@@ -104,6 +111,36 @@ Separate models for each scoring type:
 - **Conversions** (2 pts): Primarily fly-halves (#10) and fullbacks (#15)
 - **Penalties** (3 pts): Primarily fly-halves (#10) and fullbacks (#15)
 - **Drop goals** (3 pts): Rare, primarily fly-halves
+
+The model recognizes that try-scoring and kicking are distinct skills. By default, it uses:
+- **β_player_try** for tries (running ability, positioning, finishing)
+- **β_player_kick** for conversions, penalties, and drop goals (kicking accuracy, technique)
+
+This allows players to have different rankings for try-scoring vs kicking ability.
+
+### Configuration Options
+
+You can customize the model behavior using `ModelConfig`:
+
+```python
+from rugby_ranking.model import ModelConfig, RugbyModel
+
+# Use separate kicking and try-scoring effects (default)
+config = ModelConfig(separate_kicking_effect=True)
+model = RugbyModel(config=config)
+
+# Or use a single player effect for all scoring types (legacy behavior)
+config = ModelConfig(separate_kicking_effect=False)
+model = RugbyModel(config=config)
+
+# Adjust prior scales
+config = ModelConfig(
+    player_try_effect_sd=0.5,
+    player_kicking_effect_sd=0.5,
+    team_effect_sd=0.3,
+    position_effect_sd=0.5,
+)
+```
 
 ### Player Mobility
 

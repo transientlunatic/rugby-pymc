@@ -15,6 +15,48 @@ from datetime import datetime
 
 import pandas as pd
 
+from rugby_ranking.model.core import RugbyModel, ModelConfig
+from rugby_ranking.model.inference import ModelFitter
+
+
+def load_checkpoint(checkpoint_name: str, verbose: bool = True):
+    """
+    Load a trained model checkpoint.
+
+    Args:
+        checkpoint_name: Name of checkpoint (e.g., "joint_model_v2")
+        verbose: Print loading status
+
+    Returns:
+        (model, trace) tuple
+
+    Example:
+        >>> model, trace = load_checkpoint("joint_model_v2")
+        >>> rankings = model.get_player_rankings(trace, score_type='tries')
+    """
+    if verbose:
+        print(f"Loading checkpoint: {checkpoint_name}")
+
+    # Create a model instance to load into
+    # The actual config and indices will be loaded from the checkpoint
+    model = RugbyModel()
+
+    try:
+        fitter = ModelFitter.load(checkpoint_name, model)
+        trace = fitter.trace
+
+        if verbose:
+            print(f"✓ Loaded successfully")
+            print(f"  Players: {len(model._player_ids):,}")
+            print(f"  Team-seasons: {len(model._team_season_ids)}")
+
+        return model, trace
+
+    except Exception as e:
+        if verbose:
+            print(f"✗ Failed to load checkpoint: {e}")
+        raise
+
 
 def main():
     parser = argparse.ArgumentParser(
