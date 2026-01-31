@@ -8,21 +8,41 @@ const state = {
     playerRankings: null,
     matchStats: null,
     teamStats: null,
+    teamStrengthSeries: null,
+    teamFinishPositions: null,
+    upcomingPredictions: null,
+    pathsToVictory: null,
+    squadDepth: null,
     selectedSeason: null,
     selectedScoreType: 'tries',
     selectedRankLimit: 20
 };
 
+async function loadJsonSafe(url, fallback = null) {
+    try {
+        return await d3.json(url);
+    } catch (error) {
+        console.warn(`Missing or unreadable data file: ${url}`, error);
+        return fallback;
+    }
+}
+
 // Load all data
 async function loadData() {
     try {
-        const [summary, teamOffense, teamDefense, playerRankings, matchStats, teamStats] = await Promise.all([
+        const [summary, teamOffense, teamDefense, playerRankings, matchStats, teamStats,
+            teamStrengthSeries, teamFinishPositions, upcomingPredictions, pathsToVictory, squadDepth] = await Promise.all([
             d3.json('data/summary.json'),
             d3.json('data/team_offense.json'),
             d3.json('data/team_defense.json'),
             d3.json('data/player_rankings.json'),
             d3.json('data/match_stats.json'),
-            d3.json('data/team_stats.json')
+            d3.json('data/team_stats.json'),
+            loadJsonSafe('data/team_strength_series.json'),
+            loadJsonSafe('data/team_finish_positions.json'),
+            loadJsonSafe('data/upcoming_predictions.json'),
+            loadJsonSafe('data/paths_to_victory.json'),
+            loadJsonSafe('data/squad_depth.json')
         ]);
 
         state.summary = summary;
@@ -31,6 +51,11 @@ async function loadData() {
         state.playerRankings = playerRankings;
         state.matchStats = matchStats;
         state.teamStats = teamStats;
+        state.teamStrengthSeries = teamStrengthSeries;
+        state.teamFinishPositions = teamFinishPositions;
+        state.upcomingPredictions = upcomingPredictions;
+        state.pathsToVictory = pathsToVictory;
+        state.squadDepth = squadDepth;
 
         // Set default season to most recent
         state.selectedSeason = summary.seasons[summary.seasons.length - 1];
@@ -47,6 +72,11 @@ function initializeDashboard() {
     updateSummaryCards();
     populateSeasonSelects();
     populateTeamSelect();
+    populateTrendTeamSelect();
+    populateFinishPositionSelects();
+    populatePredictionSelects();
+    populatePathsSelects();
+    populateSquadSelects();
     updateAllVisualizations();
     setupEventListeners();
 }
@@ -114,6 +144,55 @@ function setupEventListeners() {
     document.getElementById('match-team').addEventListener('change', (e) => {
         updateMatchTable(document.getElementById('match-season').value, e.target.value);
     });
+
+    const trendTeam = document.getElementById('trend-team');
+    if (trendTeam) {
+        trendTeam.addEventListener('change', updateTeamTrends);
+    }
+    const trendScore = document.getElementById('trend-score-type');
+    if (trendScore) {
+        trendScore.addEventListener('change', updateTeamTrends);
+    }
+    const trendMetric = document.getElementById('trend-metric');
+    if (trendMetric) {
+        trendMetric.addEventListener('change', updateTeamTrends);
+    }
+
+    const positionCompetition = document.getElementById('position-competition');
+    if (positionCompetition) {
+        positionCompetition.addEventListener('change', updateFinishPositions);
+    }
+    const positionSeason = document.getElementById('position-season');
+    if (positionSeason) {
+        positionSeason.addEventListener('change', updateFinishPositions);
+    }
+
+    const predictionCompetition = document.getElementById('prediction-competition');
+    if (predictionCompetition) {
+        predictionCompetition.addEventListener('change', updatePredictionTable);
+    }
+    const predictionSeason = document.getElementById('prediction-season');
+    if (predictionSeason) {
+        predictionSeason.addEventListener('change', updatePredictionTable);
+    }
+
+    const pathsCompetition = document.getElementById('paths-competition');
+    if (pathsCompetition) {
+        pathsCompetition.addEventListener('change', updatePathsToVictory);
+    }
+    const pathsTeam = document.getElementById('paths-team');
+    if (pathsTeam) {
+        pathsTeam.addEventListener('change', updatePathsToVictory);
+    }
+
+    const squadTeam = document.getElementById('squad-team');
+    if (squadTeam) {
+        squadTeam.addEventListener('change', updateSquadDepth);
+    }
+    const squadSeason = document.getElementById('squad-season');
+    if (squadSeason) {
+        squadSeason.addEventListener('change', updateSquadDepth);
+    }
 }
 
 // Update all visualizations
@@ -121,6 +200,264 @@ function updateAllVisualizations() {
     updateTeamVisualizations();
     updatePlayerVisualizations('tries');
     updateMatchTable(state.selectedSeason, '');
+    updateTeamTrends();
+    // updateFinishPositions() is now called by populateFinishPositionSelects()
+    updatePredictionTable();
+    updatePathsToVictory();
+    updateSquadDepth();
+}
+
+function populateTrendTeamSelect() {
+    if (!state.teamStrengthSeries) {
+        return;
+    }
+    const teamSelect = document.getElementById('trend-team');
+    if (!teamSelect) {
+        return;
+    }
+    const teams = [...new Set(state.teamStrengthSeries.map(d => d.team))].sort();
+    teamSelect.innerHTML = teams.map(team => `<option value="${team}">${team}</option>`).join('');
+}
+
+function populateFinishPositionSelects() {
+    if (!state.teamFinishPositions) {
+        return;
+    }
+    const competitionSelect = document.getElementById('position-competition');
+    const seasonSelect = document.getElementById('position-season');
+    if (!competitionSelect || !seasonSelect) {
+        return;
+    }
+    const competitions = [...new Set(state.teamFinishPositions.map(d => d.competition))].sort();
+    competitionSelect.innerHTML = competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    const seasons = [...new Set(state.teamFinishPositions.map(d => d.season))].sort().reverse();
+    seasonSelect.innerHTML = '<option value="">All Seasons</option>' +
+        seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    
+    // Trigger initial update
+    updateFinishPositions();
+}
+
+function populatePredictionSelects() {
+    if (!state.upcomingPredictions) {
+        return;
+    }
+    const competitionSelect = document.getElementById('prediction-competition');
+    const seasonSelect = document.getElementById('prediction-season');
+    if (!competitionSelect || !seasonSelect) {
+        return;
+    }
+    const competitions = [...new Set(state.upcomingPredictions.map(d => d.competition))].sort();
+    competitionSelect.innerHTML = '<option value="">All Competitions</option>' +
+        competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    const seasons = [...new Set(state.upcomingPredictions.map(d => d.season))].sort();
+    seasonSelect.innerHTML = '<option value="">All Seasons</option>' +
+        seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+
+function populatePathsSelects() {
+    if (!state.pathsToVictory) {
+        return;
+    }
+    const competitionSelect = document.getElementById('paths-competition');
+    const teamSelect = document.getElementById('paths-team');
+    if (!competitionSelect || !teamSelect) {
+        return;
+    }
+    const competitions = [...new Set(state.pathsToVictory.map(d => d.competition))].sort();
+    competitionSelect.innerHTML = competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    const teams = [...new Set(state.pathsToVictory.map(d => d.team))].sort();
+    teamSelect.innerHTML = teams.map(team => `<option value="${team}">${team}</option>`).join('');
+}
+
+function populateSquadSelects() {
+    if (!state.squadDepth) {
+        return;
+    }
+    const teamSelect = document.getElementById('squad-team');
+    const seasonSelect = document.getElementById('squad-season');
+    if (!teamSelect || !seasonSelect) {
+        return;
+    }
+    const teams = [...new Set(state.squadDepth.map(d => d.team))].sort();
+    teamSelect.innerHTML = teams.map(team => `<option value="${team}">${team}</option>`).join('');
+    const seasons = [...new Set(state.squadDepth.map(d => d.season))].sort();
+    seasonSelect.innerHTML = seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+
+function updateTeamTrends() {
+    if (!state.teamStrengthSeries) {
+        return;
+    }
+    const team = document.getElementById('trend-team')?.value;
+    const scoreType = document.getElementById('trend-score-type')?.value || 'tries';
+    const metric = document.getElementById('trend-metric')?.value || 'offense';
+    if (!team) {
+        return;
+    }
+
+    const key = metric === 'defense' ? 'defense_mean' : 'offense_mean';
+    const filtered = state.teamStrengthSeries
+        .filter(d => d.team === team && d.score_type === scoreType)
+        .sort((a, b) => a.season.localeCompare(b.season));
+
+    RugbyCharts.renderLineChart({
+        container: '#trend-chart',
+        data: filtered.map(d => ({ season: d.season, value: d[key] })),
+        xKey: 'season',
+        yKey: 'value',
+        tooltipFormatter: d => `<strong>${team}</strong><br/>${d.season}: ${d.value.toFixed(3)}`,
+    });
+}
+
+function updateFinishPositions() {
+    if (!state.teamFinishPositions) {
+        return;
+    }
+    const competition = document.getElementById('position-competition')?.value;
+    const season = document.getElementById('position-season')?.value;
+    if (!competition) {
+        return;
+    }
+
+    let filtered = state.teamFinishPositions.filter(d => d.competition === competition);
+    if (season) {
+        filtered = filtered.filter(d => d.season === season);
+    }
+
+    // Group by team for multi-series visualization
+    const teamData = {};
+    filtered.forEach(d => {
+        if (!teamData[d.team]) {
+            teamData[d.team] = [];
+        }
+        teamData[d.team].push(d);
+    });
+
+    // Create data array with series for each team
+    const data = [];
+    Object.entries(teamData).forEach(([team, positions]) => {
+        positions.sort((a, b) => a.season.localeCompare(b.season));
+        positions.forEach(d => {
+            data.push({
+                team: team,
+                season: d.season,
+                position: d.position
+            });
+        });
+    });
+
+    RugbyCharts.renderMultiLineChart({
+        container: '#position-chart',
+        data: data,
+        xKey: 'season',
+        yKey: 'position',
+        seriesKey: 'team',
+        yReversed: true,
+        yLabel: 'Position (lower is better)',
+        xLabel: 'Season',
+        tooltipFormatter: d => `<strong>${d.team}</strong><br/>${d.season}: #${d.position}`,
+    });
+}
+
+function updatePredictionTable() {
+    if (!state.upcomingPredictions) {
+        return;
+    }
+    const competition = document.getElementById('prediction-competition')?.value;
+    const season = document.getElementById('prediction-season')?.value;
+
+    let filtered = state.upcomingPredictions;
+    if (competition) {
+        filtered = filtered.filter(d => d.competition === competition);
+    }
+    if (season) {
+        filtered = filtered.filter(d => d.season === season);
+    }
+
+    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const tbody = document.querySelector('#prediction-table tbody');
+    if (!tbody) {
+        return;
+    }
+    tbody.innerHTML = filtered.slice(0, 50).map(d => {
+        const date = new Date(d.date).toLocaleDateString();
+        const winProb = Math.max(d.home_win_prob, d.away_win_prob);
+        return `
+            <tr>
+                <td>${date}</td>
+                <td><strong>${d.home_team}</strong></td>
+                <td>${d.home_score_pred.toFixed(1)} - ${d.away_score_pred.toFixed(1)}</td>
+                <td><strong>${d.away_team}</strong></td>
+                <td>${(winProb * 100).toFixed(1)}%</td>
+                <td><small>${d.competition}</small></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updatePathsToVictory() {
+    if (!state.pathsToVictory) {
+        return;
+    }
+    const competition = document.getElementById('paths-competition')?.value;
+    const team = document.getElementById('paths-team')?.value;
+    if (!competition || !team) {
+        return;
+    }
+
+    const entry = state.pathsToVictory.find(
+        d => d.competition === competition && d.team === team
+    );
+
+    const narrativeEl = document.getElementById('paths-narrative');
+    const tbody = document.querySelector('#paths-critical-games tbody');
+
+    if (!entry || !narrativeEl || !tbody) {
+        return;
+    }
+
+    narrativeEl.textContent = entry.narrative || 'No narrative available.';
+    tbody.innerHTML = entry.critical_games.map(game => `
+        <tr>
+            <td>${game.home_team} vs ${game.away_team}</td>
+            <td>${game.mutual_information.toFixed(4)}</td>
+        </tr>
+    `).join('');
+}
+
+function updateSquadDepth() {
+    if (!state.squadDepth) {
+        return;
+    }
+    const team = document.getElementById('squad-team')?.value;
+    const season = document.getElementById('squad-season')?.value;
+    if (!team || !season) {
+        return;
+    }
+
+    const entry = state.squadDepth.find(d => d.team === team && d.season === season);
+    const summaryEl = document.getElementById('squad-summary');
+    const tbody = document.querySelector('#squad-table tbody');
+
+    if (!entry || !summaryEl || !tbody) {
+        return;
+    }
+
+    summaryEl.textContent = `Overall strength: ${(entry.overall_strength * 100).toFixed(0)}/100 · Depth score: ${(entry.depth_score * 100).toFixed(0)}/100`;
+
+    tbody.innerHTML = entry.positions.map(pos => {
+        const players = pos.players.map(p => `${p.player} (${p.rating.toFixed(2)})`).join(', ');
+        return `
+            <tr>
+                <td><strong>${pos.position}</strong></td>
+                <td>${players}</td>
+                <td>${(pos.expected_strength * 100).toFixed(0)}</td>
+                <td>${(pos.depth_score * 100).toFixed(0)}</td>
+            </tr>
+        `;
+    }).join('');
 }
 
 // Update team visualizations
@@ -148,170 +485,38 @@ function filterTeamData(data, season, scoreType) {
 
 // Draw offensive chart
 function drawOffenseChart(data) {
-    const container = document.getElementById('offense-chart');
-    container.innerHTML = '';
-
-    const margin = { top: 20, right: 30, bottom: 60, left: 150 };
-    const width = container.clientWidth - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
-
-    const svg = d3.select('#offense-chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Scales
-    const x = d3.scaleLinear()
-        .domain([d3.min(data, d => d.offense_lower) * 1.1, d3.max(data, d => d.offense_upper) * 1.1])
-        .range([0, width]);
-
-    const y = d3.scaleBand()
-        .domain(data.map(d => d.team))
-        .range([0, height])
-        .padding(0.2);
-
-    // Axes
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(5))
-        .attr('class', 'axis');
-
-    svg.append('g')
-        .call(d3.axisLeft(y))
-        .attr('class', 'axis');
-
-    // Error bars
-    svg.selectAll('.error-bar')
-        .data(data)
-        .enter()
-        .append('line')
-        .attr('class', 'error-bar')
-        .attr('x1', d => x(d.offense_lower))
-        .attr('x2', d => x(d.offense_upper))
-        .attr('y1', d => y(d.team) + y.bandwidth() / 2)
-        .attr('y2', d => y(d.team) + y.bandwidth() / 2);
-
-    // Bars
-    svg.selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', x(0))
-        .attr('y', d => y(d.team))
-        .attr('width', d => x(d.offense_mean) - x(0))
-        .attr('height', y.bandwidth())
-        .attr('fill', '#0d6efd')
-        .attr('opacity', 0.8)
-        .on('mouseover', function(event, d) {
-            d3.select(this).attr('opacity', 1);
-            showTooltip(event, `<strong>${d.team}</strong><br/>
-                Effect: ${d.offense_mean.toFixed(3)}<br/>
-                95% CI: [${d.offense_lower.toFixed(3)}, ${d.offense_upper.toFixed(3)}]`);
-        })
-        .on('mouseout', function() {
-            d3.select(this).attr('opacity', 0.8);
-            hideTooltip();
-        });
-
-    // Grid
-    svg.append('g')
-        .attr('class', 'grid')
-        .call(d3.axisBottom(x).tickSize(height).tickFormat(''))
-        .selectAll('line')
-        .attr('stroke', '#e9ecef');
+    RugbyCharts.renderBarChartWithCI({
+        container: '#offense-chart',
+        data,
+        labelKey: 'team',
+        meanKey: 'offense_mean',
+        lowerKey: 'offense_lower',
+        upperKey: 'offense_upper',
+        color: '#0d6efd',
+        tooltipFormatter: d => `<strong>${d.team}</strong><br/>
+            Effect: ${d.offense_mean.toFixed(3)}<br/>
+            95% CI: [${d.offense_lower.toFixed(3)}, ${d.offense_upper.toFixed(3)}]`,
+    });
 }
 
 // Draw defensive chart
 function drawDefenseChart(data) {
-    const container = document.getElementById('defense-chart');
-    container.innerHTML = '';
-
-    const margin = { top: 20, right: 30, bottom: 60, left: 150 };
-    const width = container.clientWidth - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
-
-    const svg = d3.select('#defense-chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Scales
-    const x = d3.scaleLinear()
-        .domain([d3.min(data, d => d.defense_lower) * 1.1, d3.max(data, d => d.defense_upper) * 1.1])
-        .range([0, width]);
-
-    const y = d3.scaleBand()
-        .domain(data.map(d => d.team))
-        .range([0, height])
-        .padding(0.2);
-
-    // Axes
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(5))
-        .attr('class', 'axis');
-
-    svg.append('g')
-        .call(d3.axisLeft(y))
-        .attr('class', 'axis');
-
-    // Error bars
-    svg.selectAll('.error-bar')
-        .data(data)
-        .enter()
-        .append('line')
-        .attr('class', 'error-bar')
-        .attr('x1', d => x(d.defense_lower))
-        .attr('x2', d => x(d.defense_upper))
-        .attr('y1', d => y(d.team) + y.bandwidth() / 2)
-        .attr('y2', d => y(d.team) + y.bandwidth() / 2);
-
-    // Bars
-    svg.selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', x(0))
-        .attr('y', d => y(d.team))
-        .attr('width', d => x(d.defense_mean) - x(0))
-        .attr('height', y.bandwidth())
-        .attr('fill', '#198754')
-        .attr('opacity', 0.8)
-        .on('mouseover', function(event, d) {
-            d3.select(this).attr('opacity', 1);
-            showTooltip(event, `<strong>${d.team}</strong><br/>
-                Effect: ${d.defense_mean.toFixed(3)}<br/>
-                95% CI: [${d.defense_lower.toFixed(3)}, ${d.defense_upper.toFixed(3)}]`);
-        })
-        .on('mouseout', function() {
-            d3.select(this).attr('opacity', 0.8);
-            hideTooltip();
-        });
+    RugbyCharts.renderBarChartWithCI({
+        container: '#defense-chart',
+        data,
+        labelKey: 'team',
+        meanKey: 'defense_mean',
+        lowerKey: 'defense_lower',
+        upperKey: 'defense_upper',
+        color: '#198754',
+        tooltipFormatter: d => `<strong>${d.team}</strong><br/>
+            Effect: ${d.defense_mean.toFixed(3)}<br/>
+            95% CI: [${d.defense_lower.toFixed(3)}, ${d.defense_upper.toFixed(3)}]`,
+    });
 }
 
 // Draw comparison chart (offense vs defense)
 function drawComparisonChart(offenseData, defenseData) {
-    const container = document.getElementById('comparison-chart');
-    container.innerHTML = '';
-
-    const margin = { top: 40, right: 40, bottom: 60, left: 60 };
-    const width = container.clientWidth - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
-
-    const svg = d3.select('#comparison-chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Merge data
     const combinedData = offenseData.map(o => {
         const d = defenseData.find(d => d.team === o.team);
         return d ? {
@@ -321,95 +526,16 @@ function drawComparisonChart(offenseData, defenseData) {
         } : null;
     }).filter(d => d !== null);
 
-    // Scales
-    const x = d3.scaleLinear()
-        .domain(d3.extent(combinedData, d => d.offense))
-        .nice()
-        .range([0, width]);
-
-    const y = d3.scaleLinear()
-        .domain(d3.extent(combinedData, d => d.defense))
-        .nice()
-        .range([height, 0]);
-
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    // Grid
-    svg.append('g')
-        .attr('class', 'grid')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickSize(-height).tickFormat(''));
-
-    svg.append('g')
-        .attr('class', 'grid')
-        .call(d3.axisLeft(y).tickSize(-width).tickFormat(''));
-
-    // Axes
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x))
-        .attr('class', 'axis');
-
-    svg.append('g')
-        .call(d3.axisLeft(y))
-        .attr('class', 'axis');
-
-    // Axis labels
-    svg.append('text')
-        .attr('x', width / 2)
-        .attr('y', height + 45)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .style('font-weight', '600')
-        .text('Offensive Effect →');
-
-    svg.append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -height / 2)
-        .attr('y', -45)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .style('font-weight', '600')
-        .text('← Defensive Effect');
-
-    // Reference lines at 0
-    svg.append('line')
-        .attr('x1', x(0))
-        .attr('x2', x(0))
-        .attr('y1', 0)
-        .attr('y2', height)
-        .attr('stroke', '#adb5bd')
-        .attr('stroke-dasharray', '5,5');
-
-    svg.append('line')
-        .attr('x1', 0)
-        .attr('x2', width)
-        .attr('y1', y(0))
-        .attr('y2', y(0))
-        .attr('stroke', '#adb5bd')
-        .attr('stroke-dasharray', '5,5');
-
-    // Points
-    svg.selectAll('.scatter-point')
-        .data(combinedData)
-        .enter()
-        .append('circle')
-        .attr('class', 'scatter-point')
-        .attr('cx', d => x(d.offense))
-        .attr('cy', d => y(d.defense))
-        .attr('r', 5)
-        .attr('fill', d => color(d.team))
-        .attr('opacity', 0.7)
-        .on('mouseover', function(event, d) {
-            d3.select(this).attr('r', 7).attr('opacity', 1);
-            showTooltip(event, `<strong>${d.team}</strong><br/>
-                Offense: ${d.offense.toFixed(3)}<br/>
-                Defense: ${d.defense.toFixed(3)}`);
-        })
-        .on('mouseout', function() {
-            d3.select(this).attr('r', 5).attr('opacity', 0.7);
-            hideTooltip();
-        });
+    RugbyCharts.renderScatterPlot({
+        container: '#comparison-chart',
+        data: combinedData,
+        xKey: 'offense',
+        yKey: 'defense',
+        labelKey: 'team',
+        tooltipFormatter: d => `<strong>${d.team}</strong><br/>
+            Offense: ${d.offense.toFixed(3)}<br/>
+            Defense: ${d.defense.toFixed(3)}`,
+    });
 }
 
 // Update offense table
@@ -465,63 +591,15 @@ function updatePlayerVisualizations(scoreType) {
 
 // Draw player chart
 function drawPlayerChart(data) {
-    const container = document.getElementById('player-chart');
-    container.innerHTML = '';
-
-    const margin = { top: 20, right: 30, bottom: 60, left: 150 };
-    const width = container.clientWidth - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
-
-    const svg = d3.select('#player-chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Scales
-    const x = d3.scaleLinear()
-        .domain([d3.min(data, d => d.effect_lower) * 1.1, d3.max(data, d => d.effect_upper) * 1.1])
-        .range([0, width]);
-
-    const y = d3.scaleBand()
-        .domain(data.map(d => d.player))
-        .range([0, height])
-        .padding(0.2);
-
-    // Axes
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(5))
-        .attr('class', 'axis');
-
-    svg.append('g')
-        .call(d3.axisLeft(y))
-        .attr('class', 'axis');
-
-    // Error bars
-    svg.selectAll('.error-bar')
-        .data(data)
-        .enter()
-        .append('line')
-        .attr('class', 'error-bar')
-        .attr('x1', d => x(d.effect_lower))
-        .attr('x2', d => x(d.effect_upper))
-        .attr('y1', d => y(d.player) + y.bandwidth() / 2)
-        .attr('y2', d => y(d.player) + y.bandwidth() / 2);
-
-    // Bars
-    svg.selectAll('.bar')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('class', 'bar')
-        .attr('x', x(0))
-        .attr('y', d => y(d.player))
-        .attr('width', d => x(d.effect_mean) - x(0))
-        .attr('height', y.bandwidth())
-        .attr('fill', '#6f42c1')
-        .attr('opacity', 0.8);
+    RugbyCharts.renderBarChartWithCI({
+        container: '#player-chart',
+        data,
+        labelKey: 'player',
+        meanKey: 'effect_mean',
+        lowerKey: 'effect_lower',
+        upperKey: 'effect_upper',
+        color: '#6f42c1',
+    });
 }
 
 // Update player table
