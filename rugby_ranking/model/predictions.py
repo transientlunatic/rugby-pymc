@@ -152,7 +152,21 @@ class MatchPredictor:
 
         # Flatten and sample from posterior
         # Handle joint model where gamma might have different structure
-        if "gamma_team_season_raw" in posterior:
+        if "gamma_team_base_raw" in posterior:
+            # Time-varying model
+            gamma_base_raw = posterior["gamma_team_base_raw"].values
+            gamma_trend_raw = posterior["gamma_team_trend_raw"].values
+            sigma_team_base = posterior["sigma_team_base"].values
+            sigma_team_trend = posterior["sigma_team_trend"].values
+            lambda_team = posterior["lambda_team"].values
+            
+            # Compute gamma at mid-season (t=0.5)
+            gamma_base = (sigma_team_base[:, :, None] * lambda_team[:, :, 0:1] * gamma_base_raw)
+            gamma_trend = (sigma_team_trend[:, :, None] * lambda_team[:, :, 0:1] * gamma_trend_raw)
+            gamma_combined = gamma_base + 0.5 * gamma_trend
+            gamma_flat = gamma_combined.reshape(-1, gamma_combined.shape[-1])
+            
+        elif "gamma_team_season_raw" in posterior:
             # Joint model uses raw + scaling
             gamma_raw = posterior["gamma_team_season_raw"].values
             sigma_team = posterior["sigma_team"].values
@@ -180,7 +194,11 @@ class MatchPredictor:
         # Handle separate kicking/try-scoring effects
         # IMPORTANT: We need the effective sigma for tries, not the raw sigma_player
         # In the joint model: beta_player[tries] = sigma_player * lambda_player[tries] * beta_player_raw
-        if "sigma_player_try" in posterior:
+        if "sigma_player_try_base" in posterior:
+            # Time-varying model - use base effect
+            sigma_base = posterior["sigma_player_try_base"].values
+            sigma_player_flat = sigma_base.flatten()
+        elif "sigma_player_try" in posterior:
             sigma_player_flat = posterior["sigma_player_try"].values.flatten()
             # For separate effects, sigma_player_try is already the effective sigma for tries
         elif "lambda_player" in posterior:
@@ -284,7 +302,21 @@ class MatchPredictor:
         sample_idx = np.random.choice(n_total, size=n_samples, replace=n_total < n_samples)
 
         # Get gamma (team effects)
-        if "gamma_team_season_raw" in posterior:
+        if "gamma_team_base_raw" in posterior:
+            # Time-varying model
+            gamma_base_raw = posterior["gamma_team_base_raw"].values
+            gamma_trend_raw = posterior["gamma_team_trend_raw"].values
+            sigma_team_base = posterior["sigma_team_base"].values
+            sigma_team_trend = posterior["sigma_team_trend"].values
+            lambda_team = posterior["lambda_team"].values
+            
+            # Compute gamma at mid-season (t=0.5)
+            gamma_base = (sigma_team_base[:, :, None] * lambda_team[:, :, 0:1] * gamma_base_raw)
+            gamma_trend = (sigma_team_trend[:, :, None] * lambda_team[:, :, 0:1] * gamma_trend_raw)
+            gamma_combined = gamma_base + 0.5 * gamma_trend
+            gamma_flat = gamma_combined.reshape(-1, gamma_combined.shape[-1])
+            
+        elif "gamma_team_season_raw" in posterior:
             gamma_raw = posterior["gamma_team_season_raw"].values
             sigma_team = posterior["sigma_team"].values
             lambda_team = posterior["lambda_team"].values
@@ -293,7 +325,21 @@ class MatchPredictor:
             gamma_flat = posterior["gamma_team_season"].values.reshape(-1, posterior["gamma_team_season"].shape[-1])
 
         # Get beta (player effects) - for tries, use try-scoring effect if separate effects enabled
-        if "beta_player_try_raw" in posterior:
+        if "beta_player_try_base_raw" in posterior:
+            # Time-varying model with separate effects
+            beta_base_raw = posterior["beta_player_try_base_raw"].values
+            beta_trend_raw = posterior["beta_player_try_trend_raw"].values
+            sigma_player_base = posterior["sigma_player_try_base"].values
+            sigma_player_trend = posterior["sigma_player_try_trend"].values
+            lambda_player = posterior["lambda_player_try"].values
+            
+            # Compute at mid-season and average across seasons
+            beta_base = (sigma_player_base[:, :, None] * lambda_player[:, :, 0:1] * beta_base_raw)
+            beta_trend = (sigma_player_trend[:, :, None] * lambda_player[:, :, 0:1] * beta_trend_raw)
+            beta_all_seasons = beta_base + 0.5 * beta_trend
+            beta_flat = beta_all_seasons.mean(axis=-1).reshape(-1, beta_all_seasons.shape[-2])
+            
+        elif "beta_player_try_raw" in posterior:
             # Separate kicking/try-scoring effects - use try effect
             beta_raw = posterior["beta_player_try_raw"].values
             sigma_player = posterior["sigma_player_try"].values

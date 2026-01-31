@@ -912,11 +912,46 @@ class RugbyModel:
             raise ValueError("No trace available. Run inference first.")
 
         # Detect model type by checking posterior variables
-        has_separate_effects = "beta_player_try_raw" in trace.posterior
+        is_time_varying = "beta_player_try_base_raw" in trace.posterior
+        has_separate_effects = "beta_player_try_raw" in trace.posterior or is_time_varying
         is_joint_model = "beta_player_raw" in trace.posterior or has_separate_effects
 
         # Extract player effects
-        if has_separate_effects:
+        if is_time_varying:
+            # Time-varying model with separate try/kick effects - compute at mid-season
+            if score_type and score_type in self.config.score_types:
+                score_idx = self.config.score_types.index(score_type)
+                
+                if score_type == "tries":
+                    beta_base_raw = trace.posterior["beta_player_try_base_raw"].values
+                    beta_trend_raw = trace.posterior["beta_player_try_trend_raw"].values
+                    sigma_base = trace.posterior["sigma_player_try_base"].values
+                    sigma_trend = trace.posterior["sigma_player_try_trend"].values
+                    lambda_p = trace.posterior["lambda_player_try"].values[..., score_idx]
+                else:
+                    beta_base_raw = trace.posterior["beta_player_kick_base_raw"].values
+                    beta_trend_raw = trace.posterior["beta_player_kick_trend_raw"].values
+                    sigma_base = trace.posterior["sigma_player_kick_base"].values
+                    sigma_trend = trace.posterior["sigma_player_kick_trend"].values
+                    lambda_p = trace.posterior["lambda_player_kick"].values[..., score_idx]
+            else:
+                # Default to tries
+                beta_base_raw = trace.posterior["beta_player_try_base_raw"].values
+                beta_trend_raw = trace.posterior["beta_player_try_trend_raw"].values
+                sigma_base = trace.posterior["sigma_player_try_base"].values
+                sigma_trend = trace.posterior["sigma_player_try_trend"].values
+                lambda_p = trace.posterior["lambda_player_try"].values[..., 0]
+            
+            # Player effects have shape (chain, draw, player, season)
+            # Compute at mid-season (t=0.5) and average across seasons
+            beta_base = sigma_base[..., None, None] * lambda_p[..., None, None] * beta_base_raw
+            beta_trend = sigma_trend[..., None, None] * lambda_p[..., None, None] * beta_trend_raw
+            beta_all_seasons = beta_base + 0.5 * beta_trend
+            
+            # Average across seasons (last axis)
+            beta = beta_all_seasons.mean(axis=-1)
+            
+        elif has_separate_effects:
             # Joint model with separate kicking/try-scoring effects
             if score_type and score_type in self.config.score_types:
                 score_idx = self.config.score_types.index(score_type)
@@ -1014,10 +1049,30 @@ class RugbyModel:
         if trace is None:
             raise ValueError("No trace available. Run inference first.")
 
-        # Detect if this is a joint model by checking for gamma_team_season_raw
+        # Detect model type
         is_joint_model = "gamma_team_season_raw" in trace.posterior
+        is_time_varying = "gamma_team_base_raw" in trace.posterior
 
-        if is_joint_model:
+        if is_time_varying:
+            # Time-varying model - compute effect at mid-season (t=0.5)
+            gamma_base_raw = trace.posterior["gamma_team_base_raw"].values
+            gamma_trend_raw = trace.posterior["gamma_team_trend_raw"].values
+            sigma_base = trace.posterior["sigma_team_base"].values
+            sigma_trend = trace.posterior["sigma_team_trend"].values
+            
+            if score_type and score_type in self.config.score_types:
+                score_idx = self.config.score_types.index(score_type)
+                lambda_t = trace.posterior["lambda_team"].values[..., score_idx]
+            else:
+                # Default to tries (index 0) if no score_type specified
+                lambda_t = trace.posterior["lambda_team"].values[..., 0]
+            
+            # Compute team effects at mid-season (t=0.5)
+            gamma_base = sigma_base[..., None] * lambda_t[..., None] * gamma_base_raw
+            gamma_trend = sigma_trend[..., None] * lambda_t[..., None] * gamma_trend_raw
+            gamma = gamma_base + 0.5 * gamma_trend
+            
+        elif is_joint_model:
             # Joint model - need to compute effective team effect
             gamma_raw = trace.posterior["gamma_team_season_raw"].values
             sigma = trace.posterior["sigma_team"].values

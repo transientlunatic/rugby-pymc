@@ -18,7 +18,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Iterator
 
 import numpy as np
@@ -447,6 +447,7 @@ class MatchData:
         return self.home_score is not None and self.away_score is not None
 
 
+
 class MatchDataset:
     """
     Container for rugby match data with methods for extracting model-ready observations.
@@ -551,8 +552,11 @@ class MatchDataset:
                 date_str = match.get("date", "")
                 try:
                     date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                    # Ensure timezone-aware (assume UTC if naive)
+                    if date.tzinfo is None:
+                        date = date.replace(tzinfo=timezone.utc)
                 except (ValueError, AttributeError, TypeError):
-                    date = datetime.now()
+                    date = datetime.now(timezone.utc)
 
                 # Handle team as dict or string, then normalize
                 home_team = home.get("team", "Unknown") if isinstance(home, dict) else "Unknown"
@@ -615,8 +619,11 @@ class MatchDataset:
                 date_str = dates.get(match_idx, "") if isinstance(dates, dict) else ""
                 try:
                     date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                    # Ensure timezone-aware (assume UTC if naive)
+                    if date.tzinfo is None:
+                        date = date.replace(tzinfo=timezone.utc)
                 except (ValueError, AttributeError, TypeError):
-                    date = datetime.now()
+                    date = datetime.now(timezone.utc)
 
                 match_id = f"{competition}_{season}_{match_idx}"
 

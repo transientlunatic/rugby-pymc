@@ -204,3 +204,19 @@ Expects JSON files from the Rugby-Data repository with:
 - Card events (yellows, reds)
 
 Supports both LIST format (recent files) and DICT format (older files).
+
+## Training on HTCondor
+
+For long-running training jobs on HTCondor clusters, see [docs/HTCONDOR_TRAINING.md](docs/HTCONDOR_TRAINING.md) for:
+- Automatic checkpointing and resume
+- HTCondor submission script
+- Best practices for resilient training
+
+## Documentation
+
+- [PLAN.md](PLAN.md) - Project roadmap and implementation status
+- [docs/INDEX.md](docs/INDEX.md) - Comprehensive documentation index
+- [docs/HTCONDOR_TRAINING.md](docs/HTCONDOR_TRAINING.md) - HTCondor training guide
+- [docs/DASHBOARD.md](docs/DASHBOARD.md) - Web dashboard setup
+
+See [docs/](docs/) for detailed documentation on implementation, features, and fixes.

@@ -43,8 +43,11 @@ Examples:
   # Train time-varying model with MCMC
   %(prog)s --model time-varying --data-dir ../Rugby-Data --method mcmc
 
-  # Resume from checkpoint
+  # Resume from checkpoint (load only)
   %(prog)s --resume joint_model_v2 --data-dir ../Rugby-Data
+
+  # Continue training from checkpoint (warm-start)
+  %(prog)s --resume my_model --continue-training --vi-iterations 10000 --data-dir ../Rugby-Data
 
   # Train on recent data only
   %(prog)s --model static --data-dir ../Rugby-Data --last-seasons 3
@@ -69,6 +72,10 @@ Examples:
                        help='Inference method (default: vi)')
     parser.add_argument('--vi-iterations', type=int, default=50000,
                        help='VI iterations (default: 50000)')
+    parser.add_argument('--vi-samples', type=int, default=500,
+                       help='Number of samples to draw from VI posterior (default: 500, use fewer for large models)')
+    parser.add_argument('--vi-sample-batch-size', type=int, default=50,
+                       help='Sample in batches of this size to avoid OOM (default: sample all at once)')
     parser.add_argument('--mcmc-draws', type=int, default=1000,
                        help='MCMC draws (default: 1000)')
     parser.add_argument('--mcmc-tune', type=int, default=500,
@@ -79,8 +86,14 @@ Examples:
     # Checkpoints
     parser.add_argument('--resume', type=str,
                        help='Resume from this checkpoint name')
+    parser.add_argument('--continue-training', action='store_true',
+                       help='Continue VI training from checkpoint (warm-start). Requires --resume.')
+    parser.add_argument('--auto-resume', action='store_true',
+                       help='Automatically resume from latest checkpoint if available')
     parser.add_argument('--save-as', type=str,
                        help='Save checkpoint with this name (default: auto-generated)')
+    parser.add_argument('--checkpoint-every', type=int,
+                       help='Save checkpoint every N iterations (for HTCondor resilience)')
 
     # Model configuration
     parser.add_argument('--score-types', nargs='+',
@@ -102,6 +115,8 @@ Examples:
     # Output
     parser.add_argument('--quiet', action='store_true',
                        help='Suppress progress output')
+    parser.add_argument('--verbose', action='store_true',
+                       help='Extra verbose output (useful for HTCondor logs)')
 
     return parser.parse_args()
 
@@ -251,6 +266,36 @@ def create_inference_config(args):
     return config
 
 
+def find_latest_checkpoint(checkpoint_name_base: str, cache_dir: Path = None) -> str | None:
+    """Find the latest checkpoint for a given base name (e.g., iter10000, iter20000)."""
+    cache_dir = cache_dir or Path("~/.cache/rugby_ranking").expanduser()
+    if not cache_dir.exists():
+        return None
+
+    # Look for checkpoints matching pattern: {base}_iter*
+    matching_dirs = list(cache_dir.glob(f"{checkpoint_name_base}_iter*"))
+    if not matching_dirs:
+        return None
+
+    # Extract iteration numbers and find the latest
+    checkpoint_iters = []
+    for dir_path in matching_dirs:
+        try:
+            # Extract iteration number from name like "checkpoint_iter10000"
+            iter_str = dir_path.name.split("_iter")[-1]
+            iter_num = int(iter_str)
+            checkpoint_iters.append((iter_num, dir_path.name))
+        except (ValueError, IndexError):
+            continue
+
+    if not checkpoint_iters:
+        return None
+
+    # Return the checkpoint with highest iteration
+    latest_iter, latest_name = max(checkpoint_iters, key=lambda x: x[0])
+    return latest_name
+
+
 def fit_model(args, model, inference_config):
     """Fit model using specified inference method."""
     if not args.quiet:
@@ -258,34 +303,112 @@ def fit_model(args, model, inference_config):
         print(f"FITTING MODEL ({args.method.upper()})")
         print("=" * 70)
 
-    # Try to resume from checkpoint
+    # Determine checkpoint name for periodic saves
+    if args.save_as:
+        checkpoint_base = args.save_as
+    else:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+        checkpoint_base = f"{args.model}_{args.method}_{timestamp}"
+
+    # Auto-resume: try to find latest checkpoint for this run
+    resume_from = None
+    if args.auto_resume and args.checkpoint_every:
+        latest = find_latest_checkpoint(checkpoint_base)
+        if latest:
+            resume_from = latest
+            if not args.quiet:
+                print(f"Auto-resume: Found checkpoint '{latest}'")
+
+    # Explicit resume takes precedence
     if args.resume:
+        resume_from = args.resume
+
+    # Try to resume from checkpoint
+    if resume_from:
         try:
-            fitter = ModelFitter.load(args.resume, model)
+            fitter = ModelFitter.load(resume_from, model)
             trace = fitter.trace
             if not args.quiet:
-                print(f"Resumed from checkpoint: {args.resume}")
+                print(f"✓ Resumed from checkpoint: {resume_from}")
+            
+            # If --continue-training, warm-start VI from the loaded approximation
+            if args.continue_training:
+                if args.method != 'vi':
+                    print("⚠ Warning: --continue-training only works with --method vi", file=sys.stderr)
+                    return fitter, trace
+                
+                if fitter._vi_approx is None:
+                    print("⚠ Warning: Checkpoint has no VI approximation, cannot continue training", file=sys.stderr)
+                    return fitter, trace
+                
+                if not args.quiet:
+                    print("\nContinuing VI training with warm-start...")
+                    print(f"Running {args.vi_iterations:,} additional iterations")
+                    if args.checkpoint_every:
+                        print(f"Saving checkpoint every {args.checkpoint_every:,} iterations")
+                    import sys
+                    sys.stdout.flush()
+                
+                # Continue training with warm-start
+                trace = fitter.fit_vi(
+                    warm_start=True,  # Use loaded approximation
+                    n_samples=args.vi_samples,
+                    sample_batch_size=args.vi_sample_batch_size,
+                    checkpoint_every=args.checkpoint_every,
+                    checkpoint_name=checkpoint_base,
+                    verbose=args.verbose or (not args.quiet),
+                )
+                
+                return fitter, trace
+            
+            # Otherwise just return the loaded checkpoint
             return fitter, trace
         except (ValueError, FileNotFoundError) as e:
             if not args.quiet:
-                print(f"Could not load checkpoint '{args.resume}': {e}")
+                print(f"Could not load checkpoint '{resume_from}': {e}")
                 print("Starting fresh training...")
 
     fitter = ModelFitter(model, inference_config)
 
-    # Fit
+    # Fit with periodic checkpointing if requested
     if args.method == 'vi':
         if not args.quiet:
             print(f"Running VI for {args.vi_iterations:,} iterations...")
-        trace = fitter.fit_vi(n_samples=2000)
+            if args.checkpoint_every:
+                print(f"Saving checkpoint every {args.checkpoint_every:,} iterations")
+            if args.verbose:
+                print("Verbose mode enabled - progress will be logged every 1000 iterations")
+            import sys
+            sys.stdout.flush()
+
+        trace = fitter.fit_vi(
+            n_samples=args.vi_samples,
+            sample_batch_size=args.vi_sample_batch_size,
+            checkpoint_every=args.checkpoint_every,
+            checkpoint_name=checkpoint_base,
+            verbose=args.verbose or (not args.quiet),  # Verbose if --verbose or not --quiet
+        )
     else:  # mcmc
         if not args.quiet:
             print(f"Running MCMC: {args.mcmc_draws} draws × {args.mcmc_chains} chains "
                   f"(+ {args.mcmc_tune} tuning)...")
-        trace = fitter.fit_mcmc()
+            if args.checkpoint_every:
+                print(f"Saving checkpoint every {args.checkpoint_every} draws")
+            if args.verbose:
+                print("Verbose mode enabled - checkpoint progress will be logged")
+            import sys
+            sys.stdout.flush()
+
+        trace = fitter.fit_mcmc(
+            checkpoint_every=args.checkpoint_every,
+            checkpoint_name=checkpoint_base,
+            verbose=args.verbose or (not args.quiet),
+        )
 
     if not args.quiet:
         print("Fitting complete!")
+        import sys
+        sys.stdout.flush()
 
     return fitter, trace
 
@@ -390,6 +513,9 @@ def main():
             print(f"  - Visualize: Load checkpoint in notebooks")
             print(f"  - Predict: Use MatchPredictor with this model")
             print(f"  - Rankings: Call model.get_player_rankings()")
+            if args.method == 'vi':
+                print(f"  - More samples: python sample_from_checkpoint.py --checkpoint {checkpoint_name} --samples 5000")
+                print(f"  - Continue training: python train_model.py --resume {checkpoint_name} --continue-training")
 
         return 0
 

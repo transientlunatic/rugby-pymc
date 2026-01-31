@@ -28,6 +28,17 @@ class SeasonPrediction:
     position_probabilities: pd.DataFrame | None = None  # P(team finishes in position k)
     playoff_probabilities: pd.DataFrame | None = None  # P(team makes playoffs)
     remaining_fixtures: pd.DataFrame | None = None
+    simulation_samples: 'SeasonSimulationSamples | None' = None
+
+
+@dataclass
+class SeasonSimulationSamples:
+    """Detailed samples from season simulations."""
+
+    teams: list[str]
+    fixtures: list[dict]
+    game_outcomes: np.ndarray  # shape: (n_simulations, n_games), values: 0=home_win,1=draw,2=away_win
+    final_positions: np.ndarray  # shape: (n_simulations, n_teams), 1-based positions
 
 
 class SeasonPredictor:
@@ -96,10 +107,11 @@ class SeasonPredictor:
         )
 
         # Run Monte Carlo simulation
-        final_standings, position_probs, playoff_probs = self._simulate_season(
+        final_standings, position_probs, playoff_probs, simulation_samples = self._simulate_season(
             current_standings=current_standings,
             remaining_predictions=remaining_predictions,
             n_simulations=n_simulations,
+            return_samples=return_samples,
         )
 
         return SeasonPrediction(
@@ -108,6 +120,7 @@ class SeasonPredictor:
             position_probabilities=position_probs,
             playoff_probabilities=playoff_probs,
             remaining_fixtures=remaining_predictions,
+            simulation_samples=simulation_samples,
         )
 
     def _predict_remaining_matches(
@@ -166,7 +179,8 @@ class SeasonPredictor:
         current_standings: pd.DataFrame,
         remaining_predictions: pd.DataFrame,
         n_simulations: int,
-    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        return_samples: bool = False,
+    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, SeasonSimulationSamples | None]:
         """
         Monte Carlo simulation of remaining season.
 
@@ -194,16 +208,40 @@ class SeasonPredictor:
         # Create team index mapping
         team_to_idx = {team: i for i, team in enumerate(teams)}
 
+        # Optional detailed samples for downstream analysis
+        fixtures = []
+        game_outcomes = None
+        final_positions = None
+        if return_samples:
+            fixtures = [
+                {
+                    'home_team': row['home_team'],
+                    'away_team': row['away_team'],
+                    'date': row.get('date', None),
+                }
+                for _, row in remaining_predictions.iterrows()
+            ]
+            game_outcomes = np.zeros((n_simulations, len(remaining_predictions)), dtype=np.int8)
+            final_positions = np.zeros((n_simulations, n_teams), dtype=np.int16)
+
         # Run simulations
         for sim in range(n_simulations):
             # Start with current standings
             sim_standings = current_standings.copy()
 
             # Simulate each remaining match
-            for _, match in remaining_predictions.iterrows():
+            for match_idx, (_, match) in enumerate(remaining_predictions.iterrows()):
                 # Sample from predicted score distributions
                 home_score = np.random.choice(match['home_score_samples'])
                 away_score = np.random.choice(match['away_score_samples'])
+
+                if return_samples:
+                    if home_score > away_score:
+                        game_outcomes[sim, match_idx] = 0
+                    elif home_score < away_score:
+                        game_outcomes[sim, match_idx] = 2
+                    else:
+                        game_outcomes[sim, match_idx] = 1
 
                 # Estimate tries (rough approximation from score)
                 home_tries = int(np.round(home_score / 7 * 1.4))
@@ -290,6 +328,9 @@ class SeasonPredictor:
                 if row['position'] <= self.playoff_spots:
                     playoff_counts[team_idx] += 1
 
+                if return_samples:
+                    final_positions[sim, team_idx] = row['position']
+
         # Compute expected final standings (mean across simulations)
         expected_standings = pd.DataFrame({
             'team': teams,
@@ -321,7 +362,16 @@ class SeasonPredictor:
             'playoff_probability': playoff_counts / n_simulations,
         }).sort_values('playoff_probability', ascending=False).reset_index(drop=True)
 
-        return expected_standings, position_probs, playoff_probs
+        simulation_samples = None
+        if return_samples:
+            simulation_samples = SeasonSimulationSamples(
+                teams=list(teams),
+                fixtures=fixtures,
+                game_outcomes=game_outcomes,
+                final_positions=final_positions,
+            )
+
+        return expected_standings, position_probs, playoff_probs, simulation_samples
 
     def format_predictions(self, season_pred: SeasonPrediction) -> str:
         """
