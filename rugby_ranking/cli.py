@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from datetime import datetime, timezone, timedelta
 
 import pandas as pd
 
@@ -432,11 +431,11 @@ def run_predict(args):
 
 def run_upcoming(args):
     """Show predictions for upcoming matches."""
+    from datetime import datetime, timezone, timedelta
     from rugby_ranking.model.core import RugbyModel
     from rugby_ranking.model.inference import ModelFitter
     from rugby_ranking.model.predictions import MatchPredictor
     from rugby_ranking.model.data import MatchDataset
-    from datetime import datetime, timedelta
 
     print(f"Loading data from {args.data_dir}...")
     dataset = MatchDataset(args.data_dir, fuzzy_match_names=False)
@@ -540,15 +539,6 @@ def run_upcoming(args):
 def run_export(args):
     """Export dashboard data to JSON files."""
     from rugby_ranking.tools.export_dashboard_data import export_dashboard_data
-
-    print(f"\n{'='*70}")
-    print("DASHBOARD EXPORT")
-    print(f"{'='*70}")
-    print(f"Data directory: {args.data_dir}")
-    print(f"Output directory: {args.output_dir}")
-    print(f"Checkpoint: {args.checkpoint or 'None (will train new model)'}")
-    print(f"Seasons: {args.seasons}")
-    print(f"{'='*70}\n")
     
     export_dashboard_data(
         data_dir=args.data_dir,

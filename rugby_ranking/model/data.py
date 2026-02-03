@@ -571,6 +571,14 @@ class MatchDataset:
                 home_team = normalize_team_name(home_team)
                 away_team = normalize_team_name(away_team)
 
+                # Get lineups
+                home_lineup = home.get("lineup", {}) if isinstance(home, dict) else {}
+                away_lineup = away.get("lineup", {}) if isinstance(away, dict) else {}
+                
+                # Skip matches without player-level data
+                if not home_lineup and not away_lineup:
+                    continue
+
                 match_data = MatchData(
                     match_id=f"{competition}_{season}_{i}",
                     date=date,
@@ -581,8 +589,8 @@ class MatchDataset:
                     away_team=away_team,
                     home_score=home.get("score") if isinstance(home, dict) else None,
                     away_score=away.get("score") if isinstance(away, dict) else None,
-                    home_lineup=home.get("lineup", {}) if isinstance(home, dict) else {},
-                    away_lineup=away.get("lineup", {}) if isinstance(away, dict) else {},
+                    home_lineup=home_lineup,
+                    away_lineup=away_lineup,
                     home_scores=home.get("scores", []) if isinstance(home, dict) else [],
                     away_scores=away.get("scores", []) if isinstance(away, dict) else [],
                 )
@@ -639,6 +647,14 @@ class MatchDataset:
                 home_team = normalize_team_name(home_team)
                 away_team = normalize_team_name(away_team)
 
+                # Get lineups
+                home_lineup = home.get("lineup", {}) if isinstance(home, dict) else {}
+                away_lineup = away.get("lineup", {}) if isinstance(away, dict) else {}
+                
+                # Skip matches without player-level data
+                if not home_lineup and not away_lineup:
+                    continue
+
                 match = MatchData(
                     match_id=match_id,
                     date=date,
@@ -649,8 +665,8 @@ class MatchDataset:
                     away_team=away_team,
                     home_score=home_score,
                     away_score=away_score,
-                    home_lineup=home.get("lineup", {}) if isinstance(home, dict) else {},
-                    away_lineup=away.get("lineup", {}) if isinstance(away, dict) else {},
+                    home_lineup=home_lineup,
+                    away_lineup=away_lineup,
                     home_scores=home.get("scores", []) if isinstance(home, dict) else [],
                     away_scores=away.get("scores", []) if isinstance(away, dict) else [],
                 )

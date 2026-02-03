@@ -17,6 +17,7 @@ from rugby_ranking.model.season_predictor import SeasonPredictor
 from rugby_ranking.model.paths_to_victory import PathsAnalyzer
 from rugby_ranking.model.squad_analysis import SquadAnalyzer
 from rugby_ranking.model.league_table import LeagueTable
+from rugby_ranking.model.data_utils import quick_standings, prepare_season_data
 
 
 def export_team_strength_series(
@@ -140,61 +141,42 @@ def export_team_finish_positions(
 def export_upcoming_predictions(
     model: RugbyModel,
     trace,
-    df: pd.DataFrame,
-    season: str,
+    dataset,
     output_dir: Path,
 ) -> None:
-    """Export predictions for sample matches (both upcoming and recent historical)."""
-    print("  - Sample match predictions...")
+    """Export predictions for actual upcoming/unplayed matches."""
+    print("  - Upcoming match predictions...")
 
     match_predictor = MatchPredictor(model, trace)
-
     predictions_data = []
 
-    # Get recent matches from the season, sampling diverse competitions
-    season_df = df[df["season"] == season]
+    # Get actual unplayed matches from the dataset
+    unplayed_matches = dataset.get_unplayed_matches()
     
-    # Sample up to 5 matches per competition for variety
-    sampled_matches = []
-    for competition in season_df["competition"].unique():
-        comp_df = season_df[season_df["competition"] == competition]
-        match_ids = comp_df["match_id"].unique()
-        # Take up to 5 random matches from this competition
-        sample_size = min(5, len(match_ids))
-        if sample_size > 0:
-            import random
-            sampled = random.sample(list(match_ids), sample_size)
-            sampled_matches.extend(sampled)
+    if not unplayed_matches:
+        print("    No upcoming matches found")
+        with open(output_dir / "upcoming_predictions.json", "w") as f:
+            json.dump([], f, indent=2)
+        return
     
-    # Limit total to 30 predictions to keep file size reasonable
-    sampled_matches = sampled_matches[:30]
-
-    for match_id in sampled_matches:
-        match_df = season_df[season_df["match_id"] == match_id]
-
-        if match_df.empty:
-            continue
-
-        first_row = match_df.iloc[0]
-
+    print(f"    Found {len(unplayed_matches)} upcoming matches")
+    
+    # Limit to next 50 matches to keep file size reasonable
+    for match in unplayed_matches[:50]:
         try:
             pred = match_predictor.predict_teams_only(
-                home_team=first_row["team"],
-                away_team=first_row["opponent"],
-                season=season,
+                home_team=match.home_team,
+                away_team=match.away_team,
+                season=match.season,
                 n_samples=500,
             )
 
-            date_value = first_row.get("date", "")
-            if hasattr(date_value, "isoformat"):
-                date_value = date_value.isoformat()
-
             predictions_data.append({
-                "date": str(date_value),
-                "home_team": first_row["team"],
-                "away_team": first_row["opponent"],
-                "season": season,
-                "competition": first_row.get("competition", ""),
+                "date": match.date.isoformat() if hasattr(match.date, "isoformat") else str(match.date),
+                "home_team": match.home_team,
+                "away_team": match.away_team,
+                "season": match.season,
+                "competition": match.competition,
                 "home_score_pred": float(pred.home.mean),
                 "away_score_pred": float(pred.away.mean),
                 "home_win_prob": float(pred.home_win_prob),
@@ -202,7 +184,7 @@ def export_upcoming_predictions(
                 "draw_prob": float(pred.draw_prob),
             })
         except Exception as e:
-            print(f"    Skipping prediction for {first_row['team']} vs {first_row['opponent']}: {e}")
+            print(f"    Skipping prediction for {match.home_team} vs {match.away_team}: {e}")
             continue
 
     with open(output_dir / "upcoming_predictions.json", "w") as f:
@@ -334,10 +316,10 @@ def export_squad_depth(
 
                     if analysis.depth_chart and row["position"] in analysis.depth_chart:
                         players = [
-                            {"name": player, "rating": float(rating)}
+                            {"player": player, "rating": float(rating)}
                             for player, rating in analysis.depth_chart[row["position"]][:3]
                         ]
-                        position_entry["top_players"] = players
+                        position_entry["players"] = players
 
                     positions_list.append(position_entry)
 
@@ -355,6 +337,110 @@ def export_squad_depth(
 
     with open(output_dir / "squad_depth.json", "w") as f:
         json.dump(squad_data, f, indent=2)
+
+
+def export_league_table(
+    dataset: MatchDataset,
+    season: str,
+    competition: str,
+    output_dir: Path,
+    top_n: int = 20,
+) -> None:
+    """Export league table/standings for a competition and season."""
+    print(f"  - League table: {competition} {season}...")
+    try:
+        standings = quick_standings(dataset, season=season, competition=competition, top_n=top_n)
+        standings_json = standings.to_dict(orient="records")
+        fname = f"league_table_{competition.replace(' ', '_')}_{season}.json"
+        with open(output_dir / fname, "w") as f:
+            json.dump(standings_json, f, indent=2)
+    except Exception as e:
+        print(f"    [WARNING] Skipping league table export for {competition} {season}: {e}")
+
+
+def export_season_prediction(
+    model: RugbyModel,
+    trace,
+    dataset: MatchDataset,
+    season: str,
+    competition: str,
+    output_dir: Path,
+    n_simulations: int = 1000,
+    playoff_spots: int = 8,
+) -> None:
+    """Export season prediction (position probabilities, playoff probabilities, etc)."""
+    print(f"  - Season prediction: {competition} {season}...")
+    try:
+        played_matches, remaining_fixtures = prepare_season_data(
+            dataset, season=season, competition=competition, include_tries=True
+        )
+        required_cols = ["team", "opponent", "score", "opponent_score", "tries"]
+        if played_matches.empty or not all(col in played_matches.columns for col in required_cols):
+            print(f"    [WARNING] Skipping season prediction export for {competition} {season}: missing or empty match data.")
+            return
+        
+        match_predictor = MatchPredictor(model, trace)
+        season_predictor = SeasonPredictor(
+            match_predictor=match_predictor, competition=competition, playoff_spots=playoff_spots
+        )
+        season_pred = season_predictor.predict_season(
+            played_matches=played_matches,
+            remaining_fixtures=remaining_fixtures,
+            season=season,
+            n_simulations=n_simulations,
+        )
+        
+        if season_pred.position_probabilities is not None:
+            pos_probs = season_pred.position_probabilities.reset_index().rename(columns={"index": "team"})
+            fname = f"season_position_probs_{competition.replace(' ', '_')}_{season}.json"
+            with open(output_dir / fname, "w") as f:
+                json.dump(pos_probs.to_dict(orient="records"), f, indent=2)
+        
+        if season_pred.playoff_probabilities is not None:
+            fname = f"season_playoff_probs_{competition.replace(' ', '_')}_{season}.json"
+            with open(output_dir / fname, "w") as f:
+                json.dump(season_pred.playoff_probabilities.to_dict(orient="records"), f, indent=2)
+        
+        if season_pred.predicted_standings is not None:
+            fname = f"season_predicted_standings_{competition.replace(' ', '_')}_{season}.json"
+            with open(output_dir / fname, "w") as f:
+                json.dump(season_pred.predicted_standings.to_dict(orient="records"), f, indent=2)
+    except Exception as e:
+        print(f"    [WARNING] Skipping season prediction export for {competition} {season}: {e}")
+
+
+def export_team_heatmap(
+    df: pd.DataFrame,
+    season: str,
+    competition: str,
+    output_dir: Path,
+) -> None:
+    """Export team-vs-team heatmap for a competition and season."""
+    print(f"  - Team heatmap: {competition} {season}...")
+    season_df = df[(df["season"] == season) & (df["competition"] == competition)]
+    teams = sorted(season_df["team"].unique())
+    if not teams:
+        print(f"    [WARNING] No teams found for {competition} {season}, skipping heatmap export.")
+        return
+    
+    matrix = np.zeros((len(teams), len(teams)))
+    for i, team_i in enumerate(teams):
+        for j, team_j in enumerate(teams):
+            if i == j:
+                matrix[i, j] = 0
+            else:
+                matches = season_df[(season_df["team"] == team_i) & (season_df["opponent"] == team_j)]
+                if not matches.empty:
+                    avg_diff = (matches["team_score"] - matches["opponent_score"]).mean()
+                    matrix[i, j] = avg_diff
+                else:
+                    matrix[i, j] = None
+    
+    matrix_json = [[(None if (v is None or np.isnan(v)) else float(v)) for v in row] for row in matrix]
+    out = {"teams": teams, "matrix": matrix_json}
+    fname = f"team_heatmap_{competition.replace(' ', '_')}_{season}.json"
+    with open(output_dir / fname, "w") as f:
+        json.dump(out, f, indent=2)
 
 
 def export_dashboard_data(
@@ -385,6 +471,14 @@ def export_dashboard_data(
 
     df = dataset.to_dataframe(played_only=True)
     print(f"Loaded {len(df):,} observations")
+
+    if len(df) == 0:
+        print("\nERROR: No player-level observations found!")
+        print("The data files do not contain player lineups with positions and statistics.")
+        print("This model requires player-level data, not just match results.")
+        print("\nData files like 'international.json' only have match results with empty lineups.")
+        print("You need files like 'six_nations_2025_adapted.json' with complete player information.")
+        return
 
     seasons = sorted(df["season"].unique())
     recent_seasons = seasons[-recent_seasons_only:]
@@ -418,6 +512,15 @@ def export_dashboard_data(
         trace = fitter.trace
     else:
         print("\nFitting new model...")
+        
+        # Create model with default configuration
+        config = ModelConfig(
+            include_defense=True,
+            separate_kicking_effect=True,
+            time_varying_effects=False,
+        )
+        
+        model = RugbyModel(config=config)
         model.build_joint(df_recent)
 
         inference_config = InferenceConfig(
@@ -582,8 +685,24 @@ def export_dashboard_data(
     export_team_strength_series(model, trace, df_recent, recent_seasons, output_dir)
     export_team_finish_positions(df_recent, recent_seasons, output_dir)
 
+    # Export league tables and season predictions for each competition/season
+    competitions = df_recent["competition"].unique()
     for season in recent_seasons:
-        export_upcoming_predictions(model, trace, df_recent, season, output_dir)
+        for competition in competitions:
+            comp_season_df = df_recent[
+                (df_recent["season"] == season) & 
+                (df_recent["competition"] == competition)
+            ]
+            if len(comp_season_df) > 0:
+                try:
+                    export_league_table(comp_season_df, competition, season, output_dir)
+                    export_season_prediction(model, trace, comp_season_df, competition, season, output_dir)
+                    export_team_heatmap(model, trace, comp_season_df, competition, season, output_dir)
+                except Exception as e:
+                    print(f"    Error exporting {competition} {season}: {e}")
+
+    # Export upcoming predictions using actual unplayed matches
+    export_upcoming_predictions(model, trace, dataset, output_dir)
 
     try:
         match_predictor = MatchPredictor(model, trace)
