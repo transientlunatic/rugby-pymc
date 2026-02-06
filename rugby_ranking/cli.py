@@ -270,8 +270,8 @@ def main():
     squad_analyze_parser.add_argument(
         "--checkpoint",
         type=str,
-        default="latest",
-        help="Model checkpoint to use"
+        default="international-mini5",
+        help="Model checkpoint to use (default: international-mini5)"
     )
     squad_analyze_parser.add_argument(
         "--detailed",
@@ -505,13 +505,74 @@ def run_upcoming(args):
             print(f"\n{match.date.strftime('%A, %B %d, %Y')}")
             print("-" * 70)
 
+        prediction_notes = []
         try:
-            # Use the match's actual season, not a global one
-            prediction = predictor.predict_teams_only(
-                home_team=match.home_team,
-                away_team=match.away_team,
-                season=match.season,  # Use match's season!
-            )
+            # Check if we have lineup data
+            has_lineups = bool(match.home_lineup and match.away_lineup)
+
+            # Transform lineup format from {str: dict} to {int: str}
+            home_lineup_simple = None
+            away_lineup_simple = None
+            if has_lineups:
+                try:
+                    home_lineup_simple = {
+                        int(pos): player_data['name']
+                        for pos, player_data in match.home_lineup.items()
+                        if isinstance(player_data, dict) and 'name' in player_data
+                    }
+                    away_lineup_simple = {
+                        int(pos): player_data['name']
+                        for pos, player_data in match.away_lineup.items()
+                        if isinstance(player_data, dict) and 'name' in player_data
+                    }
+                    # Check we got valid lineups
+                    if not home_lineup_simple or not away_lineup_simple:
+                        has_lineups = False
+                except (ValueError, KeyError, AttributeError):
+                    # Lineup format incompatible, fall back to team-only
+                    has_lineups = False
+
+            if has_lineups:
+                # Use lineup-based prediction
+                try:
+                    prediction = predictor.predict_full_lineup(
+                        home_team=match.home_team,
+                        away_team=match.away_team,
+                        season=match.season,
+                        home_lineup=home_lineup_simple,
+                        away_lineup=away_lineup_simple
+                    )
+                    prediction_notes.append("Method: Lineup-based")
+                except (ValueError, AttributeError, Exception):
+                    # Fallback to team-only if lineup prediction fails
+                    # (model checkpoint may not support player-level predictions)
+                    prediction = predictor.predict_teams_only(
+                        home_team=match.home_team,
+                        away_team=match.away_team,
+                        season=match.season,
+                    )
+                    prediction_notes.append(
+                        "Method: Team strength only (model doesn't support lineup predictions)"
+                    )
+            else:
+                # Use team-only prediction
+                prediction = predictor.predict_teams_only(
+                    home_team=match.home_team,
+                    away_team=match.away_team,
+                    season=match.season,
+                )
+                prediction_notes.append("Method: Team strength only")
+
+            # Check for season fallback
+            if prediction.home_season_used or prediction.away_season_used:
+                fallback_note = "Using"
+                if prediction.home_season_used:
+                    fallback_note += f" {match.home_team} data from {prediction.home_season_used}"
+                if prediction.away_season_used:
+                    if prediction.home_season_used:
+                        fallback_note += " and"
+                    fallback_note += f" {match.away_team} data from {prediction.away_season_used}"
+                prediction_notes.append(fallback_note)
 
             # Format output
             print(f"\n  {match.home_team} vs {match.away_team}")
@@ -521,6 +582,8 @@ def run_upcoming(args):
                   f"Draw {prediction.draw_prob:.1%} | Away {prediction.away_win_prob:.1%}")
             print(f"  90% CI: [{prediction.home.ci_lower:.0f}-{prediction.home.ci_upper:.0f}] vs "
                   f"[{prediction.away.ci_lower:.0f}-{prediction.away.ci_upper:.0f}]")
+            if prediction_notes:
+                print(f"  {' | '.join(prediction_notes)}")
             predictions_count += 1
 
         except ValueError as e:
@@ -618,18 +681,79 @@ def run_squad_analyze(args):
     from rugby_ranking.model.core import RugbyModel
     from rugby_ranking.model.inference import ModelFitter
     import os
+    import json
 
-    # Load squad
-    filename = f"squads/{args.team.lower().replace(' ', '_')}_{args.season}.csv"
+    # Position to section mapping for JSON format conversion
+    POSITION_SECTIONS = {
+        'Hooker': 'forwards',
+        'Prop': 'forwards',
+        'Lock': 'forwards',
+        'Back Row': 'mixed',
+        'Scrum-half': 'backs',
+        'Fly-half': 'backs',
+        'Centre': 'backs',
+        'Wing': 'backs',
+        'Fullback': 'backs',
+    }
 
-    if not os.path.exists(filename):
-        print(f"✗ Squad file not found: {filename}")
-        print(f"\nFirst input the squad using:")
+    # Try to find squad file - check JSON first (single file with all teams), then CSV
+    squad = None
+    filename = None
+
+    # Check both local squads/ and ../Rugby-Data/squads/
+    base_paths = ["squads", "../Rugby-Data/squads"]
+
+    # Try single JSON file with all teams (e.g., 2026_six_nations_championship_squads.json)
+    json_candidates = []
+    for base in base_paths:
+        json_candidates.extend([
+            f"{base}/{args.season.split('-')[0]}_six_nations_championship_squads.json",
+            f"{base}/six_nations_{args.season}.json",
+            f"{base}/six_nations_championship_{args.season}.json",
+        ])
+
+    for json_file in json_candidates:
+        if os.path.exists(json_file):
+            try:
+                with open(json_file) as f:
+                    squads_data = json.load(f)
+                if args.team in squads_data:
+                    squad_json = pd.DataFrame(squads_data[args.team]['players'])
+                    # Convert JSON format to SquadAnalyzer format
+                    squad = pd.DataFrame({
+                        'player': squad_json['name'],
+                        'position_text': squad_json['position'],
+                        'club': squad_json.get('club', 'Unknown'),
+                        'team': args.team,
+                        'season': args.season,
+                        'section': squad_json['position'].map(POSITION_SECTIONS).fillna('mixed'),
+                        'primary_position': squad_json['position'],
+                        'secondary_positions': '[]'
+                    })
+                    filename = json_file
+                    break
+            except Exception as e:
+                print(f"Warning: Error reading {json_file}: {e}")
+
+    # If not found in JSON, try CSV
+    if squad is None:
+        for base in base_paths:
+            csv_filename = f"{base}/{args.team.lower().replace(' ', '_')}_{args.season}.csv"
+            if os.path.exists(csv_filename):
+                squad = pd.read_csv(csv_filename)
+                filename = csv_filename
+                break
+
+    if squad is None:
+        print(f"✗ Squad file not found for {args.team} ({args.season})")
+        print("\nTried:")
+        for jf in json_candidates:
+            print(f"  - {jf}")
+        print("\nFirst input the squad using:")
         print(f"  rugby-ranking squad input --team \"{args.team}\" --season {args.season}")
         return
 
-    squad = pd.read_csv(filename)
-    print(f"✓ Loaded squad from {filename}")
+    print(f"✓ Loaded squad from {filename} ({len(squad)} players)")
 
     # Load model
     print(f"Loading model checkpoint: {args.checkpoint}...")
@@ -681,15 +805,72 @@ def run_squad_compare(args):
     analyzer = SquadAnalyzer(model, fitter.trace)
     analyses = {}
 
-    for team in teams:
-        filename = f"squads/{team.lower().replace(' ', '_')}_{args.season}.csv"
+    # Position mapping for JSON conversion
+    POSITION_SECTIONS = {
+        'Hooker': 'forwards', 'Prop': 'forwards', 'Lock': 'forwards',
+        'Back Row': 'mixed', 'Scrum-half': 'backs', 'Fly-half': 'backs',
+        'Centre': 'backs', 'Wing': 'backs', 'Fullback': 'backs',
+    }
 
-        if not os.path.exists(filename):
-            print(f"⚠ Skipping {team}: squad file not found ({filename})")
+    # Try to load from single JSON file first
+    import json
+
+    base_paths = ["squads", "../Rugby-Data/squads"]
+    json_candidates = []
+    for base in base_paths:
+        json_candidates.extend([
+            f"{base}/{args.season.split('-')[0]}_six_nations_championship_squads.json",
+            f"{base}/six_nations_{args.season}.json",
+        ])
+
+    squads_json = None
+    squads_json_file = None
+    for json_file in json_candidates:
+        if os.path.exists(json_file):
+            try:
+                with open(json_file) as f:
+                    squads_json = json.load(f)
+                squads_json_file = json_file
+                break
+            except Exception:
+                pass
+
+    for team in teams:
+        squad = None
+        filename = None
+
+        # Try JSON first
+        if squads_json and team in squads_json:
+            try:
+                squad_data = pd.DataFrame(squads_json[team]['players'])
+                squad = pd.DataFrame({
+                    'player': squad_data['name'],
+                    'position_text': squad_data['position'],
+                    'club': squad_data.get('club', 'Unknown'),
+                    'team': team,
+                    'season': args.season,
+                    'section': squad_data['position'].map(POSITION_SECTIONS).fillna('mixed'),
+                    'primary_position': squad_data['position'],
+                    'secondary_positions': '[]'
+                })
+                filename = squads_json_file
+            except Exception as e:
+                print(f"Warning: Error parsing {team} from JSON: {e}")
+
+        # Fall back to CSV
+        if squad is None:
+            for base in base_paths:
+                csv_filename = f"{base}/{team.lower().replace(' ', '_')}_{args.season}.csv"
+                if os.path.exists(csv_filename):
+                    squad = pd.read_csv(csv_filename)
+                    filename = csv_filename
+                    break
+
+        if squad is None:
+            print(f"⚠ Skipping {team}: squad file not found")
             continue
 
-        squad = pd.read_csv(filename)
-        print(f"\nAnalyzing {team}...")
+        print(f"\nAnalyzing {team}... ({len(squad)} players from {filename})")
 
         try:
             analysis = analyzer.analyze_squad(squad, team, args.season)

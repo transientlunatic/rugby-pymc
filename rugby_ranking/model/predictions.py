@@ -27,6 +27,44 @@ PENALTIES_PER_MATCH = 2.5  # Average penalties per team per match
 STARTERS = 15
 
 
+def _get_team_season_index_with_fallback(
+    team_season_ids: dict[tuple[str, str], int],
+    team: str,
+    season: str,
+) -> tuple[int | None, str | None, bool]:
+    """
+    Get team-season index, falling back to most recent season if exact match not found.
+
+    Args:
+        team_season_ids: Dictionary mapping (team, season) -> index
+        team: Team name
+        season: Requested season
+
+    Returns:
+        Tuple of (index, fallback_season, use_prior):
+        - index: team-season index or None if using prior
+        - fallback_season: season used if different from requested, or None
+        - use_prior: True if team never seen (use model prior)
+    """
+    # Try exact match first
+    if (team, season) in team_season_ids:
+        return team_season_ids[(team, season)], None, False
+
+    # Find all seasons for this team
+    team_seasons = [(t, s) for (t, s) in team_season_ids.keys() if t == team]
+
+    if not team_seasons:
+        # Team never seen - caller should use prior
+        return None, None, True
+
+    # Use most recent season as fallback
+    most_recent = max(team_seasons, key=lambda x: x[1])
+    fallback_season = most_recent[1]
+    fallback_idx = team_season_ids[most_recent]
+
+    return fallback_idx, fallback_season, False
+
+
 @dataclass
 class ScorePrediction:
     """Predicted score distribution for a single team."""
@@ -51,6 +89,9 @@ class MatchPrediction:
     draw_prob: float
     predicted_margin: float  # home - away
     margin_std: float
+    # Metadata about prediction method
+    home_season_used: str | None = None  # Season data used for home team (if fallback)
+    away_season_used: str | None = None  # Season data used for away team (if fallback)
 
     def summary(self) -> str:
         """Human-readable prediction summary."""
@@ -124,17 +165,29 @@ class MatchPredictor:
         home_team = normalize_team_name(home_team)
         away_team = normalize_team_name(away_team)
 
-        # Get team-season indices
-        home_ts = (home_team, season)
-        away_ts = (away_team, season)
+        # Get team-season indices with fallback to most recent season
+        home_idx, home_fallback, home_use_prior = _get_team_season_index_with_fallback(
+            self.model._team_season_ids, home_team, season
+        )
+        away_idx, away_fallback, away_use_prior = _get_team_season_index_with_fallback(
+            self.model._team_season_ids, away_team, season
+        )
 
-        if home_ts not in self.model._team_season_ids:
-            raise ValueError(f"Unknown team-season: {home_team} in {season}")
-        if away_ts not in self.model._team_season_ids:
-            raise ValueError(f"Unknown team-season: {away_team} in {season}")
+        # Handle completely unknown teams
+        if home_use_prior:
+            raise ValueError(
+                f"Unknown team: {home_team} (not found in any season). "
+                "Prior-only predictions not yet implemented."
+            )
+        if away_use_prior:
+            raise ValueError(
+                f"Unknown team: {away_team} (not found in any season). "
+                "Prior-only predictions not yet implemented."
+            )
 
-        home_idx = self.model._team_season_ids[home_ts]
-        away_idx = self.model._team_season_ids[away_ts]
+        # Store fallback info for metadata
+        home_season_used = home_fallback if home_fallback else None
+        away_season_used = away_fallback if away_fallback else None
 
         # Extract posterior samples
         posterior = self.trace.posterior
@@ -255,7 +308,9 @@ class MatchPredictor:
         home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
         away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
 
-        return self._build_prediction(home_team, away_team, home_scores, away_scores)
+        return self._build_prediction(
+            home_team, away_team, home_scores, away_scores, home_season_used, away_season_used
+        )
 
     def predict_full_lineup(
         self,
@@ -276,17 +331,29 @@ class MatchPredictor:
         home_team = normalize_team_name(home_team)
         away_team = normalize_team_name(away_team)
 
-        # Get team-season indices
-        home_ts = (home_team, season)
-        away_ts = (away_team, season)
+        # Get team-season indices with fallback
+        home_ts_idx, home_fallback, home_use_prior = _get_team_season_index_with_fallback(
+            self.model._team_season_ids, home_team, season
+        )
+        away_ts_idx, away_fallback, away_use_prior = _get_team_season_index_with_fallback(
+            self.model._team_season_ids, away_team, season
+        )
 
-        home_ts_idx = self.model._team_season_ids.get(home_ts)
-        away_ts_idx = self.model._team_season_ids.get(away_ts)
+        # Handle completely unknown teams
+        if home_use_prior:
+            raise ValueError(
+                f"Unknown team: {home_team} (not found in any season). "
+                "Prior-only predictions not yet implemented."
+            )
+        if away_use_prior:
+            raise ValueError(
+                f"Unknown team: {away_team} (not found in any season). "
+                "Prior-only predictions not yet implemented."
+            )
 
-        if home_ts_idx is None:
-            raise ValueError(f"Unknown team-season: {home_team} in {season}")
-        if away_ts_idx is None:
-            raise ValueError(f"Unknown team-season: {away_team} in {season}")
+        # Store fallback info for metadata
+        home_season_used = home_fallback if home_fallback else None
+        away_season_used = away_fallback if away_fallback else None
 
         # Extract posterior samples
         posterior = self.trace.posterior
@@ -334,8 +401,9 @@ class MatchPredictor:
             lambda_player = posterior["lambda_player_try"].values
             
             # Compute at mid-season and average across seasons
-            beta_base = (sigma_player_base[:, :, None] * lambda_player[:, :, 0:1] * beta_base_raw)
-            beta_trend = (sigma_player_trend[:, :, None] * lambda_player[:, :, 0:1] * beta_trend_raw)
+            # Add dimensions for broadcasting: (chain, draw, 1, 1) × (chain, draw, n_players, n_seasons)
+            beta_base = (sigma_player_base[:, :, None, None] * lambda_player[:, :, 0:1, None] * beta_base_raw)
+            beta_trend = (sigma_player_trend[:, :, None, None] * lambda_player[:, :, 0:1, None] * beta_trend_raw)
             beta_all_seasons = beta_base + 0.5 * beta_trend
             beta_flat = beta_all_seasons.mean(axis=-1).reshape(-1, beta_all_seasons.shape[-2])
             
@@ -372,7 +440,10 @@ class MatchPredictor:
         # Handle separate kicking/try-scoring effects
         # IMPORTANT: We need the effective sigma for tries, not the raw sigma_player
         # In the joint model: beta_player[tries] = sigma_player * lambda_player[tries] * beta_player_raw
-        if "sigma_player_try" in posterior:
+        if "sigma_player_try_base" in posterior:
+            # Time-varying model - use base effect
+            sigma_player_flat = posterior["sigma_player_try_base"].values.flatten()
+        elif "sigma_player_try" in posterior:
             sigma_player_flat = posterior["sigma_player_try"].values.flatten()
             # For separate effects, sigma_player_try is already the effective sigma for tries
         elif "lambda_player" in posterior:
@@ -439,7 +510,9 @@ class MatchPredictor:
         home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
         away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
 
-        return self._build_prediction(home_team, away_team, home_scores, away_scores)
+        return self._build_prediction(
+            home_team, away_team, home_scores, away_scores, home_season_used, away_season_used
+        )
 
     def _build_prediction(
         self,
@@ -447,6 +520,8 @@ class MatchPredictor:
         away_team: str,
         home_scores: np.ndarray,
         away_scores: np.ndarray,
+        home_season_used: str | None = None,
+        away_season_used: str | None = None,
     ) -> MatchPrediction:
         """Build MatchPrediction from score samples."""
         home_pred = ScorePrediction(
@@ -484,6 +559,8 @@ class MatchPredictor:
             draw_prob=draws,
             predicted_margin=float(margin.mean()),
             margin_std=float(margin.std()),
+            home_season_used=home_season_used,
+            away_season_used=away_season_used,
         )
 
     def predict_upcoming(

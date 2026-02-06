@@ -575,6 +575,47 @@ class SquadAnalyzer:
         self.trace = trace
         self.dataset = dataset
 
+    def _normalize_squad_format(self, squad: pd.DataFrame) -> pd.DataFrame:
+        """
+        Normalize squad DataFrame to standard format.
+
+        Handles both old format (player, position_text) and new Wikipedia
+        scraper format (name, position).
+
+        Args:
+            squad: Input DataFrame in any supported format
+
+        Returns:
+            Normalized DataFrame with 'player', 'position_text', and 'primary_position' columns
+        """
+        squad = squad.copy()
+
+        # Map 'name' -> 'player' if needed
+        if 'name' in squad.columns and 'player' not in squad.columns:
+            squad['player'] = squad['name']
+
+        # Map 'position' -> 'position_text' if needed
+        if 'position' in squad.columns and 'position_text' not in squad.columns:
+            squad['position_text'] = squad['position']
+
+        # Map 'position' -> 'primary_position' if needed
+        if 'position' in squad.columns and 'primary_position' not in squad.columns:
+            squad['primary_position'] = squad['position']
+        elif 'position_text' in squad.columns and 'primary_position' not in squad.columns:
+            squad['primary_position'] = squad['position_text']
+
+        # Add 'secondary_positions' if missing (default to empty list)
+        if 'secondary_positions' not in squad.columns:
+            squad['secondary_positions'] = '[]'
+
+        # Ensure required columns exist
+        if 'player' not in squad.columns:
+            raise ValueError("Squad DataFrame must have either 'player' or 'name' column")
+        if 'position_text' not in squad.columns:
+            raise ValueError("Squad DataFrame must have either 'position_text' or 'position' column")
+
+        return squad
+
     def analyze_squad(
         self,
         squad: pd.DataFrame,
@@ -585,13 +626,19 @@ class SquadAnalyzer:
         Comprehensive squad analysis.
 
         Args:
-            squad: Squad DataFrame from SquadParser
+            squad: Squad DataFrame from SquadParser or Wikipedia scraper
+                   Accepts both formats:
+                   - Old format: 'player', 'position_text', 'club'
+                   - New format: 'name', 'position', 'club'
             team: Team name
             season: Season (e.g., "2024-2025")
 
         Returns:
             SquadAnalysis with ratings, depth charts, strength scores
         """
+        # Normalize column names to handle both formats
+        squad = self._normalize_squad_format(squad)
+
         print(f"\nAnalyzing squad for {team} ({season})...")
         print("=" * 60)
 

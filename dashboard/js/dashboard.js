@@ -13,10 +13,183 @@ const state = {
     upcomingPredictions: null,
     pathsToVictory: null,
     squadDepth: null,
+    leagueTableData: {},
+    seasonPredictionData: {},
+    heatmapData: {},
+    selectedLeagueTableCompetition: null,
+    selectedLeagueTableSeason: null,
+    selectedSeasonPredictionCompetition: null,
+    selectedSeasonPredictionSeason: null,
+    selectedHeatmapCompetition: null,
+    selectedHeatmapSeason: null,
     selectedSeason: null,
     selectedScoreType: 'tries',
     selectedRankLimit: 20
 };
+
+// Heatmap rendering stub (to be implemented with D3)
+function renderHeatmap(data, teams, container) {
+    // Placeholder: implement D3 heatmap rendering here
+    // data: 2D array (teams x teams), teams: array of team names
+    // container: selector string (e.g., '#heatmap-container')
+    const el = document.querySelector(container);
+    if (!el) return;
+    el.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+}
+
+async function loadHeatmapData() {
+    const dataDir = 'data/';
+    const competitions = [
+        'six-nations', 'premiership', 'celtic', 'pro-d2', 'top14', 'euro-champions', 'euro-challenge',
+        'mid-year-internationals', 'end-of-year-internationals', 'championship'
+    ];
+    const seasons = state.summary.seasons || [];
+    state.heatmapData = {};
+    for (const comp of competitions) {
+        for (const season of seasons) {
+            const file = `${dataDir}team_heatmap_${comp}_${season}.json`;
+            state.heatmapData[`${comp}_${season}`] = await loadJsonSafe(file, null);
+        }
+    }
+}
+
+function populateHeatmapSelects() {
+    const compSelect = document.getElementById('heatmap-competition');
+    const seasonSelect = document.getElementById('heatmap-season');
+    if (!compSelect || !seasonSelect) return;
+    const competitions = [...new Set(Object.keys(state.heatmapData).map(k => k.split('_')[0]))];
+    const seasons = state.summary.seasons || [];
+    compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    state.selectedHeatmapCompetition = competitions[0] || '';
+    state.selectedHeatmapSeason = seasons[seasons.length-1] || '';
+}
+
+function updateHeatmap() {
+    const container = '#heatmap-container';
+    const comp = state.selectedHeatmapCompetition;
+    const season = state.selectedHeatmapSeason;
+    const key = `${comp}_${season}`;
+    const dataObj = state.heatmapData[key];
+    const el = document.querySelector(container);
+    if (!el) return;
+    if (!comp || !season) {
+        el.innerHTML = '<div class="text-muted">Select competition and season.</div>';
+        return;
+    }
+    if (!dataObj || !dataObj.matrix || !dataObj.teams) {
+        el.innerHTML = '<div class="text-muted">No heatmap data available for this selection.</div>';
+        return;
+    }
+    renderHeatmap(dataObj.matrix, dataObj.teams, container);
+}
+function updateLeagueTable() {
+    const tbody = document.querySelector('#league-table tbody');
+    if (!tbody) return;
+    const comp = state.selectedLeagueTableCompetition;
+    const season = state.selectedLeagueTableSeason;
+    if (!comp || !season) {
+        tbody.innerHTML = '<tr><td colspan="14">Select competition and season.</td></tr>';
+        return;
+    }
+    const key = `${comp}_${season}`;
+    const data = state.leagueTableData[key];
+    if (!data || !Array.isArray(data)) {
+        tbody.innerHTML = '<tr><td colspan="14">No data available for this selection.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(row => `
+        <tr>
+            <td>${row.position}</td>
+            <td><strong>${row.team}</strong></td>
+            <td>${row.played}</td>
+            <td>${row.won}</td>
+            <td>${row.drawn}</td>
+            <td>${row.lost}</td>
+            <td>${row.points_for}</td>
+            <td>${row.points_against}</td>
+            <td>${row.points_diff}</td>
+            <td>${row.tries_for}</td>
+            <td>${row.tries_against}</td>
+            <td>${row.bonus_points}</td>
+            <td>${row.match_points}</td>
+            <td>${row.total_points}</td>
+        </tr>
+    `).join('');
+}
+
+function updateSeasonPrediction() {
+    const tbody = document.querySelector('#season-prediction-table tbody');
+    if (!tbody) return;
+    const comp = state.selectedSeasonPredictionCompetition;
+    const season = state.selectedSeasonPredictionSeason;
+    if (!comp || !season) {
+        tbody.innerHTML = '<tr><td colspan="5">Select competition and season.</td></tr>';
+        return;
+    }
+    const key = `${comp}_${season}`;
+    const data = state.seasonPredictionData[key];
+    if (!data || !Array.isArray(data)) {
+        tbody.innerHTML = '<tr><td colspan="5">No data available for this selection.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(row => `
+        <tr>
+            <td><strong>${row.team}</strong></td>
+            <td>${row.expected_points}</td>
+            <td>${row.expected_wins}</td>
+            <td>${row.expected_diff}</td>
+            <td>${row.predicted_position}</td>
+        </tr>
+    `).join('');
+}
+// Dynamically load all league table and season prediction files
+async function loadLeagueTableAndSeasonPredictionData() {
+    const dataDir = 'data/';
+    // List of files is static, but could be made dynamic with a manifest
+    const competitions = [
+        'six-nations', 'premiership', 'celtic', 'pro-d2', 'top14', 'euro-champions', 'euro-challenge',
+        'mid-year-internationals', 'end-of-year-internationals', 'championship'
+    ];
+    const seasons = state.summary.seasons || [];
+    state.leagueTableData = {};
+    state.seasonPredictionData = {};
+    for (const comp of competitions) {
+        for (const season of seasons) {
+            const leagueTableFile = `${dataDir}league_table_${comp}_${season}.json`;
+            const seasonPredFile = `${dataDir}season_predicted_standings_${comp}_${season}.json`;
+            state.leagueTableData[`${comp}_${season}`] = await loadJsonSafe(leagueTableFile, null);
+            state.seasonPredictionData[`${comp}_${season}`] = await loadJsonSafe(seasonPredFile, null);
+        }
+    }
+}
+
+function populateLeagueTableSelects() {
+    const compSelect = document.getElementById('league-table-competition');
+    const seasonSelect = document.getElementById('league-table-season');
+    if (!compSelect || !seasonSelect) return;
+    const competitions = [...new Set(Object.keys(state.leagueTableData).map(k => k.split('_')[0]))];
+    const seasons = state.summary.seasons || [];
+    compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    // Set defaults
+    state.selectedLeagueTableCompetition = competitions[0] || '';
+    state.selectedLeagueTableSeason = seasons[seasons.length-1] || '';
+}
+
+function populateSeasonPredictionSelects() {
+    const compSelect = document.getElementById('season-prediction-competition');
+    const seasonSelect = document.getElementById('season-prediction-season');
+    if (!compSelect || !seasonSelect) return;
+    const competitions = [...new Set(Object.keys(state.seasonPredictionData).map(k => k.split('_')[0]))];
+    const seasons = state.summary.seasons || [];
+    compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    // Set defaults
+    state.selectedSeasonPredictionCompetition = competitions[0] || '';
+    state.selectedSeasonPredictionSeason = seasons[seasons.length-1] || '';
+}
+// ...existing code...
 
 async function loadJsonSafe(url, fallback = null) {
     try {
@@ -29,6 +202,7 @@ async function loadJsonSafe(url, fallback = null) {
 
 // Load all data
 async function loadData() {
+    // Load summary and all main data first
     try {
         const [summary, teamOffense, teamDefense, playerRankings, matchStats, teamStats,
             teamStrengthSeries, teamFinishPositions, upcomingPredictions, pathsToVictory, squadDepth] = await Promise.all([
@@ -57,6 +231,10 @@ async function loadData() {
         state.pathsToVictory = pathsToVictory;
         state.squadDepth = squadDepth;
 
+        // Now safe to load heatmap and other dependent data
+        await loadHeatmapData();
+        await loadLeagueTableAndSeasonPredictionData();
+
         // Set default season to most recent
         state.selectedSeason = summary.seasons[summary.seasons.length - 1];
 
@@ -65,16 +243,103 @@ async function loadData() {
         console.error('Error loading data:', error);
         showError('Failed to load dashboard data. Please ensure data files are generated.');
     }
+
+    function populateLeagueTableSelects() {
+        const compSelect = document.getElementById('league-table-competition');
+        const seasonSelect = document.getElementById('league-table-season');
+        if (!compSelect || !seasonSelect) return;
+        const competitions = [...new Set(Object.keys(state.leagueTableData).map(k => k.split('_')[0]))];
+        const seasons = state.summary.seasons || [];
+        compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+        seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+        // Set defaults
+        state.selectedLeagueTableCompetition = competitions[0] || '';
+        state.selectedLeagueTableSeason = seasons[seasons.length-1] || '';
+    }
+
+    function populateSeasonPredictionSelects() {
+        const compSelect = document.getElementById('season-prediction-competition');
+        const seasonSelect = document.getElementById('season-prediction-season');
+        if (!compSelect || !seasonSelect) return;
+        const competitions = [...new Set(Object.keys(state.seasonPredictionData).map(k => k.split('_')[0]))];
+        const seasons = state.summary.seasons || [];
+        compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+        seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+        // Set defaults
+        state.selectedSeasonPredictionCompetition = competitions[0] || '';
+        state.selectedSeasonPredictionSeason = seasons[seasons.length-1] || '';
+    }
+    try {
+        const [summary, teamOffense, teamDefense, playerRankings, matchStats, teamStats,
+            teamStrengthSeries, teamFinishPositions, upcomingPredictions, pathsToVictory, squadDepth] = await Promise.all([
+            d3.json('data/summary.json'),
+            d3.json('data/team_offense.json'),
+            d3.json('data/team_defense.json'),
+            d3.json('data/player_rankings.json'),
+            d3.json('data/match_stats.json'),
+            d3.json('data/team_stats.json'),
+            loadJsonSafe('data/team_strength_series.json'),
+            loadJsonSafe('data/team_finish_positions.json'),
+            loadJsonSafe('data/upcoming_predictions.json'),
+            loadJsonSafe('data/paths_to_victory.json'),
+            loadJsonSafe('data/squad_depth.json')
+        ]);
+
+        state.summary = summary;
+        state.teamOffense = teamOffense;
+        state.teamDefense = teamDefense;
+        state.playerRankings = playerRankings;
+        state.matchStats = matchStats;
+        state.teamStats = teamStats;
+        state.teamStrengthSeries = teamStrengthSeries;
+        state.teamFinishPositions = teamFinishPositions;
+        state.upcomingPredictions = upcomingPredictions;
+        state.pathsToVictory = pathsToVictory;
+        state.squadDepth = squadDepth;
+
+        await loadLeagueTableAndSeasonPredictionData();
+
+        // Set default season to most recent
+        state.selectedSeason = summary.seasons[summary.seasons.length - 1];
+
+        initializeDashboard();
+    // Dynamically load all league table and season prediction files
+    async function loadLeagueTableAndSeasonPredictionData() {
+        const dataDir = 'data/';
+        // List of files is static, but could be made dynamic with a manifest
+        const competitions = [
+            'six-nations', 'premiership', 'celtic', 'pro-d2', 'top14', 'euro-champions', 'euro-challenge',
+            'mid-year-internationals', 'end-of-year-internationals', 'championship'
+        ];
+        const seasons = state.summary.seasons || [];
+        state.leagueTableData = {};
+        state.seasonPredictionData = {};
+        for (const comp of competitions) {
+            for (const season of seasons) {
+                const leagueTableFile = `${dataDir}league_table_${comp}_${season}.json`;
+                const seasonPredFile = `${dataDir}season_predicted_standings_${comp}_${season}.json`;
+                state.leagueTableData[`${comp}_${season}`] = await loadJsonSafe(leagueTableFile, null);
+                state.seasonPredictionData[`${comp}_${season}`] = await loadJsonSafe(seasonPredFile, null);
+            }
+        }
+    }
+    } catch (error) {
+        console.error('Error loading data:', error);
+        showError('Failed to load dashboard data. Please ensure data files are generated.');
+    }
 }
 
 // Initialize dashboard
 function initializeDashboard() {
+            populateHeatmapSelects();
+        populateLeagueTableSelects();
+        populateSeasonPredictionSelects();
     updateSummaryCards();
+    populateGlobalControls();
     populateSeasonSelects();
     populateTeamSelect();
     populateTrendTeamSelect();
     populateFinishPositionSelects();
-    populatePredictionSelects();
     populatePathsSelects();
     populateSquadSelects();
     updateAllVisualizations();
@@ -112,8 +377,123 @@ function populateTeamSelect() {
         teams.map(team => `<option value="${team}">${team}</option>`).join('');
 }
 
+// Populate global filter controls
+function populateGlobalControls() {
+    const globalComp = document.getElementById('global-competition');
+    const globalSeason = document.getElementById('global-season');
+    
+    if (!globalComp || !globalSeason) return;
+    
+    // Get competitions from league table data (or could use summary.competitions)
+    const competitions = [...new Set(Object.keys(state.leagueTableData).map(k => k.split('_')[0]))].sort();
+    const seasons = state.summary.seasons || [];
+    
+    // Populate competition dropdown
+    globalComp.innerHTML = '<option value="">All Competitions</option>' + 
+        competitions.map(c => {
+            const displayName = c.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            return `<option value="${c}">${displayName}</option>`;
+        }).join('');
+    
+    // Populate season dropdown 
+    globalSeason.innerHTML = '<option value="">All Seasons</option>' +
+        seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    
+    // Set defaults to most recent
+    if (competitions.length > 0) {
+        globalComp.value = competitions[0];
+        state.selectedLeagueTableCompetition = competitions[0];
+        state.selectedSeasonPredictionCompetition = competitions[0];
+        state.selectedHeatmapCompetition = competitions[0];
+    }
+    
+    if (seasons.length > 0) {
+        const latestSeason = seasons[seasons.length - 1];
+        globalSeason.value = latestSeason;
+        state.selectedSeason = latestSeason;
+        state.selectedLeagueTableSeason = latestSeason;
+        state.selectedSeasonPredictionSeason = latestSeason;
+        state.selectedHeatmapSeason = latestSeason;
+    }
+}
+
 // Setup event listeners
 function setupEventListeners() {
+    // Global filter controls
+    const applyFiltersBtn = document.getElementById('apply-filters');
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', () => {
+            // Update global state from global controls
+            const globalComp = document.getElementById('global-competition');
+            const globalSeason = document.getElementById('global-season');
+            const globalScoreType = document.getElementById('global-score-type');
+            const globalRankLimit = document.getElementById('global-rank-limit');
+
+            if (globalComp && globalComp.value) {
+                state.selectedLeagueTableCompetition = globalComp.value;
+                state.selectedSeasonPredictionCompetition = globalComp.value;
+                state.selectedHeatmapCompetition = globalComp.value;
+            }
+            
+            if (globalSeason && globalSeason.value) {
+                state.selectedSeason = globalSeason.value;
+                state.selectedLeagueTableSeason = globalSeason.value;
+                state.selectedSeasonPredictionSeason = globalSeason.value;
+                state.selectedHeatmapSeason = globalSeason.value;
+            }
+            
+            if (globalScoreType) {
+                state.selectedScoreType = globalScoreType.value;
+            }
+            
+            if (globalRankLimit) {
+                state.selectedRankLimit = parseInt(globalRankLimit.value);
+            }
+
+            // Update all visualizations with new global filters
+            updateAllVisualizations();
+            updateLeagueTable();
+            updateSeasonPrediction();
+            updateHeatmap();
+        });
+    }
+
+    // Auto-populate global controls when filters change
+    const globalComp = document.getElementById('global-competition');
+    const globalSeason = document.getElementById('global-season');
+    const globalScoreType = document.getElementById('global-score-type');
+    const globalRankLimit = document.getElementById('global-rank-limit');
+    
+    if (globalComp) {
+        globalComp.addEventListener('change', (e) => {
+            state.selectedLeagueTableCompetition = e.target.value;
+            state.selectedSeasonPredictionCompetition = e.target.value;
+            state.selectedHeatmapCompetition = e.target.value;
+        });
+    }
+    
+    if (globalSeason) {
+        globalSeason.addEventListener('change', (e) => {
+            state.selectedSeason = e.target.value;
+            state.selectedLeagueTableSeason = e.target.value;
+            state.selectedSeasonPredictionSeason = e.target.value;
+            state.selectedHeatmapSeason = e.target.value;
+        });
+    }
+    
+    if (globalScoreType) {
+        globalScoreType.addEventListener('change', (e) => {
+            state.selectedScoreType = e.target.value;
+        });
+    }
+    
+    if (globalRankLimit) {
+        globalRankLimit.addEventListener('change', (e) => {
+            state.selectedRankLimit = parseInt(e.target.value);
+        });
+    }
+
+    // Individual control event listeners (only for controls that still exist in HTML)
     document.getElementById('season-select').addEventListener('change', (e) => {
         state.selectedSeason = e.target.value;
         updateAllVisualizations();
@@ -167,15 +547,6 @@ function setupEventListeners() {
         positionSeason.addEventListener('change', updateFinishPositions);
     }
 
-    const predictionCompetition = document.getElementById('prediction-competition');
-    if (predictionCompetition) {
-        predictionCompetition.addEventListener('change', updatePredictionTable);
-    }
-    const predictionSeason = document.getElementById('prediction-season');
-    if (predictionSeason) {
-        predictionSeason.addEventListener('change', updatePredictionTable);
-    }
-
     const pathsCompetition = document.getElementById('paths-competition');
     if (pathsCompetition) {
         pathsCompetition.addEventListener('change', updatePathsToVictory);
@@ -197,6 +568,7 @@ function setupEventListeners() {
 
 // Update all visualizations
 function updateAllVisualizations() {
+        updateHeatmap();
     updateTeamVisualizations();
     updatePlayerVisualizations('tries');
     updateMatchTable(state.selectedSeason, '');
@@ -205,6 +577,97 @@ function updateAllVisualizations() {
     updatePredictionTable();
     updatePathsToVictory();
     updateSquadDepth();
+    updateLeagueTable();
+    updateSeasonPrediction();
+
+// Render league table
+function populateLeagueTableSelects() {
+    const compSelect = document.getElementById('league-table-competition');
+    const seasonSelect = document.getElementById('league-table-season');
+    if (!compSelect || !seasonSelect) return;
+    const competitions = [...new Set(Object.keys(state.leagueTableData).map(k => k.split('_')[0]))];
+    const seasons = state.summary.seasons || [];
+    compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    // Set defaults
+    state.selectedLeagueTableCompetition = competitions[0] || '';
+    state.selectedLeagueTableSeason = seasons[seasons.length-1] || '';
+}
+
+function updateLeagueTable() {
+    const tbody = document.querySelector('#league-table tbody');
+    if (!tbody) return;
+    const comp = state.selectedLeagueTableCompetition;
+    const season = state.selectedLeagueTableSeason;
+    if (!comp || !season) {
+        tbody.innerHTML = '<tr><td colspan="14">Select competition and season.</td></tr>';
+        return;
+    }
+    const key = `${comp}_${season}`;
+    const data = state.leagueTableData[key];
+    if (!data || !Array.isArray(data)) {
+        tbody.innerHTML = '<tr><td colspan="14">No data available for this selection.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(row => `
+        <tr>
+            <td>${row.position}</td>
+            <td><strong>${row.team}</strong></td>
+            <td>${row.played}</td>
+            <td>${row.won}</td>
+            <td>${row.drawn}</td>
+            <td>${row.lost}</td>
+            <td>${row.points_for}</td>
+            <td>${row.points_against}</td>
+            <td>${row.points_diff}</td>
+            <td>${row.tries_for}</td>
+            <td>${row.tries_against}</td>
+            <td>${row.bonus_points}</td>
+            <td>${row.match_points}</td>
+            <td>${row.total_points}</td>
+        </tr>
+    `).join('');
+}
+
+// Render season prediction
+function populateSeasonPredictionSelects() {
+    const compSelect = document.getElementById('season-prediction-competition');
+    const seasonSelect = document.getElementById('season-prediction-season');
+    if (!compSelect || !seasonSelect) return;
+    const competitions = [...new Set(Object.keys(state.seasonPredictionData).map(k => k.split('_')[0]))];
+    const seasons = state.summary.seasons || [];
+    compSelect.innerHTML = '<option value="">Select...</option>' + competitions.map(c => `<option value="${c}">${c}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">Select...</option>' + seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+    // Set defaults
+    state.selectedSeasonPredictionCompetition = competitions[0] || '';
+    state.selectedSeasonPredictionSeason = seasons[seasons.length-1] || '';
+}
+
+function updateSeasonPrediction() {
+    const tbody = document.querySelector('#season-prediction-table tbody');
+    if (!tbody) return;
+    const comp = state.selectedSeasonPredictionCompetition;
+    const season = state.selectedSeasonPredictionSeason;
+    if (!comp || !season) {
+        tbody.innerHTML = '<tr><td colspan="5">Select competition and season.</td></tr>';
+        return;
+    }
+    const key = `${comp}_${season}`;
+    const data = state.seasonPredictionData[key];
+    if (!data || !Array.isArray(data)) {
+        tbody.innerHTML = '<tr><td colspan="5">No data available for this selection.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = data.map(row => `
+        <tr>
+            <td><strong>${row.team}</strong></td>
+            <td>${row.expected_points}</td>
+            <td>${row.expected_wins}</td>
+            <td>${row.expected_diff}</td>
+            <td>${row.predicted_position}</td>
+        </tr>
+    `).join('');
+}
 }
 
 function populateTrendTeamSelect() {
@@ -236,23 +699,6 @@ function populateFinishPositionSelects() {
     
     // Trigger initial update
     updateFinishPositions();
-}
-
-function populatePredictionSelects() {
-    if (!state.upcomingPredictions) {
-        return;
-    }
-    const competitionSelect = document.getElementById('prediction-competition');
-    const seasonSelect = document.getElementById('prediction-season');
-    if (!competitionSelect || !seasonSelect) {
-        return;
-    }
-    const competitions = [...new Set(state.upcomingPredictions.map(d => d.competition))].sort();
-    competitionSelect.innerHTML = '<option value="">All Competitions</option>' +
-        competitions.map(c => `<option value="${c}">${c}</option>`).join('');
-    const seasons = [...new Set(state.upcomingPredictions.map(d => d.season))].sort();
-    seasonSelect.innerHTML = '<option value="">All Seasons</option>' +
-        seasons.map(s => `<option value="${s}">${s}</option>`).join('');
 }
 
 function populatePathsSelects() {
@@ -364,16 +810,9 @@ function updatePredictionTable() {
     if (!state.upcomingPredictions) {
         return;
     }
-    const competition = document.getElementById('prediction-competition')?.value;
-    const season = document.getElementById('prediction-season')?.value;
 
-    let filtered = state.upcomingPredictions;
-    if (competition) {
-        filtered = filtered.filter(d => d.competition === competition);
-    }
-    if (season) {
-        filtered = filtered.filter(d => d.season === season);
-    }
+    // No filtering - show all upcoming predictions
+    const filtered = state.upcomingPredictions;
 
     filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 

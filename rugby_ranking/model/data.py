@@ -575,9 +575,10 @@ class MatchDataset:
                 home_lineup = home.get("lineup", {}) if isinstance(home, dict) else {}
                 away_lineup = away.get("lineup", {}) if isinstance(away, dict) else {}
                 
-                # Skip matches without player-level data
-                if not home_lineup and not away_lineup:
-                    continue
+                # Allow matches without player-level data (for prediction purposes)
+                # Note: Matches without lineups can still be used for team-only predictions
+                # if not home_lineup and not away_lineup:
+                #     continue
 
                 match_data = MatchData(
                     match_id=f"{competition}_{season}_{i}",
@@ -651,9 +652,10 @@ class MatchDataset:
                 home_lineup = home.get("lineup", {}) if isinstance(home, dict) else {}
                 away_lineup = away.get("lineup", {}) if isinstance(away, dict) else {}
                 
-                # Skip matches without player-level data
-                if not home_lineup and not away_lineup:
-                    continue
+                # Allow matches without player-level data (for prediction purposes)
+                # Note: Matches without lineups can still be used for team-only predictions
+                # if not home_lineup and not away_lineup:
+                #     continue
 
                 match = MatchData(
                     match_id=match_id,

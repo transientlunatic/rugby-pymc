@@ -12,6 +12,22 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .global-controls {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            padding-top: 0;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -59,6 +75,59 @@
             </div>
         </div>
     </nav>
+
+    <!-- Global Controls - Fixed at Top -->
+    <div class="global-controls">
+        <div class="container-fluid">
+            <div class="row align-items-end g-2">
+                <div class="col-md-3">
+                    <label for="global-competition" class="form-label fw-bold mb-1">
+                        <i class="bi bi-trophy"></i> Competition
+                    </label>
+                    <select class="form-select form-select-sm" id="global-competition">
+                        <option value="">All Competitions</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="global-season" class="form-label fw-bold mb-1">
+                        <i class="bi bi-calendar3"></i> Season
+                    </label>
+                    <select class="form-select form-select-sm" id="global-season">
+                        <option value="">All Seasons</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="global-score-type" class="form-label fw-bold mb-1">
+                        <i class="bi bi-graph-up"></i> Score Type
+                    </label>
+                    <select class="form-select form-select-sm" id="global-score-type">
+                        <option value="tries">Tries</option>
+                        <option value="penalties">Penalties</option>
+                        <option value="conversions">Conversions</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="global-rank-limit" class="form-label fw-bold mb-1">
+                        <i class="bi bi-list-ol"></i> Show Top
+                    </label>
+                    <select class="form-select form-select-sm" id="global-rank-limit">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="col-md-3 text-end">
+                    <label class="form-label fw-bold mb-1">&nbsp;</label>
+                    <div>
+                        <button class="btn btn-primary btn-sm w-100" id="apply-filters">
+                            <i class="bi bi-arrow-repeat"></i> Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container-fluid mt-4">
@@ -129,6 +198,92 @@
                             <strong>team defensive effects</strong> (opponent scoring prevention), and
                             <strong>position effects</strong> (base rates by jersey number).
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Heatmap Section -->
+        <section id="heatmap-section" class="mb-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="section-title">
+                            <i class="bi bi-grid-3x3-gap"></i> Team vs Team Heatmap
+                        </h2>
+                        <p class="text-muted">Use global controls above to select competition and season</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="heatmap-container"></div>
+                    </div>
+                </div>
+            </section>
+
+        <!-- League Table Section -->
+        <section id="league-table-section" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="section-title">
+                        <i class="bi bi-table"></i> League Table
+                    </h2>
+                    <p class="text-muted">Use global controls above to select competition and season</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="league-table">
+                            <thead>
+                                <tr>
+                                    <th>Pos</th>
+                                    <th>Team</th>
+                                    <th>Played</th>
+                                    <th>Won</th>
+                                    <th>Drawn</th>
+                                    <th>Lost</th>
+                                    <th>PF</th>
+                                    <th>PA</th>
+                                    <th>Diff</th>
+                                    <th>Tries For</th>
+                                    <th>Tries Against</th>
+                                    <th>Bonus</th>
+                                    <th>Match Pts</th>
+                                    <th>Total Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Season Prediction Section -->
+        <section id="season-prediction-section" class="mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="section-title">
+                        <i class="bi bi-bar-chart"></i> Season Prediction
+                    </h2>
+                    <p class="text-muted">Use global controls above to select competition and season</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="season-prediction-table">
+                            <thead>
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Expected Points</th>
+                                    <th>Expected Wins</th>
+                                    <th>Expected Diff</th>
+                                    <th>Predicted Position</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -365,21 +520,7 @@
                     <h2 class="section-title">
                         <i class="bi bi-graph-up"></i> Upcoming Match Predictions
                     </h2>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="prediction-competition" class="form-label">Competition</label>
-                    <select class="form-select" id="prediction-competition">
-                        <option value="">All Competitions</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="prediction-season" class="form-label">Season</label>
-                    <select class="form-select" id="prediction-season">
-                        <option value="">All Seasons</option>
-                    </select>
+                    <p class="text-muted">Predictions for upcoming fixtures across all competitions</p>
                 </div>
             </div>
 
