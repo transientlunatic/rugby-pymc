@@ -1018,24 +1018,359 @@ class LineupPredictor:
     """
     Predict likely starting lineups from squad.
 
-    TODO: Implement lineup prediction functionality
+    Uses optimization to select best XV while respecting positional
+    coverage requirements (specialist props, hooker, scrum-half).
     """
 
-    def predict_lineup(self, squad_analysis: SquadAnalysis) -> Dict[str, str]:
+    # Standard starting XV positions (numbered 1-15)
+    STARTING_XV_POSITIONS = {
+        1: 'Prop',  # Loosehead
+        2: 'Hooker',
+        3: 'Prop',  # Tighthead
+        4: 'Lock',
+        5: 'Lock',
+        6: 'Flanker',
+        7: 'Flanker',
+        8: 'Number 8',
+        9: 'Scrum-half',
+        10: 'Fly-half',
+        11: 'Wing',
+        12: 'Centre',
+        13: 'Centre',
+        14: 'Wing',
+        15: 'Fullback',
+    }
+
+    # Required bench positions (typically 16-23)
+    BENCH_REQUIREMENTS = {
+        'Prop': 2,  # Need front row cover
+        'Hooker': 1,
+        'Lock': 1,  # Second row cover
+        'Back row': 1,  # Flanker or Number 8
+        'Scrum-half': 1,  # Half-back cover
+        'Backs': 2,  # Utility backs
+    }
+
+    def __init__(self, model=None, trace=None):
+        """
+        Initialize LineupPredictor.
+
+        Args:
+            model: Fitted rugby model (optional, for rating-based predictions)
+            trace: Model trace (optional)
+        """
+        self.model = model
+        self.trace = trace
+
+    def predict_lineup(
+        self,
+        squad_analysis: SquadAnalysis,
+        unavailable: List[str] = None,
+    ) -> Dict[str, any]:
         """
         Predict most likely starting XV.
 
-        TODO: Implement optimization-based lineup selection
+        Uses optimization to select best possible lineup while respecting
+        positional requirements.
+
+        Args:
+            squad_analysis: SquadAnalysis with player ratings
+            unavailable: List of unavailable players (injuries, etc.)
+
+        Returns:
+            Dict with:
+                - starting_xv: Dict[position_number, player_name]
+                - bench: List[player_name] (8 players)
+                - total_rating: Overall lineup quality score
+                - coverage_valid: Whether lineup meets positional requirements
         """
-        raise NotImplementedError
+        unavailable = unavailable or []
+
+        # Get available players
+        squad = squad_analysis.squad
+        available = squad[~squad['player'].isin(unavailable)].copy()
+
+        if len(available) < 23:
+            raise ValueError(
+                f"Insufficient players: {len(available)} available, need at least 23"
+            )
+
+        # Get player ratings
+        ratings = squad_analysis.player_ratings
+        if ratings is None:
+            raise ValueError("Squad analysis must include player ratings")
+
+        # Create rating lookup (use try-scoring rating as proxy for overall ability)
+        player_rating_map = {}
+        for _, row in ratings[ratings['score_type'] == 'tries'].iterrows():
+            player_rating_map[row['player']] = row['rating_mean']
+
+        # Build lineup using greedy selection with positional constraints
+        starting_xv = {}
+        selected_players = set()
+
+        # Fill starting positions in order of specificity
+        # 1. Front row (most specialist)
+        for pos_num in [1, 2, 3]:
+            position = self.STARTING_XV_POSITIONS[pos_num]
+            candidates = self._get_candidates_for_position(
+                available, position, selected_players, player_rating_map
+            )
+            if not candidates:
+                raise ValueError(f"No available {position} for position {pos_num}")
+
+            # Select best available
+            best_player = max(candidates, key=lambda p: player_rating_map.get(p, 0.0))
+            starting_xv[pos_num] = best_player
+            selected_players.add(best_player)
+
+        # 2. Scrum-half (specialist position)
+        candidates = self._get_candidates_for_position(
+            available, 'Scrum-half', selected_players, player_rating_map
+        )
+        if candidates:
+            starting_xv[9] = max(candidates, key=lambda p: player_rating_map.get(p, 0.0))
+            selected_players.add(starting_xv[9])
+
+        # 3. Fill remaining positions by rating
+        for pos_num, position in self.STARTING_XV_POSITIONS.items():
+            if pos_num in starting_xv:
+                continue  # Already filled
+
+            candidates = self._get_candidates_for_position(
+                available, position, selected_players, player_rating_map
+            )
+            if not candidates:
+                # No primary candidates, try versatile players
+                candidates = self._get_secondary_candidates(
+                    available, position, selected_players, player_rating_map
+                )
+
+            if not candidates:
+                raise ValueError(f"No available {position} for position {pos_num}")
+
+            best_player = max(candidates, key=lambda p: player_rating_map.get(p, 0.0))
+            starting_xv[pos_num] = best_player
+            selected_players.add(best_player)
+
+        # Select bench (8 players with positional cover)
+        bench = self._select_bench(
+            available, selected_players, player_rating_map
+        )
+
+        # Calculate total rating
+        total_rating = sum(
+            player_rating_map.get(p, 0.0) for p in starting_xv.values()
+        ) / 15.0
+
+        # Validate coverage
+        coverage_valid = self._validate_coverage(starting_xv, bench, available)
+
+        return {
+            'starting_xv': starting_xv,
+            'bench': bench,
+            'total_rating': total_rating,
+            'coverage_valid': coverage_valid,
+        }
+
+    def predict_lineup_distribution(
+        self,
+        squad_analysis: SquadAnalysis,
+        n_samples: int = 100,
+        uncertainty_factor: float = 0.1,
+    ) -> pd.DataFrame:
+        """
+        Generate distribution of likely lineups via Monte Carlo sampling.
+
+        Accounts for selection uncertainty when player ratings are close.
+
+        Args:
+            squad_analysis: SquadAnalysis with player ratings
+            n_samples: Number of lineup samples
+            uncertainty_factor: Amount of noise to add to ratings (0-1)
+
+        Returns:
+            DataFrame with player selection probabilities
+        """
+        # Get base ratings
+        ratings = squad_analysis.player_ratings
+        if ratings is None:
+            raise ValueError("Squad analysis must include player ratings")
+
+        player_ratings = ratings[ratings['score_type'] == 'tries'].copy()
+
+        selection_counts = {}
+
+        for _ in range(n_samples):
+            # Add noise to ratings
+            noisy_ratings = player_ratings.copy()
+            noisy_ratings['rating_mean'] = (
+                noisy_ratings['rating_mean'] +
+                np.random.normal(0, uncertainty_factor, len(noisy_ratings))
+            )
+
+            # Create temporary squad analysis with noisy ratings
+            noisy_analysis = SquadAnalysis(
+                team=squad_analysis.team,
+                season=squad_analysis.season,
+                squad=squad_analysis.squad,
+                player_ratings=noisy_ratings,
+                depth_chart=squad_analysis.depth_chart,
+            )
+
+            # Predict lineup
+            try:
+                lineup = self.predict_lineup(noisy_analysis)
+
+                # Count selections
+                for player in lineup['starting_xv'].values():
+                    selection_counts[player] = selection_counts.get(player, 0) + 1
+
+                for player in lineup['bench']:
+                    selection_counts[player] = selection_counts.get(player, 0) + 0.5
+
+            except ValueError:
+                continue  # Skip if lineup invalid
+
+        # Convert to probabilities
+        results = []
+        for player, count in selection_counts.items():
+            results.append({
+                'player': player,
+                'selection_probability': count / n_samples,
+                'likely_role': 'starter' if count > n_samples * 0.5 else 'bench',
+            })
+
+        df = pd.DataFrame(results)
+        return df.sort_values('selection_probability', ascending=False).reset_index(drop=True)
+
+    def _get_candidates_for_position(
+        self,
+        squad: pd.DataFrame,
+        position: str,
+        excluded: set,
+        ratings: Dict[str, float],
+    ) -> List[str]:
+        """Get primary candidates for a position."""
+        candidates = squad[
+            (squad['primary_position'] == position) &
+            (~squad['player'].isin(excluded))
+        ]['player'].tolist()
+
+        return candidates
+
+    def _get_secondary_candidates(
+        self,
+        squad: pd.DataFrame,
+        position: str,
+        excluded: set,
+        ratings: Dict[str, float],
+    ) -> List[str]:
+        """Get secondary candidates (versatile players)."""
+        candidates = squad[
+            (squad['secondary_positions'].apply(
+                lambda x: position in str(x) if pd.notna(x) else False
+            )) &
+            (~squad['player'].isin(excluded))
+        ]['player'].tolist()
+
+        return candidates
+
+    def _select_bench(
+        self,
+        squad: pd.DataFrame,
+        selected_starters: set,
+        ratings: Dict[str, float],
+    ) -> List[str]:
+        """
+        Select 8-player bench with positional coverage.
+
+        Standard bench: 2 props, 1 hooker, 1 lock, 1 back row, 1 scrum-half, 2 backs
+        """
+        bench = []
+        available = squad[~squad['player'].isin(selected_starters)].copy()
+
+        # Add rating column for sorting
+        available['rating'] = available['player'].map(lambda p: ratings.get(p, 0.0))
+
+        # Priority positions for bench
+        bench_positions = [
+            ('Prop', 2),
+            ('Hooker', 1),
+            ('Lock', 1),
+            ('Flanker', 1),  # Back row cover
+            ('Scrum-half', 1),
+        ]
+
+        for position, count in bench_positions:
+            candidates = available[
+                available['primary_position'] == position
+            ].nlargest(count, 'rating')
+
+            for _, player_row in candidates.iterrows():
+                bench.append(player_row['player'])
+                available = available[available['player'] != player_row['player']]
+
+        # Fill remaining bench spots with best available backs
+        remaining = 8 - len(bench)
+        if remaining > 0:
+            back_positions = ['Fly-half', 'Centre', 'Wing', 'Fullback']
+            backs = available[
+                available['primary_position'].isin(back_positions)
+            ].nlargest(remaining, 'rating')
+
+            for _, player_row in backs.iterrows():
+                bench.append(player_row['player'])
+
+        return bench[:8]
+
+    def _validate_coverage(
+        self,
+        starting_xv: Dict[int, str],
+        bench: List[str],
+        squad: pd.DataFrame,
+    ) -> bool:
+        """
+        Validate that lineup meets positional coverage requirements.
+
+        Checks:
+        - Front row cover on bench (props + hooker)
+        - Scrum-half on field or bench
+        - Adequate back row, lock cover
+        """
+        # Get positions for bench players
+        bench_positions = []
+        for player in bench:
+            player_row = squad[squad['player'] == player]
+            if not player_row.empty:
+                bench_positions.append(player_row.iloc[0]['primary_position'])
+
+        # Check front row cover
+        has_prop_cover = bench_positions.count('Prop') >= 2
+        has_hooker_cover = bench_positions.count('Hooker') >= 1
+
+        # Check half-back cover
+        has_scrumhalf = 'Scrum-half' in bench_positions
+
+        # Check lock/back row cover
+        has_lock_cover = bench_positions.count('Lock') >= 1
+
+        return has_prop_cover and has_hooker_cover and has_scrumhalf and has_lock_cover
 
 
 class InjuryImpactAnalyzer:
     """
-    Analyze impact of player injuries/unavailability.
-
-    TODO: Implement injury impact analysis
+    Analyze impact of player injuries/unavailability on team strength.
     """
+
+    def __init__(self, lineup_predictor: LineupPredictor):
+        """
+        Initialize InjuryImpactAnalyzer.
+
+        Args:
+            lineup_predictor: LineupPredictor instance for lineup generation
+        """
+        self.lineup_predictor = lineup_predictor
 
     def analyze_player_impact(
         self,
@@ -1045,9 +1380,525 @@ class InjuryImpactAnalyzer:
         """
         Quantify impact of losing a specific player.
 
-        TODO: Implement impact calculation
+        Args:
+            player: Player name
+            squad_analysis: SquadAnalysis with ratings
+
+        Returns:
+            Dict with:
+                - player: Player name
+                - position: Primary position
+                - baseline_rating: Player's rating
+                - replacement: Most likely replacement
+                - replacement_rating: Replacement's rating
+                - rating_drop: Difference in rating
+                - relative_impact: Rating drop as % of team strength
+                - criticality_score: Overall criticality (0-1)
         """
-        raise NotImplementedError
+        # Get baseline lineup
+        try:
+            baseline = self.lineup_predictor.predict_lineup(squad_analysis)
+            baseline_rating = baseline['total_rating']
+        except ValueError as e:
+            return {
+                'player': player,
+                'error': f"Could not generate baseline lineup: {e}",
+            }
+
+        # Get lineup without this player
+        try:
+            without_player = self.lineup_predictor.predict_lineup(
+                squad_analysis,
+                unavailable=[player]
+            )
+            without_rating = without_player['total_rating']
+        except ValueError as e:
+            # Player is critical - no valid replacement
+            return {
+                'player': player,
+                'position': self._get_player_position(player, squad_analysis.squad),
+                'baseline_rating': self._get_player_rating(player, squad_analysis.player_ratings),
+                'replacement': None,
+                'replacement_rating': 0.0,
+                'rating_drop': baseline_rating,
+                'relative_impact': 1.0,
+                'criticality_score': 1.0,
+                'error': f"No valid replacement: {e}",
+            }
+
+        # Identify replacement
+        player_rating = self._get_player_rating(player, squad_analysis.player_ratings)
+        player_position = self._get_player_position(player, squad_analysis.squad)
+
+        # Find who replaced this player
+        replacement = None
+        for pos, starter in without_player['starting_xv'].items():
+            if starter not in baseline['starting_xv'].values():
+                replacement = starter
+                break
+
+        replacement_rating = (
+            self._get_player_rating(replacement, squad_analysis.player_ratings)
+            if replacement else 0.0
+        )
+
+        # Calculate impact metrics
+        rating_drop = baseline_rating - without_rating
+        relative_impact = rating_drop / baseline_rating if baseline_rating > 0 else 0.0
+
+        # Criticality score combines rating drop and replaceability
+        criticality_score = min(1.0, relative_impact * 2.0)  # Scale to 0-1
+
+        return {
+            'player': player,
+            'position': player_position,
+            'baseline_rating': player_rating,
+            'replacement': replacement,
+            'replacement_rating': replacement_rating,
+            'rating_drop': rating_drop,
+            'relative_impact': relative_impact,
+            'criticality_score': criticality_score,
+        }
+
+    def identify_critical_players(
+        self,
+        squad_analysis: SquadAnalysis,
+        top_n: int = 10,
+    ) -> pd.DataFrame:
+        """
+        Identify most critical players in squad.
+
+        Args:
+            squad_analysis: SquadAnalysis with ratings
+            top_n: Number of critical players to return
+
+        Returns:
+            DataFrame with player criticality rankings
+        """
+        results = []
+
+        # Analyze impact of each player
+        for player in squad_analysis.squad['player']:
+            impact = self.analyze_player_impact(player, squad_analysis)
+            if 'error' not in impact or impact.get('criticality_score', 0) > 0:
+                results.append(impact)
+
+        df = pd.DataFrame(results)
+
+        if len(df) == 0:
+            return df
+
+        # Sort by criticality
+        df = df.sort_values('criticality_score', ascending=False)
+
+        return df.head(top_n).reset_index(drop=True)
+
+    def analyze_squad_robustness(
+        self,
+        squad_analysis: SquadAnalysis,
+        n_simulations: int = 100,
+        injury_prob: float = 0.15,
+    ) -> Dict:
+        """
+        Analyze squad robustness to random injuries.
+
+        Simulates random injuries and measures impact on team strength.
+
+        Args:
+            squad_analysis: SquadAnalysis with ratings
+            n_simulations: Number of injury scenarios to simulate
+            injury_prob: Probability each player is injured
+
+        Returns:
+            Dict with:
+                - mean_impact: Average strength loss from injuries
+                - std_impact: Standard deviation of impact
+                - worst_case: Worst simulated scenario
+                - best_case: Best simulated scenario
+                - robustness_score: Overall robustness (0-1, higher is better)
+                - vulnerable_positions: Positions most affected
+        """
+        baseline = self.lineup_predictor.predict_lineup(squad_analysis)
+        baseline_rating = baseline['total_rating']
+
+        impacts = []
+        position_impacts = {}
+
+        for _ in range(n_simulations):
+            # Randomly select injured players
+            squad = squad_analysis.squad
+            injured = squad[
+                np.random.random(len(squad)) < injury_prob
+            ]['player'].tolist()
+
+            if not injured:
+                # No injuries in this simulation
+                impacts.append(0.0)
+                continue
+
+            # Get lineup with injuries
+            try:
+                with_injuries = self.lineup_predictor.predict_lineup(
+                    squad_analysis,
+                    unavailable=injured
+                )
+                impact = baseline_rating - with_injuries['total_rating']
+                impacts.append(impact)
+
+                # Track position-specific impacts
+                for player in injured:
+                    pos = self._get_player_position(player, squad)
+                    if pos:
+                        if pos not in position_impacts:
+                            position_impacts[pos] = []
+                        position_impacts[pos].append(impact)
+
+            except ValueError:
+                # Could not field valid lineup
+                impacts.append(baseline_rating)  # Total collapse
+
+        # Compute statistics
+        impacts = np.array(impacts)
+        mean_impact = impacts.mean()
+        std_impact = impacts.std()
+        worst_case = impacts.max()
+        best_case = impacts.min()
+
+        # Robustness score: inverse of normalized mean impact
+        # High score = team maintains strength despite injuries
+        robustness_score = max(0.0, 1.0 - (mean_impact / baseline_rating))
+
+        # Identify vulnerable positions
+        vulnerable_positions = []
+        for pos, impacts_list in position_impacts.items():
+            avg_impact = np.mean(impacts_list)
+            vulnerable_positions.append({
+                'position': pos,
+                'average_impact': avg_impact,
+            })
+
+        vulnerable_positions = sorted(
+            vulnerable_positions,
+            key=lambda x: x['average_impact'],
+            reverse=True
+        )[:5]
+
+        return {
+            'mean_impact': mean_impact,
+            'std_impact': std_impact,
+            'worst_case': worst_case,
+            'best_case': best_case,
+            'robustness_score': robustness_score,
+            'vulnerable_positions': vulnerable_positions,
+        }
+
+    def _get_player_rating(
+        self,
+        player: str,
+        ratings: pd.DataFrame,
+    ) -> float:
+        """Get player's try-scoring rating."""
+        if ratings is None or player is None:
+            return 0.0
+
+        player_ratings = ratings[
+            (ratings['player'] == player) &
+            (ratings['score_type'] == 'tries')
+        ]
+
+        if len(player_ratings) > 0:
+            return player_ratings.iloc[0]['rating_mean']
+        return 0.0
+
+    def _get_player_position(
+        self,
+        player: str,
+        squad: pd.DataFrame,
+    ) -> Optional[str]:
+        """Get player's primary position."""
+        player_row = squad[squad['player'] == player]
+        if not player_row.empty:
+            return player_row.iloc[0]['primary_position']
+        return None
+
+
+class SquadBasedPredictor:
+    """
+    Generate match predictions using squad data (pre-team announcement).
+
+    Bridges gap between teams-only predictions (high uncertainty) and
+    full-lineup predictions (announced 48h before match).
+    """
+
+    def __init__(self, match_predictor, lineup_predictor: LineupPredictor):
+        """
+        Initialize SquadBasedPredictor.
+
+        Args:
+            match_predictor: MatchPredictor for match outcome prediction
+            lineup_predictor: LineupPredictor for lineup generation
+        """
+        self.match_predictor = match_predictor
+        self.lineup_predictor = lineup_predictor
+
+    def predict_with_squads(
+        self,
+        home_squad_analysis: SquadAnalysis,
+        away_squad_analysis: SquadAnalysis,
+        season: str,
+        n_lineup_samples: int = 50,
+    ) -> Dict:
+        """
+        Predict match outcome using squad data.
+
+        Samples likely lineups from both squads and aggregates predictions.
+
+        Args:
+            home_squad_analysis: Home team squad analysis
+            away_squad_analysis: Away team squad analysis
+            season: Season for prediction
+            n_lineup_samples: Number of lineup samples per team
+
+        Returns:
+            Dict with:
+                - home_win_prob: Probability home wins
+                - away_win_prob: Probability away wins
+                - draw_prob: Probability of draw
+                - expected_home_score: Mean home score
+                - expected_away_score: Mean away score
+                - score_uncertainty: Additional uncertainty from lineup variation
+                - lineup_samples: Sample lineups used (optional)
+        """
+        # Sample lineups from both teams
+        home_lineups = self._sample_lineups(home_squad_analysis, n_lineup_samples)
+        away_lineups = self._sample_lineups(away_squad_analysis, n_lineup_samples)
+
+        # Predict match for each lineup combination (sample subset for efficiency)
+        n_match_samples = min(100, n_lineup_samples)
+        home_scores = []
+        away_scores = []
+        home_wins = 0
+        away_wins = 0
+        draws = 0
+
+        for _ in range(n_match_samples):
+            # Randomly select lineup samples
+            home_lineup = home_lineups[np.random.randint(len(home_lineups))]
+            away_lineup = away_lineups[np.random.randint(len(away_lineups))]
+
+            # Predict match (this would need full integration with MatchPredictor)
+            # For now, use a simplified rating-based prediction
+            home_rating = home_lineup['total_rating']
+            away_rating = away_lineup['total_rating']
+
+            # Simple logistic model: P(home win) ~ sigmoid(home_advantage + rating_diff)
+            rating_diff = home_rating - away_rating
+            home_advantage = 0.1  # Typical home advantage
+
+            # Predicted scores based on ratings (rough heuristic)
+            base_score = 20
+            home_score = base_score + rating_diff * 10 + home_advantage * 10
+            away_score = base_score - rating_diff * 10
+
+            # Add noise
+            home_score += np.random.normal(0, 5)
+            away_score += np.random.normal(0, 5)
+
+            home_scores.append(home_score)
+            away_scores.append(away_score)
+
+            if home_score > away_score:
+                home_wins += 1
+            elif away_score > home_score:
+                away_wins += 1
+            else:
+                draws += 1
+
+        # Compute probabilities
+        total = n_match_samples
+        home_win_prob = home_wins / total
+        away_win_prob = away_wins / total
+        draw_prob = draws / total
+
+        # Expected scores
+        expected_home_score = np.mean(home_scores)
+        expected_away_score = np.mean(away_scores)
+
+        # Uncertainty from lineup variation
+        score_uncertainty = {
+            'home_std': np.std(home_scores),
+            'away_std': np.std(away_scores),
+        }
+
+        return {
+            'home_team': home_squad_analysis.team,
+            'away_team': away_squad_analysis.team,
+            'home_win_prob': home_win_prob,
+            'away_win_prob': away_win_prob,
+            'draw_prob': draw_prob,
+            'expected_home_score': expected_home_score,
+            'expected_away_score': expected_away_score,
+            'score_uncertainty': score_uncertainty,
+            'prediction_mode': 'squad-based',
+        }
+
+    def _sample_lineups(
+        self,
+        squad_analysis: SquadAnalysis,
+        n_samples: int,
+    ) -> List[Dict]:
+        """Generate sample lineups from squad."""
+        lineups = []
+
+        for _ in range(n_samples):
+            try:
+                lineup = self.lineup_predictor.predict_lineup(squad_analysis)
+                lineups.append(lineup)
+            except ValueError:
+                continue
+
+        if not lineups:
+            # Fallback: use simple lineup if predictions fail
+            lineup = self.lineup_predictor.predict_lineup(squad_analysis)
+            lineups = [lineup] * n_samples
+
+        return lineups
+
+
+class SquadComparator:
+    """
+    Compare multiple squads for tournament analysis.
+
+    Generates pre-tournament squad rankings and identifies
+    strengths/weaknesses across teams.
+    """
+
+    def __init__(self, squad_analyzer: SquadAnalyzer):
+        """
+        Initialize SquadComparator.
+
+        Args:
+            squad_analyzer: SquadAnalyzer instance
+        """
+        self.squad_analyzer = squad_analyzer
+
+    def compare_squads(
+        self,
+        squads: Dict[str, pd.DataFrame],
+        season: str,
+    ) -> pd.DataFrame:
+        """
+        Compare multiple team squads.
+
+        Args:
+            squads: Dict mapping team name -> squad DataFrame
+            season: Season
+
+        Returns:
+            DataFrame with team rankings by:
+                - overall_strength
+                - depth_score
+                - position group strengths
+        """
+        results = []
+
+        for team, squad_df in squads.items():
+            try:
+                analysis = self.squad_analyzer.analyze_squad(squad_df, team, season)
+
+                results.append({
+                    'team': team,
+                    'overall_strength': analysis.overall_strength,
+                    'depth_score': analysis.depth_score,
+                    'squad_size': len(squad_df),
+                })
+
+            except Exception as e:
+                print(f"Warning: Could not analyze {team}: {e}")
+                continue
+
+        df = pd.DataFrame(results)
+
+        if len(df) > 0:
+            df = df.sort_values('overall_strength', ascending=False)
+
+        return df.reset_index(drop=True)
+
+    def create_strength_matrix(
+        self,
+        squad_analyses: Dict[str, SquadAnalysis],
+    ) -> pd.DataFrame:
+        """
+        Create position strength matrix across teams.
+
+        Args:
+            squad_analyses: Dict mapping team -> SquadAnalysis
+
+        Returns:
+            DataFrame with teams as rows, positions as columns
+        """
+        position_data = {}
+
+        for team, analysis in squad_analyses.items():
+            if analysis.position_strength is None:
+                continue
+
+            position_data[team] = {}
+            for _, row in analysis.position_strength.iterrows():
+                position_data[team][row['position']] = row['expected_strength']
+
+        df = pd.DataFrame(position_data).T
+
+        return df
+
+    def identify_matchup_advantages(
+        self,
+        home_analysis: SquadAnalysis,
+        away_analysis: SquadAnalysis,
+    ) -> List[Dict]:
+        """
+        Identify key individual battles in a matchup.
+
+        Args:
+            home_analysis: Home team squad analysis
+            away_analysis: Away team squad analysis
+
+        Returns:
+            List of position matchups with advantage indicators
+        """
+        matchups = []
+
+        if home_analysis.position_strength is None or away_analysis.position_strength is None:
+            return matchups
+
+        # Get position strengths
+        home_positions = home_analysis.position_strength.set_index('position')
+        away_positions = away_analysis.position_strength.set_index('position')
+
+        # Compare each position
+        for position in home_positions.index:
+            if position not in away_positions.index:
+                continue
+
+            home_strength = home_positions.loc[position, 'expected_strength']
+            away_strength = away_positions.loc[position, 'expected_strength']
+
+            advantage = home_strength - away_strength
+            advantage_pct = (advantage / max(home_strength, away_strength, 0.01)) * 100
+
+            matchups.append({
+                'position': position,
+                'home_strength': home_strength,
+                'away_strength': away_strength,
+                'advantage': advantage,
+                'advantage_pct': advantage_pct,
+                'favored_team': home_analysis.team if advantage > 0 else away_analysis.team,
+            })
+
+        # Sort by magnitude of advantage
+        matchups = sorted(matchups, key=lambda x: abs(x['advantage']), reverse=True)
+
+        return matchups
 
 
 def format_squad_analysis(analysis: SquadAnalysis, detailed: bool = True) -> str:
@@ -1218,3 +2069,306 @@ def input_squad_interactive(team: str, season: str) -> pd.DataFrame:
         print(f"\nError parsing squad: {e}")
         print("Please check the format and try again.")
         return None
+
+
+def export_squad_analysis_to_markdown(
+    analysis: SquadAnalysis,
+    critical_players: pd.DataFrame = None,
+    robustness: Dict = None,
+    output_path: str = None,
+) -> str:
+    """
+    Export squad analysis to blog-ready Markdown format.
+
+    Args:
+        analysis: SquadAnalysis
+        critical_players: Critical players DataFrame (optional)
+        robustness: Squad robustness analysis (optional)
+        output_path: Path to save markdown file (optional)
+
+    Returns:
+        Markdown formatted string
+    """
+    from datetime import datetime
+
+    lines = []
+
+    # Header
+    lines.append(f"# Squad Analysis: {analysis.team}")
+    lines.append(f"*Season: {analysis.season}*\n")
+    lines.append(f"*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n")
+    lines.append("---\n")
+
+    # Summary
+    lines.append("## Summary\n")
+    if analysis.overall_strength is not None:
+        lines.append(f"- **Overall Squad Strength:** {analysis.overall_strength*100:.0f}/100")
+    if analysis.depth_score is not None:
+        lines.append(f"- **Squad Depth:** {analysis.depth_score*100:.0f}/100")
+    lines.append(f"- **Squad Size:** {len(analysis.squad)} players\n")
+
+    # Position Analysis
+    if analysis.position_strength is not None:
+        lines.append("## Position-by-Position Breakdown\n")
+        lines.append("| Position | 1st Choice | 2nd Choice | Depth | Strength |")
+        lines.append("|----------|-----------|------------|-------|----------|")
+
+        for _, row in analysis.position_strength.iterrows():
+            first = row.get('first_choice_player', '')
+            second = row.get('second_choice_player', '')
+            depth = row['depth_score']
+            strength = row['expected_strength']
+
+            # Warning emoji for vulnerable positions
+            warning = " ⚠️" if depth < 0.6 else ""
+
+            lines.append(
+                f"| {row['position']} | {first} | {second} | "
+                f"{depth:.1%} | {strength:.1%}{warning} |"
+            )
+
+        lines.append("")
+
+        # Strongest positions
+        strongest = analysis.position_strength.nlargest(3, 'expected_strength')
+        lines.append("### Strengths\n")
+        for _, row in strongest.iterrows():
+            lines.append(f"- **{row['position']}**: Excellent depth and quality")
+        lines.append("")
+
+        # Vulnerable positions
+        vulnerable = analysis.position_strength[
+            analysis.position_strength['depth_score'] < 0.7
+        ].head(3)
+
+        if len(vulnerable) > 0:
+            lines.append("### Vulnerabilities\n")
+            for _, row in vulnerable.iterrows():
+                first = row.get('first_choice_player', '?')
+                second = row.get('second_choice_player', '?')
+                drop = (1 - row['depth_score']) * 100
+                lines.append(
+                    f"- **{row['position']}**: Significant drop-off from {first} to "
+                    f"{second} (-{drop:.0f}%)"
+                )
+            lines.append("")
+
+    # Critical Players
+    if critical_players is not None and len(critical_players) > 0:
+        lines.append("## Most Critical Players\n")
+        lines.append("Players whose absence would most impact team performance:\n")
+        lines.append("| Rank | Player | Position | Criticality | Replacement |")
+        lines.append("|------|--------|----------|-------------|-------------|")
+
+        for i, row in critical_players.head(10).iterrows():
+            replacement = row.get('replacement', 'None')
+            criticality = row.get('criticality_score', 0)
+            lines.append(
+                f"| {i+1} | {row['player']} | {row.get('position', '?')} | "
+                f"{criticality:.0%} | {replacement} |"
+            )
+
+        lines.append("")
+
+    # Squad Robustness
+    if robustness is not None:
+        lines.append("## Squad Robustness Analysis\n")
+        lines.append("Resilience to injuries:\n")
+        lines.append(f"- **Robustness Score:** {robustness['robustness_score']:.0%}")
+        lines.append(f"- **Average Impact:** {robustness['mean_impact']:.2f} rating points")
+        lines.append(f"- **Worst Case:** {robustness['worst_case']:.2f} rating points\n")
+
+        if robustness.get('vulnerable_positions'):
+            lines.append("### Most Vulnerable to Injuries:\n")
+            for pos_impact in robustness['vulnerable_positions'][:3]:
+                lines.append(
+                    f"- **{pos_impact['position']}**: "
+                    f"{pos_impact['average_impact']:.2f} avg impact"
+                )
+            lines.append("")
+
+    # Predicted Starting XV
+    if analysis.likely_xv:
+        lines.append("## Predicted Starting XV\n")
+        lines.append("| No. | Position | Player |")
+        lines.append("|-----|----------|--------|")
+
+        for pos_num in sorted(analysis.likely_xv.keys()):
+            player = analysis.likely_xv[pos_num]
+            lines.append(f"| {pos_num} | {LineupPredictor.STARTING_XV_POSITIONS[pos_num]} | {player} |")
+
+        lines.append("")
+
+        # Bench
+        if analysis.likely_bench:
+            lines.append("### Bench\n")
+            for i, player in enumerate(analysis.likely_bench[:8], 16):
+                lines.append(f"{i}. {player}")
+            lines.append("")
+
+    # Footer
+    lines.append("---")
+    lines.append("*Generated by Rugby Ranking Model*")
+
+    markdown = "\n".join(lines)
+
+    # Save to file if requested
+    if output_path:
+        with open(output_path, 'w') as f:
+            f.write(markdown)
+        print(f"Markdown exported to: {output_path}")
+
+    return markdown
+
+
+def export_tournament_comparison_to_markdown(
+    squad_comparisons: pd.DataFrame,
+    squad_analyses: Dict[str, SquadAnalysis],
+    tournament_name: str,
+    output_path: str = None,
+) -> str:
+    """
+    Export tournament squad comparison to blog-ready Markdown.
+
+    Args:
+        squad_comparisons: DataFrame from SquadComparator.compare_squads()
+        squad_analyses: Dict mapping team -> SquadAnalysis
+        tournament_name: Tournament name (e.g., "Six Nations 2025")
+        output_path: Path to save markdown file (optional)
+
+    Returns:
+        Markdown formatted string
+    """
+    from datetime import datetime
+
+    lines = []
+
+    # Header
+    lines.append(f"# {tournament_name} Squad Analysis")
+    lines.append(f"*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n")
+    lines.append("---\n")
+
+    # Overall Rankings
+    lines.append("## Overall Squad Rankings\n")
+    lines.append("| Rank | Team | Strength | Depth | Squad Size |")
+    lines.append("|------|------|----------|-------|------------|")
+
+    for i, row in squad_comparisons.iterrows():
+        strength = row['overall_strength']
+        depth = row['depth_score']
+        size = row['squad_size']
+        lines.append(
+            f"| {i+1} | {row['team']} | {strength:.0%} | {depth:.0%} | {size} |"
+        )
+
+    lines.append("")
+
+    # Team-by-team breakdown
+    lines.append("## Team-by-Team Analysis\n")
+
+    for team in squad_comparisons['team']:
+        if team not in squad_analyses:
+            continue
+
+        analysis = squad_analyses[team]
+        lines.append(f"### {team}\n")
+
+        # Summary
+        if analysis.overall_strength:
+            lines.append(f"**Strength:** {analysis.overall_strength:.0%} | ")
+        if analysis.depth_score:
+            lines.append(f"**Depth:** {analysis.depth_score:.0%}\n")
+
+        # Top strengths
+        if analysis.position_strength is not None:
+            strongest = analysis.position_strength.nlargest(3, 'expected_strength')
+            lines.append("\n**Strengths:**")
+            for _, row in strongest.iterrows():
+                lines.append(f"- {row['position']}")
+
+            # Vulnerabilities
+            vulnerable = analysis.position_strength[
+                analysis.position_strength['depth_score'] < 0.7
+            ].head(2)
+
+            if len(vulnerable) > 0:
+                lines.append("\n**Vulnerabilities:**")
+                for _, row in vulnerable.iterrows():
+                    lines.append(f"- {row['position']}")
+
+        lines.append("")
+
+    # Footer
+    lines.append("---")
+    lines.append("*Generated by Rugby Ranking Model*")
+
+    markdown = "\n".join(lines)
+
+    # Save to file if requested
+    if output_path:
+        with open(output_path, 'w') as f:
+            f.write(markdown)
+        print(f"Tournament comparison exported to: {output_path}")
+
+    return markdown
+
+
+def create_squad_visualization(
+    analysis: SquadAnalysis,
+    output_path: str = None,
+):
+    """
+    Create visualization of squad strength and depth.
+
+    Args:
+        analysis: SquadAnalysis
+        output_path: Path to save figure (optional)
+
+    Returns:
+        matplotlib figure
+    """
+    try:
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+    except ImportError:
+        print("Warning: matplotlib/seaborn not available for visualization")
+        return None
+
+    if analysis.position_strength is None:
+        print("Warning: No position strength data available")
+        return None
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+    # Plot 1: Position strength
+    pos_strength = analysis.position_strength.sort_values('expected_strength', ascending=True)
+
+    colors = ['green' if x > 0.65 else 'orange' if x > 0.5 else 'red'
+              for x in pos_strength['expected_strength']]
+
+    ax1.barh(pos_strength['position'], pos_strength['expected_strength'], color=colors, alpha=0.7)
+    ax1.set_xlabel('Expected Strength')
+    ax1.set_title(f'{analysis.team} - Position Strength')
+    ax1.set_xlim(0, 1)
+    ax1.axvline(0.5, color='gray', linestyle='--', alpha=0.5)
+
+    # Plot 2: Depth scores
+    pos_depth = analysis.position_strength.sort_values('depth_score', ascending=True)
+
+    colors2 = ['green' if x > 0.7 else 'orange' if x > 0.5 else 'red'
+               for x in pos_depth['depth_score']]
+
+    ax2.barh(pos_depth['position'], pos_depth['depth_score'], color=colors2, alpha=0.7)
+    ax2.set_xlabel('Depth Score')
+    ax2.set_title(f'{analysis.team} - Squad Depth')
+    ax2.set_xlim(0, 1)
+    ax2.axvline(0.7, color='gray', linestyle='--', alpha=0.5, label='Good depth threshold')
+    ax2.legend()
+
+    plt.tight_layout()
+
+    if output_path:
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"Visualization saved to: {output_path}")
+
+    return fig

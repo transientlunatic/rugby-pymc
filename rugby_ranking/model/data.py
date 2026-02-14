@@ -442,6 +442,10 @@ class MatchData:
     home_scores: list[dict]  # scoring events
     away_scores: list[dict]
 
+    attendance: int | None = None
+    round: int | None = None
+    round_type: str | None = None
+
     @property
     def is_played(self) -> bool:
         return self.home_score is not None and self.away_score is not None
@@ -594,6 +598,9 @@ class MatchDataset:
                     away_lineup=away_lineup,
                     home_scores=home.get("scores", []) if isinstance(home, dict) else [],
                     away_scores=away.get("scores", []) if isinstance(away, dict) else [],
+                    attendance=match.get("attendance"),
+                    round=match.get("round"),
+                    round_type=match.get("round_type"),
                 )
 
                 self.matches.append(match_data)

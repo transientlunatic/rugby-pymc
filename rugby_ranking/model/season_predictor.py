@@ -101,6 +101,36 @@ class SeasonPredictor:
         # Compute current standings
         current_standings = self.league_table.compute_standings(played_matches)
 
+        # Ensure all teams from remaining fixtures are in standings
+        # (even if they haven't played yet)
+        if len(remaining_fixtures) > 0:
+            import pandas as pd
+            # Get all teams from fixtures
+            fixture_teams = set()
+            if 'home_team' in remaining_fixtures.columns:
+                fixture_teams.update(remaining_fixtures['home_team'].unique())
+            if 'away_team' in remaining_fixtures.columns:
+                fixture_teams.update(remaining_fixtures['away_team'].unique())
+
+            # Find teams not yet in standings
+            existing_teams = set(current_standings['team'].values) if len(current_standings) > 0 else set()
+            missing_teams = fixture_teams - existing_teams
+
+            # Add missing teams with 0 points
+            if missing_teams:
+                missing_rows = pd.DataFrame([
+                    {
+                        'team': team,
+                        'played': 0, 'won': 0, 'drawn': 0, 'lost': 0,
+                        'points_for': 0, 'points_against': 0, 'points_diff': 0,
+                        'tries_for': 0, 'tries_against': 0,
+                        'try_bonus': 0, 'losing_bonus': 0, 'bonus_points': 0,
+                        'match_points': 0, 'total_points': 0, 'position': 0
+                    }
+                    for team in sorted(missing_teams)
+                ])
+                current_standings = pd.concat([current_standings, missing_rows], ignore_index=True)
+
         # Predict remaining matches (get expected scores)
         remaining_predictions = self._predict_remaining_matches(
             remaining_fixtures, season
@@ -332,11 +362,12 @@ class SeasonPredictor:
                     final_positions[sim, team_idx] = row['position']
 
         # Compute expected final standings (mean across simulations)
+        # Round to integers for better readability
         expected_standings = pd.DataFrame({
             'team': teams,
-            'expected_points': total_points_sum / n_simulations,
-            'expected_wins': total_won_sum / n_simulations,
-            'expected_diff': total_diff_sum / n_simulations,
+            'expected_points': (total_points_sum / n_simulations).round(0).astype(int),
+            'expected_wins': (total_won_sum / n_simulations).round(0).astype(int),
+            'expected_diff': (total_diff_sum / n_simulations).round(0).astype(int),
         })
 
         # Sort by expected points

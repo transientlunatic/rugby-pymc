@@ -25,6 +25,17 @@ from rugby_ranking.model.name_analysis import (
     export_merge_report,
 )
 from rugby_ranking.model import positions
+from rugby_ranking.model.knockout_forecast import (
+    TournamentTreeSimulator,
+    TournamentForecast,
+    BracketStructure,
+    URCPlayoffBracket,
+    WorldCupBracket,
+    ChampionsCupBracket,
+    KnockoutMatch,
+    KnockoutStageResult,
+    format_knockout_forecast,
+)
 
 __all__ = [
     "MatchDataset",
@@ -50,4 +61,13 @@ __all__ = [
     "get_name_variations",
     "export_merge_report",
     "positions",
+    "TournamentTreeSimulator",
+    "TournamentForecast",
+    "BracketStructure",
+    "URCPlayoffBracket",
+    "WorldCupBracket",
+    "ChampionsCupBracket",
+    "KnockoutMatch",
+    "KnockoutStageResult",
+    "format_knockout_forecast",
 ]

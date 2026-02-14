@@ -443,6 +443,218 @@ def export_team_heatmap(
         json.dump(out, f, indent=2)
 
 
+def export_matches_index(
+    dataset: MatchDataset,
+    recent_seasons: list,
+    output_dir: Path,
+) -> None:
+    """Export a lightweight match index for the blog matches table."""
+    print("  - Matches index (blog)...")
+    matches_index = []
+
+    for match in dataset.matches:
+        if match.season not in recent_seasons:
+            continue
+        if not match.is_played:
+            continue
+
+        matches_index.append({
+            "id": match.match_id,
+            "date": match.date.strftime("%Y-%m-%d"),
+            "home": match.home_team,
+            "away": match.away_team,
+            "home_score": match.home_score,
+            "away_score": match.away_score,
+            "competition": match.competition,
+            "season": match.season,
+            "stadium": match.stadium or None,
+            "attendance": match.attendance,
+        })
+
+    matches_index.sort(key=lambda m: m["date"], reverse=True)
+
+    with open(output_dir / "matches_index.json", "w") as f:
+        json.dump(matches_index, f)
+    print(f"    Wrote {len(matches_index)} matches")
+
+
+def export_match_details(
+    dataset: MatchDataset,
+    recent_seasons: list,
+    output_dir: Path,
+) -> None:
+    """Export per-competition-season match detail files with lineups and events."""
+    print("  - Match details (blog)...")
+    matches_dir = output_dir / "matches"
+    matches_dir.mkdir(parents=True, exist_ok=True)
+
+    def _flatten_lineup(lineup: dict) -> list:
+        result = []
+        for pos_str, player in lineup.items():
+            try:
+                pos = int(pos_str)
+            except (ValueError, TypeError):
+                pos = 0
+            result.append({
+                "pos": pos,
+                "name": player.get("name", player) if isinstance(player, dict) else str(player),
+                "on": player.get("on", []) if isinstance(player, dict) else [],
+                "off": player.get("off", []) if isinstance(player, dict) else [],
+                "yellows": player.get("yellows", []) if isinstance(player, dict) else [],
+                "reds": player.get("reds", []) if isinstance(player, dict) else [],
+            })
+        result.sort(key=lambda p: p["pos"])
+        return result
+
+    groups: dict[str, dict] = {}
+    for match in dataset.matches:
+        if match.season not in recent_seasons:
+            continue
+        if not match.is_played:
+            continue
+
+        key = f"{match.competition}_{match.season}"
+        idx = match.match_id.rsplit("_", 1)[-1]
+
+        detail = {
+            "home": {
+                "team": match.home_team,
+                "score": match.home_score,
+                "lineup": _flatten_lineup(match.home_lineup),
+                "events": match.home_scores,
+            },
+            "away": {
+                "team": match.away_team,
+                "score": match.away_score,
+                "lineup": _flatten_lineup(match.away_lineup),
+                "events": match.away_scores,
+            },
+            "round": match.round,
+            "round_type": match.round_type,
+            "stadium": match.stadium or None,
+            "date": match.date.isoformat(),
+            "attendance": match.attendance,
+        }
+
+        if key not in groups:
+            groups[key] = {}
+        groups[key][idx] = detail
+
+    for key, data in groups.items():
+        with open(matches_dir / f"{key}.json", "w") as f:
+            json.dump(data, f)
+
+    print(f"    Wrote {len(groups)} detail files")
+
+
+def export_player_profiles(
+    dataset: MatchDataset,
+    player_rankings_data: list[dict],
+    recent_seasons: list,
+    output_dir: Path,
+) -> None:
+    """Export enriched player profiles combining match stats with model rankings."""
+    print("  - Player profiles (blog)...")
+    from collections import defaultdict
+
+    player_stats: dict[str, dict] = defaultdict(lambda: {
+        "matches": 0,
+        "seasons": set(),
+        "teams_by_season": {},
+        "last_date": "",
+        "yellows": 0,
+        "reds": 0,
+        "tries_scored": 0,
+        "conversions_scored": 0,
+        "penalties_scored": 0,
+    })
+
+    for match in dataset.matches:
+        if match.season not in recent_seasons:
+            continue
+        if not match.is_played:
+            continue
+
+        date_str = match.date.strftime("%Y-%m-%d")
+
+        for side, lineup, scores in [
+            ("home", match.home_lineup, match.home_scores),
+            ("away", match.away_lineup, match.away_scores),
+        ]:
+            team = match.home_team if side == "home" else match.away_team
+
+            for pos_str, player in lineup.items():
+                if not isinstance(player, dict):
+                    continue
+                name = player.get("name", "")
+                if not name:
+                    continue
+
+                ps = player_stats[name]
+                ps["matches"] += 1
+                ps["seasons"].add(match.season)
+                current = ps["teams_by_season"].get(match.season)
+                if current is None or date_str > ps.get(f"_last_{match.season}", ""):
+                    ps["teams_by_season"][match.season] = team
+                    ps[f"_last_{match.season}"] = date_str
+                if date_str > ps["last_date"]:
+                    ps["last_date"] = date_str
+                ps["yellows"] += len(player.get("yellows", []))
+                ps["reds"] += len(player.get("reds", []))
+
+            for ev in scores:
+                player_name = ev.get("player")
+                if not player_name or player_name not in player_stats:
+                    continue
+                ev_type = ev.get("type", "")
+                if ev_type == "Try":
+                    player_stats[player_name]["tries_scored"] += 1
+                elif ev_type == "Conversion":
+                    player_stats[player_name]["conversions_scored"] += 1
+                elif ev_type == "Penalty":
+                    player_stats[player_name]["penalties_scored"] += 1
+
+    rank_map: dict[str, dict] = defaultdict(dict)
+    for r in player_rankings_data:
+        rank_map[r["player"]][r["score_type"]] = r
+
+    players = []
+    for name, stats in player_stats.items():
+        seasons = sorted(stats["seasons"])
+        teams_by_season = {s: stats["teams_by_season"].get(s, "") for s in seasons}
+        current_team = teams_by_season.get(seasons[-1], "") if seasons else ""
+
+        row = {
+            "name": name,
+            "matches": stats["matches"],
+            "seasons": seasons,
+            "teams_by_season": teams_by_season,
+            "current_team": current_team,
+            "yellows": stats["yellows"],
+            "reds": stats["reds"],
+            "tries_scored": stats["tries_scored"],
+        }
+
+        if name in rank_map:
+            t = rank_map[name].get("tries")
+            row["attacking"] = round(t["effect_mean"], 3) if t else None
+            c = rank_map[name].get("conversions")
+            p = rank_map[name].get("penalties")
+            kicking_vals = [x["effect_mean"] for x in [c, p] if x]
+            row["kicking"] = round(sum(kicking_vals) / len(kicking_vals), 3) if kicking_vals else None
+        else:
+            row["attacking"] = None
+            row["kicking"] = None
+
+        players.append(row)
+
+    players.sort(key=lambda p: p["attacking"] if p["attacking"] is not None else -999, reverse=True)
+
+    with open(output_dir / "players.json", "w") as f:
+        json.dump(players, f)
+    print(f"    Wrote {len(players)} players")
+
+
 def export_dashboard_data(
     data_dir: Path,
     output_dir: Path,
@@ -690,14 +902,14 @@ def export_dashboard_data(
     for season in recent_seasons:
         for competition in competitions:
             comp_season_df = df_recent[
-                (df_recent["season"] == season) & 
+                (df_recent["season"] == season) &
                 (df_recent["competition"] == competition)
             ]
             if len(comp_season_df) > 0:
                 try:
-                    export_league_table(comp_season_df, competition, season, output_dir)
-                    export_season_prediction(model, trace, comp_season_df, competition, season, output_dir)
-                    export_team_heatmap(model, trace, comp_season_df, competition, season, output_dir)
+                    export_league_table(dataset, season, competition, output_dir)
+                    export_season_prediction(model, trace, dataset, season, competition, output_dir)
+                    export_team_heatmap(df_recent, season, competition, output_dir)
                 except Exception as e:
                     print(f"    Error exporting {competition} {season}: {e}")
 
@@ -714,6 +926,12 @@ def export_dashboard_data(
     for season in recent_seasons:
         export_squad_depth(model, trace, season, output_dir)
 
+    # Export blog-specific data files
+    print("\nExporting blog data files...")
+    export_matches_index(dataset, recent_seasons, output_dir)
+    export_match_details(dataset, recent_seasons, output_dir)
+    export_player_profiles(dataset, player_data, recent_seasons, output_dir)
+
     print("\n" + "=" * 70)
     print("EXPORT COMPLETE")
     print("=" * 70)
@@ -729,8 +947,9 @@ def export_dashboard_data(
     print("  - upcoming_predictions.json")
     print("  - paths_to_victory.json (empty for historical data)")
     print("  - squad_depth.json")
-    print("\nNote: Paths to victory analysis requires unplayed fixtures.")
-    print("For historical data, this file will be empty.")
+    print("  - matches_index.json (blog)")
+    print("  - matches/*.json (blog)")
+    print("  - players.json (blog)")
     print("\nReady for dashboard deployment!")
 
 

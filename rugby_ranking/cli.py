@@ -18,6 +18,34 @@ from rugby_ranking.model.core import RugbyModel, ModelConfig
 from rugby_ranking.model.inference import ModelFitter
 
 
+def _resolve_data_dir(args_data_dir):
+    """Resolve data directory from args, config, or environment."""
+    if args_data_dir:
+        return args_data_dir
+    try:
+        from rugby.config import get_data_dir
+        data_dir = get_data_dir()
+        if data_dir:
+            return data_dir / "json"
+    except ImportError:
+        pass
+    return None
+
+
+def _resolve_squads_dirs():
+    """Return a list of squad directories to search."""
+    dirs = ["squads"]
+    try:
+        from rugby.config import get_squads_dir
+        squads_dir = get_squads_dir()
+        if squads_dir:
+            dirs.insert(0, str(squads_dir))
+    except ImportError:
+        pass
+    dirs.append("../Rugby-Data/squads")
+    return dirs
+
+
 def load_checkpoint(checkpoint_name: str, verbose: bool = True):
     """
     Load a trained model checkpoint.
@@ -71,8 +99,8 @@ def main():
     update_parser.add_argument(
         "--data-dir",
         type=Path,
-        required=True,
-        help="Path to Rugby-Data repository"
+        default=None,
+        help="Path to Rugby-Data json/ directory (auto-detected from rugby config if not specified)"
     )
     update_parser.add_argument(
         "--method",
@@ -155,8 +183,8 @@ def main():
     upcoming_parser.add_argument(
         "--data-dir",
         type=Path,
-        required=True,
-        help="Path to Rugby-Data repository"
+        default=None,
+        help="Path to Rugby-Data json/ directory (auto-detected from rugby config if not specified)"
     )
     upcoming_parser.add_argument(
         "--days",
@@ -191,8 +219,8 @@ def main():
     export_parser.add_argument(
         "--data-dir",
         type=Path,
-        required=True,
-        help="Path to Rugby-Data repository"
+        default=None,
+        help="Path to Rugby-Data json/ directory (auto-detected from rugby config if not specified)"
     )
     export_parser.add_argument(
         "--output-dir",
@@ -303,6 +331,103 @@ def main():
         help="Model checkpoint to use"
     )
 
+    # Squad lineup
+    squad_lineup_parser = squad_subparsers.add_parser(
+        "lineup",
+        help="Predict likely starting lineup"
+    )
+    squad_lineup_parser.add_argument(
+        "--team",
+        type=str,
+        required=True,
+        help="Team name"
+    )
+    squad_lineup_parser.add_argument(
+        "--season",
+        type=str,
+        default="2024-2025",
+        help="Season (default: 2024-2025)"
+    )
+    squad_lineup_parser.add_argument(
+        "--checkpoint",
+        type=str,
+        default="latest",
+        help="Model checkpoint to use"
+    )
+    squad_lineup_parser.add_argument(
+        "--unavailable",
+        type=str,
+        nargs="+",
+        default=None,
+        help="List of unavailable players (injuries)"
+    )
+
+    # Squad critical-players
+    squad_critical_parser = squad_subparsers.add_parser(
+        "critical-players",
+        help="Identify most critical players"
+    )
+    squad_critical_parser.add_argument(
+        "--team",
+        type=str,
+        required=True,
+        help="Team name"
+    )
+    squad_critical_parser.add_argument(
+        "--season",
+        type=str,
+        default="2024-2025",
+        help="Season (default: 2024-2025)"
+    )
+    squad_critical_parser.add_argument(
+        "--checkpoint",
+        type=str,
+        default="latest",
+        help="Model checkpoint to use"
+    )
+    squad_critical_parser.add_argument(
+        "--top",
+        type=int,
+        default=10,
+        help="Number of critical players to show (default: 10)"
+    )
+
+    # Squad robustness
+    squad_robustness_parser = squad_subparsers.add_parser(
+        "robustness",
+        help="Analyze squad robustness to injuries"
+    )
+    squad_robustness_parser.add_argument(
+        "--team",
+        type=str,
+        required=True,
+        help="Team name"
+    )
+    squad_robustness_parser.add_argument(
+        "--season",
+        type=str,
+        default="2024-2025",
+        help="Season (default: 2024-2025)"
+    )
+    squad_robustness_parser.add_argument(
+        "--checkpoint",
+        type=str,
+        default="latest",
+        help="Model checkpoint to use"
+    )
+    squad_robustness_parser.add_argument(
+        "--simulations",
+        type=int,
+        default=100,
+        help="Number of injury simulations (default: 100)"
+    )
+    squad_robustness_parser.add_argument(
+        "--injury-prob",
+        type=float,
+        default=0.15,
+        help="Injury probability per player (default: 0.15)"
+    )
+
     args = parser.parse_args()
 
     if args.command == "update":
@@ -322,6 +447,12 @@ def main():
             run_squad_analyze(args)
         elif args.squad_command == "compare":
             run_squad_compare(args)
+        elif args.squad_command == "lineup":
+            run_squad_lineup(args)
+        elif args.squad_command == "critical-players":
+            run_squad_critical_players(args)
+        elif args.squad_command == "robustness":
+            run_squad_robustness(args)
         else:
             squad_parser.print_help()
     else:
@@ -334,6 +465,10 @@ def run_update(args):
     from rugby_ranking.model.core import RugbyModel, ModelConfig
     from rugby_ranking.model.inference import ModelFitter, InferenceConfig
 
+    args.data_dir = _resolve_data_dir(args.data_dir)
+    if not args.data_dir:
+        print("Error: --data-dir is required (or run 'rugby config init' to set it)")
+        return
     print(f"Loading data from {args.data_dir}...")
     dataset = MatchDataset(args.data_dir)
     dataset.load_json_files()
@@ -437,6 +572,10 @@ def run_upcoming(args):
     from rugby_ranking.model.predictions import MatchPredictor
     from rugby_ranking.model.data import MatchDataset
 
+    args.data_dir = _resolve_data_dir(args.data_dir)
+    if not args.data_dir:
+        print("Error: --data-dir is required (or run 'rugby config init' to set it)")
+        return
     print(f"Loading data from {args.data_dir}...")
     dataset = MatchDataset(args.data_dir, fuzzy_match_names=False)
     dataset.load_json_files()
@@ -602,7 +741,11 @@ def run_upcoming(args):
 def run_export(args):
     """Export dashboard data to JSON files."""
     from rugby_ranking.tools.export_dashboard_data import export_dashboard_data
-    
+
+    args.data_dir = _resolve_data_dir(args.data_dir)
+    if not args.data_dir:
+        print("Error: --data-dir is required (or run 'rugby config init' to set it)")
+        return
     export_dashboard_data(
         data_dir=args.data_dir,
         output_dir=args.output_dir,
@@ -700,8 +843,7 @@ def run_squad_analyze(args):
     squad = None
     filename = None
 
-    # Check both local squads/ and ../Rugby-Data/squads/
-    base_paths = ["squads", "../Rugby-Data/squads"]
+    base_paths = _resolve_squads_dirs()
 
     # Try single JSON file with all teams (e.g., 2026_six_nations_championship_squads.json)
     json_candidates = []
@@ -815,7 +957,7 @@ def run_squad_compare(args):
     # Try to load from single JSON file first
     import json
 
-    base_paths = ["squads", "../Rugby-Data/squads"]
+    base_paths = _resolve_squads_dirs()
     json_candidates = []
     for base in base_paths:
         json_candidates.extend([
@@ -932,6 +1074,332 @@ def run_squad_compare(args):
                 f.write("\n\n")
 
     print(f"✓ Comparison report saved to: {report_filename}")
+
+
+def run_squad_lineup(args):
+    """Predict likely starting lineup."""
+    from rugby_ranking.model.squad_analysis import SquadAnalyzer, LineupPredictor
+    from rugby_ranking.model.core import RugbyModel
+    from rugby_ranking.model.inference import ModelFitter
+    import os
+    import json
+
+    # Load squad (same logic as run_squad_analyze)
+    squad = None
+    filename = None
+    base_paths = _resolve_squads_dirs()
+
+    # Try JSON first
+    json_candidates = []
+    for base in base_paths:
+        json_candidates.extend([
+            f"{base}/{args.season.split('-')[0]}_six_nations_championship_squads.json",
+            f"{base}/six_nations_{args.season}.json",
+        ])
+
+    POSITION_SECTIONS = {
+        'Hooker': 'forwards', 'Prop': 'forwards', 'Lock': 'forwards',
+        'Back Row': 'mixed', 'Scrum-half': 'backs', 'Fly-half': 'backs',
+        'Centre': 'backs', 'Wing': 'backs', 'Fullback': 'backs',
+    }
+
+    for json_file in json_candidates:
+        if os.path.exists(json_file):
+            try:
+                with open(json_file) as f:
+                    squads_data = json.load(f)
+                if args.team in squads_data:
+                    squad_json = pd.DataFrame(squads_data[args.team]['players'])
+                    squad = pd.DataFrame({
+                        'player': squad_json['name'],
+                        'position_text': squad_json['position'],
+                        'club': squad_json.get('club', 'Unknown'),
+                        'team': args.team,
+                        'season': args.season,
+                        'section': squad_json['position'].map(POSITION_SECTIONS).fillna('mixed'),
+                        'primary_position': squad_json['position'],
+                        'secondary_positions': '[]'
+                    })
+                    filename = json_file
+                    break
+            except Exception:
+                pass
+
+    # Fall back to CSV
+    if squad is None:
+        for base in base_paths:
+            csv_filename = f"{base}/{args.team.lower().replace(' ', '_')}_{args.season}.csv"
+            if os.path.exists(csv_filename):
+                squad = pd.read_csv(csv_filename)
+                filename = csv_filename
+                break
+
+    if squad is None:
+        print(f"✗ Squad file not found for {args.team} ({args.season})")
+        print(f"\nFirst input the squad using:")
+        print(f"  rugby-ranking squad input --team \"{args.team}\" --season {args.season}")
+        return
+
+    print(f"✓ Loaded squad from {filename} ({len(squad)} players)")
+
+    # Load model
+    print(f"Loading model checkpoint: {args.checkpoint}...")
+    model = RugbyModel()
+    fitter = ModelFitter.load(args.checkpoint, model)
+
+    # Analyze squad
+    analyzer = SquadAnalyzer(model, fitter.trace)
+    analysis = analyzer.analyze_squad(squad, args.team, args.season)
+
+    # Predict lineup
+    print("\nPredicting lineup...")
+    predictor = LineupPredictor()
+
+    try:
+        lineup = predictor.predict_lineup(
+            analysis,
+            unavailable=args.unavailable
+        )
+
+        print("\n" + "=" * 70)
+        print(f"PREDICTED LINEUP: {args.team}")
+        print("=" * 70)
+        print()
+
+        # Starting XV
+        print("STARTING XV")
+        print("-" * 70)
+        for pos_num in sorted(lineup['starting_xv'].keys()):
+            position_name = LineupPredictor.STARTING_XV_POSITIONS[pos_num]
+            player = lineup['starting_xv'][pos_num]
+            print(f"{pos_num:2d}. {position_name:<15} {player}")
+
+        # Bench
+        print("\nBENCH")
+        print("-" * 70)
+        for i, player in enumerate(lineup['bench'][:8], 16):
+            print(f"{i}. {player}")
+
+        print()
+        print(f"Total Rating: {lineup['total_rating']:.3f}")
+        print(f"Coverage Valid: {'✓' if lineup['coverage_valid'] else '✗'}")
+
+        if args.unavailable:
+            print(f"\nUnavailable: {', '.join(args.unavailable)}")
+
+        print("=" * 70)
+
+    except ValueError as e:
+        print(f"✗ Error predicting lineup: {e}")
+
+
+def run_squad_critical_players(args):
+    """Identify most critical players."""
+    from rugby_ranking.model.squad_analysis import (
+        SquadAnalyzer, LineupPredictor, InjuryImpactAnalyzer
+    )
+    from rugby_ranking.model.core import RugbyModel
+    from rugby_ranking.model.inference import ModelFitter
+    import os
+    import json
+
+    # Load squad (same logic as above)
+    squad = None
+    filename = None
+    base_paths = _resolve_squads_dirs()
+
+    json_candidates = []
+    for base in base_paths:
+        json_candidates.extend([
+            f"{base}/{args.season.split('-')[0]}_six_nations_championship_squads.json",
+            f"{base}/six_nations_{args.season}.json",
+        ])
+
+    POSITION_SECTIONS = {
+        'Hooker': 'forwards', 'Prop': 'forwards', 'Lock': 'forwards',
+        'Back Row': 'mixed', 'Scrum-half': 'backs', 'Fly-half': 'backs',
+        'Centre': 'backs', 'Wing': 'backs', 'Fullback': 'backs',
+    }
+
+    for json_file in json_candidates:
+        if os.path.exists(json_file):
+            try:
+                with open(json_file) as f:
+                    squads_data = json.load(f)
+                if args.team in squads_data:
+                    squad_json = pd.DataFrame(squads_data[args.team]['players'])
+                    squad = pd.DataFrame({
+                        'player': squad_json['name'],
+                        'position_text': squad_json['position'],
+                        'club': squad_json.get('club', 'Unknown'),
+                        'team': args.team,
+                        'season': args.season,
+                        'section': squad_json['position'].map(POSITION_SECTIONS).fillna('mixed'),
+                        'primary_position': squad_json['position'],
+                        'secondary_positions': '[]'
+                    })
+                    filename = json_file
+                    break
+            except Exception:
+                pass
+
+    if squad is None:
+        for base in base_paths:
+            csv_filename = f"{base}/{args.team.lower().replace(' ', '_')}_{args.season}.csv"
+            if os.path.exists(csv_filename):
+                squad = pd.read_csv(csv_filename)
+                filename = csv_filename
+                break
+
+    if squad is None:
+        print(f"✗ Squad file not found for {args.team} ({args.season})")
+        return
+
+    print(f"✓ Loaded squad from {filename} ({len(squad)} players)")
+
+    # Load model
+    print(f"Loading model checkpoint: {args.checkpoint}...")
+    model = RugbyModel()
+    fitter = ModelFitter.load(args.checkpoint, model)
+
+    # Analyze squad
+    analyzer = SquadAnalyzer(model, fitter.trace)
+    analysis = analyzer.analyze_squad(squad, args.team, args.season)
+
+    # Identify critical players
+    print(f"\nAnalyzing player criticality...")
+    predictor = LineupPredictor()
+    impact_analyzer = InjuryImpactAnalyzer(predictor)
+
+    critical = impact_analyzer.identify_critical_players(analysis, top_n=args.top)
+
+    print("\n" + "=" * 70)
+    print(f"MOST CRITICAL PLAYERS: {args.team}")
+    print("=" * 70)
+    print()
+    print(f"{'Rank':<6} {'Player':<25} {'Position':<12} {'Criticality':<12} {'Replacement':<20}")
+    print("-" * 70)
+
+    for i, row in critical.iterrows():
+        rank = i + 1
+        player = row['player']
+        position = row.get('position', '?')
+        criticality = row.get('criticality_score', 0)
+        replacement = row.get('replacement', 'None')
+
+        print(f"{rank:<6} {player:<25} {position:<12} {criticality:>6.0%}      {replacement:<20}")
+
+    print("=" * 70)
+    print("\nCriticality: 100% = irreplaceable, 0% = easily replaceable")
+
+
+def run_squad_robustness(args):
+    """Analyze squad robustness to injuries."""
+    from rugby_ranking.model.squad_analysis import (
+        SquadAnalyzer, LineupPredictor, InjuryImpactAnalyzer
+    )
+    from rugby_ranking.model.core import RugbyModel
+    from rugby_ranking.model.inference import ModelFitter
+    import os
+    import json
+
+    # Load squad
+    squad = None
+    filename = None
+    base_paths = _resolve_squads_dirs()
+
+    json_candidates = []
+    for base in base_paths:
+        json_candidates.extend([
+            f"{base}/{args.season.split('-')[0]}_six_nations_championship_squads.json",
+            f"{base}/six_nations_{args.season}.json",
+        ])
+
+    POSITION_SECTIONS = {
+        'Hooker': 'forwards', 'Prop': 'forwards', 'Lock': 'forwards',
+        'Back Row': 'mixed', 'Scrum-half': 'backs', 'Fly-half': 'backs',
+        'Centre': 'backs', 'Wing': 'backs', 'Fullback': 'backs',
+    }
+
+    for json_file in json_candidates:
+        if os.path.exists(json_file):
+            try:
+                with open(json_file) as f:
+                    squads_data = json.load(f)
+                if args.team in squads_data:
+                    squad_json = pd.DataFrame(squads_data[args.team]['players'])
+                    squad = pd.DataFrame({
+                        'player': squad_json['name'],
+                        'position_text': squad_json['position'],
+                        'club': squad_json.get('club', 'Unknown'),
+                        'team': args.team,
+                        'season': args.season,
+                        'section': squad_json['position'].map(POSITION_SECTIONS).fillna('mixed'),
+                        'primary_position': squad_json['position'],
+                        'secondary_positions': '[]'
+                    })
+                    filename = json_file
+                    break
+            except Exception:
+                pass
+
+    if squad is None:
+        for base in base_paths:
+            csv_filename = f"{base}/{args.team.lower().replace(' ', '_')}_{args.season}.csv"
+            if os.path.exists(csv_filename):
+                squad = pd.read_csv(csv_filename)
+                filename = csv_filename
+                break
+
+    if squad is None:
+        print(f"✗ Squad file not found for {args.team} ({args.season})")
+        return
+
+    print(f"✓ Loaded squad from {filename} ({len(squad)} players)")
+
+    # Load model
+    print(f"Loading model checkpoint: {args.checkpoint}...")
+    model = RugbyModel()
+    fitter = ModelFitter.load(args.checkpoint, model)
+
+    # Analyze squad
+    analyzer = SquadAnalyzer(model, fitter.trace)
+    analysis = analyzer.analyze_squad(squad, args.team, args.season)
+
+    # Analyze robustness
+    print(f"\nSimulating injuries ({args.simulations} scenarios)...")
+    predictor = LineupPredictor()
+    impact_analyzer = InjuryImpactAnalyzer(predictor)
+
+    robustness = impact_analyzer.analyze_squad_robustness(
+        analysis,
+        n_simulations=args.simulations,
+        injury_prob=args.injury_prob
+    )
+
+    print("\n" + "=" * 70)
+    print(f"SQUAD ROBUSTNESS ANALYSIS: {args.team}")
+    print("=" * 70)
+    print()
+    print(f"Robustness Score: {robustness['robustness_score']:.0%}")
+    print(f"  (Higher is better: team maintains strength despite injuries)")
+    print()
+    print(f"Average Impact:   {robustness['mean_impact']:.3f} rating points")
+    print(f"Std Deviation:    {robustness['std_impact']:.3f}")
+    print(f"Best Case:        {robustness['best_case']:.3f} (no/minor injuries)")
+    print(f"Worst Case:       {robustness['worst_case']:.3f} (severe injuries)")
+    print()
+
+    if robustness.get('vulnerable_positions'):
+        print("POSITIONS MOST VULNERABLE TO INJURIES")
+        print("-" * 70)
+        for pos_impact in robustness['vulnerable_positions'][:5]:
+            position = pos_impact['position']
+            impact = pos_impact['average_impact']
+            print(f"  {position:<20} Average Impact: {impact:.3f}")
+
+    print("=" * 70)
+    print(f"\nSimulation parameters: {args.simulations} scenarios, {args.injury_prob:.0%} injury probability per player")
 
 
 if __name__ == "__main__":

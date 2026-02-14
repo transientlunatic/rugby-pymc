@@ -152,6 +152,16 @@ class LeagueTable:
                 - total_points: Total league points
                 - position: League position (1 = first)
         """
+        # Handle empty matches - return empty standings table with proper columns
+        if len(matches) == 0:
+            return pd.DataFrame(columns=[
+                'team', 'played', 'won', 'drawn', 'lost',
+                'points_for', 'points_against', 'points_diff',
+                'tries_for', 'tries_against',
+                'try_bonus', 'losing_bonus', 'bonus_points',
+                'match_points', 'total_points', 'position'
+            ])
+
         # Validate required columns
         required = [team_col, opponent_col, score_col, opponent_score_col, tries_col]
         missing = [col for col in required if col not in matches.columns]
