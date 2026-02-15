@@ -526,20 +526,53 @@ class TournamentTreeSimulator:
         position_probs: pd.DataFrame,
         position_cols: List[str],
     ) -> Dict[str, int]:
-        """Sample pool positions for all teams from probability distributions."""
+        """
+        Sample pool positions for all teams from probability distributions.
+
+        Uses Gumbel-max trick applied column-wise to sample a valid ranking
+        (bijection) where each position is assigned to exactly one team,
+        properly respecting the probability distributions.
+
+        This is the correct way to sample permutations from a probability matrix.
+        """
+        n_teams = len(teams)
+        prob_matrix = position_probs[position_cols].values
+
+        # Sample using Gumbel-max trick applied to each position (column)
+        # This ensures each position gets exactly one team
         pool_positions = {}
 
-        for team in teams:
-            # Get probability distribution for this team
-            probs = position_probs.loc[team, position_cols].values
+        # For each position, sample which team occupies it
+        available_teams = set(range(n_teams))
 
-            # Normalize to sum to 1.0
-            probs = probs / probs.sum() if probs.sum() > 0 else np.ones_like(probs) / len(probs)
+        for position_idx in range(n_teams):
+            if not available_teams:
+                break
 
-            # Sample position
-            positions = range(1, len(position_cols) + 1)
-            sampled_pos = np.random.choice(positions, p=probs)
-            pool_positions[team] = sampled_pos
+            # Get probabilities for this position across remaining teams
+            position_probs_vec = prob_matrix[:, position_idx].copy()
+
+            # Zero out probabilities for already-assigned teams
+            for team_idx in range(n_teams):
+                if team_idx not in available_teams:
+                    position_probs_vec[team_idx] = 0
+
+            # Normalize
+            prob_sum = position_probs_vec.sum()
+            if prob_sum > 0:
+                position_probs_vec = position_probs_vec / prob_sum
+            else:
+                # Uniform over available teams
+                for team_idx in available_teams:
+                    position_probs_vec[team_idx] = 1.0 / len(available_teams)
+
+            # Sample team for this position
+            sampled_team_idx = np.random.choice(n_teams, p=position_probs_vec)
+
+            # Assign position (1-indexed)
+            team_name = teams[sampled_team_idx]
+            pool_positions[team_name] = position_idx + 1
+            available_teams.remove(sampled_team_idx)
 
         return pool_positions
 

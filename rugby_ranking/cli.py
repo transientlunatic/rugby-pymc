@@ -174,6 +174,11 @@ def main():
         default="latest",
         help="Checkpoint to load"
     )
+    predict_parser.add_argument(
+        "--no-archive",
+        action="store_true",
+        help="Don't archive this prediction"
+    )
 
     # Upcoming command
     upcoming_parser = subparsers.add_parser(
@@ -210,6 +215,11 @@ def main():
         default="latest",
         help="Checkpoint to load"
     )
+    upcoming_parser.add_argument(
+        "--no-archive",
+        action="store_true",
+        help="Don't archive predictions"
+    )
 
     # Export command
     export_parser = subparsers.add_parser(
@@ -239,6 +249,35 @@ def main():
         type=int,
         default=3,
         help="Number of recent seasons to export (default: 3)"
+    )
+
+    # Ingest results command
+    ingest_parser = subparsers.add_parser(
+        "ingest-results",
+        help="Update archived predictions with actual results"
+    )
+    ingest_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=None,
+        help="Path to Rugby-Data json/ directory (auto-detected from rugby config if not specified)"
+    )
+    ingest_parser.add_argument(
+        "--date-from",
+        type=str,
+        default=None,
+        help="Only process matches from this date (ISO format)"
+    )
+    ingest_parser.add_argument(
+        "--date-to",
+        type=str,
+        default=None,
+        help="Only process matches until this date (ISO format)"
+    )
+    ingest_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be updated without making changes"
     )
 
     # Squad commands
@@ -440,6 +479,8 @@ def main():
         run_upcoming(args)
     elif args.command == "export":
         run_export(args)
+    elif args.command == "ingest-results":
+        run_ingest_results(args)
     elif args.command == "squad":
         if args.squad_command == "input":
             run_squad_input(args)
@@ -533,9 +574,13 @@ def run_rankings(args):
 
 def run_predict(args):
     """Predict match outcome."""
+    from datetime import datetime, timezone
     from rugby_ranking.model.core import RugbyModel
     from rugby_ranking.model.inference import ModelFitter
     from rugby_ranking.model.predictions import MatchPredictor
+    from rugby_ranking.model.prediction_archive import (
+        PredictionArchiver, MatchMetadata
+    )
 
     model = RugbyModel()
     fitter = ModelFitter.load(args.checkpoint, model)
@@ -557,6 +602,30 @@ def run_predict(args):
             season=season,
         )
         print(f"\n{prediction.summary()}")
+
+        # Archive prediction unless --no-archive flag is set
+        if not getattr(args, 'no_archive', False):
+            archiver = PredictionArchiver()
+
+            match_meta = MatchMetadata(
+                match_id=f"user-prediction_{args.home}-vs-{args.away}_{season}",
+                competition="user-specified",
+                season=season,
+                date=datetime.now(timezone.utc),
+                home_team=args.home,
+                away_team=args.away
+            )
+
+            prediction_id = archiver.archive_prediction(
+                prediction=prediction,
+                match_metadata=match_meta,
+                model_checkpoint=args.checkpoint,
+                prediction_type="teams_only",
+                model_inputs={"season": season}
+            )
+
+            print(f"\n(Prediction archived: {prediction_id})")
+
     except ValueError as e:
         print(f"Error: {e}")
         print("Available teams:")
@@ -571,6 +640,9 @@ def run_upcoming(args):
     from rugby_ranking.model.inference import ModelFitter
     from rugby_ranking.model.predictions import MatchPredictor
     from rugby_ranking.model.data import MatchDataset
+    from rugby_ranking.model.prediction_archive import (
+        PredictionArchiver, MatchMetadata
+    )
 
     args.data_dir = _resolve_data_dir(args.data_dir)
     if not args.data_dir:
@@ -632,6 +704,12 @@ def run_upcoming(args):
 
     # Generate predictions
     predictor = MatchPredictor(model, fitter.trace)
+
+    # Initialize archiver if not disabled
+    archiver = None
+    archived_count = 0
+    if not getattr(args, 'no_archive', False):
+        archiver = PredictionArchiver()
 
     current_date = None
     predictions_count = 0
@@ -725,6 +803,35 @@ def run_upcoming(args):
                 print(f"  {' | '.join(prediction_notes)}")
             predictions_count += 1
 
+            # Archive prediction if archiver is enabled
+            if archiver:
+                match_meta = MatchMetadata(
+                    match_id=match.match_id,
+                    competition=match.competition,
+                    season=match.season,
+                    date=match.date,
+                    home_team=match.home_team,
+                    away_team=match.away_team,
+                    stadium=getattr(match, 'stadium', None),
+                    round=getattr(match, 'round', None)
+                )
+
+                prediction_type = "full_lineup" if has_lineups else "teams_only"
+                model_inputs = {
+                    "season": match.season,
+                    "home_lineup": home_lineup_simple if has_lineups else None,
+                    "away_lineup": away_lineup_simple if has_lineups else None
+                }
+
+                archiver.archive_prediction(
+                    prediction=prediction,
+                    match_metadata=match_meta,
+                    model_checkpoint=args.checkpoint,
+                    prediction_type=prediction_type,
+                    model_inputs=model_inputs
+                )
+                archived_count += 1
+
         except ValueError as e:
             print(f"\n  {match.home_team} vs {match.away_team}")
             print(f"  Competition: {match.competition} | Season: {match.season}")
@@ -735,6 +842,8 @@ def run_upcoming(args):
     print(f"Predictions generated: {predictions_count}")
     if errors_count > 0:
         print(f"Errors: {errors_count} (teams/seasons not in training data)")
+    if archiver and archived_count > 0:
+        print(f"Predictions archived: {archived_count}")
     print(f"{'='*70}\n")
 
 
@@ -752,6 +861,48 @@ def run_export(args):
         checkpoint_name=args.checkpoint,
         recent_seasons_only=args.seasons
     )
+
+
+def run_ingest_results(args):
+    """Update archived predictions with actual results."""
+    from rugby_ranking.model.prediction_archive import PredictionArchiver
+
+    args.data_dir = _resolve_data_dir(args.data_dir)
+    if not args.data_dir:
+        print("Error: --data-dir is required (or run 'rugby config init' to set it)")
+        return
+
+    print(f"Loading Rugby-Data from {args.data_dir}...")
+    archiver = PredictionArchiver()
+
+    # Run ingestion
+    stats = archiver.ingest_results_from_rugby_data(
+        rugby_data_dir=args.data_dir,
+        match_date_from=args.date_from,
+        match_date_to=args.date_to,
+        dry_run=getattr(args, 'dry_run', False)
+    )
+
+    # Display results
+    print(f"\n{'='*70}")
+    print("RESULT INGESTION SUMMARY")
+    print(f"{'='*70}")
+    print(f"Matched predictions: {stats['matched']}")
+    print(f"Updated predictions: {stats['updated']}")
+    print(f"Unmatched predictions: {stats['unmatched']}")
+
+    if stats.get('dry_run'):
+        print("\n(DRY RUN - No changes made)")
+
+    if stats['unmatched'] > 0 and stats.get('unmatched_list'):
+        print(f"\nUnmatched predictions:")
+        for unmatched in stats['unmatched_list'][:10]:  # Show first 10
+            print(f"  - {unmatched['home_team']} vs {unmatched['away_team']}")
+            print(f"    Date: {unmatched['date']} | Competition: {unmatched['competition']}")
+        if len(stats['unmatched_list']) > 10:
+            print(f"  ... and {len(stats['unmatched_list']) - 10} more")
+
+    print(f"{'='*70}\n")
 
 
 def run_squad_input(args):
