@@ -898,6 +898,13 @@ def export_dashboard_data(
     export_team_finish_positions(df_recent, recent_seasons, output_dir)
 
     # Export league tables and season predictions for each competition/season
+    # Note: Season predictions only work for league competitions with bonus point rules
+    # Skip for international tournaments (Six Nations, World Cup, etc.)
+    LEAGUE_COMPETITIONS = {
+        'urc', 'celtic', 'premiership', 'top14', 'pro-d2',
+        'euro-champions', 'euro-challenge', 'championship'
+    }
+
     competitions = df_recent["competition"].unique()
     for season in recent_seasons:
         for competition in competitions:
@@ -908,7 +915,18 @@ def export_dashboard_data(
             if len(comp_season_df) > 0:
                 try:
                     export_league_table(dataset, season, competition, output_dir)
-                    export_season_prediction(model, trace, dataset, season, competition, output_dir)
+
+                    # Only export season predictions for league competitions
+                    if competition.lower() in LEAGUE_COMPETITIONS:
+                        export_season_prediction(
+                            model, trace, dataset, season, competition, output_dir
+                        )
+                    else:
+                        print(
+                            f"  - Season prediction: {competition} {season}... "
+                            f"(skipped - international tournament)"
+                        )
+
                     export_team_heatmap(df_recent, season, competition, output_dir)
                 except Exception as e:
                     print(f"    Error exporting {competition} {season}: {e}")
