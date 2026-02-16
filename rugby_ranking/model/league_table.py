@@ -23,6 +23,7 @@ class BonusPointRules(Enum):
     URC = "urc"  # United Rugby Championship
     PREMIERSHIP = "premiership"  # English Premiership
     TOP14 = "top14"  # French Top 14
+    SIX_NATIONS = "six-nations"  # Six Nations Championship (bonus points from 2017)
 
 
 @dataclass
@@ -73,6 +74,19 @@ class BonusPointConfig:
                 try_bonus_points=1,
                 try_bonus_relative=True,  # Relative to opponent
                 losing_bonus_margin=5,  # Lose by 5 or less
+                losing_bonus_points=1,
+                win_points=4,
+                draw_points=2,
+                loss_points=0,
+            )
+        elif competition == BonusPointRules.SIX_NATIONS:
+            # Six Nations (introduced bonus points in 2017)
+            # Same rules as URC/Premiership
+            return cls(
+                try_bonus_threshold=4,
+                try_bonus_points=1,
+                try_bonus_relative=False,
+                losing_bonus_margin=7,
                 losing_bonus_points=1,
                 win_points=4,
                 draw_points=2,

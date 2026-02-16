@@ -898,11 +898,12 @@ def export_dashboard_data(
     export_team_finish_positions(df_recent, recent_seasons, output_dir)
 
     # Export league tables and season predictions for each competition/season
-    # Note: Season predictions only work for league competitions with bonus point rules
-    # Skip for international tournaments (Six Nations, World Cup, etc.)
+    # Note: Season predictions only work for competitions with bonus point rules
+    # Skip for tournaments without bonus points (World Cup pre-2019, etc.)
     LEAGUE_COMPETITIONS = {
         'urc', 'celtic', 'premiership', 'top14', 'pro-d2',
-        'euro-champions', 'euro-challenge', 'championship'
+        'euro-champions', 'euro-challenge', 'championship',
+        'six-nations'  # Six Nations has bonus points from 2017
     }
 
     competitions = df_recent["competition"].unique()
