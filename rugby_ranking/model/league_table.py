@@ -21,9 +21,12 @@ class BonusPointRules(Enum):
     """Different bonus point systems used by major competitions."""
 
     URC = "urc"  # United Rugby Championship
+    CELTIC = "celtic"  # Celtic League (now URC) - same rules as URC
     PREMIERSHIP = "premiership"  # English Premiership
     TOP14 = "top14"  # French Top 14
     SIX_NATIONS = "six-nations"  # Six Nations Championship (bonus points from 2017)
+    EURO_CHAMPIONS = "euro-champions"  # European Rugby Champions Cup
+    EURO_CHALLENGE = "euro-challenge"  # European Rugby Challenge Cup
 
 
 @dataclass
@@ -82,6 +85,42 @@ class BonusPointConfig:
         elif competition == BonusPointRules.SIX_NATIONS:
             # Six Nations (introduced bonus points in 2017)
             # Same rules as URC/Premiership
+            return cls(
+                try_bonus_threshold=4,
+                try_bonus_points=1,
+                try_bonus_relative=False,
+                losing_bonus_margin=7,
+                losing_bonus_points=1,
+                win_points=4,
+                draw_points=2,
+                loss_points=0,
+            )
+        elif competition == BonusPointRules.CELTIC:
+            # Celtic League (now URC) - same rules as URC
+            return cls(
+                try_bonus_threshold=4,
+                try_bonus_points=1,
+                try_bonus_relative=False,
+                losing_bonus_margin=7,
+                losing_bonus_points=1,
+                win_points=4,
+                draw_points=2,
+                loss_points=0,
+            )
+        elif competition == BonusPointRules.EURO_CHAMPIONS:
+            # European Champions Cup - same rules as URC/Premiership
+            return cls(
+                try_bonus_threshold=4,
+                try_bonus_points=1,
+                try_bonus_relative=False,
+                losing_bonus_margin=7,
+                losing_bonus_points=1,
+                win_points=4,
+                draw_points=2,
+                loss_points=0,
+            )
+        elif competition == BonusPointRules.EURO_CHALLENGE:
+            # European Challenge Cup - same rules as URC/Premiership
             return cls(
                 try_bonus_threshold=4,
                 try_bonus_points=1,
