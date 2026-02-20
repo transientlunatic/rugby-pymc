@@ -655,6 +655,82 @@ def export_player_profiles(
     print(f"    Wrote {len(players)} players")
 
 
+def export_knockout_bracket(
+    model: RugbyModel,
+    trace,
+    dataset: MatchDataset,
+    season: str,
+    competition: str,
+    output_dir: Path,
+    n_simulations: int = 5000,
+) -> None:
+    """
+    Export knockout bracket predictions for tournaments with TBC teams.
+
+    This handles scenarios where knockout fixtures exist but participants
+    are TBD (To Be Determined) based on pool results or earlier knockout matches.
+    """
+    print(f"  - Knockout bracket: {competition} {season}...")
+
+    try:
+        # Get all unplayed matches for this competition/season
+        unplayed = [m for m in dataset.matches
+                   if m.season == season
+                   and m.competition == competition
+                   and not m.is_played
+                   and m.round_type == "knockout"]
+
+        if not unplayed:
+            print(f"    No knockout fixtures found")
+            return
+
+        # Check if any have TBC/TBD teams
+        tbc_count = sum(1 for m in unplayed
+                       if "TBC" in m.home_team or "TBC" in m.away_team
+                       or "TBD" in m.home_team or "TBD" in m.away_team)
+
+        if tbc_count == 0:
+            print("    No TBC teams in knockout fixtures (all teams determined)")
+            return
+
+        print(f"    Found {len(unplayed)} knockout fixtures "
+              f"({tbc_count} with TBC teams)")
+
+        # Build bracket structure from fixtures
+        bracket_matches = []
+        for match in unplayed:
+            match_data = {
+                "id": f"{match.round_type}_{match.round}",
+                "round_type": match.round_type,
+                "round": match.round,
+                "home_team": match.home_team,
+                "away_team": match.away_team,
+                "date": match.date.isoformat() if match.date else None,
+                "stadium": match.stadium,
+            }
+            bracket_matches.append(match_data)
+
+        # Export the bracket structure (for now, without predictions)
+        # TODO: Implement full bracket prediction using BracketPredictor
+        # This would require defining the bracket structure properly
+        bracket_data = {
+            "competition": competition,
+            "season": season,
+            "matches": bracket_matches,
+            "note": ("Bracket prediction requires pool standings and full "
+                    "bracket structure. Currently showing fixture list."),
+        }
+
+        fname = f"knockout_bracket_{competition.replace(' ', '_')}_{season}.json"
+        with open(output_dir / fname, "w") as f:
+            json.dump(bracket_data, f, indent=2)
+
+        print(f"    Exported {len(bracket_matches)} knockout fixtures")
+
+    except Exception as e:
+        print(f"    [WARNING] Error exporting knockout bracket: {e}")
+
+
 def export_dashboard_data(
     data_dir: Path,
     output_dir: Path,
@@ -692,10 +768,10 @@ def export_dashboard_data(
         print("You need files like 'six_nations_2025_adapted.json' with complete player information.")
         return
 
-    seasons = sorted(df["season"].unique())
-    recent_seasons = seasons[-recent_seasons_only:]
+    cutoff = df["date"].max() - pd.DateOffset(years=recent_seasons_only)
+    recent_seasons = sorted(df[df["date"] >= cutoff]["season"].unique())
     df_recent = df[df["season"].isin(recent_seasons)]
-    print(f"Filtering to {recent_seasons_only} recent seasons: {recent_seasons}")
+    print(f"Filtering to seasons within last {recent_seasons_only} years: {recent_seasons}")
     print(f"Using {len(df_recent):,} observations")
 
     if checkpoint_name:
@@ -929,6 +1005,11 @@ def export_dashboard_data(
                         )
 
                     export_team_heatmap(df_recent, season, competition, output_dir)
+
+                    # Export knockout bracket if fixtures exist
+                    export_knockout_bracket(
+                        model, trace, dataset, season, competition, output_dir
+                    )
                 except Exception as e:
                     print(f"    Error exporting {competition} {season}: {e}")
 

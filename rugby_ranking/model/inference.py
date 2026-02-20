@@ -570,12 +570,14 @@ class ModelFitter:
         # Note: PyMC VI approximations may contain unpicklable objects (e.g., functools.partial)
         # so we try to save it but continue if it fails
         if self._vi_approx is not None:
+            vi_path = checkpoint_dir / "vi_approx.pkl"
             try:
-                with open(checkpoint_dir / "vi_approx.pkl", "wb") as f:
+                with open(vi_path, "wb") as f:
                     pickle.dump(self._vi_approx, f)
             except (AttributeError, TypeError, pickle.PicklingError) as e:
                 print(f"Warning: Could not save VI approximation ({e})")
                 print("The trace has been saved and can still be used for predictions.")
+                vi_path.unlink(missing_ok=True)  # Remove partial file
 
         # Save model indices and metadata
         metadata = {
@@ -593,6 +595,28 @@ class ModelFitter:
 
         print(f"Saved checkpoint to {checkpoint_dir}")
         return checkpoint_dir
+
+    @classmethod
+    def load_vi_approx(cls, name: str, cache_dir: Path | None = None):
+        """
+        Load only the VI approximation from a checkpoint, without opening the trace file.
+
+        Use this for warm-starting a new fit so the trace.nc file is never held
+        open and can safely be overwritten when the new checkpoint is saved.
+
+        Returns the approximation object, or None if unavailable.
+        """
+        cache_dir = cache_dir or Path("~/.cache/rugby_ranking").expanduser()
+        vi_approx_path = cache_dir / name / "vi_approx.pkl"
+        if not vi_approx_path.exists():
+            return None
+        try:
+            with open(vi_approx_path, "rb") as f:
+                return pickle.load(f)
+        except (EOFError, pickle.UnpicklingError) as e:
+            print(f"Warning: Could not load VI approximation ({e})")
+            vi_approx_path.unlink()  # Remove corrupted file so future runs skip it
+            return None
 
     @classmethod
     def load(

@@ -114,6 +114,42 @@ def main():
         default="latest",
         help="Checkpoint name to save/load"
     )
+    update_parser.add_argument(
+        "--warm-start",
+        action="store_true",
+        default=False,
+        help="Initialise VI from previous checkpoint's approximation (VI only, ignored for MCMC)"
+    )
+    update_parser.add_argument(
+        "--n-iterations",
+        type=int,
+        default=None,
+        help="Number of VI iterations (default: 50000)"
+    )
+    update_parser.add_argument(
+        "--n-draws",
+        type=int,
+        default=None,
+        help="MCMC draws per chain (default: 2000)"
+    )
+    update_parser.add_argument(
+        "--n-chains",
+        type=int,
+        default=None,
+        help="MCMC chains (default: 4)"
+    )
+    update_parser.add_argument(
+        "--seasons",
+        type=int,
+        default=None,
+        help="Only train on the last N seasons (default: all seasons)"
+    )
+    update_parser.add_argument(
+        "--fuzzy-match",
+        action="store_true",
+        default=False,
+        help="Enable fuzzy player name matching (default: disabled)"
+    )
 
     # Rankings command
     rankings_parser = subparsers.add_parser(
@@ -510,12 +546,20 @@ def run_update(args):
     if not args.data_dir:
         print("Error: --data-dir is required (or run 'rugby config init' to set it)")
         return
+    fuzzy_match = getattr(args, 'fuzzy_match', False)
     print(f"Loading data from {args.data_dir}...")
-    dataset = MatchDataset(args.data_dir)
+    dataset = MatchDataset(args.data_dir, fuzzy_match_names=fuzzy_match)
     dataset.load_json_files()
 
     print("Preparing model data...")
     df = dataset.to_dataframe(played_only=True)
+
+    if args.seasons is not None:
+        cutoff = df["date"].max() - pd.DateOffset(years=args.seasons)
+        recent_seasons = sorted(df[df["date"] >= cutoff]["season"].unique())
+        df = df[df["season"].isin(recent_seasons)]
+        print(f"  Filtering to seasons within last {args.seasons} years: {recent_seasons}")
+
     print(f"  {len(df)} player-match observations")
     print(f"  {df['season'].nunique()} seasons")
 
@@ -524,11 +568,33 @@ def run_update(args):
     model = RugbyModel(config)
     model.build(df, score_type="tries")
 
-    print(f"Fitting model using {args.method.upper()}...")
-    fitter = ModelFitter(model, InferenceConfig())
+    # Build inference config, applying any CLI overrides
+    inference_config = InferenceConfig()
+    if args.n_iterations is not None:
+        inference_config.vi_n_iterations = args.n_iterations
+    if args.n_draws is not None:
+        inference_config.mcmc_draws = args.n_draws
+    if args.n_chains is not None:
+        inference_config.mcmc_chains = args.n_chains
 
+    fitter = ModelFitter(model, inference_config)
+
+    # Warm-start: load only the VI approximation pickle — never touch trace.nc so
+    # it can be safely overwritten when the new checkpoint is saved.
+    warm_start = getattr(args, 'warm_start', False)
+    if warm_start and args.method == "vi":
+        print(f"Loading previous VI approximation from '{args.checkpoint}' for warm start...")
+        vi_approx = ModelFitter.load_vi_approx(args.checkpoint)
+        if vi_approx is not None:
+            fitter._vi_approx = vi_approx
+            print("  Warm-start ready (previous VI approximation loaded)")
+        else:
+            print("  Warning: previous checkpoint has no VI approximation — fitting from scratch")
+            warm_start = False
+
+    print(f"Fitting model using {args.method.upper()}{'  (warm start)' if warm_start else ''}...")
     if args.method == "vi":
-        trace = fitter.fit_vi()
+        trace = fitter.fit_vi(warm_start=warm_start)
     else:
         trace = fitter.fit_mcmc()
 

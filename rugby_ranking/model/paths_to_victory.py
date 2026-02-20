@@ -1060,6 +1060,14 @@ class PathsAnalyzer:
                         (outcome_name == 'away_win' and away == team)
                     )
 
+                    team_in_fixture = (home == team or away == team)
+
+                    # Skip conditions where the team is in the fixture but
+                    # doesn't control the outcome (e.g. "England must beat France"
+                    # when analysing France — nonsensical as a requirement).
+                    if team_in_fixture and not team_controls:
+                        continue
+
                     conditions.append(Condition(
                         game=(home, away),
                         outcome=outcome_name,
@@ -1321,7 +1329,13 @@ class PathsAnalyzer:
             lines.append("")
 
             team_conditions = [c for c in result.conditions if c.team_controls]
-            other_conditions = [c for c in result.conditions if not c.team_controls]
+            # Exclude any fixture that involves the target team from the
+            # "needs from others" list — those should never appear here.
+            other_conditions = [
+                c for c in result.conditions
+                if not c.team_controls
+                and result.team not in (c.game[0], c.game[1])
+            ]
 
             if team_conditions:
                 lines.append(f"  What {result.team} must do:")
@@ -1422,8 +1436,12 @@ class PathsAnalyzer:
                     lines.append(f"  - This appears in {cond.frequency:.0%} of successful scenarios.")
             lines.append("")
 
-        # What they need from others
-        other_conditions = [c for c in result.conditions if not c.team_controls][:3]
+        # What they need from others (only fixtures that don't involve the target team)
+        other_conditions = [
+            c for c in result.conditions
+            if not c.team_controls
+            and result.team not in (c.game[0], c.game[1])
+        ][:3]
         if other_conditions:
             lines.append(f"## What {result.team} Needs From Others")
             lines.append("")
@@ -1487,8 +1505,12 @@ class PathsAnalyzer:
             cond = team_conditions[0]
             lines.append(f"✓ Must: {self._format_condition_social(cond)}")
 
-        # Top external factor
-        other_conditions = [c for c in result.conditions if not c.team_controls]
+        # Top external factor (only fixtures that don't involve the target team)
+        other_conditions = [
+            c for c in result.conditions
+            if not c.team_controls
+            and result.team not in (c.game[0], c.game[1])
+        ]
         if other_conditions:
             cond = other_conditions[0]
             lines.append(f"🤞 Need: {self._format_condition_social(cond)}")
@@ -1648,7 +1670,11 @@ class PathsAnalyzer:
         for cond in team_conds:
             linkedin_lines.append(f"✓ {self._format_condition_blog(cond, result.team)}")
 
-        other_conds = [c for c in result.conditions if not c.team_controls][:2]
+        other_conds = [
+            c for c in result.conditions
+            if not c.team_controls
+            and result.team not in (c.game[0], c.game[1])
+        ][:2]
         for cond in other_conds:
             linkedin_lines.append(f"🤞 {self._format_condition_blog(cond, result.team)}")
 
@@ -2209,6 +2235,18 @@ class RuleExtractor:
                         (outcome_name == 'home_win' and fixture['home_team'] == target_team) or
                         (outcome_name == 'away_win' and fixture['away_team'] == target_team)
                     )
+
+                    team_in_fixture = (
+                        fixture['home_team'] == target_team or
+                        fixture['away_team'] == target_team
+                    )
+
+                    # Skip conditions where the team is in the fixture but
+                    # doesn't control the outcome — these would produce nonsensical
+                    # "needs from others" entries like "England must beat France"
+                    # when analysing France.
+                    if team_in_fixture and not team_controls:
+                        continue
 
                     conditions.append(Condition(
                         game=(fixture['home_team'], fixture['away_team']),
