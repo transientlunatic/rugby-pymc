@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 import numpy as np
@@ -153,10 +153,10 @@ def export_upcoming_predictions(
     # Get actual unplayed matches from the dataset, filtered to genuinely
     # future matches and sorted by date so the 50-match cap distributes
     # fairly across all competitions (not just the first alphabetically).
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     unplayed_matches = [
         m for m in dataset.get_unplayed_matches()
-        if m.date is not None and m.date > now
+        if m.date is not None and m.date.replace(tzinfo=m.date.tzinfo or timezone.utc) > now
     ]
     unplayed_matches.sort(key=lambda m: m.date)
 
@@ -990,6 +990,16 @@ def export_dashboard_data(
         'six-nations'  # Six Nations has bonus points from 2017
     }
 
+    # Seasons with at least one future unplayed match — the only ones where a
+    # season prediction is meaningful. Historical seasons are complete so their
+    # predicted standings would just replicate the actual table.
+    now_utc = datetime.now(timezone.utc)
+    current_seasons = {
+        m.season for m in dataset.get_unplayed_matches()
+        if m.date is not None
+        and m.date.replace(tzinfo=m.date.tzinfo or timezone.utc) > now_utc
+    }
+
     competitions = df_recent["competition"].unique()
     for season in recent_seasons:
         for competition in competitions:
@@ -1002,10 +1012,17 @@ def export_dashboard_data(
                     export_league_table(dataset, season, competition, output_dir)
 
                     # Only export season predictions for league competitions
+                    # that still have matches to play.
                     if competition.lower() in LEAGUE_COMPETITIONS:
-                        export_season_prediction(
-                            model, trace, dataset, season, competition, output_dir
-                        )
+                        if season in current_seasons:
+                            export_season_prediction(
+                                model, trace, dataset, season, competition, output_dir
+                            )
+                        else:
+                            print(
+                                f"  - Season prediction: {competition} {season}... "
+                                f"(skipped - season complete)"
+                            )
                     else:
                         print(
                             f"  - Season prediction: {competition} {season}... "
