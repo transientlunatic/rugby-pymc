@@ -166,11 +166,23 @@ def export_upcoming_predictions(
             json.dump([], f, indent=2)
         return
 
-    print(f"    Found {len(unplayed_matches)} upcoming matches across "
-          f"{len({m.competition for m in unplayed_matches})} competitions")
+    # Pre-filter to matches where both teams are known to the model, so that
+    # competitions not in the training data (e.g. Super Rugby) don't silently
+    # consume slots from the cap before we get to competitions we can predict.
+    known_matches = [
+        m for m in unplayed_matches
+        if (m.home_team, m.season) in model._team_season_ids
+        and (m.away_team, m.season) in model._team_season_ids
+    ]
+    skipped = len(unplayed_matches) - len(known_matches)
+    print(f"    Found {len(known_matches)} predictable matches across "
+          f"{len({m.competition for m in known_matches})} competitions "
+          f"({skipped} skipped — teams not in model)")
 
-    # Limit to next 50 matches to keep file size reasonable
-    for match in unplayed_matches[:50]:
+    # Cap at 50 *successful* predictions (iterate further if some still fail)
+    for match in known_matches:
+        if len(predictions_data) >= 50:
+            break
         try:
             pred = match_predictor.predict_teams_only(
                 home_team=match.home_team,
