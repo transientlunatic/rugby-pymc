@@ -150,17 +150,25 @@ def export_upcoming_predictions(
     match_predictor = MatchPredictor(model, trace)
     predictions_data = []
 
-    # Get actual unplayed matches from the dataset
-    unplayed_matches = dataset.get_unplayed_matches()
-    
+    # Get actual unplayed matches from the dataset, filtered to genuinely
+    # future matches and sorted by date so the 50-match cap distributes
+    # fairly across all competitions (not just the first alphabetically).
+    now = datetime.now()
+    unplayed_matches = [
+        m for m in dataset.get_unplayed_matches()
+        if m.date is not None and m.date > now
+    ]
+    unplayed_matches.sort(key=lambda m: m.date)
+
     if not unplayed_matches:
         print("    No upcoming matches found")
         with open(output_dir / "upcoming_predictions.json", "w") as f:
             json.dump([], f, indent=2)
         return
-    
-    print(f"    Found {len(unplayed_matches)} upcoming matches")
-    
+
+    print(f"    Found {len(unplayed_matches)} upcoming matches across "
+          f"{len({m.competition for m in unplayed_matches})} competitions")
+
     # Limit to next 50 matches to keep file size reasonable
     for match in unplayed_matches[:50]:
         try:
