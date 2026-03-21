@@ -788,10 +788,10 @@ def export_dashboard_data(
         print("You need files like 'six_nations_2025_adapted.json' with complete player information.")
         return
 
-    cutoff = df["date"].max() - pd.DateOffset(years=recent_seasons_only)
-    recent_seasons = sorted(df[df["date"] >= cutoff]["season"].unique())
+    season_latest_date = df.groupby("season")["date"].max().sort_values()
+    recent_seasons = list(season_latest_date.iloc[-recent_seasons_only:].index)
     df_recent = df[df["season"].isin(recent_seasons)]
-    print(f"Filtering to seasons within last {recent_seasons_only} years: {recent_seasons}")
+    print(f"Filtering to {recent_seasons_only} most recent seasons: {recent_seasons}")
     print(f"Using {len(df_recent):,} observations")
 
     if checkpoint_name:
