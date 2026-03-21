@@ -1015,7 +1015,11 @@ class PathsAnalyzer:
             return []
 
         n_games = len(remaining_fixtures)
-        outcome_names = ['home_win', 'draw', 'away_win']
+        outcome_name_map = {
+            **{c: 'home_win' for c in range(4)},
+            4: 'draw',
+            **{c: 'away_win' for c in range(5, 9)},
+        }
 
         # Count frequency of each outcome for each game
         # outcome_freq[game_idx][outcome] = (count, total_prob_with_outcome)
@@ -1035,10 +1039,7 @@ class PathsAnalyzer:
             home = fixture['home_team']
             away = fixture['away_team']
 
-            for outcome_code in [0, 1, 2]:
-                if outcome_code not in outcome_freq[game_idx]:
-                    continue
-
+            for outcome_code in outcome_freq[game_idx]:
                 count, prob_with_outcome = outcome_freq[game_idx][outcome_code]
                 frequency = count / len(successful_combos)
 
@@ -1053,7 +1054,7 @@ class PathsAnalyzer:
 
                 # Only include frequent and impactful conditions
                 if frequency >= 0.3 and abs(importance) >= 0.05:
-                    outcome_name = outcome_names[outcome_code]
+                    outcome_name = outcome_name_map.get(outcome_code, 'home_win')
 
                     team_controls = (
                         (outcome_name == 'home_win' and home == team) or
@@ -1102,27 +1103,37 @@ class PathsAnalyzer:
         # For each game, calculate variance in success across outcomes
         game_impacts = []
 
+        # Determine the set of outcome codes used in successful combos
+        all_outcome_codes = sorted({
+            combo[game_idx]
+            for game_idx in range(n_games)
+            for combo, _, _ in successful_combos
+        })
+
         for game_idx in range(n_games):
             _, fixture = fixtures_list[game_idx]
             home = fixture['home_team']
             away = fixture['away_team']
 
-            # Count successes for each outcome
-            outcome_successes = [0, 0, 0]
-            outcome_totals = [0, 0, 0]
+            # Collect the distinct outcome codes for this game slot
+            codes_for_game = sorted({combo[game_idx] for combo, _, _ in successful_combos})
+            if not codes_for_game:
+                codes_for_game = all_outcome_codes
 
+            # Count successes per outcome code (use dict to avoid index mismatch)
+            outcome_successes = {code: 0 for code in codes_for_game}
             for outcome_combo, _, _ in successful_combos:
-                outcome_successes[outcome_combo[game_idx]] += 1
+                code = outcome_combo[game_idx]
+                if code in outcome_successes:
+                    outcome_successes[code] += 1
 
-            # Count totals from all combinations (not just successful)
-            # This is approximate - assumes uniform distribution
-            for outcome in [0, 1, 2]:
-                outcome_totals[outcome] = total_combos // 3
+            # Approximate total combos per outcome (uniform assumption)
+            combos_per_outcome = total_combos // max(len(codes_for_game), 1)
 
             # Calculate impact as variance in success rate across outcomes
             success_rates = [
-                outcome_successes[i] / max(outcome_totals[i], 1)
-                for i in range(3)
+                outcome_successes[code] / max(combos_per_outcome, 1)
+                for code in codes_for_game
             ]
 
             impact = np.std(success_rates) if len(success_rates) > 0 else 0.0
@@ -1216,8 +1227,6 @@ class PathsAnalyzer:
         team: str,
     ) -> str:
         """Generate description of an outcome combination."""
-        outcome_names = {0: 'win', 1: 'draw', 2: 'loss'}
-
         team_results = {'wins': 0, 'draws': 0, 'losses': 0}
 
         for game_idx, (_, fixture) in enumerate(remaining_fixtures.iterrows()):
@@ -1225,17 +1234,21 @@ class PathsAnalyzer:
             home = fixture['home_team']
             away = fixture['away_team']
 
+            is_home_win = outcome <= 3
+            is_draw = outcome == 4
+            is_away_win = outcome >= 5
+
             if home == team:
-                if outcome == 0:
+                if is_home_win:
                     team_results['wins'] += 1
-                elif outcome == 1:
+                elif is_draw:
                     team_results['draws'] += 1
                 else:
                     team_results['losses'] += 1
             elif away == team:
-                if outcome == 2:
+                if is_away_win:
                     team_results['wins'] += 1
-                elif outcome == 1:
+                elif is_draw:
                     team_results['draws'] += 1
                 else:
                     team_results['losses'] += 1
@@ -1256,13 +1269,19 @@ class PathsAnalyzer:
         remaining_fixtures: pd.DataFrame,
     ) -> Dict[Tuple[str, str], str]:
         """Convert outcome combo to dictionary."""
-        outcome_names = ['home_win', 'draw', 'away_win']
         result = {}
 
         for game_idx, (_, fixture) in enumerate(remaining_fixtures.iterrows()):
             home = fixture['home_team']
             away = fixture['away_team']
-            result[(home, away)] = outcome_names[outcome_combo[game_idx]]
+            code = outcome_combo[game_idx]
+            if code <= 3:
+                name = 'home_win'
+            elif code == 4:
+                name = 'draw'
+            else:
+                name = 'away_win'
+            result[(home, away)] = name
 
         return result
 

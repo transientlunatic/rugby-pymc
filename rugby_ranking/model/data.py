@@ -49,8 +49,7 @@ TEAM_NAME_ALIASES = {
     "Bulls": "Vodacom Bulls",
     # Premiership teams (common variants)
     "Northampton": "Northampton Saints",
-    "Newcastle Falcons": "Newcastle",
-    "Newcastle Red Bulls": "Newcastle",
+    "Newcastle Red Bulls": "Newcastle Falcons",
     "Leicester": "Leicester Tigers",
     "Bath": "Bath Rugby",
     "Sale": "Sale Sharks",
@@ -83,61 +82,6 @@ def normalize_team_name(name: str) -> str:
 # ============================================================================
 # Player Name Normalization
 # ============================================================================
-
-# Common name variations to normalize
-# Maps variant spellings to canonical form
-PLAYER_NAME_CORRECTIONS = {
-    # Common first name variations
-    "Jonny": "Johnny",
-    "Johnnie": "Johnny",
-    "Jon ": "John ",
-    "Stu ": "Stuart ",
-    "Steve ": "Steven ",
-    "Mike ": "Michael ",
-    "Mick ": "Michael ",
-    "Rob ": "Robert ",
-    "Bob ": "Robert ",
-    "Bobby ": "Robert ",
-    "Bill ": "William ",
-    "Billy ": "William ",
-    "Will ": "William ",
-    "Willy ": "William ",
-    "Willie ": "William ",
-    "Tom ": "Thomas ",
-    "Tommy ": "Thomas ",
-    "Sam ": "Samuel ",
-    "Sammy ": "Samuel ",
-    "Dan ": "Daniel ",
-    "Danny ": "Daniel ",
-    "Andy ": "Andrew ",
-    "Drew ": "Andrew ",
-    "Nick ": "Nicholas ",
-    "Nicky ": "Nicholas ",
-    "Chris ": "Christopher ",
-    "Matt ": "Matthew ",
-    "Matty ": "Matthew ",
-    "Alex ": "Alexander ",
-    "Alec ": "Alexander ",
-    "Jim ": "James ",
-    "Jimmy ": "James ",
-    "Jamie ": "James ",
-    "Dave ": "David ",
-    "Davey ": "David ",
-    "Ben ": "Benjamin ",
-    "Benny ": "Benjamin ",
-    "Joe ": "Joseph ",
-    "Joey ": "Joseph ",
-    "Ed ": "Edward ",
-    "Eddie ": "Edward ",
-    "Ted ": "Edward ",
-    "Teddy ": "Edward ",
-    "Tony ": "Anthony ",
-    "Pete ": "Peter ",
-    "Paddy ": "Patrick ",
-    "Pat ": "Patrick ",
-    "Rory ": "Ruairi ",
-    "Tadhg ": "Tadgh ",
-}
 
 
 def normalize_player_name(name: str) -> str:

@@ -593,8 +593,9 @@ class TournamentTreeSimulator:
         """
         matches = self.bracket.get_knockout_matches()
 
-        # Track which teams advance
+        # Track which teams advance and which lose
         advancing_teams = {}  # match_id -> winner
+        losing_teams = {}     # match_id -> loser
         stage_teams = defaultdict(set)
         stage_matchups = defaultdict(list)
 
@@ -605,7 +606,7 @@ class TournamentTreeSimulator:
             for match in stage_matches:
                 # Determine actual teams
                 home_team, away_team = self._resolve_match_teams(
-                    match, pool_positions, advancing_teams
+                    match, pool_positions, advancing_teams, losing_teams
                 )
 
                 if home_team and away_team:
@@ -622,7 +623,7 @@ class TournamentTreeSimulator:
                             season=self.season,
                         )
                         home_win_prob = prediction.home_win_prob
-                    except:
+                    except Exception:
                         # Fallback to 50-50 if prediction fails
                         home_win_prob = 0.5
 
@@ -631,6 +632,7 @@ class TournamentTreeSimulator:
                     loser = away_team if winner == home_team else home_team
 
                     advancing_teams[match.match_id] = winner
+                    losing_teams[match.match_id] = loser
 
                     # Track paths
                     team_paths[winner][sim_id].append(stage)
@@ -658,8 +660,12 @@ class TournamentTreeSimulator:
         match: KnockoutMatch,
         pool_positions: Dict[str, int],
         advancing_teams: Dict[str, str],
+        losing_teams: Dict[str, str] = None,
     ) -> Tuple[Optional[str], Optional[str]]:
         """Resolve match teams from seeds or previous match winners."""
+        if losing_teams is None:
+            losing_teams = {}
+
         def resolve_seed(seed):
             if isinstance(seed, int):
                 # Pool position
@@ -671,9 +677,7 @@ class TournamentTreeSimulator:
             elif isinstance(seed, str) and seed.startswith('Loser('):
                 # Previous match loser (for bronze medal games)
                 prev_match_id = seed[6:-1]
-                winner = advancing_teams.get(prev_match_id)
-                # This is trickier - would need to track losers separately
-                return None  # Simplified for now
+                return losing_teams.get(prev_match_id)
             else:
                 return seed
 

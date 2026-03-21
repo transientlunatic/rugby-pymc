@@ -334,15 +334,15 @@ class MatchPredictor:
         home_tries_expected = np.zeros(n_samples)
         away_tries_expected = np.zeros(n_samples)
 
-        for pos in range(STARTERS):
-            # Player uncertainty for unknown player at this position
-            player_noise_home = np.random.normal(0, sigma_player)
-            player_noise_away = np.random.normal(0, sigma_player)
+        # Draw independent noise for every (sample, position) pair up front
+        player_noise_home_all = np.random.normal(0, sigma_player[:, None], size=(n_samples, STARTERS))
+        player_noise_away_all = np.random.normal(0, sigma_player[:, None], size=(n_samples, STARTERS))
 
+        for pos in range(STARTERS):
             # Log-rate for this position
             # Note: theta[:, pos] gives position effect for position pos+1 (0-indexed)
-            home_log_rate = alpha + home_team_effect + theta[:, pos] + eta_home + player_noise_home
-            away_log_rate = alpha + away_team_effect + theta[:, pos] + player_noise_away
+            home_log_rate = alpha + home_team_effect + theta[:, pos] + eta_home + player_noise_home_all[:, pos]
+            away_log_rate = alpha + away_team_effect + theta[:, pos] + player_noise_away_all[:, pos]
 
             # Expected tries for this position (rate, not count)
             home_tries_expected += np.exp(home_log_rate)

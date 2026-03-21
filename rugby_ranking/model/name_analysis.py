@@ -49,9 +49,13 @@ def analyze_merged_names(dataset) -> pd.DataFrame:
         return pd.DataFrame(columns=["canonical", "variation", "similarity", "count"])
 
     # Convert to structured format
+    # get_merged_names() returns (canonical, set[str]) tuples — compute similarity here
     records = []
-    for canonical, variations in merged.items():
-        for var_name, similarity in variations:
+    for canonical, variations in merged:
+        for var_name in variations:
+            if var_name == canonical:
+                continue
+            similarity = SequenceMatcher(None, canonical.lower(), var_name.lower()).ratio()
             records.append(
                 {
                     "canonical": canonical,

@@ -113,14 +113,14 @@ def random_match_split(
     Returns:
         ValidationSplit with train/test data
     """
-    np.random.seed(random_seed)
+    rng = np.random.default_rng(random_seed)
 
     # Get unique matches
     matches = df[["match_id"]].drop_duplicates()
     n_test = int(len(matches) * test_fraction)
 
     # Randomly select test matches
-    test_match_ids = np.random.choice(
+    test_match_ids = rng.choice(
         matches["match_id"].values,
         size=n_test,
         replace=False,

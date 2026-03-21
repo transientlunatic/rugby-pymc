@@ -116,7 +116,6 @@ class RugbyModel:
         with pm.Model() as model:
             # === Data ===
             player_idx = pm.Data("player_idx", data["player_idx"])
-            team_idx = pm.Data("team_idx", data["team_idx"])
             team_season_idx = pm.Data("team_season_idx", data["team_season_idx"])
             opponent_team_season_idx = pm.Data(
                 "opponent_team_season_idx", data["opponent_team_season_idx"]

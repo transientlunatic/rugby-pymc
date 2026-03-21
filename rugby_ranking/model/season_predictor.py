@@ -305,28 +305,23 @@ class SeasonPredictor:
                     opponent_tries_col='opponent_tries'
                 )
 
-                # Merge with existing standings
+                # Merge with existing standings using direct index lookup
                 for _, row in match_standings.iterrows():
                     team = row['team']
-                    if team in sim_standings['team'].values:
-                        idx = sim_standings[sim_standings['team'] == team].index[0]
-                        sim_standings.loc[idx, 'played'] += row['played']
-                        sim_standings.loc[idx, 'won'] += row['won']
-                        sim_standings.loc[idx, 'drawn'] += row['drawn']
-                        sim_standings.loc[idx, 'lost'] += row['lost']
-                        sim_standings.loc[idx, 'points_for'] += row['points_for']
-                        sim_standings.loc[idx, 'points_against'] += row['points_against']
-                        sim_standings.loc[idx, 'tries_for'] += row['tries_for']
-                        sim_standings.loc[idx, 'tries_against'] += row['tries_against']
-                        sim_standings.loc[idx, 'try_bonus'] += row['try_bonus']
-                        sim_standings.loc[idx, 'losing_bonus'] += row['losing_bonus']
+                    if team in team_to_idx:
+                        idx = team_to_idx[team]
+                        for col in ('played', 'won', 'drawn', 'lost', 'points_for',
+                                    'points_against', 'tries_for', 'tries_against',
+                                    'try_bonus', 'losing_bonus'):
+                            sim_standings.iloc[idx, sim_standings.columns.get_loc(col)] += row[col]
 
             # Recalculate final standings
             sim_standings['bonus_points'] = (
                 sim_standings['try_bonus'] + sim_standings['losing_bonus']
             )
             sim_standings['match_points'] = (
-                sim_standings['won'] * 4 + sim_standings['drawn'] * 2
+                sim_standings['won'] * self.league_table.config.win_points +
+                sim_standings['drawn'] * self.league_table.config.draw_points
             )
             sim_standings['total_points'] = (
                 sim_standings['match_points'] + sim_standings['bonus_points']
