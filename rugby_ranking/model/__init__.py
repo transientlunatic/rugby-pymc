@@ -25,6 +25,11 @@ from rugby_ranking.model.name_analysis import (
     export_merge_report,
 )
 from rugby_ranking.model import positions
+from rugby_ranking.model.strength_rankings import (
+    compute_team_rankings,
+    compute_player_vorp,
+    compute_squad_criticality,
+)
 from rugby_ranking.model.knockout_forecast import (
     TournamentTreeSimulator,
     TournamentForecast,
@@ -38,6 +43,9 @@ from rugby_ranking.model.knockout_forecast import (
 )
 
 __all__ = [
+    "compute_team_rankings",
+    "compute_player_vorp",
+    "compute_squad_criticality",
     "MatchDataset",
     "PlayerMatchObservation",
     "RugbyModel",

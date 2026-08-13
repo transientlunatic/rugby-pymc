@@ -18,6 +18,10 @@ from rugby_ranking.model.paths_to_victory import PathsAnalyzer
 from rugby_ranking.model.squad_analysis import SquadAnalyzer
 from rugby_ranking.model.league_table import LeagueTable
 from rugby_ranking.model.data_utils import quick_standings, prepare_season_data
+from rugby_ranking.model.strength_rankings import (
+    compute_team_rankings,
+    compute_player_vorp,
+)
 
 
 def export_team_strength_series(
@@ -138,33 +142,197 @@ def export_team_finish_positions(
         json.dump(positions_data, f, indent=2)
 
 
+def export_prediction_history(
+    output_dir: Path,
+    days: int = 21,
+    archiver: "PredictionArchiver | None" = None,
+) -> None:
+    """Export authentic pre-match predictions from the local archive.
+
+    Writes ``prediction_history.json`` in the same shape as
+    ``upcoming_predictions.json`` so the blog widget can show "prediction vs
+    actual" using the predictions that were actually made before each match,
+    rather than predictions recomputed post-hoc with an updated model.
+
+    Falls back gracefully if the archive is empty or absent.
+
+    Args:
+        archiver: Reuse an existing PredictionArchiver (e.g. one pointed at a
+            repo-committed archive_dir) instead of opening the default
+            ``~/.cache`` location.
+    """
+    from rugby_ranking.model.prediction_archive import PredictionArchiver
+
+    print("  - Prediction history (from archive)...")
+
+    if archiver is None:
+        archiver = PredictionArchiver()
+    cutoff = (datetime.now(timezone.utc) - pd.Timedelta(days=days)).isoformat()
+
+    try:
+        predictions = archiver.get_predictions(date_from=cutoff)
+    except Exception as e:
+        print(f"    Archive unavailable ({e}), writing empty prediction_history.json")
+        with open(output_dir / "prediction_history.json", "w") as f:
+            json.dump([], f)
+        return
+
+    if not predictions:
+        print("    No archived predictions found (archive may be empty)")
+        with open(output_dir / "prediction_history.json", "w") as f:
+            json.dump([], f)
+        return
+
+    # Deduplicate: one entry per match (home+away+date), keeping the prediction
+    # with the latest timestamp — i.e. the most recent pre-match forecast.
+    seen: dict[tuple, object] = {}
+    for pred in predictions:
+        key = (
+            pred.match_metadata.home_team.lower(),
+            pred.match_metadata.away_team.lower(),
+            pred.match_metadata.date.date().isoformat(),
+        )
+        existing = seen.get(key)
+        if existing is None or (
+            pred.prediction_metadata.timestamp > existing.prediction_metadata.timestamp
+        ):
+            seen[key] = pred
+
+    history = []
+    for pred in sorted(seen.values(), key=lambda p: p.match_metadata.date):
+        history.append({
+            "date": pred.match_metadata.date.isoformat(),
+            "home_team": pred.match_metadata.home_team,
+            "away_team": pred.match_metadata.away_team,
+            "competition": pred.match_metadata.competition,
+            "season": pred.match_metadata.season,
+            "home_score_pred": float(pred.prediction.home.mean),
+            "away_score_pred": float(pred.prediction.away.mean),
+            "home_win_prob": float(pred.prediction.home_win_prob),
+            "away_win_prob": float(pred.prediction.away_win_prob),
+            "draw_prob": float(pred.prediction.draw_prob),
+        })
+
+    print(f"    Exported {len(history)} archived predictions (last {days} days)")
+    with open(output_dir / "prediction_history.json", "w") as f:
+        json.dump(history, f, indent=2)
+
+
 def export_upcoming_predictions(
     model: RugbyModel,
     trace,
     dataset,
     output_dir: Path,
+    recent_days: int = 14,
+    archiver: "PredictionArchiver | None" = None,
+    checkpoint_label: str = "dashboard_export",
 ) -> None:
-    """Export predictions for actual upcoming/unplayed matches."""
+    """Export predictions for upcoming matches and recently played matches.
+
+    Including recently played matches (last ``recent_days`` days) ensures that
+    the blog widget can show "prediction vs actual" for the previous weekend
+    even after ``upcoming_predictions.json`` has been regenerated.
+
+    Args:
+        archiver: If given, genuinely pre-match predictions (matches that
+            haven't been played yet) are archived via
+            ``archiver.archive_prediction()`` so calibration can be tracked
+            over time. Predictions for already-played matches are NOT
+            archived here — those are recomputed post-hoc with the current
+            (possibly retrained-on-that-match) model purely for display, and
+            archiving them would leak the result into what's supposed to be
+            a pre-match forecast.
+    """
     print("  - Upcoming match predictions...")
 
     match_predictor = MatchPredictor(model, trace)
     predictions_data = []
 
-    # Get actual unplayed matches from the dataset, filtered to genuinely
-    # future matches and sorted by date so the 50-match cap distributes
-    # fairly across all competitions (not just the first alphabetically).
     now = datetime.now(timezone.utc)
+    recent_cutoff = now - pd.Timedelta(days=recent_days)
+
+    # Recently played matches (for blog widget "prediction vs actual" display)
+    recent_played = [
+        m for m in dataset.matches
+        if m.is_played
+        and m.date is not None
+        and m.date.replace(tzinfo=m.date.tzinfo or timezone.utc) >= recent_cutoff
+    ]
+    recent_played.sort(key=lambda m: m.date)
+
+    # Upcoming unplayed matches
     unplayed_matches = [
         m for m in dataset.get_unplayed_matches()
         if m.date is not None and m.date.replace(tzinfo=m.date.tzinfo or timezone.utc) > now
     ]
     unplayed_matches.sort(key=lambda m: m.date)
 
-    if not unplayed_matches:
-        print("    No upcoming matches found")
+    if not unplayed_matches and not recent_played:
+        print("    No upcoming or recent matches found")
         with open(output_dir / "upcoming_predictions.json", "w") as f:
             json.dump([], f, indent=2)
         return
+
+    def _predict_match(match, archive=False):
+        pred = match_predictor.predict_teams_only(
+            home_team=match.home_team,
+            away_team=match.away_team,
+            season=match.season,
+            n_samples=500,
+        )
+        if archive and archiver is not None:
+            from rugby_ranking.model.prediction_archive import MatchMetadata
+
+            try:
+                match_meta = MatchMetadata(
+                    match_id=(
+                        f"{match.competition}_{match.date.date().isoformat()}_"
+                        f"{match.home_team}-vs-{match.away_team}"
+                    ),
+                    competition=match.competition,
+                    season=match.season,
+                    date=match.date,
+                    home_team=match.home_team,
+                    away_team=match.away_team,
+                )
+                archiver.archive_prediction(
+                    prediction=pred,
+                    match_metadata=match_meta,
+                    model_checkpoint=checkpoint_label,
+                    prediction_type="teams_only",
+                    model_inputs={"season": match.season},
+                )
+            except Exception as e:
+                print(
+                    f"    Failed to archive prediction for "
+                    f"{match.home_team} vs {match.away_team}: {e}"
+                )
+        return {
+            "date": match.date.isoformat() if hasattr(match.date, "isoformat") else str(match.date),
+            "home_team": match.home_team,
+            "away_team": match.away_team,
+            "season": match.season,
+            "competition": match.competition,
+            "home_score_pred": float(pred.home.mean),
+            "away_score_pred": float(pred.away.mean),
+            "home_win_prob": float(pred.home_win_prob),
+            "away_win_prob": float(pred.away_win_prob),
+            "draw_prob": float(pred.draw_prob),
+        }
+
+    # Recent played matches — include predictions so the blog widget can show
+    # "prediction vs actual" for last weekend even after the file is regenerated.
+    known_recent = [
+        m for m in recent_played
+        if (m.home_team, m.season) in model._team_season_ids
+        and (m.away_team, m.season) in model._team_season_ids
+    ]
+    print(f"    Including {len(known_recent)} recently played matches (last {recent_days} days)")
+    for match in known_recent:
+        try:
+            predictions_data.append(_predict_match(match))
+        except Exception as e:
+            print(f"    Skipping recent match {match.home_team} vs {match.away_team}: {e}")
 
     # Pre-filter to matches where both teams are known to the model, so that
     # competitions not in the training data (e.g. Super Rugby) don't silently
@@ -175,34 +343,16 @@ def export_upcoming_predictions(
         and (m.away_team, m.season) in model._team_season_ids
     ]
     skipped = len(unplayed_matches) - len(known_matches)
-    print(f"    Found {len(known_matches)} predictable matches across "
+    print(f"    Found {len(known_matches)} predictable upcoming matches across "
           f"{len({m.competition for m in known_matches})} competitions "
           f"({skipped} skipped — teams not in model)")
 
-    # Cap at 50 *successful* predictions (iterate further if some still fail)
+    # Cap at 50 *successful* upcoming predictions (iterate further if some still fail)
     for match in known_matches:
-        if len(predictions_data) >= 50:
+        if len(predictions_data) >= 50 + len(known_recent):
             break
         try:
-            pred = match_predictor.predict_teams_only(
-                home_team=match.home_team,
-                away_team=match.away_team,
-                season=match.season,
-                n_samples=500,
-            )
-
-            predictions_data.append({
-                "date": match.date.isoformat() if hasattr(match.date, "isoformat") else str(match.date),
-                "home_team": match.home_team,
-                "away_team": match.away_team,
-                "season": match.season,
-                "competition": match.competition,
-                "home_score_pred": float(pred.home.mean),
-                "away_score_pred": float(pred.away.mean),
-                "home_win_prob": float(pred.home_win_prob),
-                "away_win_prob": float(pred.away_win_prob),
-                "draw_prob": float(pred.draw_prob),
-            })
+            predictions_data.append(_predict_match(match, archive=True))
         except Exception as e:
             print(f"    Skipping prediction for {match.home_team} vs {match.away_team}: {e}")
             continue
@@ -1050,8 +1200,31 @@ def export_dashboard_data(
                 except Exception as e:
                     print(f"    Error exporting {competition} {season}: {e}")
 
+    # Prediction archive: persisted under output_dir so the existing
+    # "commit dashboard data" workflow step picks it up automatically.
+    # Pointing at ~/.cache (the PredictionArchiver default) would lose all
+    # history between CI runs, since GitHub Actions runners are ephemeral.
+    from rugby_ranking.model.prediction_archive import PredictionArchiver
+
+    archiver = PredictionArchiver(archive_dir=output_dir / "prediction_archive")
+    active_checkpoint_label = checkpoint_name or "dashboard_export"
+
+    print("  - Ingesting results for previously-archived predictions...")
+    try:
+        ingest_stats = archiver.ingest_results_from_rugby_data(rugby_data_dir=data_dir)
+        print(
+            f"    {ingest_stats['matched']} matched, "
+            f"{ingest_stats['updated']} updated, "
+            f"{ingest_stats['unmatched']} unmatched"
+        )
+    except Exception as e:
+        print(f"    Result ingestion skipped: {e}")
+
     # Export upcoming predictions using actual unplayed matches
-    export_upcoming_predictions(model, trace, dataset, output_dir)
+    export_upcoming_predictions(
+        model, trace, dataset, output_dir,
+        archiver=archiver, checkpoint_label=active_checkpoint_label,
+    )
 
     try:
         match_predictor = MatchPredictor(model, trace)
@@ -1062,6 +1235,65 @@ def export_dashboard_data(
 
     for season in recent_seasons:
         export_squad_depth(model, trace, season, output_dir)
+
+    # Export prediction history from archive (authentic pre-match predictions)
+    export_prediction_history(output_dir, archiver=archiver)
+
+    # Strength rankings: attack/defense/reference-margin + player VORP
+    try:
+        print("  - Strength rankings (reference margin + VORP)...")
+        # Reuse the MatchPredictor already constructed above (avoids double
+        # allocation of the ~100 MB cached posterior arrays).
+        _predictor = match_predictor
+        latest_season = recent_seasons[-1]
+
+        strength_rows = []
+        for season in recent_seasons:
+            rankings = compute_team_rankings(
+                _predictor, season=season, n_samples=1000, seed=42
+            )
+            for _, r in rankings.iterrows():
+                strength_rows.append({
+                    "team": r["team"],
+                    "season": r["season"],
+                    "attack_mean": r["attack_mean"],
+                    "attack_lower": r["attack_lower"],
+                    "attack_upper": r["attack_upper"],
+                    "defense_mean": r["defense_mean"],
+                    "defense_lower": r["defense_lower"],
+                    "defense_upper": r["defense_upper"],
+                    "ref_margin_mean": r["ref_margin_mean"],
+                    "ref_margin_lower": r["ref_margin_lower"],
+                    "ref_margin_upper": r["ref_margin_upper"],
+                    "win_prob_vs_ref": r["win_prob_vs_ref"],
+                })
+        with open(output_dir / "team_strength_rankings.json", "w") as f:
+            json.dump(strength_rows, f, indent=2)
+
+        vorp_rows = compute_player_vorp(
+            model, trace, df_recent, n_samples=1000, min_matches=5,
+            top_n=200, seed=42
+        )
+        vorp_out = [
+            {
+                "player": r["player"],
+                "primary_position": int(r["primary_position"]),
+                "n_matches": int(r["n_matches"]),
+                "vorp_mean": r["vorp_mean"],
+                "vorp_lower": r["vorp_lower"],
+                "vorp_upper": r["vorp_upper"],
+                "vorp_tries_mean": r["vorp_tries_mean"],
+                "vorp_kicking_mean": r["vorp_kicking_mean"],
+            }
+            for _, r in vorp_rows.iterrows()
+        ]
+        with open(output_dir / "player_vorp.json", "w") as f:
+            json.dump(vorp_out, f, indent=2)
+
+    except Exception as e:
+        import traceback as _tb
+        print(f"    Strength rankings skipped: {e}")
+        _tb.print_exc()
 
     # Export blog-specific data files
     print("\nExporting blog data files...")
@@ -1082,18 +1314,24 @@ def export_dashboard_data(
     print("  - team_strength_series.json")
     print("  - team_finish_positions.json")
     print("  - upcoming_predictions.json")
+    print("  - prediction_history.json (blog — authentic pre-match predictions)")
     print("  - paths_to_victory.json (empty for historical data)")
     print("  - squad_depth.json")
     print("  - matches_index.json (blog)")
     print("  - matches/*.json (blog)")
     print("  - players.json (blog)")
+    print("  - team_strength_rankings.json (attack/defense/reference margin)")
+    print("  - player_vorp.json (VORP rankings)")
     print("\nReady for dashboard deployment!")
 
 
 if __name__ == "__main__":
-    DATA_DIR = Path("../Rugby-Data")
-    if not DATA_DIR.exists():
-        DATA_DIR = Path("../../Rugby-Data")
+    # Search order covers CI (Rugby-Data/ checked out alongside repo root),
+    # local dev (../Rugby-Data), and nested checkouts.
+    for _candidate in ("Rugby-Data", "../Rugby-Data", "../../Rugby-Data"):
+        DATA_DIR = Path(_candidate)
+        if DATA_DIR.exists():
+            break
 
     OUTPUT_DIR = Path("dashboard/data")
 
