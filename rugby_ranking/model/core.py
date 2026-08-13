@@ -42,6 +42,11 @@ class ModelConfig:
     # Defensive effects
     include_defense: bool = True
     defense_effect_sd: float = 0.3
+    # Score types for which the opponent defensive effect is modelled.
+    # Conversions and penalties are kicking scores — the kick itself is unchallenged,
+    # so there is no meaningful "conversion/penalty defense". Only tries reflect genuine
+    # defensive suppression of the opponent's scoring rate.
+    defense_score_types: tuple[str, ...] = ("tries",)
 
     # Home advantage
     home_advantage_prior_mean: float = 0.1
@@ -74,11 +79,14 @@ class RugbyModel:
                           + δ_player_team[player_id, team_id]
                           + θ_position[position]
                           + η_home × is_home
+                          - δ_defense[opponent_team_season]  # tries only
                           + log(minutes / 80)  # exposure offset
 
         N_score[i,m] ~ Poisson(λ_score[i,m])
 
     Where separate models are fit for tries, penalties, conversions, drop_goals.
+    The defensive effect (δ_defense) is applied only to tries; conversions and
+    penalties are unchallenged kicks so there is no meaningful defense term.
     """
 
     def __init__(self, config: ModelConfig | None = None):
@@ -154,8 +162,13 @@ class RugbyModel:
                 shape=n_team_seasons,
             )
 
-            # Defensive effects (reduce opponent scoring)
-            if self.config.include_defense:
+            # Defensive effects (reduce opponent try-scoring rate only).
+            # Conversions and penalties are unchallenged kicks; defense cannot suppress them.
+            _apply_defense = (
+                self.config.include_defense
+                and score_type in self.config.defense_score_types
+            )
+            if _apply_defense:
                 sigma_defense = pm.HalfNormal("sigma_defense", sigma=self.config.defense_effect_sd)
                 delta_defense = pm.Normal(
                     "delta_defense",
@@ -193,8 +206,7 @@ class RugbyModel:
                 + pt.log(exposure)  # Exposure offset
             )
 
-            # Add defensive effect if enabled
-            if self.config.include_defense:
+            if _apply_defense:
                 log_lambda = log_lambda - delta_defense[opponent_team_season_idx]
 
             lambda_ = pt.exp(log_lambda)
@@ -205,7 +217,7 @@ class RugbyModel:
         self.model = model
         return model
 
-    def build_joint(self, df: pd.DataFrame) -> pm.Model:
+    def build_joint(self, df: pd.DataFrame, preserve_indices: bool = False) -> pm.Model:
         """
         Build a joint model for all scoring types.
 
@@ -214,8 +226,15 @@ class RugbyModel:
 
         If config.separate_kicking_effect is True, uses separate player effects
         for try-scoring vs kicking ability.
+
+        Args:
+            df: Dataset from MatchDataset.to_dataframe()
+            preserve_indices: If True and indices already exist (e.g., from a loaded
+                checkpoint), keep them rather than rebuilding. Used by
+                sample_posterior_predictive() to rebuild the PyMC model context
+                while keeping checkpoint index mappings intact.
         """
-        self._build_indices(df)
+        self._build_indices(df, preserve_indices=preserve_indices)
 
         with pm.Model() as model:
             n_players = len(self._player_ids)
@@ -280,11 +299,10 @@ class RugbyModel:
             # Team effect loadings per score type
             lambda_team = pm.HalfNormal("lambda_team", sigma=0.5, shape=n_score_types)
 
-            # Defensive effect loadings per score type
+            # Defensive effect loading (scalar — defense only applies to tries).
+            # No per-score-type loading needed since conversions/penalties are excluded.
             if self.config.include_defense:
-                lambda_defense = pm.HalfNormal(
-                    "lambda_defense", sigma=0.5, shape=n_score_types
-                )
+                lambda_defense = pm.HalfNormal("lambda_defense", sigma=0.5)
 
             # Position effects per score type
             theta_position = pm.Normal(
@@ -337,12 +355,6 @@ class RugbyModel:
                 # Scaled team offensive effect
                 gamma_team_season = sigma_team * lambda_team[s] * gamma_team_season_raw
 
-                # Scaled defensive effect
-                if self.config.include_defense:
-                    delta_defense = (
-                        sigma_defense * lambda_defense[s] * delta_defense_raw
-                    )
-
                 log_lambda = (
                     alpha[s]
                     + beta_player[player_idx]
@@ -352,8 +364,13 @@ class RugbyModel:
                     + pt.log(exposure)
                 )
 
-                # Subtract opponent defensive effect
-                if self.config.include_defense:
+                # Subtract opponent defensive effect for tries only.
+                # Conversions/penalties are unchallenged kicks; no meaningful defense term.
+                if (
+                    self.config.include_defense
+                    and score_type in self.config.defense_score_types
+                ):
+                    delta_defense = sigma_defense * lambda_defense * delta_defense_raw
                     log_lambda = log_lambda - delta_defense[opponent_team_season_idx_data]
 
                 lambda_ = pt.exp(log_lambda)
@@ -446,9 +463,7 @@ class RugbyModel:
             lambda_team = pm.HalfNormal("lambda_team", sigma=0.5, shape=n_score_types)
 
             if self.config.include_defense:
-                lambda_defense = pm.HalfNormal(
-                    "lambda_defense", sigma=0.5, shape=n_score_types
-                )
+                lambda_defense = pm.HalfNormal("lambda_defense", sigma=0.5)
 
             theta_position = pm.Normal(
                 "theta_position",
@@ -520,11 +535,6 @@ class RugbyModel:
 
                 gamma_team_season = sigma_team * lambda_team[s] * gamma_team_season_raw
 
-                if self.config.include_defense:
-                    delta_defense = (
-                        sigma_defense * lambda_defense[s] * delta_defense_raw
-                    )
-
                 log_lambda = (
                     alpha[s]
                     + beta_player[player_idx]
@@ -534,10 +544,13 @@ class RugbyModel:
                     + pt.log(exposure)
                 )
 
-                if self.config.include_defense:
-                    log_lambda = log_lambda - delta_defense[
-                        opponent_team_season_idx_data
-                    ]
+                # Subtract opponent defensive effect for tries only.
+                if (
+                    self.config.include_defense
+                    and score_type in self.config.defense_score_types
+                ):
+                    delta_defense = sigma_defense * lambda_defense * delta_defense_raw
+                    log_lambda = log_lambda - delta_defense[opponent_team_season_idx_data]
 
                 lambda_ = pt.exp(log_lambda)
 
@@ -680,9 +693,7 @@ class RugbyModel:
             lambda_team = pm.HalfNormal("lambda_team", sigma=0.5, shape=n_score_types)
 
             if self.config.include_defense:
-                lambda_defense = pm.HalfNormal(
-                    "lambda_defense", sigma=0.5, shape=n_score_types
-                )
+                lambda_defense = pm.HalfNormal("lambda_defense", sigma=0.5)
 
             theta_position = pm.Normal(
                 "theta_position",
@@ -767,10 +778,6 @@ class RugbyModel:
                     + gamma_team_trend[team_season_idx] * season_progress
                 )
 
-                # Defensive effect
-                if self.config.include_defense:
-                    delta_defense = sigma_defense * lambda_defense[s] * delta_defense_raw
-
                 # Linear predictor
                 log_lambda = (
                     alpha[s]
@@ -781,8 +788,12 @@ class RugbyModel:
                     + pt.log(exposure)
                 )
 
-                # Subtract opponent defensive effect
-                if self.config.include_defense:
+                # Subtract opponent defensive effect for tries only.
+                if (
+                    self.config.include_defense
+                    and score_type in self.config.defense_score_types
+                ):
+                    delta_defense = sigma_defense * lambda_defense * delta_defense_raw
                     log_lambda = log_lambda - delta_defense[opponent_team_season_idx_data]
 
                 lambda_ = pt.exp(log_lambda)
@@ -793,8 +804,95 @@ class RugbyModel:
         self.model = model
         return model
 
-    def _build_indices(self, df: pd.DataFrame) -> None:
-        """Build mappings from names to integer indices."""
+    def _filter_to_known_entities(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filter a dataframe to rows whose player, position, and team-season are
+        all present in the current index mappings.
+
+        This is required before rebuilding the PyMC model with preserve_indices=True,
+        because _prepare_data will raise KeyError on any unknown entity.
+        """
+        if not self._player_ids:
+            raise ValueError("No index mappings available. Build or load a model first.")
+        known_team_seasons = set(self._team_season_ids.keys())
+        ts_pairs = list(zip(df["team"], df["season"]))
+        ts_mask = pd.Series(
+            [ts in known_team_seasons for ts in ts_pairs], index=df.index
+        )
+        mask = (
+            df["player_name"].isin(self._player_ids)
+            & df["position"].isin(self._position_ids)
+            & ts_mask
+        )
+        return df[mask].copy()
+
+    def sample_posterior_predictive(
+        self,
+        trace,
+        df: pd.DataFrame,
+        var_names: list[str] | None = None,
+        random_seed: int | None = None,
+    ):
+        """
+        Sample from the posterior predictive distribution for model checking.
+
+        Rebuilds the PyMC model context (required after loading a checkpoint)
+        while preserving the checkpoint's index mappings, then calls
+        pm.sample_posterior_predictive().
+
+        The returned InferenceData has ``posterior_predictive`` and
+        ``observed_data`` groups that can be passed directly to az.plot_ppc().
+
+        Args:
+            trace: ArviZ InferenceData from MCMC or VI inference.
+            df: Dataset to use for PPC. Rows with unknown players/teams are
+                filtered out automatically so the data matches the checkpoint.
+            var_names: Which likelihood variables to sample. Defaults to all
+                ``y_<score_type>`` variables in the joint model.
+            random_seed: Random seed for reproducibility.
+
+        Returns:
+            ArviZ InferenceData with posterior_predictive and observed_data groups.
+
+        Example::
+
+            model, trace = load_checkpoint("latest")
+            dataset, df, _ = setup_notebook_environment()
+            ppc = model.sample_posterior_predictive(trace, df)
+            az.plot_ppc(ppc, var_names=["y_tries"])
+        """
+        df_filtered = self._filter_to_known_entities(df)
+        n_dropped = len(df) - len(df_filtered)
+        if n_dropped > 0:
+            print(
+                f"Note: filtered {n_dropped:,} rows with entities not in checkpoint "
+                f"({len(df_filtered):,} rows remain)."
+            )
+
+        # Rebuild the PyMC model using checkpoint indices (preserve_indices=True
+        # ensures _build_indices is a no-op and existing index mappings are kept)
+        self.build_joint(df_filtered, preserve_indices=True)
+
+        with self.model:
+            ppc = pm.sample_posterior_predictive(
+                trace,
+                var_names=var_names,
+                random_seed=random_seed,
+            )
+
+        return ppc
+
+    def _build_indices(self, df: pd.DataFrame, preserve_indices: bool = False) -> None:
+        """Build mappings from names to integer indices.
+
+        Args:
+            df: Dataset to build indices from.
+            preserve_indices: If True and indices are already populated (e.g., from a
+                loaded checkpoint), skip rebuilding. Use this when you need to reconstruct
+                the PyMC model context without changing the index mappings.
+        """
+        if preserve_indices and self._player_ids:
+            return
         # Players
         unique_players = df["player_name"].unique()
         self._player_ids = {name: i for i, name in enumerate(unique_players)}
