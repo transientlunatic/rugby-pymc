@@ -6,7 +6,6 @@ on:
     paths:
       - 'dashboard/**'
       - 'rugby_ranking/**'
-      - 'export_dashboard_data.py'
   workflow_dispatch:  # Manual trigger
   schedule:
     - cron: '0 2 * * 0'  # Weekly Sunday 2am UTC
@@ -43,7 +42,7 @@ jobs:
 
       - name: Generate dashboard data
         run: |
-          python export_dashboard_data.py
+          python -m rugby_ranking.tools.export_dashboard_data
         continue-on-error: false
 
       - name: Verify data files
