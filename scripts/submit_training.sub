@@ -1,0 +1,55 @@
+#!/usr/bin/env condor_submit
+# HTCondor submission file for rugby ranking model training
+#
+# Usage:
+#   condor_submit submit_training.sub
+#
+# This script includes automatic checkpointing and resume capability.
+# If the job is evicted or interrupted, it will resume from the last checkpoint.
+#
+# NOTE: HTCondor is most useful for MCMC training, which is computationally intensive.
+# For VI, you may be better off running locally unless you need very long runs.
+
+# Executable and arguments
+executable = train_model.py
+
+# For VI (faster, less resource-intensive):
+arguments = --model static --data-dir /path/to/Rugby-Data --method vi --vi-iterations 100000 --checkpoint-every 5000 --auto-resume --save-as htcondor_run --verbose
+
+# For MCMC (slower, more thorough - better for HTCondor):
+# arguments = --model static --data-dir /path/to/Rugby-Data --method mcmc --mcmc-draws 2000 --mcmc-chains 4 --auto-resume --save-as htcondor_mcmc_run --verbose
+
+# Environment
+universe = vanilla
+getenv = True
+
+# Resource requirements
+# For VI:
+request_cpus = 2
+request_memory = 8GB
+request_disk = 2GB
+
+# For MCMC (use 4 CPUs for 4 chains):
+# request_cpus = 4
+# request_memory = 16GB
+# request_disk = 5GB
+
+# Output files
+log = logs/training_$(Cluster).log
+output = logs/training_$(Cluster).out
+error = logs/training_$(Cluster).err
+
+# Checkpoint support
+# Enable periodic checkpointing (HTCondor will send SIGTERM before evicting)
++WantGracefulRemoval = True
+# Allow job to continue if it's evicted
+on_exit_hold = (ExitCode =?= UNDEFINED)
+on_exit_hold_reason = "Job was evicted, will retry"
+periodic_release = (NumJobStarts < 10) && ((CurrentTime - EnteredCurrentStatus) > 300)
+
+# Email notifications (optional)
+# notify_user = your.email@example.com
+# notification = Error
+
+# Submit the job
+queue 1

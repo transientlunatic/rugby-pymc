@@ -1,0 +1,62 @@
+# HTCondor submit file — Rugby Ranking MCMC training
+#
+# Prerequisites (run once on wiay before submitting):
+#   git clone <rugby-ranking-url> /data/wiay/daniel/scratch/rugby-ranking
+#   git clone <Rugby-Data-url>    /data/wiay/daniel/scratch/Rugby-Data
+#   /data/wiay/conda_envs/pymc-sandbox/bin/pip install -e /data/wiay/daniel/scratch/rugby-ranking
+#
+# Usage:
+#   cd /data/wiay/daniel/scratch/rugby-ranking
+#   git pull                          # make sure code is up to date
+#   condor_submit scripts/condor/mcmc.sub
+#
+# Monitor:
+#   condor_q
+#   tail -f logs/mcmc_$(condor_q -format '%d' ClusterId).out   # once you know ClusterId
+#
+# Retrieve checkpoint (from local machine):
+#   rsync -av wiay:~/.cache/rugby_ranking/mcmc_corrected_model/ \
+#             ~/.cache/rugby_ranking/mcmc_corrected_model/
+
+universe   = vanilla
+executable = scripts/condor/run_mcmc.sh
+
+# Working directory — must be the repo root so the module is importable
+# (only matters if running without pip install -e; with it this is irrelevant)
+initialdir = /data/wiay/daniel/scratch/rugby-ranking
+
+# Condor log/output/error (relative to initialdir)
+log    = logs/condor/mcmc_$(Cluster).log
+output = logs/condor/mcmc_$(Cluster).out
+error  = logs/condor/mcmc_$(Cluster).err
+
+# Resources — 4 CPUs for 4 parallel chains, 16 GB for large trace arrays
+request_cpus   = 4
+request_memory = 16384
+request_disk   = 5120
+
+# Pass the current shell environment into the job
+getenv = True
+
+# Override specific variables here if needed
+# environment = "CHECKPOINT_NAME=mcmc_corrected_model N_DRAWS=2000 N_CHAINS=4"
+
+# Don't transfer files — /data/wiay and NFS home are shared across all nodes
+should_transfer_files = NO
+
+# Graceful eviction support: HTCondor sends SIGTERM before evicting,
+# allowing PyMC to flush in-progress chains
++WantGracefulRemoval = True
+
+# If the job is evicted (exit code undefined), hold and auto-release it
+# so it resumes from the last checkpoint automatically.
+# PyMC NUTS doesn't support mid-chain resume, so we just restart.
+on_exit_hold        = (ExitCode =?= UNDEFINED)
+on_exit_hold_reason = "Job evicted — will retry"
+periodic_release    = (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 300)
+
+# Optional: email on failure
+# notification  = Error
+# notify_user   = daniel@example.com
+
+queue 1
