@@ -624,3 +624,94 @@ class TestSBC_MCMC:
 
     def test_team_effect_scale_sigma_team(self, sbc_ranks_mcmc):
         _assert_uniform(sbc_ranks_mcmc["sigma_team"], "sigma_team")
+
+
+@pytest.mark.statistical
+@pytest.mark.slow
+class TestSBC_MCMC_ProductionConfig:
+    """
+    MCMC reference P-P tests for the production model config (build_joint,
+    defense, kicking split) — the ground-truth counterpart to
+    TestSBC_VI_ProductionConfig. If a parameter fails under VI but passes
+    here, the posterior itself is fine and the problem is VI's approximation
+    (typically an overly narrow mean-field posterior); if it fails here too,
+    the model — not just the inference method — needs attention.
+
+    Run with:
+        pytest tests/test_statistical_calibration.py -m "statistical and slow" -v -s
+    """
+
+    _MCMC_DRAWS = 500
+    _MCMC_TUNE = 500
+    _MCMC_CHAINS = 2
+
+    @pytest.fixture(scope="class")
+    def sbc_ranks_mcmc_joint(self, minimal_df, n_sims):
+        _OUTPUT_DIR.mkdir(exist_ok=True)
+        all_param_names = _JOINT_SCALAR_PARAMS + [label for _, _, label in _JOINT_INDEXED_PARAMS]
+        ranks: dict[str, list[float]] = {p: [] for p in all_param_names}
+        score_types = ("tries", "penalties", "conversions", "drop_goals")
+
+        ref_model = RugbyModel(ModelConfig(**_PRODUCTION_CONFIG_KWARGS))
+        ref_model.build_joint(minimal_df)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            with ref_model.model:
+                prior_ppc = pm.sample_prior_predictive(samples=n_sims, random_seed=44)
+
+        for sim_idx in range(n_sims):
+            df_sim = minimal_df.copy()
+            for score_type in score_types:
+                y_sim = prior_ppc.prior_predictive[f"y_{score_type}"].values[0, sim_idx].astype(int)
+                df_sim[score_type] = y_sim
+
+            sim_model = RugbyModel(ModelConfig(**_PRODUCTION_CONFIG_KWARGS))
+            sim_model.build_joint(df_sim)
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                with sim_model.model:
+                    trace = pm.sample(
+                        draws=self._MCMC_DRAWS,
+                        tune=self._MCMC_TUNE,
+                        chains=self._MCMC_CHAINS,
+                        progressbar=False,
+                        random_seed=sim_idx,
+                    )
+
+            for param in _JOINT_SCALAR_PARAMS:
+                if param not in prior_ppc.prior.data_vars:
+                    continue
+                theta_true = float(prior_ppc.prior[param].values[0, sim_idx])
+                theta_post = trace.posterior[param].values.reshape(-1)
+                ranks[param].append(float(np.mean(theta_post < theta_true)))
+
+            for param, idx, label in _JOINT_INDEXED_PARAMS:
+                if param not in prior_ppc.prior.data_vars:
+                    continue
+                theta_true = float(prior_ppc.prior[param].values[0, sim_idx, idx])
+                theta_post = trace.posterior[param].values[..., idx].reshape(-1)
+                ranks[label].append(float(np.mean(theta_post < theta_true)))
+
+        result = {p: np.array(v) for p, v in ranks.items()}
+        _save_pp_plot(result, "sbc_mcmc_joint_pp_plot.png")
+        return result
+
+    def test_defense_scale_sigma_defense(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["sigma_defense"], "sigma_defense")
+
+    def test_defense_loading_lambda_defense(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["lambda_defense"], "lambda_defense")
+
+    def test_try_effect_scale_sigma_player_try(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["sigma_player_try"], "sigma_player_try")
+
+    def test_kicking_effect_scale_sigma_player_kick(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["sigma_player_kick"], "sigma_player_kick")
+
+    def test_tries_intercept_alpha(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["alpha_tries"], "alpha_tries")
+
+    def test_tries_home_advantage_eta_home(self, sbc_ranks_mcmc_joint):
+        _assert_uniform(sbc_ranks_mcmc_joint["eta_home_tries"], "eta_home_tries")
