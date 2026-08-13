@@ -187,8 +187,8 @@ class PredictionArchiver:
             model_inputs=model_inputs or {}
         )
 
-        # Save to date-based file
-        self._save_to_archive(archived, timestamp.date())
+        # Save to date-based file (keyed by match date for easy retrieval)
+        self._save_to_archive(archived, match_metadata.date.date())
 
         if self.auto_update_metadata:
             self._update_metadata_index()
@@ -237,8 +237,8 @@ class PredictionArchiver:
             pred.result_updated_at = datetime.now(timezone.utc)
             pred.calibration_metrics = metrics
 
-            # Save back to archive
-            pred_date = pred.prediction_metadata.timestamp.date()
+            # Save back to archive (keyed by match date, same as archive_prediction)
+            pred_date = pred.match_metadata.date.date()
             self._update_in_archive(pred, pred_date)
 
         if self.auto_update_metadata:
@@ -769,6 +769,81 @@ class PredictionArchiver:
                 "home_in_ci": pred.calibration_metrics.home_in_ci,
                 "away_in_ci": pred.calibration_metrics.away_in_ci
             } if pred.calibration_metrics else None
+        }
+
+    def calibration_report(
+        self,
+        competition: Optional[str] = None,
+        season: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Aggregate calibration metrics across all predictions that have results.
+
+        Returns a dict with:
+          - n: number of scored predictions
+          - outcome_accuracy: fraction of correct winner predictions
+          - mean_home_error: mean signed error on home score
+          - mean_away_error: mean signed error on away score
+          - mae_home: mean absolute error on home score
+          - mae_away: mean absolute error on away score
+          - mae_margin: mean absolute error on margin
+          - home_ci_coverage: fraction of home scores within 90% CI
+          - away_ci_coverage: fraction of away scores within 90% CI
+          - brier_score: mean Brier score for outcome (home/draw/away)
+        """
+        predictions = self.get_predictions(
+            competition=competition,
+            season=season,
+            has_result=True,
+        )
+
+        if not predictions:
+            return {"n": 0}
+
+        n = len(predictions)
+        outcome_correct = 0
+        home_errors = []
+        away_errors = []
+        margin_errors = []
+        home_in_ci = 0
+        away_in_ci = 0
+        brier_scores = []
+
+        for pred in predictions:
+            m = pred.calibration_metrics
+            r = pred.actual_result
+            p = pred.prediction
+
+            outcome_correct += int(m.outcome_correct)
+            home_errors.append(m.home_score_error)
+            away_errors.append(m.away_score_error)
+            margin_errors.append(m.margin_error)
+            home_in_ci += int(m.home_in_ci)
+            away_in_ci += int(m.away_in_ci)
+
+            # Brier score: multiclass (home win / draw / away win)
+            actual_margin = r.home_score - r.away_score
+            o_home = 1.0 if actual_margin > 0 else 0.0
+            o_draw = 1.0 if actual_margin == 0 else 0.0
+            o_away = 1.0 if actual_margin < 0 else 0.0
+            bs = (
+                (p.home_win_prob - o_home) ** 2
+                + (p.draw_prob - o_draw) ** 2
+                + (p.away_win_prob - o_away) ** 2
+            ) / 3.0
+            brier_scores.append(bs)
+
+        return {
+            "n": n,
+            "outcome_accuracy": outcome_correct / n,
+            "mean_home_error": sum(home_errors) / n,
+            "mean_away_error": sum(away_errors) / n,
+            "mae_home": sum(abs(e) for e in home_errors) / n,
+            "mae_away": sum(abs(e) for e in away_errors) / n,
+            "mae_margin": sum(abs(e) for e in margin_errors) / n,
+            "home_ci_coverage": home_in_ci / n,
+            "away_ci_coverage": away_in_ci / n,
+            "brier_score": sum(brier_scores) / n,
         }
 
     def _deserialize_prediction(self, data: Dict[str, Any]) -> ArchivedPrediction:

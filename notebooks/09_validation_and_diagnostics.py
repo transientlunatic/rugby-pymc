@@ -14,9 +14,9 @@ This notebook demonstrates model quality assessment and inference diagnostics.
 
 from rugby_ranking.notebook_utils import setup_notebook_environment, load_model_and_trace, print_summary
 from rugby_ranking.model.validation import (
-    temporal_train_test_split,
-    validate_predictions,
-    log_likelihood_scores,
+    temporal_split,
+    compute_validation_metrics,
+    calibration_analysis,
 )
 import arviz as az
 import pandas as pd
@@ -27,7 +27,7 @@ dataset, df, model_dir = setup_notebook_environment()
 
 # %%
 # ## 1. Load Model
-# 
+#
 # Load a trained model checkpoint and examine its inference configuration.
 
 model, trace = load_model_and_trace("latest")
@@ -42,7 +42,7 @@ print(f"  Warmup: {trace.posterior.dims.get('warmup', 'N/A')}")
 
 # %%
 # ## 2. Trace Diagnostics
-# 
+#
 # Assess whether the MCMC chain has converged using Rhat (should be < 1.01) and ESS (effective sample size).
 
 # Summary of key parameters
@@ -81,7 +81,7 @@ else:
 
 # %%
 # ## 3. Divergences
-# 
+#
 # Check for post-warmup divergences (indicates sampling difficulties).
 
 # Check for divergences
@@ -89,7 +89,7 @@ if 'diverging' in trace.sample_stats.data_vars:
     divergences = trace.sample_stats.diverging.sum()
     total = trace.posterior.dims['chain'] * trace.posterior.dims['draw']
     div_pct = (divergences / total) * 100
-    
+
     if divergences == 0:
         print(f"✓ No divergences (good)")
     elif div_pct < 1:
@@ -101,42 +101,148 @@ else:
 
 # %%
 # ## 4. Posterior Predictive Checks
-# 
-# Compare observed data to predictions from the posterior to check model fit.
+#
+# Compare observed data distributions to replicated datasets drawn from the
+# posterior predictive. For a well-specified model the two should agree.
+#
+# model.sample_posterior_predictive() rebuilds the PyMC model context using
+# the checkpoint's index mappings, filters df to known entities, and calls
+# pm.sample_posterior_predictive() — so this works even after load_checkpoint().
 
-# TODO: Implement posterior predictive checks
-# This requires computing predictions for each posterior sample
-# and comparing to observed scoring events
-
-print("Posterior predictive checks not yet implemented.")
-print("This would compare observed vs predicted score distributions.")
-
-# %%
-# ## 5. Prediction Calibration
-# 
-# Assess whether predicted probabilities match observed frequencies on held-out data.
-
-# Temporal train/test split
-all_dates = df['date'].unique()
-split_date = pd.Timestamp(np.percentile(all_dates, 80))
-
-train_df = df[df['date'] < split_date].copy()
-test_df = df[df['date'] >= split_date].copy()
-
-print(f"Train set: {train_df['date'].min().date()} to {train_df['date'].max().date()} ({len(train_df)} records)")
-print(f"Test set:  {test_df['date'].min().date()} to {test_df['date'].max().date()} ({len(test_df)} records)")
-print(f"\nTest set contains {test_df['player_name'].nunique()} players, {test_df.groupby(['date', 'team']).ngroups} matches")
+print("Running posterior predictive checks (this may take a few minutes)...")
+ppc = model.sample_posterior_predictive(trace, df, random_seed=42)
+print("✓ PPC sampling complete.")
 
 # %%
-# TODO: Compute predictions on test set
-# This would predict matches in the test set and compare to actual outcomes
+# ### 4a. Observed vs predicted distributions (az.plot_ppc)
+#
+# For each score type, the thin lines are draws from the posterior predictive;
+# the thick line is the observed distribution. Close agreement means the model
+# captures the marginal count distributions.
 
-print("Calibration analysis not yet implemented.")
-print("This would compute prediction accuracy and probability calibration.")
+import matplotlib.pyplot as plt
+
+score_types = list(model.config.score_types)
+fig, axes = plt.subplots(2, 2, figsize=(14, 8))
+fig.suptitle("Posterior Predictive Checks — observed vs predicted distributions")
+
+for ax, score_type in zip(axes.flat, score_types):
+    var_name = f"y_{score_type}"
+    if var_name not in ppc.posterior_predictive:
+        ax.set_title(f"{score_type} (not available)")
+        continue
+
+    # Observed counts
+    obs = ppc.observed_data[var_name].values
+    # PPC samples (shape: chain × draw × obs) → flatten to (n_samples, n_obs)
+    ppc_samples = ppc.posterior_predictive[var_name].values.reshape(-1, len(obs))
+
+    # Plot: distribution of mean predicted counts vs observed mean
+    ppc_means = ppc_samples.mean(axis=1)  # mean over observations for each draw
+    obs_mean = obs.mean()
+
+    ax.hist(ppc_means, bins=50, alpha=0.6, color="steelblue", label="Predicted means")
+    ax.axvline(obs_mean, color="red", linewidth=2, label=f"Observed mean ({obs_mean:.3f})")
+    ax.set_title(score_type)
+    ax.set_xlabel("Mean count per player-match")
+    ax.set_ylabel("Posterior predictive draws")
+    ax.legend(fontsize=8)
+
+plt.tight_layout()
+plt.savefig("ppc_distributions.png", dpi=120, bbox_inches="tight")
+plt.show()
+print("Saved: ppc_distributions.png")
+
+# %%
+# ### 4b. PIT histogram and calibration curves
+#
+# The Probability Integral Transform (PIT) should be uniform if the model is
+# well-calibrated. Systematic deviations indicate over/under-dispersion or
+# bias in specific count ranges.
+
+fig, axes = plt.subplots(2, 4, figsize=(16, 7))
+fig.suptitle("PIT Histograms and Calibration Curves")
+
+for col, score_type in enumerate(score_types):
+    var_name = f"y_{score_type}"
+    if var_name not in ppc.posterior_predictive:
+        continue
+
+    obs = ppc.observed_data[var_name].values
+    ppc_samples = ppc.posterior_predictive[var_name].values.reshape(-1, len(obs))
+
+    cal = calibration_analysis(obs, ppc_samples, n_bins=10)
+
+    # PIT histogram
+    ax_pit = axes[0, col]
+    bin_edges = np.array(cal["pit_bin_edges"])
+    bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+    ax_pit.bar(bin_centers, cal["pit_histogram"], width=0.09, alpha=0.7, color="steelblue")
+    ax_pit.axhline(cal["pit_expected_per_bin"], color="red", linestyle="--", label="Expected (uniform)")
+    ax_pit.set_title(f"{score_type}\nPIT histogram")
+    ax_pit.set_xlabel("PIT value")
+    ax_pit.set_ylabel("Count")
+    ax_pit.legend(fontsize=7)
+
+    # Calibration curve
+    ax_cal = axes[1, col]
+    if cal["calibration_curve"]:
+        pred_m = [b["pred_mean"] for b in cal["calibration_curve"]]
+        obs_m = [b["obs_mean"] for b in cal["calibration_curve"]]
+        ax_cal.scatter(pred_m, obs_m, s=40, color="steelblue", zorder=3)
+        lim = max(max(pred_m), max(obs_m)) * 1.05
+        ax_cal.plot([0, lim], [0, lim], "r--", label="Perfect calibration")
+        ax_cal.set_title(f"Calibration curve\nMACE={cal['mean_absolute_calibration_error']:.4f}")
+        ax_cal.set_xlabel("Mean predicted count")
+        ax_cal.set_ylabel("Mean observed count")
+        ax_cal.legend(fontsize=7)
+
+    print(
+        f"{score_type:15s}  pred_mean={cal['mean_predicted']:.4f}  "
+        f"obs_mean={cal['mean_observed']:.4f}  "
+        f"MACE={cal['mean_absolute_calibration_error']:.4f}"
+    )
+
+plt.tight_layout()
+plt.savefig("ppc_calibration.png", dpi=120, bbox_inches="tight")
+plt.show()
+print("Saved: ppc_calibration.png")
+
+# %%
+# ## 5. Match-level Prediction Calibration
+#
+# Player-level PPC checks the score-count model. For match outcome calibration
+# (home/draw/away win probabilities and CI coverage) we use the prediction
+# archive, which stores historical predictions and compares them to actual results.
+
+try:
+    from rugby_ranking.model.prediction_archive import PredictionArchiver
+    archiver = PredictionArchiver()
+    report = archiver.calibration_report()
+
+    if report.get("n", 0) == 0:
+        print("No archived predictions with results yet.")
+        print("Run `rugby analysis calibration` after results are ingested.")
+    else:
+        print(f"\n=== Match Prediction Calibration (n={report['n']}) ===")
+        print(f"Outcome accuracy  : {report['outcome_accuracy']:.1%}")
+        print(f"Brier score       : {report['brier_score']:.4f}  (0=perfect, 1=worst)")
+        print(f"Mean home error   : {report['mean_home_error']:+.1f} pts")
+        print(f"Mean away error   : {report['mean_away_error']:+.1f} pts")
+        print(f"MAE margin        : {report['mae_margin']:.1f} pts")
+        print(f"Home 90% CI cov.  : {report['home_ci_coverage']:.1%}  (target: 90%)")
+        print(f"Away 90% CI cov.  : {report['away_ci_coverage']:.1%}  (target: 90%)")
+
+        # Brier skill score vs. reference (uniform 1/3 each)
+        brier_ref = 2 / 3  # Uniform 1/3 over three outcomes: (1/3-1)^2 + (1/3-0)^2 + (1/3-0)^2 = 2/3
+        bss = 1.0 - report['brier_score'] / brier_ref
+        print(f"Brier skill score : {bss:.3f}  (>0 beats reference)")
+except FileNotFoundError:
+    print("Prediction archive not found. Run predictions with `rugby predict` and ingest results first.")
 
 # %%
 # ## 6. Model Comparison
-# 
+#
 # Compare different model variants (static vs time-varying, with/without defense).
 
 # TODO: Load multiple models and compare

@@ -50,3 +50,17 @@ data/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# HTCondor job logs
+logs/condor/*.log
+logs/condor/*.out
+logs/condor/*.err
+
+# Editor workspace files
+*.code-workspace
+
+# Scratch squad-scraper output (not read by any code path)
+/squads/
+
+# SBC P-P plots — regenerated each time the statistical test suite runs
+tests/statistical_outputs/

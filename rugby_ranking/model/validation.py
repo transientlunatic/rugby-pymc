@@ -222,6 +222,7 @@ def compute_validation_metrics(
 
     rmse = {}
     mae = {}
+    calibration = {}
 
     for score_type in score_types:
         if score_type not in predictions:
@@ -248,11 +249,14 @@ def compute_validation_metrics(
         rmse[score_type] = np.sqrt(np.mean((actual - lambda_pred) ** 2))
         mae[score_type] = np.mean(np.abs(actual - lambda_pred))
 
+        # PIT-based calibration requires a predictive distribution (posterior
+        # samples), not just a point estimate, so only compute it when given
+        # samples — matches calibration_analysis()'s expected input shape.
+        if pred_rates.ndim > 1:
+            calibration[score_type] = calibration_analysis(actual, pred_rates)
+
     # Average log-likelihood
     avg_ll = total_ll / n_obs if n_obs > 0 else float("nan")
-
-    # Calibration (for now, placeholder)
-    calibration = {}
 
     metadata = {
         "n_observations": n_obs,
@@ -274,25 +278,84 @@ def calibration_analysis(
     n_bins: int = 10,
 ) -> dict:
     """
-    Analyze calibration of probabilistic predictions.
+    PIT-based calibration analysis for Poisson count predictions.
 
-    Checks if predicted probabilities match observed frequencies.
+    Uses the randomized Probability Integral Transform (PIT) to check whether
+    posterior predictive samples are well-calibrated. For a correctly specified
+    model, PIT values should follow a Uniform(0, 1) distribution.
+
+    Also computes a calibration curve: groups observations by mean predicted
+    count and checks whether the observed mean matches.
 
     Args:
-        actual_scores: Actual scores (n_matches,)
-        predicted_scores: Predicted score distributions (n_samples, n_matches)
-        n_bins: Number of bins for calibration plot
+        actual_scores: Observed counts, shape (n_obs,).
+        predicted_scores: Posterior predictive samples, shape (n_samples, n_obs).
+        n_bins: Number of bins for PIT histogram and calibration curve.
 
     Returns:
-        Dictionary with calibration metrics
+        Dictionary with:
+          - ``implemented``: True
+          - ``n_observations``: number of observations used
+          - ``pit_values``: PIT value per observation (np.ndarray)
+          - ``pit_histogram``: bin counts (list of ints)
+          - ``pit_bin_edges``: bin edges (list of floats)
+          - ``pit_expected_per_bin``: expected count per bin if uniform
+          - ``calibration_curve``: list of dicts with pred_mean, obs_mean, n
+          - ``mean_absolute_calibration_error``: mean |pred_mean - obs_mean| per bin
+          - ``mean_predicted``: overall mean predicted count
+          - ``mean_observed``: overall mean observed count
     """
-    # Convert predictions to probabilities for each outcome
-    # This is a placeholder - full implementation would compute
-    # P(home_score - away_score) and compare to actual margins
+    actual_scores = np.asarray(actual_scores)
+    predicted_scores = np.asarray(predicted_scores)
+
+    # Randomized PIT for discrete (Poisson) distributions.
+    # u_i = F(y_i - 1) + V_i * [F(y_i) - F(y_i - 1)]
+    # where F(y) = P(Y_pred <= y) estimated from samples, V_i ~ Uniform(0,1).
+    # Under a correctly specified model, u_i ~ Uniform(0, 1).
+    F_below = np.mean(predicted_scores < actual_scores[np.newaxis, :], axis=0)   # P(Y_pred < y)
+    F_at = np.mean(predicted_scores == actual_scores[np.newaxis, :], axis=0)      # P(Y_pred == y)
+
+    rng = np.random.default_rng(42)
+    v = rng.uniform(0.0, 1.0, size=len(actual_scores))
+    pit_values = F_below + v * F_at
+
+    # PIT histogram — should be approximately flat if well-calibrated
+    pit_hist, bin_edges = np.histogram(pit_values, bins=n_bins, range=(0.0, 1.0))
+    expected_per_bin = len(pit_values) / n_bins
+
+    # Calibration curve: bin observations by mean predicted count, compare to
+    # mean observed count within each bin.
+    pred_means = predicted_scores.mean(axis=0)  # (n_obs,)
+    quantile_edges = np.quantile(pred_means, np.linspace(0.0, 1.0, n_bins + 1))
+    quantile_edges[-1] += 1e-10  # Make the last edge inclusive
+
+    calibration_curve = []
+    for lo, hi in zip(quantile_edges[:-1], quantile_edges[1:]):
+        mask = (pred_means >= lo) & (pred_means < hi)
+        if mask.sum() > 0:
+            calibration_curve.append(
+                {
+                    "pred_mean": float(pred_means[mask].mean()),
+                    "obs_mean": float(actual_scores[mask].mean()),
+                    "n": int(mask.sum()),
+                }
+            )
+
+    mace = float(
+        np.mean([abs(b["pred_mean"] - b["obs_mean"]) for b in calibration_curve])
+    ) if calibration_curve else float("nan")
 
     return {
-        "implemented": False,
-        "note": "Calibration analysis requires match-level predictions",
+        "implemented": True,
+        "n_observations": len(actual_scores),
+        "pit_values": pit_values,
+        "pit_histogram": pit_hist.tolist(),
+        "pit_bin_edges": bin_edges.tolist(),
+        "pit_expected_per_bin": float(expected_per_bin),
+        "calibration_curve": calibration_curve,
+        "mean_absolute_calibration_error": mace,
+        "mean_predicted": float(pred_means.mean()),
+        "mean_observed": float(actual_scores.mean()),
     }
 
 

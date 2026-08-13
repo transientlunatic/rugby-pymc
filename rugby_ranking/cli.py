@@ -316,6 +316,24 @@ def main():
         help="Show what would be updated without making changes"
     )
 
+    # Calibration report command
+    calibration_parser = subparsers.add_parser(
+        "calibration",
+        help="Show calibration report for archived predictions"
+    )
+    calibration_parser.add_argument(
+        "--competition",
+        type=str,
+        default=None,
+        help="Filter by competition"
+    )
+    calibration_parser.add_argument(
+        "--season",
+        type=str,
+        default=None,
+        help="Filter by season"
+    )
+
     # Squad commands
     squad_parser = subparsers.add_parser(
         "squad",
@@ -517,6 +535,8 @@ def main():
         run_export(args)
     elif args.command == "ingest-results":
         run_ingest_results(args)
+    elif args.command == "calibration":
+        run_calibration(args)
     elif args.command == "squad":
         if args.squad_command == "input":
             run_squad_input(args)
@@ -566,7 +586,11 @@ def run_update(args):
     print("Building model...")
     config = ModelConfig()
     model = RugbyModel(config)
-    model.build(df, score_type="tries")
+    # Use the joint model (non-centered parameterisation) for both VI and MCMC.
+    # The single-score build() uses a centred parameterisation that causes Neal's
+    # funnel with 1000+ team-seasons, leading to poor R-hat/ESS for sigma_team and
+    # sigma_defense even with no divergences.
+    model.build_joint(df)
 
     # Build inference config, applying any CLI overrides
     inference_config = InferenceConfig()
@@ -968,6 +992,43 @@ def run_ingest_results(args):
         if len(stats['unmatched_list']) > 10:
             print(f"  ... and {len(stats['unmatched_list']) - 10} more")
 
+    print(f"{'='*70}\n")
+
+
+def run_calibration(args):
+    """Show calibration report for archived predictions."""
+    from rugby_ranking.model.prediction_archive import PredictionArchiver
+
+    archiver = PredictionArchiver()
+    report = archiver.calibration_report(
+        competition=getattr(args, 'competition', None),
+        season=getattr(args, 'season', None),
+    )
+
+    print(f"\n{'='*70}")
+    print("PREDICTION CALIBRATION REPORT")
+    if args.competition:
+        print(f"Competition: {args.competition}")
+    if args.season:
+        print(f"Season: {args.season}")
+    print(f"{'='*70}")
+
+    if report['n'] == 0:
+        print("\nNo scored predictions found in archive.")
+        print("Run 'rugby-ranking ingest-results' to match predictions with results.")
+        print(f"{'='*70}\n")
+        return
+
+    print(f"\nPredictions scored: {report['n']}")
+    print(f"\nOutcome accuracy:   {report['outcome_accuracy']:.1%}")
+    print(f"Brier score:        {report['brier_score']:.4f}  (lower is better; 0.333 = random)")
+    print(f"\nScore errors (actual − predicted):")
+    print(f"  Home MAE:         {report['mae_home']:.1f} pts  (bias: {report['mean_home_error']:+.1f})")
+    print(f"  Away MAE:         {report['mae_away']:.1f} pts  (bias: {report['mean_away_error']:+.1f})")
+    print(f"  Margin MAE:       {report['mae_margin']:.1f} pts")
+    print(f"\n90% CI coverage (expect ~90%):")
+    print(f"  Home:             {report['home_ci_coverage']:.1%}")
+    print(f"  Away:             {report['away_ci_coverage']:.1%}")
     print(f"{'='*70}\n")
 
 
