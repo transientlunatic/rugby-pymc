@@ -45,12 +45,22 @@ jobs:
           python -m rugby_ranking.tools.export_dashboard_data
         continue-on-error: false
 
+      - name: Run holdout validation
+        run: |
+          python -m rugby_ranking.tools.run_holdout_validation \
+            --data-dir Rugby-Data --out-dir dashboard/data
+        continue-on-error: false
+
       - name: Verify data files
         run: |
           echo "Checking generated files..."
           ls -lh dashboard/data/
           if [ ! -f dashboard/data/summary.json ]; then
             echo "Error: summary.json not generated"
+            exit 1
+          fi
+          if [ ! -f dashboard/data/holdout_validation_report.json ]; then
+            echo "Error: holdout_validation_report.json not generated"
             exit 1
           fi
 
@@ -76,3 +86,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📊 **Data Files**:" >> $GITHUB_STEP_SUMMARY
           ls -lh dashboard/data/ | tail -n +2 | awk '{print "- " $9 ": " $5}' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Holdout Validation (out-of-sample)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          python -m rugby_ranking.tools.print_holdout_summary dashboard/data/holdout_validation_report.json >> $GITHUB_STEP_SUMMARY

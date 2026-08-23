@@ -46,20 +46,31 @@ but is marginally *worse* than "always predict the mean score" on score
 RMSE (13.04 vs 12.92). Per-player try/conversion rate calibration is good
 out-of-sample; penalties are over-predicted by ~60%.
 
+**This validation now runs automatically.** `deploy-dashboard.yml` calls
+`rugby_ranking.tools.run_holdout_validation` after each dashboard export —
+fresh temporal holdout split relative to the run date, fresh VI fit, results
+written to `dashboard/data/holdout_validation_report.json` (published with
+the rest of the dashboard) and summarized in the workflow's step summary via
+`rugby_ranking.tools.print_holdout_summary`. It does **not** gate the build
+on the metrics — see "Add a regression gate" below for why not yet.
+
 ---
 
 ## Near-Term Priorities
 
 ### 1. Posterior predictive checks and model validation
 
-**Done, for the first time, 2026-08-23.** See the validation run above.
-Infrastructure (PPC, PIT/MACE, SBC) was already in place but had never been
-run against real data and recorded — it now has been, once.
+**Done, for the first time, 2026-08-23, and now automated weekly.** See the
+validation run above. Infrastructure (PPC, PIT/MACE, SBC) was already in
+place but had never been run against real data and recorded before this.
 
 **What still needs doing:**
 
-- Re-run on the actual current checkpoint used by the (now-fixed) dashboard
-  workflow, not just this one-off holdout
+- Add a regression gate once there's a few weeks of automated runs to
+  calibrate a threshold against — right now there is exactly one manual data
+  point plus whatever accumulates from the new weekly runs, nowhere near
+  enough to set a bound without either blocking on VI's normal run-to-run
+  Monte Carlo noise or picking an arbitrary number
 - Run this same split under MCMC to check whether VI's known miscalibration
   on `alpha_tries`/`sigma_player_kick` (SBC tests) moves these numbers
 - Investigate the ~60% penalty over-prediction found above
@@ -67,7 +78,11 @@ run against real data and recorded — it now has been, once.
 - Build the Elo/simple-baseline comparison from Phase 11 — the one baseline
   computed so far ("always predict home / mean score") is the floor, not a
   fair fight; score RMSE currently doesn't clear even that floor
-- Repeat as a rolling backtest across multiple seasons, not a single holdout
+- The automated run only checks the `include_defense=True,
+  separate_kicking_effect=True` production config via VI — it fits its own
+  model independently of the dashboard's own checkpoint, so it's a second
+  ~5-minute VI fit per CI run. Fine for weekly cadence; would need
+  minibatching or a shared fit if this ever needs to run more often.
 
 **Why first**: Identifies where complexity is actually needed vs. where the
 current model is already good enough. This should inform all structural
