@@ -1335,9 +1335,23 @@ if __name__ == "__main__":
 
     OUTPUT_DIR = Path("dashboard/data")
 
+    # "time_model_v1" is a local dev checkpoint -- it only exists on a
+    # machine someone has actually trained it on (~/.cache/rugby_ranking/).
+    # CI has no such cache, so hardcoding it here crashed every run that got
+    # past the dependency bug: FileNotFoundError on trace.nc. Only use it if
+    # it's actually present; otherwise fall through to export_dashboard_data's
+    # own checkpoint_name=None path, which fits fresh via VI.
+    _CHECKPOINT_NAME = "time_model_v1"
+    _checkpoint_path = Path("~/.cache/rugby_ranking").expanduser() / _CHECKPOINT_NAME / "trace.nc"
+    if _checkpoint_path.exists():
+        print(f"Using local checkpoint: {_CHECKPOINT_NAME}")
+    else:
+        print(f"No local checkpoint at {_checkpoint_path} -- fitting fresh via VI instead")
+        _CHECKPOINT_NAME = None
+
     export_dashboard_data(
         data_dir=DATA_DIR,
         output_dir=OUTPUT_DIR,
-        checkpoint_name="time_model_v1",
+        checkpoint_name=_CHECKPOINT_NAME,
         recent_seasons_only=3,
     )
