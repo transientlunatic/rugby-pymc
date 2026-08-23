@@ -44,6 +44,57 @@ class InferenceConfig:
     cache_dir: Path = Path("~/.cache/rugby_ranking").expanduser()
 
 
+class _StaticParam:
+    """
+    Duck-types a pytensor shared variable's read interface (`.get_value()`,
+    `.shape`) for a plain numpy array.
+
+    `_transfer_vi_params` only ever calls `.get_value()` and reads `.shape`
+    on VI approximation params -- it never needs the live pytensor graph.
+    Wrapping loaded checkpoint values this way lets warm-starting treat a
+    same-session live approximation and a checkpoint loaded from disk
+    identically, with no branching in `_transfer_vi_params` itself.
+    """
+
+    def __init__(self, value):
+        self._value = np.asarray(value)
+        self.shape = self._value.shape
+
+    def get_value(self):
+        return self._value
+
+
+class _LoadedVIApprox:
+    """
+    Stand-in for a `pm.Approximation` reconstructed from a saved checkpoint.
+
+    A live `pm.Approximation` holds pytensor graph nodes bound to a specific
+    model context (including unpicklable `functools.partial` closures) --
+    that object cannot survive a pickle round-trip, and no fix short of
+    rebuilding the whole model can produce a truly equivalent object from
+    disk. What CAN survive the round-trip, and is all `_transfer_vi_params`
+    actually needs to warm-start a new fit, is the plain numeric values of
+    the fitted variational parameters. This class exposes exactly that.
+
+    `.sample()` is deliberately NOT supported here (unlike a live
+    Approximation) -- see the docstring on that method for why.
+    """
+
+    def __init__(self, param_values: list):
+        self.params = [_StaticParam(v) for v in param_values]
+
+    def sample(self, *args, **kwargs):
+        raise RuntimeError(
+            "This VI approximation was loaded from a checkpoint on disk and only "
+            "contains parameter values for warm-starting a new fit (via "
+            "ModelFitter.fit_vi(warm_start=True)) -- it is not a live PyMC "
+            "Approximation bound to a model, so it cannot draw samples directly. "
+            "Either call fit_vi(warm_start=True) to get a fresh, sample()-able "
+            "approximation seeded from these values, or use the checkpoint's "
+            "saved trace.nc for already-drawn samples."
+        )
+
+
 class ModelFitter:
     """
     Handles model fitting with support for incremental updates.
@@ -290,7 +341,7 @@ class ModelFitter:
     def _transfer_vi_params(self, new_approx):
         """
         Transfer parameters from previous VI approximation.
-        
+
         Handles dimension changes when new players/teams are added:
         - Exact match: Copy parameters directly
         - New model larger: Copy old parameters, keep new ones at initialization
@@ -298,12 +349,25 @@ class ModelFitter:
         """
         if self._vi_approx is not None:
             old_params = self._vi_approx.params
-            new_params = new_approx.params
+            # new_approx is the freshly constructed pm.ADVI()/FullRankADVI()
+            # wrapper -- it has no .params of its own (that only appears on
+            # the object pm.fit() returns, after fitting). The actual
+            # variational parameters, available before fitting starts, live
+            # on its .approx attribute (a MeanField/FullRank Approximation).
+            # Using new_approx.params directly always raised AttributeError,
+            # silently caught by fit_vi()'s warm_start try/except -- meaning
+            # warm-starting has never worked even within a single process,
+            # independent of whether a checkpoint was ever saved/loaded.
+            new_params = new_approx.approx.params
 
             for old_p, new_p in zip(old_params, new_params):
-                old_shape = old_p.shape
-                new_shape = new_p.shape
-                
+                # .shape on a real pytensor SharedVariable is a symbolic
+                # expression, not a concrete tuple -- only .get_value().shape
+                # is. (_StaticParam.get_value() is already a plain ndarray,
+                # so this works uniformly for live and loaded-checkpoint params.)
+                old_shape = old_p.get_value().shape
+                new_shape = new_p.get_value().shape
+
                 if old_shape == new_shape:
                     # Exact match - copy directly
                     new_p.set_value(old_p.get_value())
@@ -566,16 +630,22 @@ class ModelFitter:
         if self.trace is not None:
             self.trace.to_netcdf(checkpoint_dir / "trace.nc")
 
-        # Save VI approximation (enables drawing more samples later)
-        # Note: PyMC VI approximations may contain unpicklable objects (e.g., functools.partial)
-        # so we try to save it but continue if it fails
+        # Save VI approximation parameters (enables warm-starting a new fit later).
+        # The live pm.Approximation object itself can't be pickled -- it holds
+        # pytensor graph nodes bound to this model's context, including
+        # unpicklable closures (functools.partial) that PyMC's VI internals use.
+        # This used to just try-and-discard the whole object, which meant it
+        # silently failed on every single save. What warm-starting actually
+        # needs (see _transfer_vi_params) is only the numeric parameter values,
+        # which are always picklable -- so save those instead.
         if self._vi_approx is not None:
             vi_path = checkpoint_dir / "vi_approx.pkl"
             try:
+                param_values = [np.asarray(p.get_value()) for p in self._vi_approx.params]
                 with open(vi_path, "wb") as f:
-                    pickle.dump(self._vi_approx, f)
+                    pickle.dump(param_values, f)
             except (AttributeError, TypeError, pickle.PicklingError) as e:
-                print(f"Warning: Could not save VI approximation ({e})")
+                print(f"Warning: Could not save VI approximation parameters ({e})")
                 print("The trace has been saved and can still be used for predictions.")
                 vi_path.unlink(missing_ok=True)  # Remove partial file
 
@@ -599,12 +669,16 @@ class ModelFitter:
     @classmethod
     def load_vi_approx(cls, name: str, cache_dir: Path | None = None):
         """
-        Load only the VI approximation from a checkpoint, without opening the trace file.
+        Load only the VI approximation parameters from a checkpoint, without
+        opening the trace file.
 
         Use this for warm-starting a new fit so the trace.nc file is never held
         open and can safely be overwritten when the new checkpoint is saved.
 
-        Returns the approximation object, or None if unavailable.
+        Returns a `_LoadedVIApprox` exposing `.params` (enough for
+        `_transfer_vi_params` / `fit_vi(warm_start=True)`), or None if
+        unavailable. Note this is NOT a live `pm.Approximation` -- calling
+        `.sample()` on it raises a clear error; see `_LoadedVIApprox`.
         """
         cache_dir = cache_dir or Path("~/.cache/rugby_ranking").expanduser()
         vi_approx_path = cache_dir / name / "vi_approx.pkl"
@@ -612,7 +686,8 @@ class ModelFitter:
             return None
         try:
             with open(vi_approx_path, "rb") as f:
-                return pickle.load(f)
+                param_values = pickle.load(f)
+            return _LoadedVIApprox(param_values)
         except (EOFError, pickle.UnpicklingError) as e:
             print(f"Warning: Could not load VI approximation ({e})")
             vi_approx_path.unlink()  # Remove corrupted file so future runs skip it
@@ -663,16 +738,20 @@ class ModelFitter:
             fitter.trace = az.from_netcdf(trace_path)
             model.trace = fitter.trace
 
-        # Load VI approximation (if available)
+        # Load VI approximation parameters (if available). This only enables
+        # warm-starting a new fit (fit_vi(warm_start=True)) -- not
+        # sample_from_vi(), which needs a live Approximation; see
+        # _LoadedVIApprox for why that can't survive a save/load round-trip.
         vi_approx_path = checkpoint_dir / "vi_approx.pkl"
         if vi_approx_path.exists():
             try:
                 with open(vi_approx_path, "rb") as f:
-                    fitter._vi_approx = pickle.load(f)
-                print(f"Loaded VI approximation (can draw more samples)")
+                    param_values = pickle.load(f)
+                fitter._vi_approx = _LoadedVIApprox(param_values)
+                print("Loaded VI approximation parameters (can warm-start a new fit)")
             except (EOFError, pickle.UnpicklingError) as e:
                 print(f"Warning: Could not load VI approximation ({e})")
-                print("Trace is available but cannot draw additional samples")
+                print("Trace is available but cannot warm-start from it")
                 fitter._vi_approx = None
 
         print(f"Loaded checkpoint from {checkpoint_dir}")
