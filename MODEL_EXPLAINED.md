@@ -547,6 +547,12 @@ Before a tournament, analyze each team's:
 > replaced with a real one. See `validation_reports/2026-08-23_teams-only-holdout.json`
 > for the full report and `validation_reports/2026-08-23_run_script.py` for
 > the script that produced it; re-run and replace as the model changes.
+> A first version of this validation computed the baseline's home-win rate
+> and mean score from the held-out test set itself (data leakage, caught in
+> PR review) — fixed by computing the baseline from the training set only,
+> as the methodology below now describes. Re-running with the fix barely
+> moved the numbers (this dataset's train/test splits happen to have similar
+> home-win rates), but the corrected numbers are what's reported here.
 
 ### Methodology
 
@@ -561,24 +567,26 @@ Before a tournament, analyze each team's:
   pipeline.
 - **Predictions**: `MatchPredictor.predict_teams_only()` (higher-uncertainty
   mode; no lineup information used) for each of the 228 held-out matches.
-- **Baseline**: the cheapest possible skill-free reference — predict the
-  training set's empirical home-win rate (68.0%) as a fixed probability for
-  every match, and the training set's mean score for every scoreline. This
-  is not the Elo/league-position baselines below (never built — see Roadmap);
-  those rows are gone rather than left fabricated.
+- **Baseline**: the cheapest possible skill-free reference, computed
+  entirely from the training set (never the test set) — predict the
+  training set's empirical home-win rate (67.6%, so "always predict home")
+  as a fixed probability for every match, and the training set's mean score
+  for every scoreline. This is not the Elo/league-position baselines below
+  (never built — see Roadmap); those rows are gone rather than left
+  fabricated.
 
 ### Results (out-of-sample, 228 held-out matches)
 
-| Metric | Model | Baseline (always predict home / mean score) |
+| Metric | Model | Baseline (train-set rate/mean, always predict home) |
 |--------|-------|------|
-| Win accuracy | **70.6%** | 68.0% |
+| Win accuracy | **70.2%** | 68.0% |
 | Brier score (lower is better) | **0.420** | 0.451 |
-| Score RMSE | 13.03 | **12.91** |
-| Score MAE | 10.58 | — |
+| Score RMSE | 13.04 | **12.92** |
+| Score MAE | 10.60 | — |
 
 **Honest read:** the model beats the trivial baseline on win accuracy and
 Brier score, but the edge is small — with n=228, the standard error on a
-~70% accuracy is roughly ±3 points, so the 2.6-point gap is not statistically
+~70% accuracy is roughly ±3 points, so the 2.2-point gap is not statistically
 distinguishable from noise on this sample alone. On raw score accuracy
 (RMSE), the full hierarchical model is *marginally worse* than just
 predicting the training-set mean score every time. That's the least
@@ -596,9 +604,9 @@ into a match-level score.
 
 | Score type | Predicted mean | Observed mean | MACE |
 |---|---|---|---|
-| Tries | 0.1545 | 0.1581 | 0.011 |
-| Conversions | 0.1196 | 0.1189 | 0.034 |
-| Penalties | 0.0637 | 0.0394 | 0.024 (over-predicts) |
+| Tries | 0.1547 | 0.1581 | 0.005 |
+| Conversions | 0.1210 | 0.1189 | 0.033 |
+| Penalties | 0.0644 | 0.0394 | 0.025 (over-predicts) |
 | Drop goals | 0.0021 | 0.0003 | 0.003 |
 
 Tries and conversions are well-calibrated out-of-sample. Penalties are

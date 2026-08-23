@@ -14,9 +14,9 @@ one.** Checked against real evidence (CI run history, repo contents) on
   run of `deploy-dashboard.yml` had failed (33/33 runs since Feb 2026),
   always within seconds, on `ModuleNotFoundError: No module named 'sklearn'`
   — an undeclared dependency. No `gh-pages` branch has ever existed for this
-  repo. Fixed in `claude/rugby-analysis-optimization-4w790r` (scikit-learn
-  and scipy added to `pyproject.toml`, CI now installs via `pip install
-  -e .[viz]`) — first real deploy attempt is the next scheduled/manual run.
+  repo. Fixed by adding scikit-learn and scipy to `pyproject.toml` and
+  installing via `pip install -e .[viz]` in CI instead of a hand-maintained
+  package list — first real deploy attempt is the next scheduled/manual run.
 - **Weekly VI training warm-started from MCMC checkpoints**: ❌ **doesn't
   exist as automation.** No `train-model-weekly.yml` workflow exists (it's
   referenced by name in `tests/test_statistical_calibration.py` docstrings
@@ -39,11 +39,12 @@ one.** Checked against real evidence (CI run history, repo contents) on
 **First real, out-of-sample validation run** (2026-08-23, teams-only,
 228-match holdout — see `validation_reports/2026-08-23_teams-only-holdout.json`
 and the real numbers now in [MODEL_EXPLAINED.md](MODEL_EXPLAINED.md#model-validation-how-well-does-it-work)):
-model beats a trivial "always predict home win" baseline on win accuracy
-(70.6% vs 68.0%, not statistically distinguishable at n=228) and Brier score
-(0.420 vs 0.451), but is marginally *worse* than "always predict the mean
-score" on score RMSE (13.03 vs 12.91). Per-player try/conversion rate
-calibration is good out-of-sample; penalties are over-predicted by ~60%.
+model beats a trivial "always predict home win" baseline (computed from
+training data only, no test leakage) on win accuracy (70.2% vs 68.0%, not
+statistically distinguishable at n=228) and Brier score (0.420 vs 0.451),
+but is marginally *worse* than "always predict the mean score" on score
+RMSE (13.04 vs 12.92). Per-player try/conversion rate calibration is good
+out-of-sample; penalties are over-predicted by ~60%.
 
 ---
 
