@@ -20,6 +20,8 @@ dependencies = [
     "xarray>=2023.0",
     "matplotlib>=3.7",
     "seaborn>=0.12",
+    "scikit-learn>=1.0",
+    "scipy>=1.10",
 ]
 
 [project.optional-dependencies]
@@ -36,6 +38,9 @@ docs = [
     "pydata-sphinx-theme>=0.13",
     "myst-parser>=1.0",
     "sphinx-autodoc-typehints>=1.20",
+]
+viz = [
+    "plotly>=5.0",
 ]
 
 [project.scripts]

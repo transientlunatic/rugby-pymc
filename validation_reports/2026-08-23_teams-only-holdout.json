@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-08-23T19:51:40.955985+00:00",
+  "data_slice": {
+    "recent_season_start_years": [
+      2024,
+      2025,
+      2026
+    ],
+    "n_rows_total": 69897,
+    "n_train_matches": 1295,
+    "n_test_matches": 228
+  },
+  "fit": {
+    "method": "vi/advi",
+    "n_iterations": 20000,
+    "fit_seconds": 250.8572974205017
+  },
+  "n_test_rows_known_to_model": 9604,
+  "n_test_rows_total": 10488,
+  "out_of_sample_calibration": {
+    "tries": {
+      "n_observations": 9447,
+      "mean_predicted": 0.1546989520482693,
+      "mean_observed": 0.15814544299777708,
+      "mean_absolute_calibration_error": 0.004540182428212995
+    },
+    "penalties": {
+      "n_observations": 9447,
+      "mean_predicted": 0.06442050386366042,
+      "mean_observed": 0.039377580184185454,
+      "mean_absolute_calibration_error": 0.02480199469474739
+    },
+    "conversions": {
+      "n_observations": 9447,
+      "mean_predicted": 0.12103646660315445,
+      "mean_observed": 0.11887371652376416,
+      "mean_absolute_calibration_error": 0.03264421761984069
+    },
+    "drop_goals": {
+      "n_observations": 9447,
+      "mean_predicted": 0.0020995024875621895,
+      "mean_observed": 0.00031756113051762465,
+      "mean_absolute_calibration_error": 0.002695239700948587
+    }
+  },
+  "match_level_test": {
+    "n_matches": 228,
+    "n_predicted_ok": 228,
+    "n_predicted_failed": 0,
+    "model": {
+      "win_accuracy": 0.7017543859649122,
+      "brier_score": 0.4204499649122807,
+      "score_rmse": 13.043645474450686,
+      "score_mae": 10.60201754385965
+    },
+    "baseline_always_predict_mode_outcome": {
+      "computed_from": "training set only (no test-set leakage)",
+      "outcome_predicted": "home",
+      "win_accuracy": 0.6798245614035088,
+      "brier_score": 0.45093209910929893,
+      "score_rmse_predicting_mean_score": 12.915030071816675,
+      "home_win_rate": 0.6756756756756757,
+      "away_win_rate": 0.30347490347490347,
+      "draw_rate": 0.02084942084942085
+    }
+  },
+  "total_wall_seconds": 280.61961245536804
+}
