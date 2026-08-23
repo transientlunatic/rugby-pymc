@@ -95,7 +95,17 @@ def run_holdout_validation(
     df["date"] = pd.to_datetime(df["date"], utc=True)
     as_of_ts = pd.Timestamp(as_of, tz="UTC") if as_of else pd.Timestamp.now(tz="UTC")
     df = df[df["date"] <= as_of_ts]
-    df["season_start_year"] = df["season"].str.extract(r"(\d{4})").astype(int)
+    # str.extract leaves NaN for season labels with no 4-digit year (e.g.
+    # data.py's "unknown" fallback for unparseable filenames) -- .astype(int)
+    # on a column containing NaN raises ValueError, so drop those rows first
+    # rather than crash the whole CI run on one bad match.
+    season_year = df["season"].str.extract(r"(\d{4})")[0]
+    n_unparseable = int(season_year.isna().sum())
+    if n_unparseable:
+        log(f"  Dropping {n_unparseable} rows with unparseable season labels "
+            f"(e.g. {sorted(df.loc[season_year.isna(), 'season'].unique())[:5]})")
+    df = df[season_year.notna()].copy()
+    df["season_start_year"] = season_year[season_year.notna()].astype(int)
     recent_years = sorted(df["season_start_year"].unique())[-n_recent_seasons:]
     df = df[df["season_start_year"].isin(recent_years)].copy()
     log(f"Recent-seasons slice: years={recent_years}, rows={len(df)}, "
@@ -105,7 +115,14 @@ def run_holdout_validation(
     # ---- temporal train/test split (last N% of matches by date) -----------
     match_dates = df.groupby("match_id")["date"].first().sort_values()
     n_matches = len(match_dates)
-    n_test = max(1, int(round(n_matches * test_fraction)))
+    if n_matches < 2:
+        raise RuntimeError(
+            f"Only {n_matches} match(es) in the recent-seasons slice -- not enough "
+            "data for a train/test split. Check --data-dir and --n-recent-seasons."
+        )
+    # Cap n_test so at least one match remains for training, however small
+    # test_fraction or n_matches is.
+    n_test = min(max(1, int(round(n_matches * test_fraction))), n_matches - 1)
     test_match_ids = set(match_dates.iloc[-n_test:].index)
     train_match_ids = set(match_dates.iloc[:-n_test].index)
 
@@ -178,8 +195,14 @@ def run_holdout_validation(
     for _, row in matches.iterrows():
         try:
             pred = predictor.predict_teams_only(row["home_team"], row["away_team"], row["season"], n_samples=500)
-        except Exception:  # noqa: BLE001 -- want to count failures, not crash the run
+        except Exception as exc:  # noqa: BLE001 -- want to count failures, not crash the run
             n_failed += 1
+            if n_failed <= 5:
+                log(f"  prediction failed for match {row['match_id']} "
+                    f"({row['home_team']} vs {row['away_team']}, {row['season']}): "
+                    f"{type(exc).__name__}: {exc}")
+            elif n_failed == 6:
+                log("  (further prediction failures logged only as a count)")
             continue
         n_ok += 1
         home_score, away_score = row["home_score"], row["away_score"]
