@@ -4,15 +4,46 @@ This is the living project roadmap. For the full development history and impleme
 
 ---
 
-## What's Working in Production (as of 2026-03-21)
+## What's Working in Production (corrected 2026-08-23 — see below)
 
-- **Weekly VI training** via GitHub Actions, warm-started from MCMC Release checkpoints
-- **Dashboard** deployed to GitHub Pages with team strength, player rankings, upcoming predictions
-- **Match predictions**: teams-only and full-lineup, with uncertainty quantification
-- **Squad analysis**: strength, depth, lineup prediction, injury impact
-- **Paths to victory**: Six Nations CLI (`rugby analysis paths-to-victory`)
-- **Knockout bracket forecasting**: bracket structure, conditional predictions, tournament simulation
-- **Prediction archive**: auto-archives on `upcoming`/`predict`, `ingest-results` CLI for result ingestion, `calibration` CLI for accuracy reporting, `prediction_history.json` exported for blog widget
+**This section previously described the intended pipeline, not the actual
+one.** Checked against real evidence (CI run history, repo contents) on
+2026-08-23:
+
+- **Dashboard deployment**: ❌ **not actually working.** Every scheduled/push
+  run of `deploy-dashboard.yml` had failed (33/33 runs since Feb 2026),
+  always within seconds, on `ModuleNotFoundError: No module named 'sklearn'`
+  — an undeclared dependency. No `gh-pages` branch has ever existed for this
+  repo. Fixed in `claude/rugby-analysis-optimization-4w790r` (scikit-learn
+  and scipy added to `pyproject.toml`, CI now installs via `pip install
+  -e .[viz]`) — first real deploy attempt is the next scheduled/manual run.
+- **Weekly VI training warm-started from MCMC checkpoints**: ❌ **doesn't
+  exist as automation.** No `train-model-weekly.yml` workflow exists (it's
+  referenced by name in `tests/test_statistical_calibration.py` docstrings
+  but was never created). The only workflow cold-starts a fresh VI fit from
+  scratch each time it runs. Separately, warm-start *persistence* is itself
+  broken: `ModelFitter.save()` cannot pickle the VI approximation object on
+  the currently pinned PyMC version (`'functools.partial' object has no
+  attribute '__name__'`, caught and silently discarded) — so even a wired-up
+  weekly job couldn't warm-start across runs today.
+- **`prediction_history.json` / prediction archive "in production"**: ❌ not
+  evidenced. `PredictionArchiver` and the `calibration` CLI are fully
+  implemented, but no archived prediction file exists anywhere in the repo
+  or its `gh-pages`-equivalent output, and there's no sign
+  `calibration_report()` has ever been run against real results.
+- **Match predictions, squad analysis, paths-to-victory, knockout
+  forecasting**: ✅ implemented and unit-tested (module-level), but not
+  validated against real outcomes until the holdout run below — treat
+  "implemented" and "known to work well" as separate claims going forward.
+
+**First real, out-of-sample validation run** (2026-08-23, teams-only,
+228-match holdout — see `validation_reports/2026-08-23_teams-only-holdout.json`
+and the real numbers now in [MODEL_EXPLAINED.md](MODEL_EXPLAINED.md#model-validation-how-well-does-it-work)):
+model beats a trivial "always predict home win" baseline on win accuracy
+(70.6% vs 68.0%, not statistically distinguishable at n=228) and Brier score
+(0.420 vs 0.451), but is marginally *worse* than "always predict the mean
+score" on score RMSE (13.03 vs 12.91). Per-player try/conversion rate
+calibration is good out-of-sample; penalties are over-predicted by ~60%.
 
 ---
 
@@ -20,21 +51,27 @@ This is the living project roadmap. For the full development history and impleme
 
 ### 1. Posterior predictive checks and model validation
 
-**Infrastructure complete.** The validation toolchain is now in place:
-
-- `model.sample_posterior_predictive(trace, df)` — rebuilds the PyMC model context from a checkpoint and runs `pm.sample_posterior_predictive()`; returns ArviZ `InferenceData` for use with `az.plot_ppc()`
-- `validation.calibration_analysis(obs, ppc_samples)` — randomised PIT histogram and calibration curve for Poisson count predictions
-- `notebooks/09_validation_and_diagnostics.py` — filled-in notebook covering PPC plots, PIT histograms, calibration curves for all score types, and match-level Brier scores from the prediction archive
-- `tests/test_statistical_calibration.py` — SBC / P-P tests (the same methodology used in GW astronomy) for VI and MCMC, run with `pytest -m statistical`
+**Done, for the first time, 2026-08-23.** See the validation run above.
+Infrastructure (PPC, PIT/MACE, SBC) was already in place but had never been
+run against real data and recorded — it now has been, once.
 
 **What still needs doing:**
 
-- Run the notebook on the current MCMC checkpoint and inspect results
-- Check whether the PIT histograms show VI underestimation (expected U-shaped pattern)
+- Re-run on the actual current checkpoint used by the (now-fixed) dashboard
+  workflow, not just this one-off holdout
+- Run this same split under MCMC to check whether VI's known miscalibration
+  on `alpha_tries`/`sigma_player_kick` (SBC tests) moves these numbers
+- Investigate the ~60% penalty over-prediction found above
 - Stratify calibration by competition/team/season to identify systematic biases
-- Run full SBC (`pytest -m statistical`) to formally quantify VI vs MCMC calibration gap
+- Build the Elo/simple-baseline comparison from Phase 11 — the one baseline
+  computed so far ("always predict home / mean score") is the floor, not a
+  fair fight; score RMSE currently doesn't clear even that floor
+- Repeat as a rolling backtest across multiple seasons, not a single holdout
 
-**Why first**: Identifies where complexity is actually needed vs. where the current model is already good enough. This should inform all structural changes.
+**Why first**: Identifies where complexity is actually needed vs. where the
+current model is already good enough. This should inform all structural
+changes — and the first real result (model ≈ baseline on score RMSE) is
+exactly the kind of signal this was supposed to surface.
 
 ---
 

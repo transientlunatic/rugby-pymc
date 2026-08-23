@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-08-23T11:47:07.046412+00:00",
+  "data_slice": {
+    "recent_season_start_years": [
+      2024,
+      2025,
+      2026
+    ],
+    "n_rows_total": 69897,
+    "n_train_matches": 1295,
+    "n_test_matches": 228
+  },
+  "fit": {
+    "method": "vi/advi",
+    "n_iterations": 20000,
+    "fit_seconds": 256.80000472068787
+  },
+  "n_test_rows_known_to_model": 9604,
+  "n_test_rows_total": 10488,
+  "out_of_sample_calibration": {
+    "tries": {
+      "n_observations": 9447,
+      "mean_predicted": 0.15448719170106912,
+      "mean_observed": 0.15814544299777708,
+      "mean_absolute_calibration_error": 0.011372807897896782
+    },
+    "penalties": {
+      "n_observations": 9447,
+      "mean_predicted": 0.06372134010797079,
+      "mean_observed": 0.039377580184185454,
+      "mean_absolute_calibration_error": 0.02413630997460761
+    },
+    "conversions": {
+      "n_observations": 9447,
+      "mean_predicted": 0.11955864295543558,
+      "mean_observed": 0.11887371652376416,
+      "mean_absolute_calibration_error": 0.03435987710814496
+    },
+    "drop_goals": {
+      "n_observations": 9447,
+      "mean_predicted": 0.0020852651635439824,
+      "mean_observed": 0.00031756113051762465,
+      "mean_absolute_calibration_error": 0.0027462172792153067
+    }
+  },
+  "match_level_test": {
+    "n_matches": 228,
+    "n_predicted_ok": 228,
+    "n_predicted_failed": 0,
+    "model": {
+      "win_accuracy": 0.706140350877193,
+      "brier_score": 0.42020371929824557,
+      "score_rmse": 13.030350908821202,
+      "score_mae": 10.584429824561404
+    },
+    "baseline_always_predict_mode_outcome": {
+      "outcome_predicted": "home",
+      "win_accuracy": 0.6798245614035088,
+      "brier_score": 0.45079255155432446,
+      "score_rmse_predicting_mean_score": 12.910692479554738,
+      "home_win_rate": 0.6798245614035088,
+      "away_win_rate": 0.29385964912280704,
+      "draw_rate": 0.02631578947368421
+    }
+  },
+  "total_wall_seconds": 279.98037600517273
+}
