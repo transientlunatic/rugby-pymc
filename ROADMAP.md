@@ -73,7 +73,28 @@ place but had never been run against real data and recorded before this.
   Monte Carlo noise or picking an arbitrary number
 - Run this same split under MCMC to check whether VI's known miscalibration
   on `alpha_tries`/`sigma_player_kick` (SBC tests) moves these numbers
-- Investigate the ~60% penalty over-prediction found above
+- ~~Investigate the ~60% penalty over-prediction~~ — **Root-caused,
+  2026-08-24.** It's real season-over-season drift, not a model or data
+  bug: penalty rate per 80 minutes falls from 0.101 (2024-25) to 0.073
+  (2025-26) to 0.043 (2026-27, partial) in the training slice, a
+  train/test ratio (1.63x) that accounts for essentially all of the
+  measured 1.68x over-prediction. `alpha[penalties]` is a single constant
+  fit across the whole training window, so it reflects the blended
+  (higher) historical rate. Checked and ruled out: scorer-name
+  surname-fallback mis-attribution (only 1.43% of penalty-scoring events
+  are ambiguous by surname — nowhere near enough to explain a 68% bias).
+  See `MODEL_EXPLAINED.md`'s per-player calibration section for the full
+  numbers. **Not yet fixed** — needs a season-level trend/random-walk
+  term on score-type intercepts, or recency-weighted/truncated training;
+  `time_varying_effects` already in `ModelConfig` doesn't cover this, it
+  only models within-season form, not across-season drift. This is a
+  structural change touching every score type's intercept, not a one-line
+  fix — own task, below.
+- Add a season-level trend to score-type intercepts (or recency-weight /
+  truncate the training window) so the model tracks a drifting rate
+  instead of fitting a single constant across seasons — see the penalty
+  finding above; likely affects all four score types to some degree, not
+  just penalties
 - Stratify calibration by competition/team/season to identify systematic biases
 - ~~Build the Elo/simple-baseline comparison~~ — **Done, 2026-08-24.** See
   `rugby_ranking/model/elo.py` and the updated results table in
