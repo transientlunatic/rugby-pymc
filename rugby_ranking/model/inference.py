@@ -340,12 +340,32 @@ class ModelFitter:
 
     def _transfer_vi_params(self, new_approx):
         """
-        Transfer parameters from previous VI approximation.
+        Transfer parameters from a previous VI approximation, when it is
+        safe to do so.
 
-        Handles dimension changes when new players/teams are added:
-        - Exact match: Copy parameters directly
-        - New model larger: Copy old parameters, keep new ones at initialization
-        - New model smaller: Subset the old parameters (for filtering old data)
+        Mean-field ADVI's `.params` are exactly two arrays -- `mu` and `rho`
+        -- covering the FULL model's variational distribution flattened and
+        concatenated across every random variable, in PyMC's internal
+        variable ordering. They are NOT one array per named RV. That means
+        a positional partial-copy (e.g. "copy the first min(old_len,
+        new_len) elements when lengths differ") is unsound whenever the
+        model's shape changed: adding a player anywhere in the ordering
+        shifts every subsequent RV's slice of the flattened vector, so a
+        naive prefix copy can silently seed one player's (or team's, or
+        score-type's) posterior into a completely different one's slot
+        while reporting a successful warm start. An earlier version of this
+        method did exactly that partial copy -- caught in review before
+        merging (see PR #3) -- so it's removed rather than fixed here.
+
+        Correctly remapping per-entity (matching PyMC's variable ordering to
+        old/new player and team-season ID mappings) is real, separately-
+        scoped work -- not attempted in this pass. What's implemented here
+        instead is the safe subset: transfer only when the flattened mu/rho
+        vectors are exactly the same length (i.e. the model's dimensions --
+        player count, team-season count, etc. -- are unchanged since the
+        checkpoint was saved). Any other case skips warm-starting for that
+        parameter and logs why, rather than silently transferring
+        misaligned values.
         """
         if self._vi_approx is not None:
             old_params = self._vi_approx.params
@@ -369,32 +389,17 @@ class ModelFitter:
                 new_shape = new_p.get_value().shape
 
                 if old_shape == new_shape:
-                    # Exact match - copy directly
                     new_p.set_value(old_p.get_value())
-                elif len(old_shape) == len(new_shape):
-                    # Same number of dimensions - try to copy what we can
-                    old_val = old_p.get_value()
-                    new_val = new_p.get_value()
-                    
-                    # Build slicing tuples for copying common dimensions
-                    slices_old = []
-                    slices_new = []
-                    can_copy = True
-                    
-                    for old_dim, new_dim in zip(old_shape, new_shape):
-                        min_dim = min(old_dim, new_dim)
-                        if min_dim > 0:
-                            slices_old.append(slice(0, min_dim))
-                            slices_new.append(slice(0, min_dim))
-                        else:
-                            can_copy = False
-                            break
-                    
-                    if can_copy:
-                        # Copy the overlapping part
-                        new_val[tuple(slices_new)] = old_val[tuple(slices_old)]
-                        new_p.set_value(new_val)
-                # If shapes are incompatible, keep initialization from new_approx
+                else:
+                    print(
+                        f"Warm start: skipping a parameter with shape {old_shape} -> "
+                        f"{new_shape} (model dimensions changed since the checkpoint "
+                        "was saved -- e.g. players or team-seasons added/removed). "
+                        "Partial/positional transfer across a dimension change is not "
+                        "safe for flattened mean-field params; that parameter keeps "
+                        "its fresh initialization instead of a silently misaligned one.",
+                        flush=True,
+                    )
 
         return new_approx
 
@@ -409,7 +414,9 @@ class ModelFitter:
         Draw additional samples from a fitted VI approximation.
 
         Useful for drawing more samples after training without re-running optimization.
-        Requires that the model was fitted with VI and saved/loaded with the approximation.
+        Requires a *live* VI approximation from fit_vi() in this process -- a checkpoint
+        loaded via ModelFitter.load()/load_vi_approx() in a fresh process does NOT work
+        here (see _LoadedVIApprox), only for warm-starting a new fit_vi(warm_start=True).
 
         Args:
             n_samples: Number of samples to draw
@@ -614,7 +621,9 @@ class ModelFitter:
         Saves:
         - Trace (posterior samples)
         - Model indices (player/team mappings)
-        - VI approximation (if available, for drawing more samples)
+        - VI approximation parameters, if available -- for warm-starting a
+          new fit_vi(warm_start=True) later, NOT for sample_from_vi(); see
+          _LoadedVIApprox for why those are different
         - Metadata
 
         Args:
@@ -687,10 +696,16 @@ class ModelFitter:
         try:
             with open(vi_approx_path, "rb") as f:
                 param_values = pickle.load(f)
+            # vi_approx.pkl has no format/version marker. This is expected to
+            # be a list of arrays (the format this method's caller writes);
+            # constructing _LoadedVIApprox inside the try means any payload
+            # that isn't -- a stray file, or (hypothetically) a pickle from
+            # code that predates this format -- is treated the same as a
+            # corrupted file below, instead of raising past this method.
             return _LoadedVIApprox(param_values)
-        except (EOFError, pickle.UnpicklingError) as e:
+        except (EOFError, pickle.UnpicklingError, TypeError, AttributeError, ValueError) as e:
             print(f"Warning: Could not load VI approximation ({e})")
-            vi_approx_path.unlink()  # Remove corrupted file so future runs skip it
+            vi_approx_path.unlink()  # Remove corrupted/unrecognized file so future runs skip it
             return None
 
     @classmethod
@@ -749,7 +764,7 @@ class ModelFitter:
                     param_values = pickle.load(f)
                 fitter._vi_approx = _LoadedVIApprox(param_values)
                 print("Loaded VI approximation parameters (can warm-start a new fit)")
-            except (EOFError, pickle.UnpicklingError) as e:
+            except (EOFError, pickle.UnpicklingError, TypeError, AttributeError, ValueError) as e:
                 print(f"Warning: Could not load VI approximation ({e})")
                 print("Trace is available but cannot warm-start from it")
                 fitter._vi_approx = None

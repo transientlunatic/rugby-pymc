@@ -1341,12 +1341,19 @@ if __name__ == "__main__":
     # past the dependency bug: FileNotFoundError on trace.nc. Only use it if
     # it's actually present; otherwise fall through to export_dashboard_data's
     # own checkpoint_name=None path, which fits fresh via VI.
+    #
+    # Check both trace.nc AND metadata.pkl, not just trace.nc: ModelFitter.save()
+    # writes the trace before metadata, so an interrupted save can leave a
+    # directory with trace.nc but no metadata.pkl -- ModelFitter.load()
+    # unconditionally opens metadata.pkl, so trace.nc alone existing isn't
+    # proof the checkpoint is actually loadable.
     _CHECKPOINT_NAME = "time_model_v1"
-    _checkpoint_path = Path("~/.cache/rugby_ranking").expanduser() / _CHECKPOINT_NAME / "trace.nc"
-    if _checkpoint_path.exists():
+    _checkpoint_dir = Path("~/.cache/rugby_ranking").expanduser() / _CHECKPOINT_NAME
+    _checkpoint_ready = (_checkpoint_dir / "trace.nc").exists() and (_checkpoint_dir / "metadata.pkl").exists()
+    if _checkpoint_ready:
         print(f"Using local checkpoint: {_CHECKPOINT_NAME}")
     else:
-        print(f"No local checkpoint at {_checkpoint_path} -- fitting fresh via VI instead")
+        print(f"No complete local checkpoint at {_checkpoint_dir} -- fitting fresh via VI instead")
         _CHECKPOINT_NAME = None
 
     export_dashboard_data(

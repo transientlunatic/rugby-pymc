@@ -6,6 +6,15 @@ This script allows you to draw more posterior samples from a previously
 trained VI model without re-running the optimization. Useful when you
 want more samples for better uncertainty estimates.
 
+LIMITATION: this only works within the same process that ran fit_vi() --
+i.e. you didn't just run `ModelFitter.load(...)` in a fresh script/session.
+A live PyMC Approximation holds pytensor graph nodes bound to a specific
+model context and cannot be pickled/reloaded; a checkpoint loaded from disk
+only carries the numeric parameter values (enough to warm-start a *new*
+fit via `ModelFitter.fit_vi(warm_start=True)`, not enough to draw more
+samples from the *existing* one). This script currently cannot do that --
+see the checkpoint-load error below if you try.
+
 Usage:
     # Draw 5000 samples in batches of 100
     python sample_from_checkpoint.py --checkpoint international-mini5 --samples 5000 --batch-size 100
@@ -25,7 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from rugby_ranking.model.core import RugbyModel, ModelConfig
-from rugby_ranking.model.inference import ModelFitter
+from rugby_ranking.model.inference import ModelFitter, _LoadedVIApprox
 
 
 def parse_args():
@@ -78,6 +87,24 @@ def main():
             print("\n❌ ERROR: This checkpoint does not contain a VI approximation.", file=sys.stderr)
             print("Only checkpoints from VI training can draw additional samples.", file=sys.stderr)
             print(f"Checkpoint was fit using: {fitter._fit_method}", file=sys.stderr)
+            return 1
+
+        if isinstance(fitter._vi_approx, _LoadedVIApprox):
+            print(
+                "\n❌ ERROR: This checkpoint's VI approximation was loaded from disk, "
+                "which only carries the fitted parameter *values* -- not a live "
+                "PyMC Approximation bound to a model, which is what drawing more "
+                "samples needs (and can't survive a pickle round-trip; see this "
+                "script's module docstring).",
+                file=sys.stderr,
+            )
+            print(
+                "This checkpoint's saved trace.nc already has the samples drawn "
+                "during the original fit. To get more, warm-start a new fit "
+                "instead: ModelFitter.fit_vi(warm_start=True) after loading this "
+                "checkpoint as the starting point (see update_with_new_data.py).",
+                file=sys.stderr,
+            )
             return 1
 
         if not args.quiet:
