@@ -75,9 +75,18 @@ place but had never been run against real data and recorded before this.
   on `alpha_tries`/`sigma_player_kick` (SBC tests) moves these numbers
 - Investigate the ~60% penalty over-prediction found above
 - Stratify calibration by competition/team/season to identify systematic biases
-- Build the Elo/simple-baseline comparison from Phase 11 — the one baseline
-  computed so far ("always predict home / mean score") is the floor, not a
-  fair fight; score RMSE currently doesn't clear even that floor
+- ~~Build the Elo/simple-baseline comparison~~ — **Done, 2026-08-24.** See
+  `rugby_ranking/model/elo.py` and the updated results table in
+  `MODEL_EXPLAINED.md`. Result: **Elo beats the Bayesian model on win
+  accuracy, Brier score, and RMSE**, on this one holdout split. That's a
+  real, uncomfortable finding, not a formality to check off — it needs
+  replication on other splits (see below) before deciding what to do about
+  it, but as measured it means the model's added complexity is not
+  currently earning its keep on match-outcome/score prediction. What it
+  still owns uniquely is per-player rates and lineup-conditional
+  predictions, which Elo cannot produce at all.
+- Replicate the Elo-vs-model comparison on other holdout splits (rolling or
+  different date ranges) — right now it's one split, one data point
 - The automated run only checks the `include_defense=True,
   separate_kicking_effect=True` production config via VI — it fits its own
   model independently of the dashboard's own checkpoint, so it's a second
@@ -86,8 +95,9 @@ place but had never been run against real data and recorded before this.
 
 **Why first**: Identifies where complexity is actually needed vs. where the
 current model is already good enough. This should inform all structural
-changes — and the first real result (model ≈ baseline on score RMSE) is
-exactly the kind of signal this was supposed to surface.
+changes — and the results so far (model ≈ trivial baseline on score RMSE;
+Elo beats the model outright on every match-level metric) are exactly the
+kind of signal this was supposed to surface.
 
 ---
 

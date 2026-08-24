@@ -45,6 +45,7 @@ from rugby_ranking.model.core import RugbyModel, ModelConfig
 from rugby_ranking.model.inference import ModelFitter, InferenceConfig
 from rugby_ranking.model.predictions import MatchPredictor
 from rugby_ranking.model.validation import calibration_analysis
+from rugby_ranking.model.elo import EloRatingSystem, MarginModel, calibrate_elo
 
 
 def _make_logger(out_dir: Path):
@@ -276,6 +277,67 @@ def run_holdout_validation(
         f"win_accuracy={baseline_accuracy:.1%} brier={baseline_brier:.4f} "
         f"score_RMSE={baseline_rmse:.2f} (predicting train-set mean score every time)")
 
+    # ---- Elo baseline: a real, if simple, rating system --------------------
+    # The trivial baseline above is a floor, not a fair competitor -- it has
+    # no notion of team strength at all. Elo does, with exactly two free
+    # parameters, and is the standard comparison point for a sports ranking
+    # system. See rugby_ranking/model/elo.py for full design notes.
+    #
+    # (k, home_advantage) are calibrated on an INNER split of df_train only
+    # (never the real test set -- same leakage bug fixed in PR #1 for the
+    # trivial baseline). Ratings are then frozen at the end of training and
+    # applied unchanged to every test match, deliberately NOT updated
+    # sequentially as test results come in -- that would give Elo an
+    # information advantage the static-posterior Bayesian model doesn't get,
+    # since the model is also fit once on training data and never updated
+    # mid-test-set. Real deployment would update Elo after every match.
+    log("Calibrating Elo baseline on training data...")
+    elo = calibrate_elo(train_matches)
+    log(f"  Elo calibrated: k={elo.k}, home_advantage={elo.home_advantage}")
+
+    elo_walk = EloRatingSystem(k=elo.k, home_advantage=elo.home_advantage)
+    train_elo_diffs, train_margins, train_totals = [], [], []
+    for _, row in train_matches.sort_values("date").iterrows():
+        diff = (elo_walk.get_rating(row["home_team"]) + elo_walk.home_advantage) - elo_walk.get_rating(row["away_team"])
+        train_elo_diffs.append(diff)
+        train_margins.append(row["home_score"] - row["away_score"])
+        train_totals.append(row["home_score"] + row["away_score"])
+        elo_walk.update(row["home_team"], row["away_team"], row["home_score"], row["away_score"], row["season"])
+    margin_model = MarginModel().fit(train_elo_diffs, train_margins, train_totals)
+
+    elo_correct, elo_briers, elo_sq_errors = [], [], []
+    for _, row in matches.iterrows():
+        if row["home_score"] > row["away_score"]:
+            actual = "home"
+        elif row["away_score"] > row["home_score"]:
+            actual = "away"
+        else:
+            actual = "draw"
+
+        p_home_win = elo.win_probabilities(row["home_team"], row["away_team"])
+        # Draws are rare in rugby and Elo's core formula doesn't model them;
+        # reuse the training-set draw rate (same source as the trivial
+        # baseline) and split the remainder by Elo's win/loss odds -- a
+        # standard, simple way to bolt draw probability onto binary Elo.
+        p_draw = draw_rate
+        probs = {"home": p_home_win * (1 - p_draw), "away": (1 - p_home_win) * (1 - p_draw), "draw": p_draw}
+        predicted_winner = max(probs, key=probs.get)
+        elo_correct.append(predicted_winner == actual)
+
+        onehot = {"home": [1, 0, 0], "away": [0, 1, 0], "draw": [0, 0, 1]}[actual]
+        p = [probs["home"], probs["away"], probs["draw"]]
+        elo_briers.append(sum((pi - oi) ** 2 for pi, oi in zip(p, onehot)))
+
+        elo_diff = (elo.get_rating(row["home_team"]) + elo.home_advantage) - elo.get_rating(row["away_team"])
+        pred_home_score, pred_away_score = margin_model.predict_scores(elo_diff)
+        elo_sq_errors.append((pred_home_score - row["home_score"]) ** 2)
+        elo_sq_errors.append((pred_away_score - row["away_score"]) ** 2)
+
+    elo_accuracy = float(np.mean(elo_correct))
+    elo_brier = float(np.mean(elo_briers))
+    elo_rmse = float(np.sqrt(np.mean(elo_sq_errors)))
+    log(f"  ELO     win_accuracy={elo_accuracy:.1%} brier={elo_brier:.4f} score_RMSE={elo_rmse:.2f}")
+
     report["match_level_test"] = {
         "n_matches": len(matches),
         "n_predicted_ok": n_ok,
@@ -295,6 +357,16 @@ def run_holdout_validation(
             "home_win_rate": home_win_rate,
             "away_win_rate": away_win_rate,
             "draw_rate": draw_rate,
+        },
+        "elo_baseline": {
+            "computed_from": "training set only, k/home_advantage calibrated on an inner "
+                              "split of training data, ratings frozen at end of training "
+                              "(not updated sequentially through the test set)",
+            "k": elo.k,
+            "home_advantage": elo.home_advantage,
+            "win_accuracy": elo_accuracy,
+            "brier_score": elo_brier,
+            "score_rmse": elo_rmse,
         },
     }
 
