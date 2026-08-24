@@ -21,6 +21,7 @@ def format_summary(report: dict) -> str:
     match_test = report.get("match_level_test", {})
     model = match_test.get("model", {})
     baseline = match_test.get("baseline_always_predict_mode_outcome", {})
+    elo = match_test.get("elo_baseline", {})
     n_matches = match_test.get("n_matches")
     as_of = str(report.get("as_of", "?"))[:10]
 
@@ -35,12 +36,16 @@ def format_summary(report: dict) -> str:
     lines = [
         f"Evaluated on {n_matches} held-out matches, as of {as_of}.",
         "",
-        "| Metric | Model | Baseline (train-set rate/mean) |",
-        "|---|---|---|",
-        f"| Win accuracy | {pct(model, 'win_accuracy')} | {pct(baseline, 'win_accuracy')} |",
-        f"| Brier score | {num(model, 'brier_score')} | {num(baseline, 'brier_score')} |",
+        "| Metric | Model | Elo baseline | Trivial baseline (train-set rate/mean) |",
+        "|---|---|---|---|",
+        f"| Win accuracy | {pct(model, 'win_accuracy')} | {pct(elo, 'win_accuracy')} | {pct(baseline, 'win_accuracy')} |",
+        f"| Brier score | {num(model, 'brier_score')} | {num(elo, 'brier_score')} | {num(baseline, 'brier_score')} |",
         f"| Score RMSE | {num(model, 'score_rmse', '.2f')} | "
+        f"{num(elo, 'score_rmse', '.2f')} | "
         f"{num(baseline, 'score_rmse_predicting_mean_score', '.2f')} |",
+        "",
+        f"Elo baseline: k={num(elo, 'k', '.0f')}, home_advantage={num(elo, 'home_advantage', '.0f')} "
+        "(calibrated on training data only).",
         "",
         "Not gated on thresholds yet -- see ROADMAP.md.",
     ]
