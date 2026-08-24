@@ -553,6 +553,12 @@ Before a tournament, analyze each team's:
 > as the methodology below now describes. Re-running with the fix barely
 > moved the numbers (this dataset's train/test splits happen to have similar
 > home-win rates), but the corrected numbers are what's reported here.
+>
+> **Update (2026-08-24):** Added a real Elo rating baseline (see
+> `rugby_ranking/model/elo.py`) — the trivial baseline above is the floor,
+> not a fair fight for a ranking system. **Elo beats the Bayesian model on
+> every metric measured.** This is not a flattering result and it is
+> reported as measured, not softened.
 
 ### Methodology
 
@@ -563,38 +569,53 @@ Before a tournament, analyze each team's:
   saw during fitting (Dec 2025–Mar 2026).
 - **Model**: production config (`include_defense=True,
   separate_kicking_effect=True`), fit via VI/ADVI (the fast weekly path),
-  20,000 iterations. Fit took 257s — VI itself is not the slow part of this
-  pipeline.
+  20,000 iterations. Fit took ~420s.
 - **Predictions**: `MatchPredictor.predict_teams_only()` (higher-uncertainty
   mode; no lineup information used) for each of the 228 held-out matches.
-- **Baseline**: the cheapest possible skill-free reference, computed
+- **Trivial baseline**: the cheapest possible skill-free reference, computed
   entirely from the training set (never the test set) — predict the
   training set's empirical home-win rate (67.6%, so "always predict home")
   as a fixed probability for every match, and the training set's mean score
-  for every scoreline. This is not the Elo/league-position baselines below
-  (never built — see Roadmap); those rows are gone rather than left
-  fabricated.
+  for every scoreline.
+- **Elo baseline**: a standard Elo rating system, one rating per team across
+  a global pool (not split by competition, to stay comparable with the
+  Bayesian model, which also doesn't condition on competition). K-factor and
+  home-advantage are calibrated by grid search on an *inner* chronological
+  split of the training data only (same leakage discipline as the trivial
+  baseline — the real test set is never touched during calibration), with
+  season regression-to-the-mean and a linear margin model turning rating
+  differences into predicted scores (the standard sports-analytics
+  point-spread technique). See `rugby_ranking/model/elo.py` for the full
+  implementation and rationale.
 
 ### Results (out-of-sample, 228 held-out matches)
 
-| Metric | Model | Baseline (train-set rate/mean, always predict home) |
-|--------|-------|------|
-| Win accuracy | **70.2%** | 68.0% |
-| Brier score (lower is better) | **0.420** | 0.451 |
-| Score RMSE | 13.04 | **12.92** |
-| Score MAE | 10.60 | — |
+| Metric | Model | Elo baseline (k=32, home_adv=80) | Trivial baseline (train-set rate/mean) |
+|--------|-------|------|------|
+| Win accuracy | 70.6% | **73.2%** | 68.0% |
+| Brier score (lower is better) | 0.4215 | **0.4174** | 0.4509 |
+| Score RMSE | 13.04 | **12.29** | 12.92 |
+| Score MAE | 10.59 | — | — |
 
-**Honest read:** the model beats the trivial baseline on win accuracy and
-Brier score, but the edge is small — with n=228, the standard error on a
-~70% accuracy is roughly ±3 points, so the 2.2-point gap is not statistically
-distinguishable from noise on this sample alone. On raw score accuracy
-(RMSE), the full hierarchical model is *marginally worse* than just
-predicting the training-set mean score every time. That's the least
-flattering honest number in this report, and the most important one: right
-now there is no strong evidence the added machinery (defense terms, kicking
-split, joint likelihood, player/team random effects) earns its complexity
-over a much simpler baseline, on scoreline accuracy specifically. Win/Brier
-metrics tell a more favorable story.
+**Honest read:** Elo — two calibrated parameters and one number per team —
+beats the full Bayesian hierarchical model on every metric measured: win
+accuracy (+2.6 points), Brier score, and score RMSE. It also beats the
+trivial baseline on RMSE, which the Bayesian model does not. With n=228 the
+standard error on a ~70% accuracy is roughly ±3 points, so none of these
+gaps are individually large relative to sampling noise on this one holdout
+split — but the *direction* is consistent across all three metrics, which a
+single-split fluke would not reliably produce.
+
+This is the least flattering, most important result in this document: the
+added machinery (player/team random effects, defense terms, kicking split,
+joint likelihood across four score types) is not currently earning its
+complexity or its runtime cost over a same-day-to-calibrate Elo system, on
+match outcome or scoreline accuracy. Where the Bayesian model has a real
+edge Elo cannot touch at all is *what it predicts* — per-player scoring
+rates, lineup-conditional predictions, uncertainty intervals — not *how
+well it predicts match winners and scores*. Whether that extra output is
+worth the complexity for this project's actual use case is a real, open
+question, not one this validation answers by itself.
 
 ### Per-player scoring-rate calibration (out-of-sample PIT)
 
@@ -604,9 +625,9 @@ into a match-level score.
 
 | Score type | Predicted mean | Observed mean | MACE |
 |---|---|---|---|
-| Tries | 0.1547 | 0.1581 | 0.005 |
-| Conversions | 0.1210 | 0.1189 | 0.033 |
-| Penalties | 0.0644 | 0.0394 | 0.025 (over-predicts) |
+| Tries | 0.1542 | 0.1581 | 0.007 |
+| Conversions | 0.1204 | 0.1189 | 0.033 |
+| Penalties | 0.0662 | 0.0394 | 0.027 (over-predicts) |
 | Drop goals | 0.0021 | 0.0003 | 0.003 |
 
 Tries and conversions are well-calibrated out-of-sample. Penalties are
@@ -619,8 +640,9 @@ rather than a guess.
 - No MCMC comparison run on this same split (would show whether VI's known
   miscalibration on `alpha_tries`/`sigma_player_kick` — see the SBC tests —
   actually moves these numbers).
-- No Elo or other simple baseline beyond the two trivial ones above.
-- Single 228-match holdout, not a rolling/multi-season backtest.
+- Single 228-match holdout, not a rolling/multi-season backtest — the Elo
+  result above needs replication on other splits before treating "Elo wins"
+  as settled rather than "Elo wins on this split."
 - Teams-only predictions only; full-lineup mode not evaluated here.
 
 ---
