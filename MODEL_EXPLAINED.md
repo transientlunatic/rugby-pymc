@@ -631,9 +631,53 @@ into a match-level score.
 | Drop goals | 0.0021 | 0.0003 | 0.003 |
 
 Tries and conversions are well-calibrated out-of-sample. Penalties are
-over-predicted by about 60% relative to the observed rate — a concrete,
-measured target for the "review defensive/penalty structure" roadmap item,
-rather than a guess.
+over-predicted by about 68% relative to the observed rate.
+
+**Update (2026-08-24): root-caused, and it isn't a model bug.** Penalty
+rate is falling sharply, season over season, in the recent-seasons slice
+this validation trains on:
+
+| Season | Penalties / 80 min |
+|---|---|
+| 2024-2025 | 0.1006 |
+| 2025-2026 | 0.0731 |
+| 2026-2027 (partial) | 0.0428 |
+
+Train period (bulk of 2024-2025 + most of 2025-2026) pools to 0.093
+penalties/80min; the test period (the most recent ~228 matches) pools to
+0.057 — a 1.63x ratio, which alone accounts for essentially all of the
+1.68x over-prediction ratio above. The model's `alpha[penalties]`
+intercept is a single constant fit across the whole training window, so
+it reflects the training period's blended (higher) rate and doesn't know
+the rate kept falling into the test period. This tracks a real,
+identifiable trend, likely from law/officiating changes aimed at reducing
+kickable penalties (rugby has seen several such trials across this
+window) rather than a genuine change in team discipline — but this
+dataset can't distinguish those causes, only measure the trend.
+
+Ruled out as a contributing cause: attribution errors in scorer-name
+matching. `MatchDataset._count_scoring_events` falls back to surname-only
+matching when a scorer's full name doesn't match a lineup entry exactly,
+which could in principle mis-attribute or double-count a score when two
+players share a surname. Checked directly against the raw match data:
+47.8% of matches have *some* duplicate surname across both 23-player
+squads (unsurprising), but only 1.43% of actual penalty-scoring events
+(193 of 13,520) hit that ambiguous fallback path at all — nowhere near
+enough to explain a 68% systematic bias, and it would bias observed
+counts (inflating them), not predicted ones.
+
+**What this means for the model**: `alpha[s]` (and every other
+score-type intercept) assumes a rate that's constant over the training
+window. `time_varying_effects` (see `ModelConfig`) already exists but
+only models *within-season* form trends (0→1 progress through a single
+season) — it doesn't reach across season boundaries, so it wouldn't have
+caught this. A real fix needs either a season-level trend/random-walk
+term on the intercepts, or recency-weighting/truncating the training
+window so stale seasons stop pulling the fitted rate up. Not implemented
+here — this is a structural model change that touches every score type's
+intercept, not a one-line fix, and deserves its own validation pass
+rather than being rushed alongside this investigation. Tracked in
+ROADMAP.md.
 
 ### What this doesn't cover yet
 

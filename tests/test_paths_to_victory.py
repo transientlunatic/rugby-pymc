@@ -332,7 +332,7 @@ class TestNarrativeGeneration:
         narrative = analyzer._generate_detailed_narrative(result)
 
         assert isinstance(narrative, str)
-        assert 'Team A' in narrative.upper()
+        assert 'team a' in narrative.lower()
         assert '1st' in narrative or 'first' in narrative.lower()
         assert result.method.upper() in narrative
         assert len(narrative) > 100  # Should be detailed

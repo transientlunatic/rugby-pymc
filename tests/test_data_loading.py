@@ -14,13 +14,15 @@ class TestNormalizeTeamName:
     """Test team name normalization."""
 
     def test_basic_normalization(self):
-        """Test basic name normalization."""
-        assert normalize_team_name("LEINSTER") == "Leinster"
-        assert normalize_team_name("dublin") == "Dublin"
+        """Test known-alias resolution (exact-string lookup, not case-folding --
+        see TEAM_NAME_ALIASES in rugby_ranking.model.data)."""
+        assert normalize_team_name("Leinster") == "Leinster Rugby"
+        assert normalize_team_name("Some Unlisted Team") == "Some Unlisted Team"
 
     def test_strip_whitespace(self):
         """Test whitespace handling."""
-        assert normalize_team_name("  Leinster  ") == "Leinster"
+        assert normalize_team_name("  Leinster  ") == "Leinster Rugby"
+        assert normalize_team_name("  Some Unlisted Team  ") == "Some Unlisted Team"
 
     def test_accent_removal(self):
         """Test accent handling."""
@@ -33,45 +35,53 @@ class TestMatchDataset:
 
     @pytest.fixture
     def temp_json_dir(self):
-        """Create temporary directory with sample JSON files."""
+        """Create temporary directory with sample JSON files.
+
+        Matches MatchDataset's real LIST format (see
+        MatchDataset._load_list_format's docstring / real files under
+        Rugby-Data/json): each match has "home"/"away" dicts with
+        "team", "score", "lineup" (jersey number -> player dict with
+        on/off/reds/yellows), and "scores" (a list of scoring events).
+        """
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create sample LIST format JSON
             list_data = [
                 {
                     "home": {
-                        "1": {"name": "Player 1", "on": [0], "off": [], "reds": [], "yellows": []},
-                        "2": {"name": "Player 2", "on": [0], "off": [], "reds": [], "yellows": []},
+                        "team": "Leinster",
+                        "score": 20,
+                        "lineup": {
+                            "1": {"name": "Player 1", "on": [0], "off": [], "reds": [], "yellows": []},
+                            "2": {"name": "Player 2", "on": [0], "off": [], "reds": [], "yellows": []},
+                        },
+                        "scores": [
+                            {"minute": 10, "type": "Try", "player": "Player 1", "value": 5},
+                            {"minute": 12, "type": "Conversion", "player": "Player 2", "value": 2},
+                            {"minute": 30, "type": "Penalty", "player": "Player 2", "value": 3},
+                            {"minute": 60, "type": "Penalty", "player": "Player 2", "value": 3},
+                        ],
                     },
                     "away": {
-                        "1": {"name": "Player 3", "on": [0], "off": [], "reds": [], "yellows": []},
-                        "2": {"name": "Player 4", "on": [0], "off": [], "reds": [], "yellows": []},
+                        "team": "Munster",
+                        "score": 15,
+                        "lineup": {
+                            "1": {"name": "Player 3", "on": [0], "off": [], "reds": [], "yellows": []},
+                            "2": {"name": "Player 4", "on": [0], "off": [], "reds": [], "yellows": []},
+                        },
+                        "scores": [
+                            {"minute": 20, "type": "Try", "player": "Player 3", "value": 5},
+                            {"minute": 40, "type": "Penalty", "player": "Player 4", "value": 3},
+                        ],
                     },
                     "date": "2023-01-15T15:00:00.000Z",
-                    "homeTeam": "Leinster",
-                    "awayTeam": "Munster",
-                    "homeScore": 20,
-                    "awayScore": 15,
-                    "scored": {
-                        "home": {
-                            "tries": {"Player 1": 1},
-                            "penalties": {"Player 2": 2},
-                            "conversions": {"Player 2": 1},
-                            "drop_goals": {},
-                        },
-                        "away": {
-                            "tries": {"Player 3": 1},
-                            "penalties": {"Player 4": 1},
-                            "conversions": {},
-                            "drop_goals": {},
-                        },
-                    },
+                    "stadium": "Aviva Stadium",
                 }
             ]
-            
+
             json_path = Path(tmpdir) / "premiership-2023-2024.json"
             with open(json_path, "w") as f:
                 json.dump(list_data, f)
-            
+
             yield tmpdir
 
     def test_initialization(self):
@@ -84,8 +94,8 @@ class TestMatchDataset:
         """Test loading JSON files."""
         dataset = MatchDataset(Path(temp_json_dir))
         dataset.load_json_files()
-        
-        assert len(dataset._matches) > 0
+
+        assert len(dataset.matches) > 0
 
     def test_to_dataframe(self, temp_json_dir):
         """Test conversion to DataFrame."""
@@ -107,7 +117,7 @@ class TestMatchDataset:
         
         required_cols = {
             'player_name', 'team', 'opponent', 'date', 'position',
-            'minutes', 'season', 'tries', 'penalties', 'conversions'
+            'minutes_played', 'season', 'tries', 'penalties', 'conversions'
         }
         assert required_cols.issubset(set(df.columns))
 

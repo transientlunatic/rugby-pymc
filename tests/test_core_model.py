@@ -19,7 +19,8 @@ def sample_data():
         'opponent': np.random.choice(['Leinster', 'Munster', 'Ulster'], 100),
         'player_name': np.random.choice(['Player A', 'Player B', 'Player C', 'Player D'], 100),
         'position': np.random.randint(1, 16, 100),  # Valid rugby positions
-        'minutes': np.random.uniform(60, 80, 100),
+        'minutes_played': np.random.uniform(60, 80, 100),
+        'is_home': np.random.choice([True, False], 100),
         'season': '2023-2024',
         'tries': np.random.poisson(0.2, 100),
         'penalties': np.random.poisson(0.5, 100),

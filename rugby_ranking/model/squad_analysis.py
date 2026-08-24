@@ -1566,7 +1566,10 @@ class InjuryImpactAnalyzer:
 
         # Robustness score: inverse of normalized mean impact
         # High score = team maintains strength despite injuries
-        robustness_score = max(0.0, 1.0 - (mean_impact / baseline_rating))
+        # mean_impact can go negative (a simulated injury looks like a net
+        # positive by chance), which would push this above 1.0 -- clamp both
+        # ends, since this is documented as a 0-1 score.
+        robustness_score = max(0.0, min(1.0, 1.0 - (mean_impact / baseline_rating)))
 
         # Identify vulnerable positions
         vulnerable_positions = []
