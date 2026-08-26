@@ -96,18 +96,23 @@ place but had never been run against real data and recorded before this.
   finding above; likely affects all four score types to some degree, not
   just penalties
 - Stratify calibration by competition/team/season to identify systematic biases
-- ~~Build the Elo/simple-baseline comparison~~ — **Done, 2026-08-24.** See
-  `rugby_ranking/model/elo.py` and the updated results table in
-  `MODEL_EXPLAINED.md`. Result: **Elo beats the Bayesian model on win
-  accuracy, Brier score, and RMSE**, on this one holdout split. That's a
-  real, uncomfortable finding, not a formality to check off — it needs
-  replication on other splits (see below) before deciding what to do about
-  it, but as measured it means the model's added complexity is not
-  currently earning its keep on match-outcome/score prediction. What it
-  still owns uniquely is per-player rates and lineup-conditional
-  predictions, which Elo cannot produce at all.
-- Replicate the Elo-vs-model comparison on other holdout splits (rolling or
-  different date ranges) — right now it's one split, one data point
+- ~~Build the Elo/simple-baseline comparison~~ / ~~Replicate on other
+  splits~~ — **Done, 2026-08-24.** See `rugby_ranking/model/elo.py` and the
+  "Replication across three holdout splits" section in
+  `MODEL_EXPLAINED.md`. The initial single-split result ("Elo beats the
+  model on every metric") **did not replicate** across two more holdout
+  windows (Jan-May 2025, Feb-May 2024): win accuracy is a wash (mean 71.3%
+  model vs 71.8% Elo, direction flips between splits), RMSE is a wash
+  overall (Elo's edge was concentrated in the first split; model is
+  marginally ahead in the other two), and only Brier score shows a
+  consistent, repeatable Elo advantage across all three splits. Revised
+  conclusion: model and Elo are roughly comparable on match
+  outcome/scoreline prediction; Elo calibrates win probabilities a bit
+  better. Still an uncomfortable result for the added complexity given
+  Elo's near-zero cost vs. ~5 min of VI per fit — but a materially
+  different, better-supported claim than the original one-split finding.
+  What the model still owns uniquely is per-player rates and
+  lineup-conditional predictions, which Elo cannot produce at all.
 - The automated run only checks the `include_defense=True,
   separate_kicking_effect=True` production config via VI — it fits its own
   model independently of the dashboard's own checkpoint, so it's a second
@@ -117,8 +122,9 @@ place but had never been run against real data and recorded before this.
 **Why first**: Identifies where complexity is actually needed vs. where the
 current model is already good enough. This should inform all structural
 changes — and the results so far (model ≈ trivial baseline on score RMSE;
-Elo beats the model outright on every match-level metric) are exactly the
-kind of signal this was supposed to surface.
+model ≈ Elo on outcome/score prediction across three replicated splits,
+with Elo modestly better calibrated) are exactly the kind of signal this
+was supposed to surface.
 
 ---
 
