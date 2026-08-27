@@ -714,6 +714,77 @@ intercept, not a one-line fix, and deserves its own validation pass
 rather than being rushed alongside this investigation. Tracked in
 ROADMAP.md.
 
+### Is per-scorer try credit fair? Testing the team-attribution hypothesis
+
+The model credits tries to whoever's name is against the score in the data
+— the same treatment as conversions and penalties. But a try is
+substantially a team output (phases won, go-forward ball, a break made by
+someone else) with one player finishing it, unlike a kick, which is a
+clean individual act independent of teammates. That raises a real
+question: is crediting only the scorer the wrong unit of attribution, and
+would crediting presence on the pitch (or lineup contribution more
+broadly) capture more signal?
+
+Tested directly (2026-08-26) with two methods on the 2023+ seasons slice,
+both using **teammates' tries only** (the player's own tries excluded, so
+personal scoring isn't mistaken for a broader team effect) and both
+demeaning by team-season (or using a within-player fixed-effects
+regression) to remove team-quality confounds — comparing matches where a
+player was in the lineup against matches their team played without them:
+
+1. **Binary on/off** (7,869 player-team-season comparisons, ≥3 matches
+   each side): teammates score **0.090 fewer tries/match** when the player
+   is present than when absent (p<0.0001, 95% CI [−0.112, −0.068]).
+2. **Continuous minutes regression** (308,121 player-match panel rows, far
+   more statistical power): confirms the same direction with much tighter
+   estimates.
+
+**Position-stratified, this splits cleanly by who actually scores, not by
+forward/back:**
+
+| Position group | n (panel rows) | Effect of 80 vs 0 min | p-value |
+|---|---|---|---|
+| **Props (1, 3)** | 51,419 | **−0.027 tries/match** | **0.45 (null)** |
+| Front row (1,2,3) | 76,287 | −0.086 | 0.003 |
+| All forwards (1-8) | 174,540 | −0.078 | <0.0001 |
+| All backs (9-15) | 133,581 | −0.144 | <0.0001 |
+| Back three + centres | 89,728 | −0.166 | <0.0001 |
+
+Every individual back position is significant and negative except
+fly-half (p=0.35 — a distributor/kicker, not primarily a finisher). Among
+forwards, locks and props show nothing (p=0.21–0.67), but hooker
+(p<0.0001), openside flanker (p=0.008), and number eight (p=0.03) do —
+and those three, plus the significant backs, are exactly `positions.py`'s
+own `HIGH_TRY_SCORERS` list (wings, fullback, flankers, number eight) plus
+hooker (a real occasional try-scorer via driving mauls, just not on that
+list). The effect tracks **personal scoring involvement**, not general
+team contribution.
+
+**Conclusion: this doesn't support reframing try credit toward team
+presence, and props are the cleanest possible negative case.** A prop is
+about as pure an "enabling, rarely-scoring" role as exists in rugby — if
+box-score presence were going to reveal a broad team-attribution signal
+anywhere, it should be there. It doesn't: the effect is a tight null
+(±0.03–0.06 tries/match) at both binary and continuous resolution. What
+*does* show up is a redistribution pattern among players who personally
+score — a strong finisher's presence takes tries away from teammates
+roughly in proportion to what he adds himself, netting out close to the
+model's existing small positive total-team-tries effect from an earlier,
+less careful cut of this same test (+0.042 tries/match, before excluding
+personal scoring) — not evidence of the team scoring more overall.
+
+Honest limitation: this measures *presence*, not contribution quality or
+role (a struggling prop counts the same as a dominant one), and it
+compares "this specific player" against "whoever replaced him," not
+"a player at this position" against "nobody" — for a specialist position
+like prop, clubs generally carry adequate like-for-like depth, which is a
+plausible reason a real per-match contribution could exist without
+showing up in aggregate replacement comparisons. So this rules out
+*recovering* a team-attribution signal from match-level try counts via
+presence — it doesn't rule out that props matter to tries in ways this
+dataset can't see (scrum penalties won, metres in the tackle, none of
+which are recorded here).
+
 ### What this doesn't cover yet
 
 - No MCMC comparison run on this same split (would show whether VI's known

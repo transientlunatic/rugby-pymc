@@ -163,6 +163,41 @@ The Six Nations just ended. This is the best window to validate whether the path
 
 ---
 
+### 5. Try-scoring attribution: is per-scorer credit fair?
+
+**Investigated and largely settled, 2026-08-26.** A try is substantially a
+team output (build-up, phases won, a break made by someone else) with one
+player finishing it — unlike a kick, which is a clean individual act.
+Tested whether crediting presence on the pitch, rather than personal
+scoring, would capture real signal the current per-scorer model misses.
+See `MODEL_EXPLAINED.md`'s "Is per-scorer try credit fair?" section for
+full numbers.
+
+**Result: no.** Two independent methods (binary on/off with team-season
+demeaning, n=7,869; continuous minutes regression with fixed effects,
+n=308,121 panel rows) agree: a player's presence doesn't move their
+teammates' try output, once personal scoring is excluded from the
+comparison. Position-stratified, the effect tracks who actually scores
+tries personally (backs, plus hooker/flanker/no.8), not general
+contribution — **props specifically show a tight null** (p=0.45–0.67,
+effect bounded to roughly ±0.03-0.06 tries/match), the cleanest possible
+test case since they're a pure enabling role that almost never scores.
+What does show up for high personal scorers is a redistribution effect
+(their presence takes tries away from teammates roughly in proportion to
+what they add themselves) — not a pie-growing team effect.
+
+**What this means**: no evidence supports moving try attribution from
+per-scorer credit toward a team/lineup-presence model. Doesn't mean props
+(or other enablers) don't matter to tries in reality — only that whatever
+they contribute isn't recoverable from box-score presence data (this
+dataset has no scrum-penalty, metres-carried, or tackle-broken fields that
+might actually capture it). Not pursuing a team-attribution rebuild of the
+try-scoring likelihood based on this evidence.
+
+**Effort spent**: Small (data analysis only, no model changes)
+
+---
+
 ## Deferred / Someday
 
 These are real ideas but should wait until the model quality work (items 3–4) is done:
