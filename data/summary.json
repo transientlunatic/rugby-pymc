@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-08-30T07:58:48.898421",
+  "seasons": [
+    "2025-2026",
+    "2026-2027",
+    "2020-2021"
+  ],
+  "total_matches": 1187,
+  "total_teams": 109,
+  "total_players": 5374,
+  "competitions": [
+    "six-nations",
+    "premiership",
+    "celtic",
+    "euro-challenge",
+    "euro-champions",
+    "end-of-year-internationals",
+    "mid-year-internationals",
+    "pro-d2",
+    "top14",
+    "championship"
+  ],
+  "model_config": {
+    "include_defense": true,
+    "separate_kicking_effect": true,
+    "defense_effect_sd": 0.3
+  }
+}

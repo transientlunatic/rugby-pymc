@@ -1,0 +1,22 @@
+[07:59:00] Loading Rugby-Data from Rugby-Data (fuzzy_match_names=False)...
+[07:59:11] Recent-seasons slice: years=[np.int64(2024), np.int64(2025), np.int64(2026)], rows=70219, matches=1530, players=4637, teams=103
+[07:59:11] Split: 1300 train matches / 230 test matches (test date range 2025-12-20 13:30:00+00:00 to 2026-08-28 19:00:00+00:00)
+[07:59:11] Building joint model on training data...
+[07:59:12] Fitting VI (ADVI, n=20000)...
+[08:04:01] VI fit done in 289.3s (14.47 ms/iter)
+[08:04:01] Sampling posterior predictive on held-out test rows...
+[08:04:06]   OOS tries        pred_mean=0.1534 obs_mean=0.1581 MACE=0.0115
+[08:04:06]   OOS penalties    pred_mean=0.0664 obs_mean=0.0401 MACE=0.0262
+[08:04:06]   OOS conversions  pred_mean=0.1223 obs_mean=0.1190 MACE=0.0323
+[08:04:06]   OOS drop_goals   pred_mean=0.0021 obs_mean=0.0003 MACE=0.0027
+[08:04:06] Building match-level test set and running teams-only predictions...
+[08:04:06]   230 test matches with recorded scores
+[08:04:06]   prediction failed for match pro-d2_2026-2027_0 (Biarritz vs Nissa Rugby, 2026-2027): ValueError: Unknown team: Nissa Rugby (not found in any season). Prior-only predictions not yet implemented.
+[08:04:06]   prediction failed for match pro-d2_2026-2027_4 (Dax vs Narbonne, 2026-2027): ValueError: Unknown team: Narbonne (not found in any season). Prior-only predictions not yet implemented.
+[08:04:06]   predictions ok=228 failed=2
+[08:04:06]   MODEL   win_accuracy=71.1% brier=0.4187 score_RMSE=12.91 score_MAE=10.44
+[08:04:06]   BASELINE (train-set rates; always predict 'home') win_accuracy=68.7% brier=0.4455 score_RMSE=12.97 (predicting train-set mean score every time)
+[08:04:06] Calibrating Elo baseline on training data...
+[08:04:07]   Elo calibrated: k=32.0, home_advantage=80.0
+[08:04:07]   ELO     win_accuracy=73.5% brier=0.4132 score_RMSE=12.30
+[08:04:07] DONE. Report written to dashboard/data/holdout_validation_report.json. Total wall time 307.2s

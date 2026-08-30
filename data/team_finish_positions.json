@@ -1,0 +1,2207 @@
+[
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 1,
+    "played": 5,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 2,
+    "played": 5,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 3,
+    "played": 5,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 4,
+    "played": 5,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Italy",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 5,
+    "played": 5,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Wales",
+    "season": "2025-2026",
+    "competition": "six-nations",
+    "position": 6,
+    "played": 5,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "",
+    "season": "2025-2026",
+    "competition": "mid-year-internationals",
+    "position": 1,
+    "played": 29,
+    "won": 17,
+    "total_points": 68
+  },
+  {
+    "team": "British & Irish Lions",
+    "season": "2025-2026",
+    "competition": "mid-year-internationals",
+    "position": 2,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Barbarians",
+    "season": "2025-2026",
+    "competition": "mid-year-internationals",
+    "position": 3,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Vannes",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 1,
+    "played": 19,
+    "won": 15,
+    "total_points": 62
+  },
+  {
+    "team": "Colomiers",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 2,
+    "played": 19,
+    "won": 14,
+    "total_points": 56
+  },
+  {
+    "team": "Provence",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 3,
+    "played": 19,
+    "won": 13,
+    "total_points": 52
+  },
+  {
+    "team": "Valence-Romans",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 4,
+    "played": 19,
+    "won": 13,
+    "total_points": 52
+  },
+  {
+    "team": "Brive",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 5,
+    "played": 20,
+    "won": 10,
+    "total_points": 42
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 6,
+    "played": 20,
+    "won": 10,
+    "total_points": 40
+  },
+  {
+    "team": "Agen",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 7,
+    "played": 20,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Aurillac",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 8,
+    "played": 19,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Soyaux Angouleme",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 9,
+    "played": 20,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Biarritz",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 10,
+    "played": 19,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Nevers",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 11,
+    "played": 19,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Grenoble",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 12,
+    "played": 20,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Beziers",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 13,
+    "played": 20,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Dax",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 14,
+    "played": 18,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Mont-de-Marsan",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 15,
+    "played": 20,
+    "won": 6,
+    "total_points": 26
+  },
+  {
+    "team": "Carcassonne",
+    "season": "2025-2026",
+    "competition": "pro-d2",
+    "position": 16,
+    "played": 19,
+    "won": 4,
+    "total_points": 18
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 1,
+    "played": 16,
+    "won": 12,
+    "total_points": 48
+  },
+  {
+    "team": "Pau",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 2,
+    "played": 16,
+    "won": 11,
+    "total_points": 44
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 3,
+    "played": 16,
+    "won": 9,
+    "total_points": 38
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 4,
+    "played": 16,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 5,
+    "played": 16,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Toulon",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 6,
+    "played": 16,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Castres",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 7,
+    "played": 16,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Montpellier",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 8,
+    "played": 16,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 9,
+    "played": 16,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Bayonne",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 10,
+    "played": 16,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 11,
+    "played": 16,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Lyon",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 12,
+    "played": 16,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Perpignan",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 13,
+    "played": 16,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Montauban",
+    "season": "2025-2026",
+    "competition": "top14",
+    "position": 14,
+    "played": 16,
+    "won": 1,
+    "total_points": 6
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 1,
+    "played": 10,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 2,
+    "played": 10,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 3,
+    "played": 10,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 4,
+    "played": 10,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 5,
+    "played": 10,
+    "won": 6,
+    "total_points": 26
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 6,
+    "played": 10,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 7,
+    "played": 10,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 8,
+    "played": 10,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 9,
+    "played": 10,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2025-2026",
+    "competition": "premiership",
+    "position": 10,
+    "played": 10,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 1,
+    "played": 11,
+    "won": 9,
+    "total_points": 36
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 2,
+    "played": 11,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 3,
+    "played": 10,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 4,
+    "played": 10,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 5,
+    "played": 11,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 6,
+    "played": 11,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 7,
+    "played": 10,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 8,
+    "played": 11,
+    "won": 4,
+    "total_points": 20
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 9,
+    "played": 10,
+    "won": 4,
+    "total_points": 18
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 10,
+    "played": 10,
+    "won": 4,
+    "total_points": 18
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 11,
+    "played": 11,
+    "won": 4,
+    "total_points": 18
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 12,
+    "played": 10,
+    "won": 3,
+    "total_points": 14
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 13,
+    "played": 10,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 14,
+    "played": 11,
+    "won": 2,
+    "total_points": 12
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 15,
+    "played": 10,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2025-2026",
+    "competition": "celtic",
+    "position": 16,
+    "played": 11,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 1,
+    "played": 16,
+    "won": 16,
+    "total_points": 64
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 2,
+    "played": 16,
+    "won": 11,
+    "total_points": 46
+  },
+  {
+    "team": "Hartpury",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 3,
+    "played": 16,
+    "won": 11,
+    "total_points": 46
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 4,
+    "played": 16,
+    "won": 10,
+    "total_points": 40
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 5,
+    "played": 16,
+    "won": 10,
+    "total_points": 40
+  },
+  {
+    "team": "Coventry",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 6,
+    "played": 16,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Caldy",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 7,
+    "played": 16,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 8,
+    "played": 16,
+    "won": 7,
+    "total_points": 30
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 9,
+    "played": 16,
+    "won": 7,
+    "total_points": 30
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 10,
+    "played": 16,
+    "won": 5,
+    "total_points": 26
+  },
+  {
+    "team": "Ampthill",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 11,
+    "played": 16,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Richmond",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 12,
+    "played": 16,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "London Scottish",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 13,
+    "played": 16,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Cambridge",
+    "season": "2025-2026",
+    "competition": "championship",
+    "position": 14,
+    "played": 16,
+    "won": 0,
+    "total_points": 2
+  },
+  {
+    "team": "South Africa",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 1,
+    "played": 5,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 2,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "New Zealand",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 3,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 4,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 5,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Argentina",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 6,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Georgia",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 7,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Portugal",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 8,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 9,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Uruguay",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 10,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Italy",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 11,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Australia",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 12,
+    "played": 5,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Fiji",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 13,
+    "played": 3,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Wales",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 14,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Romania",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 15,
+    "played": 3,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "United States",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 16,
+    "played": 3,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 17,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "JAP",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 18,
+    "played": 2,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Canada",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 19,
+    "played": 3,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Japan",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 20,
+    "played": 3,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Spain",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 21,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Chile",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 22,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 23,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Tonga",
+    "season": "2025-2026",
+    "competition": "end-of-year-internationals",
+    "position": 24,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 1,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 2,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 3,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 4,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 5,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 6,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 7,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Toulon",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 8,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 9,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 10,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 11,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Castres",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 12,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 13,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 14,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 15,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 16,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 17,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Pau",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 18,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 19,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 20,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 21,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 22,
+    "played": 4,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Bayonne",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 23,
+    "played": 4,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "competition": "euro-champions",
+    "position": 24,
+    "played": 4,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 1,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Montpellier",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 2,
+    "played": 4,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 3,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 4,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 5,
+    "played": 4,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 6,
+    "played": 4,
+    "won": 2,
+    "total_points": 10
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 7,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 8,
+    "played": 3,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 9,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 10,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 11,
+    "played": 4,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Perpignan",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 12,
+    "played": 4,
+    "won": 1,
+    "total_points": 6
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 13,
+    "played": 4,
+    "won": 1,
+    "total_points": 6
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 14,
+    "played": 4,
+    "won": 1,
+    "total_points": 6
+  },
+  {
+    "team": "Black Lion",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 15,
+    "played": 4,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Lyon",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 16,
+    "played": 4,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Montauban",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 17,
+    "played": 4,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Toyota Cheetahs",
+    "season": "2025-2026",
+    "competition": "euro-challenge",
+    "position": 18,
+    "played": 3,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "France",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 1,
+    "played": 5,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Ireland",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 2,
+    "played": 5,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Scotland",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 3,
+    "played": 5,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Italy",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 4,
+    "played": 5,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "England",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 5,
+    "played": 5,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Wales",
+    "season": "2026-2027",
+    "competition": "six-nations",
+    "position": 6,
+    "played": 5,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Dax",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 1,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Grenoble",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 2,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Provence",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 3,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Soyaux Angouleme",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 4,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Biarritz",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 5,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 6,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Brive",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 7,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Aurillac",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 8,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Colomiers",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 9,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Beziers",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 10,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Valence-Romans",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 11,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Narbonne",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 12,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Agen",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 13,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Nissa Rugby",
+    "season": "2026-2027",
+    "competition": "pro-d2",
+    "position": 14,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "",
+    "season": "2020-2021",
+    "competition": "six-nations",
+    "position": 1,
+    "played": 15,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "(1 BP)",
+    "season": "2020-2021",
+    "competition": "six-nations",
+    "position": 2,
+    "played": 12,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 1,
+    "played": 24,
+    "won": 17,
+    "total_points": 68
+  },
+  {
+    "team": "Wasps",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 2,
+    "played": 24,
+    "won": 15,
+    "total_points": 60
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 3,
+    "played": 23,
+    "won": 14,
+    "total_points": 58
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 4,
+    "played": 23,
+    "won": 14,
+    "total_points": 58
+  },
+  {
+    "team": "Saracens",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 5,
+    "played": 22,
+    "won": 13,
+    "total_points": 54
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 6,
+    "played": 21,
+    "won": 13,
+    "total_points": 52
+  },
+  {
+    "team": "Harlequins",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 7,
+    "played": 22,
+    "won": 10,
+    "total_points": 42
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 8,
+    "played": 21,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 9,
+    "played": 21,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 10,
+    "played": 21,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "London Irish",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 11,
+    "played": 22,
+    "won": 6,
+    "total_points": 26
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2020-2021",
+    "competition": "premiership",
+    "position": 12,
+    "played": 22,
+    "won": 6,
+    "total_points": 26
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 1,
+    "played": 28,
+    "won": 27,
+    "total_points": 108
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 2,
+    "played": 27,
+    "won": 19,
+    "total_points": 76
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 3,
+    "played": 27,
+    "won": 19,
+    "total_points": 76
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 4,
+    "played": 26,
+    "won": 15,
+    "total_points": 60
+  },
+  {
+    "team": "Scarlets",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 5,
+    "played": 27,
+    "won": 15,
+    "total_points": 60
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 6,
+    "played": 25,
+    "won": 13,
+    "total_points": 52
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 7,
+    "played": 27,
+    "won": 13,
+    "total_points": 52
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 8,
+    "played": 25,
+    "won": 11,
+    "total_points": 44
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 9,
+    "played": 24,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Ospreys",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 10,
+    "played": 25,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 11,
+    "played": 24,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 12,
+    "played": 25,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 13,
+    "played": 13,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Kings",
+    "season": "2020-2021",
+    "competition": "celtic",
+    "position": 14,
+    "played": 13,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 1,
+    "played": 9,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Toulon",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 2,
+    "played": 9,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 3,
+    "played": 9,
+    "won": 7,
+    "total_points": 28
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 4,
+    "played": 8,
+    "won": 6,
+    "total_points": 26
+  },
+  {
+    "team": "Pau",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 5,
+    "played": 8,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Castres",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 6,
+    "played": 8,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 7,
+    "played": 7,
+    "won": 4,
+    "total_points": 18
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 8,
+    "played": 7,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 9,
+    "played": 7,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Scarlets",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 10,
+    "played": 7,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 11,
+    "played": 8,
+    "won": 3,
+    "total_points": 16
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 12,
+    "played": 8,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "London Irish",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 13,
+    "played": 8,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Brive",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 14,
+    "played": 8,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Wasps",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 15,
+    "played": 6,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Ospreys",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 16,
+    "played": 2,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Bayonne",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 17,
+    "played": 8,
+    "won": 1,
+    "total_points": 6
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 18,
+    "played": 7,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 19,
+    "played": 2,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 20,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Enisei-STM",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 21,
+    "played": 6,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Calvisano",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 22,
+    "played": 6,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Agen",
+    "season": "2020-2021",
+    "competition": "euro-challenge",
+    "position": 23,
+    "played": 7,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 1,
+    "played": 10,
+    "won": 9,
+    "total_points": 38
+  },
+  {
+    "team": "Racing 92",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 2,
+    "played": 11,
+    "won": 8,
+    "total_points": 34
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 3,
+    "played": 9,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Toulouse",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 4,
+    "played": 9,
+    "won": 8,
+    "total_points": 32
+  },
+  {
+    "team": "Clermont",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 5,
+    "played": 9,
+    "won": 6,
+    "total_points": 24
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 6,
+    "played": 8,
+    "won": 5,
+    "total_points": 22
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 7,
+    "played": 9,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Saracens",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 8,
+    "played": 8,
+    "won": 5,
+    "total_points": 20
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 9,
+    "played": 9,
+    "won": 4,
+    "total_points": 16
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 10,
+    "played": 7,
+    "won": 3,
+    "total_points": 14
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 11,
+    "played": 8,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 12,
+    "played": 7,
+    "won": 3,
+    "total_points": 12
+  },
+  {
+    "team": "Lyon",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 13,
+    "played": 7,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 14,
+    "played": 8,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Montpellier",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 15,
+    "played": 8,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Harlequins",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 16,
+    "played": 8,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 17,
+    "played": 2,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Wasps",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 18,
+    "played": 2,
+    "won": 2,
+    "total_points": 8
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 19,
+    "played": 8,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 20,
+    "played": 6,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 21,
+    "played": 2,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Toulon",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 22,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 23,
+    "played": 2,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Scarlets",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 24,
+    "played": 1,
+    "won": 1,
+    "total_points": 4
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 25,
+    "played": 7,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Ospreys",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 26,
+    "played": 6,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2020-2021",
+    "competition": "euro-champions",
+    "position": 27,
+    "played": 2,
+    "won": 0,
+    "total_points": 0
+  },
+  {
+    "team": "",
+    "season": "2020-2021",
+    "competition": "end-of-year-internationals",
+    "position": 1,
+    "played": 9,
+    "won": 7,
+    "total_points": 30
+  },
+  {
+    "team": "Moana Pasifika",
+    "season": "2020-2021",
+    "competition": "end-of-year-internationals",
+    "position": 2,
+    "played": 1,
+    "won": 0,
+    "total_points": 0
+  }
+]
