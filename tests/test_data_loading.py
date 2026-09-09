@@ -132,6 +132,116 @@ class TestMatchDataset:
         assert pd.api.types.is_numeric_dtype(df['tries'])
 
 
+class TestUnparseableDateFallback:
+    """A handful of real source files contain the literal string "NaT"
+    (a leaked pandas not-a-time repr) instead of a real date for isolated
+    matches. Falling back to datetime.now() for those silently makes an
+    old match look like it just happened, which corrupts every
+    "most recent season" calculation downstream (e.g. export_dashboard_data's
+    training-data slice). The fallback must use another date from the same
+    file instead, never "now".
+    """
+
+    def _minimal_match(self, home_score=20, away_score=15):
+        return {
+            "home": {"team": "Leinster", "score": home_score, "lineup": {}, "scores": []},
+            "away": {"team": "Munster", "score": away_score, "lineup": {}, "scores": []},
+        }
+
+    def test_list_format_bad_date_uses_median_not_now(self):
+        from datetime import datetime, timezone
+
+        earliest = datetime(2020, 10, 1, 15, 0, 0, tzinfo=timezone.utc)
+        latest = datetime(2020, 12, 1, 15, 0, 0, tzinfo=timezone.utc)
+        list_data = [
+            {**self._minimal_match(), "date": earliest.isoformat().replace("+00:00", ".000Z")},
+            {**self._minimal_match(), "date": "NaT"},
+            {**self._minimal_match(), "date": latest.isoformat().replace("+00:00", ".000Z")},
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "premiership-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(list_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = sorted(m.date for m in dataset.matches)
+            assert dates == [earliest, latest, latest]
+            # The fallback (median of the two valid dates) must land within
+            # the file's real date range, not at "now" (years after 2020).
+            for d in dates:
+                assert earliest <= d <= latest
+
+    def test_dict_format_bad_date_uses_median_not_now(self):
+        from datetime import datetime, timezone
+
+        earliest = datetime(2020, 10, 1, 15, 0, 0, tzinfo=timezone.utc)
+        latest = datetime(2020, 12, 1, 15, 0, 0, tzinfo=timezone.utc)
+        dict_data = {
+            "home": {"0": self._minimal_match()["home"], "1": self._minimal_match()["home"], "2": self._minimal_match()["home"]},
+            "away": {"0": self._minimal_match()["away"], "1": self._minimal_match()["away"], "2": self._minimal_match()["away"]},
+            "date": {
+                "0": earliest.isoformat().replace("+00:00", ".000Z"),
+                "1": "NaT",
+                "2": latest.isoformat().replace("+00:00", ".000Z"),
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "celtic-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(dict_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = sorted(m.date for m in dataset.matches)
+            assert dates == [earliest, latest, latest]
+            for d in dates:
+                assert earliest <= d <= latest
+
+    def test_list_format_all_dates_bad_uses_season_not_now(self):
+        """When a whole file has no parseable dates, fall back to a
+        season-derived date, never datetime.now() -- reproduces the
+        Copilot-flagged gap where the median-fallback path itself had no
+        valid dates to fall back on."""
+        from datetime import datetime, timezone
+
+        list_data = [
+            {**self._minimal_match(), "date": "NaT"},
+            {**self._minimal_match(), "date": ""},
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "premiership-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(list_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = {m.date for m in dataset.matches}
+            assert dates == {datetime(2020, 9, 1, tzinfo=timezone.utc)}
+
+    def test_dict_format_all_dates_bad_uses_season_not_now(self):
+        from datetime import datetime, timezone
+
+        dict_data = {
+            "home": {"0": self._minimal_match()["home"], "1": self._minimal_match()["home"]},
+            "away": {"0": self._minimal_match()["away"], "1": self._minimal_match()["away"]},
+            "date": {"0": "NaT", "1": ""},
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "celtic-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(dict_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = {m.date for m in dataset.matches}
+            assert dates == {datetime(2020, 9, 1, tzinfo=timezone.utc)}
+
+
 class TestDatasetFiltering:
     """Test dataset filtering and processing."""
 
