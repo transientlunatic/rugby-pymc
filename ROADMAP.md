@@ -96,18 +96,23 @@ place but had never been run against real data and recorded before this.
   finding above; likely affects all four score types to some degree, not
   just penalties
 - Stratify calibration by competition/team/season to identify systematic biases
-- ~~Build the Elo/simple-baseline comparison~~ — **Done, 2026-08-24.** See
-  `rugby_ranking/model/elo.py` and the updated results table in
-  `MODEL_EXPLAINED.md`. Result: **Elo beats the Bayesian model on win
-  accuracy, Brier score, and RMSE**, on this one holdout split. That's a
-  real, uncomfortable finding, not a formality to check off — it needs
-  replication on other splits (see below) before deciding what to do about
-  it, but as measured it means the model's added complexity is not
-  currently earning its keep on match-outcome/score prediction. What it
-  still owns uniquely is per-player rates and lineup-conditional
-  predictions, which Elo cannot produce at all.
-- Replicate the Elo-vs-model comparison on other holdout splits (rolling or
-  different date ranges) — right now it's one split, one data point
+- ~~Build the Elo/simple-baseline comparison~~ / ~~Replicate on other
+  splits~~ — **Done, 2026-08-24.** See `rugby_ranking/model/elo.py` and the
+  "Replication across three holdout splits" section in
+  `MODEL_EXPLAINED.md`. The initial single-split result ("Elo beats the
+  model on every metric") **did not replicate** across two more holdout
+  windows (Jan-May 2025, Feb-May 2024): win accuracy is a wash (mean 71.3%
+  model vs 71.8% Elo, direction flips between splits), RMSE is a wash
+  overall (Elo's edge was concentrated in the first split; model is
+  marginally ahead in the other two), and only Brier score shows a
+  consistent, repeatable Elo advantage across all three splits. Revised
+  conclusion: model and Elo are roughly comparable on match
+  outcome/scoreline prediction; Elo calibrates win probabilities a bit
+  better. Still an uncomfortable result for the added complexity given
+  Elo's near-zero cost vs. ~5 min of VI per fit — but a materially
+  different, better-supported claim than the original one-split finding.
+  What the model still owns uniquely is per-player rates and
+  lineup-conditional predictions, which Elo cannot produce at all.
 - The automated run only checks the `include_defense=True,
   separate_kicking_effect=True` production config via VI — it fits its own
   model independently of the dashboard's own checkpoint, so it's a second
@@ -117,8 +122,9 @@ place but had never been run against real data and recorded before this.
 **Why first**: Identifies where complexity is actually needed vs. where the
 current model is already good enough. This should inform all structural
 changes — and the results so far (model ≈ trivial baseline on score RMSE;
-Elo beats the model outright on every match-level metric) are exactly the
-kind of signal this was supposed to surface.
+model ≈ Elo on outcome/score prediction across three replicated splits,
+with Elo modestly better calibrated) are exactly the kind of signal this
+was supposed to surface.
 
 ---
 
@@ -154,6 +160,41 @@ The Six Nations just ended. This is the best window to validate whether the path
 - How well-calibrated were the tournament finish probabilities?
 
 **Effort**: Small (run PathsAnalyzer on historical Six Nations data, compare to outcomes)
+
+---
+
+### 5. Try-scoring attribution: is per-scorer credit fair?
+
+**Investigated and largely settled, 2026-08-26.** A try is substantially a
+team output (build-up, phases won, a break made by someone else) with one
+player finishing it — unlike a kick, which is a clean individual act.
+Tested whether crediting presence on the pitch, rather than personal
+scoring, would capture real signal the current per-scorer model misses.
+See `MODEL_EXPLAINED.md`'s "Is per-scorer try credit fair?" section for
+full numbers.
+
+**Result: no.** Two independent methods (binary on/off with team-season
+demeaning, n=7,869; continuous minutes regression with fixed effects,
+n=308,121 panel rows) agree: a player's presence doesn't move their
+teammates' try output, once personal scoring is excluded from the
+comparison. Position-stratified, the effect tracks who actually scores
+tries personally (backs, plus hooker/flanker/no.8), not general
+contribution — **props specifically show a tight null** (p=0.45–0.67,
+effect bounded to roughly ±0.03-0.06 tries/match), the cleanest possible
+test case since they're a pure enabling role that almost never scores.
+What does show up for high personal scorers is a redistribution effect
+(their presence takes tries away from teammates roughly in proportion to
+what they add themselves) — not a pie-growing team effect.
+
+**What this means**: no evidence supports moving try attribution from
+per-scorer credit toward a team/lineup-presence model. Doesn't mean props
+(or other enablers) don't matter to tries in reality — only that whatever
+they contribute isn't recoverable from box-score presence data (this
+dataset has no scrum-penalty, metres-carried, or tackle-broken fields that
+might actually capture it). Not pursuing a team-attribution rebuild of the
+try-scoring likelihood based on this evidence.
+
+**Effort spent**: Small (data analysis only, no model changes)
 
 ---
 

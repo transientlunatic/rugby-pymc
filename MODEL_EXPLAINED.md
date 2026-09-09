@@ -556,9 +556,13 @@ Before a tournament, analyze each team's:
 >
 > **Update (2026-08-24):** Added a real Elo rating baseline (see
 > `rugby_ranking/model/elo.py`) — the trivial baseline above is the floor,
-> not a fair fight for a ranking system. **Elo beats the Bayesian model on
-> every metric measured.** This is not a flattering result and it is
-> reported as measured, not softened.
+> not a fair fight for a ranking system. On the single split available at
+> the time, Elo beat the Bayesian model on every metric measured.
+>
+> **Update (2026-08-24, later): replicated on two more holdout splits, and
+> it doesn't hold up as a clean win.** See "Replication across three
+> holdout splits" below — Elo's edge was specific to that one split, not a
+> general result.
 
 ### Methodology
 
@@ -597,25 +601,56 @@ Before a tournament, analyze each team's:
 | Score RMSE | 13.04 | **12.29** | 12.92 |
 | Score MAE | 10.59 | — | — |
 
-**Honest read:** Elo — two calibrated parameters and one number per team —
-beats the full Bayesian hierarchical model on every metric measured: win
-accuracy (+2.6 points), Brier score, and score RMSE. It also beats the
-trivial baseline on RMSE, which the Bayesian model does not. With n=228 the
-standard error on a ~70% accuracy is roughly ±3 points, so none of these
-gaps are individually large relative to sampling noise on this one holdout
-split — but the *direction* is consistent across all three metrics, which a
-single-split fluke would not reliably produce.
+**Honest read (superseded — see replication below):** on this one split,
+Elo beat the full Bayesian hierarchical model on every metric measured.
+That looked like a consistent, single-direction result. It wasn't — see
+below.
 
-This is the least flattering, most important result in this document: the
-added machinery (player/team random effects, defense terms, kicking split,
-joint likelihood across four score types) is not currently earning its
-complexity or its runtime cost over a same-day-to-calibrate Elo system, on
-match outcome or scoreline accuracy. Where the Bayesian model has a real
-edge Elo cannot touch at all is *what it predicts* — per-player scoring
-rates, lineup-conditional predictions, uncertainty intervals — not *how
-well it predicts match winners and scores*. Whether that extra output is
-worth the complexity for this project's actual use case is a real, open
-question, not one this validation answers by itself.
+### Replication across three holdout splits
+
+The single-split result above was flagged in this document itself as
+needing replication before treating "Elo wins" as settled. Re-ran the same
+methodology (production model config, VI/20000 iterations, Elo calibrated
+fresh on each split's training data) at three different `--as-of` cutoffs,
+giving three non-overlapping test windows:
+
+| Test window (n matches) | Model win acc | Elo win acc | Model Brier | Elo Brier | Model RMSE | Elo RMSE |
+|---|---|---|---|---|---|---|
+| Dec 2025 – Mar 2026 (228) | 70.6% | **73.2%** | 0.4215 | **0.4174** | 13.04 | **12.29** |
+| Jan – May 2025 (244) | 69.7% | 69.7% | 0.4338 | **0.4233** | **12.20** | 12.24 |
+| Feb – May 2024 (246) | **73.6%** | 72.4% | 0.4058 | **0.4045** | **11.62** | 11.67 |
+| **Mean across splits** | 71.3% | 71.8% | 0.4204 | 0.4151 | 12.29 | 12.07 |
+
+**Honest read:** the original "Elo wins everything" result does not
+replicate. It was specific to the one split first tested (which also has
+the largest test set and the most recent data). Across all three splits:
+
+- **Win accuracy**: a wash. Elo wins split 1, ties split 2, loses split 3.
+  Mean difference (+0.5 points to Elo) is well inside noise at n≈240 per
+  split.
+- **Brier score**: Elo wins all three splits, consistently, though narrowly
+  in two of them. This is the one place a real, repeatable Elo edge shows
+  up — its win-probability calibration is a bit better than the Bayesian
+  model's across different time periods.
+- **Score RMSE**: a wash overall. Elo's big win-margin-averaged headline
+  number was carried almost entirely by split 1; in the other two splits
+  the model is marginally *better* on RMSE, by less than the difference
+  between two coin flips.
+
+**Revised conclusion**: the Bayesian model and Elo are roughly comparable
+on match outcome and score prediction — neither clearly beats the other
+once you look past a single split. Elo does appear to have a small, real
+edge in probability calibration (Brier). Given that Elo is a two-parameter
+system that fits in milliseconds and the Bayesian model takes ~5 minutes of
+VI per fit, "roughly comparable, Elo calibrates its win probabilities a bit
+better" is still not a flattering result for the added complexity — but
+it's a materially different, more measured claim than "Elo wins
+everything," and it's the one actually supported by three splits rather
+than one. What the Bayesian model has that Elo fundamentally cannot
+produce — per-player scoring rates, lineup-conditional predictions,
+uncertainty intervals — is unaffected by any of this; whether that extra
+output justifies the complexity for this project's actual use case remains
+a real, open question this validation doesn't answer by itself.
 
 ### Per-player scoring-rate calibration (out-of-sample PIT)
 
@@ -679,14 +714,87 @@ intercept, not a one-line fix, and deserves its own validation pass
 rather than being rushed alongside this investigation. Tracked in
 ROADMAP.md.
 
+### Is per-scorer try credit fair? Testing the team-attribution hypothesis
+
+The model credits tries to whoever's name is against the score in the data
+— the same treatment as conversions and penalties. But a try is
+substantially a team output (phases won, go-forward ball, a break made by
+someone else) with one player finishing it, unlike a kick, which is a
+clean individual act independent of teammates. That raises a real
+question: is crediting only the scorer the wrong unit of attribution, and
+would crediting presence on the pitch (or lineup contribution more
+broadly) capture more signal?
+
+Tested directly (2026-08-26) with two methods on the 2023+ seasons slice,
+both using **teammates' tries only** (the player's own tries excluded, so
+personal scoring isn't mistaken for a broader team effect) and both
+demeaning by team-season (or using a within-player fixed-effects
+regression) to remove team-quality confounds — comparing matches where a
+player was in the lineup against matches their team played without them:
+
+1. **Binary on/off** (7,869 player-team-season comparisons, ≥3 matches
+   each side): teammates score **0.090 fewer tries/match** when the player
+   is present than when absent (p<0.0001, 95% CI [−0.112, −0.068]).
+2. **Continuous minutes regression** (308,121 player-match panel rows, far
+   more statistical power): confirms the same direction with much tighter
+   estimates.
+
+**Position-stratified, this splits cleanly by who actually scores, not by
+forward/back:**
+
+| Position group | n (panel rows) | Effect of 80 vs 0 min | p-value |
+|---|---|---|---|
+| **Props (1, 3)** | 51,419 | **−0.027 tries/match** | **0.45 (null)** |
+| Front row (1,2,3) | 76,287 | −0.086 | 0.003 |
+| All forwards (1-8) | 174,540 | −0.078 | <0.0001 |
+| All backs (9-15) | 133,581 | −0.144 | <0.0001 |
+| Back three + centres | 89,728 | −0.166 | <0.0001 |
+
+Every individual back position is significant and negative except
+fly-half (p=0.35 — a distributor/kicker, not primarily a finisher). Among
+forwards, locks and props show nothing (p=0.21–0.67), but hooker
+(p<0.0001), openside flanker (p=0.008), and number eight (p=0.03) do —
+and those three, plus the significant backs, are exactly `positions.py`'s
+own `HIGH_TRY_SCORERS` list (wings, fullback, flankers, number eight) plus
+hooker (a real occasional try-scorer via driving mauls, just not on that
+list). The effect tracks **personal scoring involvement**, not general
+team contribution.
+
+**Conclusion: this doesn't support reframing try credit toward team
+presence, and props are the cleanest possible negative case.** A prop is
+about as pure an "enabling, rarely-scoring" role as exists in rugby — if
+box-score presence were going to reveal a broad team-attribution signal
+anywhere, it should be there. It doesn't: the effect is a tight null
+(±0.03–0.06 tries/match) at both binary and continuous resolution. What
+*does* show up is a redistribution pattern among players who personally
+score — a strong finisher's presence takes tries away from teammates
+roughly in proportion to what he adds himself, netting out close to the
+model's existing small positive total-team-tries effect from an earlier,
+less careful cut of this same test (+0.042 tries/match, before excluding
+personal scoring) — not evidence of the team scoring more overall.
+
+Honest limitation: this measures *presence*, not contribution quality or
+role (a struggling prop counts the same as a dominant one), and it
+compares "this specific player" against "whoever replaced him," not
+"a player at this position" against "nobody" — for a specialist position
+like prop, clubs generally carry adequate like-for-like depth, which is a
+plausible reason a real per-match contribution could exist without
+showing up in aggregate replacement comparisons. So this rules out
+*recovering* a team-attribution signal from match-level try counts via
+presence — it doesn't rule out that props matter to tries in ways this
+dataset can't see (scrum penalties won, metres in the tackle, none of
+which are recorded here).
+
 ### What this doesn't cover yet
 
 - No MCMC comparison run on this same split (would show whether VI's known
   miscalibration on `alpha_tries`/`sigma_player_kick` — see the SBC tests —
   actually moves these numbers).
-- Single 228-match holdout, not a rolling/multi-season backtest — the Elo
-  result above needs replication on other splits before treating "Elo wins"
-  as settled rather than "Elo wins on this split."
+- Three fixed holdout splits (see replication above), not a true rolling
+  backtest with many overlapping windows — the direction (Elo/model roughly
+  comparable, Elo a bit better calibrated) is more trustworthy now than the
+  single-split result was, but three points is still a small sample of
+  possible splits.
 - Teams-only predictions only; full-lineup mode not evaluated here.
 
 ---
