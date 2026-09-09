@@ -217,8 +217,17 @@ class MatchPredictor:
         else:
             self._eta_flat = eta_vals.flatten()
 
-        # Sigma player - handle time-varying, separate, joint models
-        if "sigma_player_try_base" in posterior:
+        # Sigma player - handle time-varying, separate, joint, and
+        # no-player-effect (ModelConfig.include_player_effect=False,
+        # ablation only) models
+        self._has_player_effect = not (
+            "sigma_player_try_base" not in posterior
+            and "sigma_player_try" not in posterior
+            and "sigma_player" not in posterior
+        )
+        if not self._has_player_effect:
+            self._sigma_player_flat = np.zeros(self._alpha_flat.shape)
+        elif "sigma_player_try_base" in posterior:
             # Time-varying model - use base effect
             sigma_base = posterior["sigma_player_try_base"].values
             self._sigma_player_flat = sigma_base.flatten()
@@ -235,7 +244,10 @@ class MatchPredictor:
             self._sigma_player_flat = posterior["sigma_player"].values.flatten()
 
         # Beta (player effects) - needed for full lineup predictions
-        if "beta_player_try_base_raw" in posterior:
+        if not self._has_player_effect:
+            n_players = len(self.model._player_ids)
+            self._beta_flat = np.zeros((self._alpha_flat.shape[0], n_players))
+        elif "beta_player_try_base_raw" in posterior:
             # Time-varying model with separate effects
             beta_base_raw = posterior["beta_player_try_base_raw"].values
             beta_trend_raw = posterior["beta_player_try_trend_raw"].values
@@ -268,6 +280,21 @@ class MatchPredictor:
         else:
             # Single score type model
             self._beta_flat = posterior["beta_player"].values.reshape(-1, posterior["beta_player"].shape[-1])
+
+        # Delta defense (opponent's defense suppresses their tries) -- only
+        # exists when ModelConfig.include_defense=True. Applies to tries
+        # only (ModelConfig.defense_score_types), which is all predict_*
+        # uses this for since tries are the only score type predicted from
+        # team/player identity here.
+        if "delta_defense_raw" in posterior:
+            delta_raw = posterior["delta_defense_raw"].values
+            sigma_defense = posterior["sigma_defense"].values
+            lambda_defense = posterior["lambda_defense"].values
+            delta_defense_eff = (sigma_defense * lambda_defense)[:, :, None] * delta_raw
+            self._delta_defense_flat = delta_defense_eff.reshape(-1, delta_raw.shape[-1])
+            self._has_defense_effect = True
+        else:
+            self._has_defense_effect = False
 
         # Store total sample count for indexing
         self._n_total = len(self._alpha_flat)
@@ -327,6 +354,17 @@ class MatchPredictor:
         home_team_effect = gamma[:, home_idx]
         away_team_effect = gamma[:, away_idx]
 
+        # Opponent defense suppresses a team's own try-scoring rate (see
+        # ModelConfig.include_defense / core.py's delta_defense) -- e.g. the
+        # away team's defense reduces the *home* team's expected tries.
+        if self._has_defense_effect:
+            delta_defense = self._delta_defense_flat[sample_idx]
+            home_opponent_defense = delta_defense[:, away_idx]
+            away_opponent_defense = delta_defense[:, home_idx]
+        else:
+            home_opponent_defense = np.zeros(n_samples)
+            away_opponent_defense = np.zeros(n_samples)
+
         # Compute expected tries for each team by summing across all 15 positions
         # For each position, expected tries = exp(alpha + gamma_team + theta_position + eta_home + player_uncertainty)
         # Since we don't know specific players, we marginalize over average player (beta ~ N(0, sigma_player))
@@ -341,8 +379,14 @@ class MatchPredictor:
         for pos in range(STARTERS):
             # Log-rate for this position
             # Note: theta[:, pos] gives position effect for position pos+1 (0-indexed)
-            home_log_rate = alpha + home_team_effect + theta[:, pos] + eta_home + player_noise_home_all[:, pos]
-            away_log_rate = alpha + away_team_effect + theta[:, pos] + player_noise_away_all[:, pos]
+            home_log_rate = (
+                alpha + home_team_effect + theta[:, pos] + eta_home
+                + player_noise_home_all[:, pos] - home_opponent_defense
+            )
+            away_log_rate = (
+                alpha + away_team_effect + theta[:, pos]
+                + player_noise_away_all[:, pos] - away_opponent_defense
+            )
 
             # Expected tries for this position (rate, not count)
             home_tries_expected += np.exp(home_log_rate)
@@ -424,6 +468,16 @@ class MatchPredictor:
         home_team_effect = gamma[:, home_ts_idx]
         away_team_effect = gamma[:, away_ts_idx]
 
+        # Opponent defense suppresses a team's own try-scoring rate (see
+        # ModelConfig.include_defense / core.py's delta_defense).
+        if self._has_defense_effect:
+            delta_defense = self._delta_defense_flat[sample_idx]
+            home_opponent_defense = delta_defense[:, away_ts_idx]
+            away_opponent_defense = delta_defense[:, home_ts_idx]
+        else:
+            home_opponent_defense = np.zeros(n_samples)
+            away_opponent_defense = np.zeros(n_samples)
+
         # Compute expected tries by summing across lineup
         home_tries_expected = np.zeros(n_samples)
         away_tries_expected = np.zeros(n_samples)
@@ -447,8 +501,14 @@ class MatchPredictor:
             pos_effect = theta[:, pos - 1]
 
             # Log-rate for this position
-            home_log_rate = alpha + home_team_effect + home_player_effect + pos_effect + eta_home
-            away_log_rate = alpha + away_team_effect + away_player_effect + pos_effect
+            home_log_rate = (
+                alpha + home_team_effect + home_player_effect + pos_effect
+                + eta_home - home_opponent_defense
+            )
+            away_log_rate = (
+                alpha + away_team_effect + away_player_effect + pos_effect
+                - away_opponent_defense
+            )
 
             # Expected tries for this position
             home_tries_expected += np.exp(home_log_rate)
