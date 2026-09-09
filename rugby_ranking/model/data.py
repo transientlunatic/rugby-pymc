@@ -49,6 +49,20 @@ def _median_datetime(dates: list[datetime]) -> datetime:
     return ordered[len(ordered) // 2]
 
 
+def _season_fallback_date(season: str) -> datetime:
+    """Deterministic last-resort date for a file with zero parseable dates.
+
+    Never "now" -- that would reintroduce the exact recency corruption this
+    fallback chain exists to avoid. Uses the season label's own start year
+    (e.g. "2020-2021" -> 2020) and a nominal September 1st season-start
+    date, so a badly-dated match still sorts into its own season rather
+    than looking like it just happened.
+    """
+    match = re.search(r"(\d{4})", season)
+    year = int(match.group(1)) if match else 2000
+    return datetime(year, 9, 1, tzinfo=timezone.utc)
+
+
 # Team name normalization mapping
 # Maps variant names to canonical names
 TEAM_NAME_ALIASES = {
@@ -544,7 +558,13 @@ class MatchDataset:
                         )
                         date = fallback_date
                     else:
-                        date = datetime.now(timezone.utc)
+                        date = _season_fallback_date(season)
+                        print(
+                            f"    [WARNING] No parseable dates anywhere in "
+                            f"{competition} {season}; match {i} falls back "
+                            f"to a nominal season-start date "
+                            f"({date.date()}) instead of 'now'"
+                        )
 
                 # Handle team as dict or string, then normalize
                 home_team = home.get("team", "Unknown") if isinstance(home, dict) else "Unknown"
@@ -637,7 +657,13 @@ class MatchDataset:
                         )
                         date = fallback_date
                     else:
-                        date = datetime.now(timezone.utc)
+                        date = _season_fallback_date(season)
+                        print(
+                            f"    [WARNING] No parseable dates anywhere in "
+                            f"{competition} {season}; match {match_idx} falls "
+                            f"back to a nominal season-start date "
+                            f"({date.date()}) instead of 'now'"
+                        )
 
                 match_id = f"{competition}_{season}_{match_idx}"
 
