@@ -785,6 +785,85 @@ presence — it doesn't rule out that props matter to tries in ways this
 dataset can't see (scrum penalties won, metres in the tackle, none of
 which are recorded here).
 
+### Bug found: predictions silently ignored the model's own defense estimates
+
+A user report that the live dashboard's match predictions "always predict
+a home win" turned into a real, fixable bug — but not the one it looked
+like at first.
+
+**Symptom, confirmed with a genuine out-of-sample holdout** (production
+config, 228 test matches, same methodology as the validation run above):
+the model predicted the home team as favorite in **95.2%** of matches,
+even though the true home-win rate in that test set was only **68.0%**
+(and away teams won 29.4% of the time). Win accuracy (70.2%) barely beat
+the trivial "always predict home" baseline (68.0%) — the model was
+adding almost nothing beyond "home team wins," despite genuinely
+differentiating team quality during training.
+
+Two hypotheses tested and ruled out before finding the real cause:
+
+1. **"The player-strength term is stealing signal from team strength."**
+   Added a `ModelConfig.include_player_effect` flag (research/ablation
+   only, defaults to `True` — no change to any shipped config) and refit
+   with player effects removed entirely, forcing all of a team's
+   scoring variation into `gamma_team_season`. Barely moved anything:
+   `gamma_team_season` spread went from std=0.159 to std=0.173 (+9%),
+   `eta_home` was unchanged (0.347→0.350), and the home-predicted rate
+   barely moved (95.2%→94.7%). Ruled out.
+2. **"VI's mean-field approximation is under-estimating team-effect
+   variance (a known ADVI failure mode)."** Fit the *same* stripped-down
+   model (no player effect, tries only, for tractable MCMC) with both VI
+   and NUTS on identical training data. MCMC's `sigma_team` posterior
+   mean (0.378) was only 1.22× VI's (0.310), and per-team `gamma`
+   estimates from the two methods correlated at 0.995 — VI is shrinking
+   team effects somewhat, a real and expected VI limitation, but nowhere
+   near enough to explain a 95%-vs-68% gap. Real, but a minor
+   contributor, not the main story.
+
+**Root cause**: `core.py`'s `build_joint()` fits a genuine opponent-defense
+suppression term for tries (`delta_defense`, with its own `sigma_defense`
+hyperparameter, learned from data at a magnitude comparable to
+`sigma_team` itself) — but `predictions.py`'s `predict_teams_only()` and
+`predict_full_lineup()` never referenced `delta_defense` anywhere. Every
+match prediction silently used only half of the team-quality information
+the model had actually learned: a team's attacking rate, but never its
+defensive record. `grep -rn "defense" rugby_ranking/model/predictions.py`
+returned nothing before this fix.
+
+**Fix**: both prediction methods now subtract the opponent's fitted
+defense effect from a team's expected try rate (matching exactly how
+`delta_defense` is applied during training — see `ModelConfig.include_defense`
+/ `defense_score_types`). Verified with a fast, deterministic unit test
+(`tests/test_predictions.py`) using a hand-crafted trace with defense as
+the only non-zero effect, confirming the direction and magnitude are
+correct, plus that `include_defense=False` models are unaffected.
+
+**Result, same out-of-sample holdout, same production config, defense
+fix applied**:
+
+| | Before fix | After fix | Actual |
+|---|---|---|---|
+| Home predicted | 95.2% | **87.7%** | 68.0% |
+| Away predicted | 4.8% | **12.3%** | 29.4% |
+| Win accuracy | 70.2% | **72.8%** | (baseline 68.0%) |
+
+A real, substantial improvement — away-favored predictions nearly
+tripled, and win accuracy now clearly clears the trivial baseline by
+4.8 points instead of barely tying it at 2.2. The defense term was the
+dominant missing signal.
+
+**Honest limitation**: the model still over-predicts home wins relative
+to reality (87.7% vs 68.0%) — some of this is the residual, real (if
+modest) VI shrinkage measured above, and some may be genuine: real
+match-to-match noise (injuries, weather, refereeing) limits how much
+team-quality signal is identifiable per team-season at all, and home
+advantage in this data is itself unusually strong (~30 vs ~22 average
+points across nearly every competition in the training window — see the
+try-attribution section above for the raw home/away scoring gap by
+competition). Not yet root-caused further; worth revisiting if a future
+change (fullrank ADVI, an MCMC-warm-started production fit, or more
+match-level covariates) meaningfully closes more of the gap.
+
 ### What this doesn't cover yet
 
 - No MCMC comparison run on this same split (would show whether VI's known

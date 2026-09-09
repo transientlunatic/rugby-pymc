@@ -39,6 +39,14 @@ class ModelConfig:
     player_kicking_effect_sd: float = 0.5
     player_try_effect_sd: float = 0.5
 
+    # Whether to model individual player ability at all (build_joint only).
+    # False collapses all of a team's per-match scoring variation into
+    # gamma_team_season instead of splitting it between player and team
+    # effects -- a diagnostic/ablation switch, not (yet) a validated
+    # production config. See MODEL_EXPLAINED.md's team-strength-shrinkage
+    # investigation.
+    include_player_effect: bool = True
+
     # Defensive effects
     include_defense: bool = True
     defense_effect_sd: float = 0.3
@@ -252,7 +260,14 @@ class RugbyModel:
                 )
 
             # === Shared Random Effects ===
-            if self.config.separate_kicking_effect:
+            if not self.config.include_player_effect:
+                # Ablation: no individual player ability at all -- every
+                # player-match observation's beta_player term is zero, so
+                # all team-level scoring variation must be explained by
+                # gamma_team_season (+ position/home/defense) instead of
+                # being split between team and player effects.
+                pass
+            elif self.config.separate_kicking_effect:
                 # Separate player effects for try-scoring vs kicking
                 sigma_player_try = pm.HalfNormal(
                     "sigma_player_try", sigma=self.config.player_try_effect_sd
@@ -338,7 +353,9 @@ class RugbyModel:
                 observed = pm.Data(f"observed_{score_type}", data["observed"])
 
                 # Compute player effects based on score type
-                if self.config.separate_kicking_effect:
+                if not self.config.include_player_effect:
+                    beta_player = None
+                elif self.config.separate_kicking_effect:
                     # Tries use try-scoring effect, kicks use kicking effect
                     if score_type == "tries":
                         beta_player = (
@@ -357,12 +374,13 @@ class RugbyModel:
 
                 log_lambda = (
                     alpha[s]
-                    + beta_player[player_idx]
                     + gamma_team_season[team_season_idx]
                     + theta_position[s, position_idx]  # Already 0-indexed
                     + eta_home[s] * is_home_data
                     + pt.log(exposure)
                 )
+                if beta_player is not None:
+                    log_lambda = log_lambda + beta_player[player_idx]
 
                 # Subtract opponent defensive effect for tries only.
                 # Conversions/penalties are unchallenged kicks; no meaningful defense term.

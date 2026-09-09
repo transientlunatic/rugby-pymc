@@ -198,6 +198,43 @@ try-scoring likelihood based on this evidence.
 
 ---
 
+### 6. Bug fix: predictions ignored the model's own defense estimates
+
+**Fixed, 2026-09-09.** A user reported the live dashboard's predictions
+"always predict a home win." Root-caused to a real bug, not the strong
+home advantage this dataset already documents (see item 5's home/away
+scoring gaps): `predictions.py`'s `predict_teams_only()` and
+`predict_full_lineup()` never applied the model's fitted opponent-defense
+term (`delta_defense`) at all — every prediction used only a team's
+attacking rate, silently discarding the defensive half of what the model
+had learned. Confirmed with a genuine out-of-sample holdout (production
+config, 228 test matches): before the fix, the model predicted home as
+favorite in 95.2% of matches vs a true 68.0% home rate; two other
+hypotheses (player-effect signal aliasing; VI under-estimating team-effect
+variance vs MCMC) were tested and ruled out as the primary cause first —
+see `MODEL_EXPLAINED.md`'s "Bug found: predictions silently ignored the
+model's own defense estimates" section for the full investigation.
+
+**After the fix**, same holdout: home-predicted dropped from 95.2% to
+87.7% (true rate 68.0%), away-predicted nearly tripled (4.8%→12.3%), and
+win accuracy improved from 70.2% to 72.8% (now clearing the trivial
+"always predict home" baseline of 68.0% by 4.8 points instead of barely
+tying it). A real, substantial, well-tested improvement, though the model
+still over-predicts home somewhat — see the write-up for the remaining
+gap and honest limitations.
+
+**Also added**: `ModelConfig.include_player_effect` (default `True`, no
+behavior change) — a research/ablation flag used to rule out the "player
+effects are stealing team-quality signal" hypothesis during this
+investigation. Not a validated production config; kept because it's a
+legitimate, low-risk knob consistent with the existing config-toggle
+pattern, and useful for any future ablation work.
+
+**Effort spent**: Medium (three hypotheses tested — one clean bug fix,
+two ruled out — plus a new deterministic regression test)
+
+---
+
 ## Deferred / Someday
 
 These are real ideas but should wait until the model quality work (items 3–4) is done:
