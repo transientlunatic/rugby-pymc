@@ -25,6 +25,30 @@ import numpy as np
 import pandas as pd
 
 
+def _try_parse_iso_date(date_str) -> datetime | None:
+    """Parse an ISO-ish date string, returning None if missing/malformed.
+
+    Source files sometimes contain the literal string "NaT" (a leaked
+    pandas not-a-time repr from an upstream export) instead of a real date
+    or an empty value.
+    """
+    if not isinstance(date_str, str) or not date_str or date_str == "NaT":
+        return None
+    try:
+        date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+    except (ValueError, AttributeError, TypeError):
+        return None
+    if date.tzinfo is None:
+        date = date.replace(tzinfo=timezone.utc)
+    return date
+
+
+def _median_datetime(dates: list[datetime]) -> datetime:
+    """Median of a non-empty list of datetimes (for filling in bad dates)."""
+    ordered = sorted(dates)
+    return ordered[len(ordered) // 2]
+
+
 # Team name normalization mapping
 # Maps variant names to canonical names
 TEAM_NAME_ALIASES = {
@@ -491,6 +515,17 @@ class MatchDataset:
             ...
         }
         """
+        # A handful of source files contain unparseable dates (e.g. a leaked
+        # "NaT" string) for individual matches. Falling back to
+        # datetime.now() for those would silently make an old match look
+        # like it just happened, corrupting every "most recent" calculation
+        # downstream. Fall back to the median date of the other matches in
+        # this same file instead.
+        parsed_dates = [
+            d for m in data if (d := _try_parse_iso_date(m.get("date", ""))) is not None
+        ]
+        fallback_date = _median_datetime(parsed_dates) if parsed_dates else None
+
         for i, match in enumerate(data):
             try:
                 home = match.get("home", {})
@@ -498,13 +533,18 @@ class MatchDataset:
 
                 # Parse date
                 date_str = match.get("date", "")
-                try:
-                    date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
-                    # Ensure timezone-aware (assume UTC if naive)
-                    if date.tzinfo is None:
-                        date = date.replace(tzinfo=timezone.utc)
-                except (ValueError, AttributeError, TypeError):
-                    date = datetime.now(timezone.utc)
+                date = _try_parse_iso_date(date_str)
+                if date is None:
+                    if fallback_date is not None:
+                        print(
+                            f"    [WARNING] Unparseable date {date_str!r} for "
+                            f"{competition} {season} match {i}; using "
+                            f"median date of other matches in this file "
+                            f"({fallback_date.date()}) instead of 'now'"
+                        )
+                        date = fallback_date
+                    else:
+                        date = datetime.now(timezone.utc)
 
                 # Handle team as dict or string, then normalize
                 home_team = home.get("team", "Unknown") if isinstance(home, dict) else "Unknown"
@@ -569,6 +609,15 @@ class MatchDataset:
         dates = data.get("date", {})
         stadiums = data.get("stadium", {})
 
+        # See _load_list_format for why we don't fall back to datetime.now()
+        # for unparseable dates (e.g. a leaked "NaT" string): it would
+        # silently make an old match look like it just happened, corrupting
+        # every "most recent" calculation downstream.
+        parsed_dates = [
+            d for v in dates.values() if (d := _try_parse_iso_date(v)) is not None
+        ] if isinstance(dates, dict) else []
+        fallback_date = _median_datetime(parsed_dates) if parsed_dates else None
+
         # Iterate over matches (keyed by index)
         for match_idx in home_data.keys():
             try:
@@ -577,13 +626,18 @@ class MatchDataset:
 
                 # Parse date
                 date_str = dates.get(match_idx, "") if isinstance(dates, dict) else ""
-                try:
-                    date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
-                    # Ensure timezone-aware (assume UTC if naive)
-                    if date.tzinfo is None:
-                        date = date.replace(tzinfo=timezone.utc)
-                except (ValueError, AttributeError, TypeError):
-                    date = datetime.now(timezone.utc)
+                date = _try_parse_iso_date(date_str)
+                if date is None:
+                    if fallback_date is not None:
+                        print(
+                            f"    [WARNING] Unparseable date {date_str!r} for "
+                            f"{competition} {season} match {match_idx}; using "
+                            f"median date of other matches in this file "
+                            f"({fallback_date.date()}) instead of 'now'"
+                        )
+                        date = fallback_date
+                    else:
+                        date = datetime.now(timezone.utc)
 
                 match_id = f"{competition}_{season}_{match_idx}"
 

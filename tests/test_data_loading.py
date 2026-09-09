@@ -132,6 +132,67 @@ class TestMatchDataset:
         assert pd.api.types.is_numeric_dtype(df['tries'])
 
 
+class TestUnparseableDateFallback:
+    """A handful of real source files contain the literal string "NaT"
+    (a leaked pandas not-a-time repr) instead of a real date for isolated
+    matches. Falling back to datetime.now() for those silently makes an
+    old match look like it just happened, which corrupts every
+    "most recent season" calculation downstream (e.g. export_dashboard_data's
+    training-data slice). The fallback must use another date from the same
+    file instead, never "now".
+    """
+
+    def _minimal_match(self, home_score=20, away_score=15):
+        return {
+            "home": {"team": "Leinster", "score": home_score, "lineup": {}, "scores": []},
+            "away": {"team": "Munster", "score": away_score, "lineup": {}, "scores": []},
+        }
+
+    def test_list_format_bad_date_uses_median_not_now(self):
+        list_data = [
+            {**self._minimal_match(), "date": "2020-10-01T15:00:00.000Z"},
+            {**self._minimal_match(), "date": "NaT"},
+            {**self._minimal_match(), "date": "2020-12-01T15:00:00.000Z"},
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "premiership-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(list_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = sorted(m.date for m in dataset.matches)
+            assert len(dates) == 3
+            # The fallback must land within the file's real date range, not
+            # at "now" (which would be years after these 2020 matches).
+            for d in dates:
+                assert d.year == 2020
+
+    def test_dict_format_bad_date_uses_median_not_now(self):
+        dict_data = {
+            "home": {"0": self._minimal_match()["home"], "1": self._minimal_match()["home"], "2": self._minimal_match()["home"]},
+            "away": {"0": self._minimal_match()["away"], "1": self._minimal_match()["away"], "2": self._minimal_match()["away"]},
+            "date": {
+                "0": "2020-10-01T15:00:00.000Z",
+                "1": "NaT",
+                "2": "2020-12-01T15:00:00.000Z",
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            json_path = Path(tmpdir) / "celtic-2020-2021.json"
+            with open(json_path, "w") as f:
+                json.dump(dict_data, f)
+
+            dataset = MatchDataset(Path(tmpdir))
+            dataset.load_json_files()
+
+            dates = sorted(m.date for m in dataset.matches)
+            assert len(dates) == 3
+            for d in dates:
+                assert d.year == 2020
+
+
 class TestDatasetFiltering:
     """Test dataset filtering and processing."""
 
