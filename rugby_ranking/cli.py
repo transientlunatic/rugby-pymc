@@ -121,6 +121,26 @@ def main():
         help="Initialise VI from previous checkpoint's approximation (VI only, ignored for MCMC)"
     )
     update_parser.add_argument(
+        "--comp-home-advantage",
+        action="store_true",
+        default=False,
+        help="Per-competition home advantage (partial pooling; big leagues use empirical values). "
+             "Changes the model structure: cannot warm-start from an older checkpoint.",
+    )
+    update_parser.add_argument(
+        "--team-ar1",
+        action="store_true",
+        default=False,
+        help="Team strengths follow an AR(1) across seasons instead of independent team-seasons. "
+             "Changes the model structure: cannot warm-start from an older checkpoint.",
+    )
+    update_parser.add_argument(
+        "--win-prob-temperature",
+        type=float,
+        default=1.0,
+        help="Temperature on the win-probability logit (>1 = less confident; backtest suggests ~1.4)",
+    )
+    update_parser.add_argument(
         "--n-iterations",
         type=int,
         default=None,
@@ -584,7 +604,29 @@ def run_update(args):
     print(f"  {df['season'].nunique()} seasons")
 
     print("Building model...")
-    config = ModelConfig()
+    config = ModelConfig(
+        competition_home_advantage=args.comp_home_advantage,
+        team_ar1=args.team_ar1,
+        win_prob_temperature=args.win_prob_temperature,
+    )
+    if args.warm_start:
+        # Warm-starting only makes sense if the previous checkpoint has the same
+        # model structure; checkpoints from before these options lack model_config.
+        try:
+            import pickle
+            from pathlib import Path as _P
+            meta_path = _P("~/.cache/rugby_ranking").expanduser() / args.checkpoint / "metadata.pkl"
+            with open(meta_path, "rb") as _f:
+                prev = pickle.load(_f).get("model_config")
+            same = prev is not None and (
+                prev.competition_home_advantage == config.competition_home_advantage
+                and prev.team_ar1 == config.team_ar1
+            ) or (prev is None and not (config.competition_home_advantage or config.team_ar1))
+        except Exception:
+            same = False
+        if not same:
+            print("Note: --warm-start disabled because the model structure differs from the checkpoint")
+            args.warm_start = False
     model = RugbyModel(config)
     # Use the joint model (non-centered parameterisation) for both VI and MCMC.
     # The single-score build() uses a centred parameterisation that causes Neal's
@@ -847,7 +889,8 @@ def run_upcoming(args):
                         away_team=match.away_team,
                         season=match.season,
                         home_lineup=home_lineup_simple,
-                        away_lineup=away_lineup_simple
+                        away_lineup=away_lineup_simple,
+                        competition=getattr(match, "competition", None),
                     )
                     prediction_notes.append("Method: Lineup-based")
                 except (ValueError, AttributeError, Exception):
@@ -857,6 +900,7 @@ def run_upcoming(args):
                         home_team=match.home_team,
                         away_team=match.away_team,
                         season=match.season,
+                        competition=getattr(match, "competition", None),
                     )
                     prediction_notes.append(
                         "Method: Team strength only (model doesn't support lineup predictions)"
@@ -867,6 +911,7 @@ def run_upcoming(args):
                     home_team=match.home_team,
                     away_team=match.away_team,
                     season=match.season,
+                    competition=getattr(match, "competition", None),
                 )
                 prediction_notes.append("Method: Team strength only")
 

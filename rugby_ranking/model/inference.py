@@ -664,6 +664,11 @@ class ModelFitter:
             "team_ids": self.rugby_model._team_ids,
             "season_ids": self.rugby_model._season_ids,
             "team_season_ids": self.rugby_model._team_season_ids,
+            "model_config": self.rugby_model.config,
+            "comp_ids": self.rugby_model._comp_ids,
+            "eta_empirical": self.rugby_model._eta_empirical,
+            "eta_n_matches": self.rugby_model._eta_n_matches,
+            "eta_pooled": self.rugby_model._eta_pooled,
             "last_fit_time": self._last_fit_time,
             "fit_method": self._fit_method,
             "config": self.config,
@@ -741,6 +746,12 @@ class ModelFitter:
         model._team_ids = metadata["team_ids"]
         model._season_ids = metadata["season_ids"]
         model._team_season_ids = metadata["team_season_ids"]
+        if metadata.get("model_config") is not None:
+            model.config = metadata["model_config"]
+        model._comp_ids = metadata.get("comp_ids", {})
+        model._eta_empirical = metadata.get("eta_empirical", {})
+        model._eta_n_matches = metadata.get("eta_n_matches", {})
+        model._eta_pooled = metadata.get("eta_pooled")
 
         # Create fitter
         fitter = cls(model, metadata.get("config"))

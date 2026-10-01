@@ -17,7 +17,7 @@ from rugby_ranking.model.league_table import BonusPointRules
 class MockMatchPredictor:
     """Mock predictor for testing without loading a full model."""
 
-    def predict_teams_only(self, home_team: str, away_team: str, season: str, n_samples: int = 1000):
+    def predict_teams_only(self, home_team: str, away_team: str, season: str, n_samples: int = 1000, competition: str | None = None):
         """Generate mock predictions with realistic variation."""
         # Simple home advantage model
         np.random.seed(hash(home_team + away_team) % 2**32)
