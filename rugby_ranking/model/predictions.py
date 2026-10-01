@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import arviz as az
 
-from rugby_ranking.model.core import RugbyModel
+from rugby_ranking.model.core import RugbyModel, season_sort_key
 from rugby_ranking.model.data import normalize_team_name
 
 
@@ -211,11 +211,24 @@ class MatchPredictor:
 
         # Eta - handle joint vs single model
         eta_vals = posterior["eta_home"].values
-        if eta_vals.ndim == 3:
+        self._eta_comp_flat = None
+        if eta_vals.ndim == 4:
+            # Per-competition model: (chain, draw, n_score_types, n_comp) - tries
+            self._eta_comp_flat = eta_vals[:, :, 0, :].reshape(-1, eta_vals.shape[-1])
+            self._eta_flat = posterior["eta_mu"].values[:, :, 0].flatten()
+        elif eta_vals.ndim == 3:
             # Joint model: (chain, draw, n_score_types) - use tries
             self._eta_flat = eta_vals[:, :, 0].flatten()
         else:
             self._eta_flat = eta_vals.flatten()
+
+        # AR(1) persistence: decay applied to a fallback (last-seen) team-season
+        self._rho_gamma_flat = (
+            posterior["rho_team"].values.reshape(-1) if "rho_team" in posterior else None
+        )
+        self._rho_def_flat = (
+            posterior["rho_def"].values.reshape(-1) if "rho_def" in posterior else None
+        )
 
         # Sigma player - handle time-varying, separate, joint, and
         # no-player-effect (ModelConfig.include_player_effect=False,
@@ -299,12 +312,45 @@ class MatchPredictor:
         # Store total sample count for indexing
         self._n_total = len(self._alpha_flat)
 
+    def _eta_for(self, competition: str | None, sample_idx: np.ndarray) -> np.ndarray:
+        """Home advantage (tries) draws for a competition."""
+        if self._eta_comp_flat is None:
+            return self._eta_flat[sample_idx]
+        m = self.model
+        cfg = m.config
+        if competition is not None and competition in m._comp_ids:
+            if (
+                m._eta_n_matches.get(competition, 0) >= cfg.empirical_home_min_matches
+                and competition in m._eta_empirical
+            ):
+                return np.full(len(sample_idx), m._eta_empirical[competition])
+            return self._eta_comp_flat[sample_idx, m._comp_ids[competition]]
+        return self._eta_flat[sample_idx]
+
+    @staticmethod
+    def _fallback_decay(rho_flat, sample_idx, season, used_season, n):
+        """rho ** season-gap weights for a team-season carried forward from used_season."""
+        if used_season is None or rho_flat is None:
+            return np.ones(n)
+        gap = max(1, round(season_sort_key(season) - season_sort_key(used_season)))
+        return rho_flat[sample_idx] ** gap
+
+    def _apply_temperature(self, home_wins: float, away_wins: float, draws: float):
+        T = getattr(self.model.config, "win_prob_temperature", 1.0)
+        if T == 1.0 or home_wins <= 0 or away_wins <= 0:
+            return home_wins, away_wins
+        decisive = 1.0 - draws
+        logit = np.log(home_wins / away_wins) / T
+        ph = decisive / (1.0 + np.exp(-logit))
+        return float(ph), float(decisive - ph)
+
     def predict_teams_only(
         self,
         home_team: str,
         away_team: str,
         season: str,
         n_samples: int = 1000,
+        competition: str | None = None,
     ) -> MatchPrediction:
         """
         Predict match outcome using only team identities.
@@ -347,20 +393,24 @@ class MatchPredictor:
         alpha = self._alpha_flat[sample_idx]
         gamma = self._gamma_flat[sample_idx]
         theta = self._theta_flat[sample_idx]
-        eta_home = self._eta_flat[sample_idx]
+        eta_home = self._eta_for(competition, sample_idx)
         sigma_player = self._sigma_player_flat[sample_idx]
 
         # Team effects
-        home_team_effect = gamma[:, home_idx]
-        away_team_effect = gamma[:, away_idx]
+        _wh = self._fallback_decay(self._rho_gamma_flat, sample_idx, season, home_fallback, n_samples)
+        _wa = self._fallback_decay(self._rho_gamma_flat, sample_idx, season, away_fallback, n_samples)
+        _dh = self._fallback_decay(self._rho_def_flat, sample_idx, season, home_fallback, n_samples)
+        _da = self._fallback_decay(self._rho_def_flat, sample_idx, season, away_fallback, n_samples)
+        home_team_effect = _wh * gamma[:, home_idx]
+        away_team_effect = _wa * gamma[:, away_idx]
 
         # Opponent defense suppresses a team's own try-scoring rate (see
         # ModelConfig.include_defense / core.py's delta_defense) -- e.g. the
         # away team's defense reduces the *home* team's expected tries.
         if self._has_defense_effect:
             delta_defense = self._delta_defense_flat[sample_idx]
-            home_opponent_defense = delta_defense[:, away_idx]
-            away_opponent_defense = delta_defense[:, home_idx]
+            home_opponent_defense = _da * delta_defense[:, away_idx]
+            away_opponent_defense = _dh * delta_defense[:, home_idx]
         else:
             home_opponent_defense = np.zeros(n_samples)
             away_opponent_defense = np.zeros(n_samples)
@@ -418,6 +468,7 @@ class MatchPredictor:
         away_lineup: dict[int, str],
         season: str,
         n_samples: int = 1000,
+        competition: str | None = None,
     ) -> MatchPrediction:
         """
         Predict match outcome using full announced lineups.
@@ -461,19 +512,23 @@ class MatchPredictor:
         gamma = self._gamma_flat[sample_idx]
         beta = self._beta_flat[sample_idx]
         theta = self._theta_flat[sample_idx]
-        eta_home = self._eta_flat[sample_idx]
+        eta_home = self._eta_for(competition, sample_idx)
         sigma_player = self._sigma_player_flat[sample_idx]
 
-        # Team effects
-        home_team_effect = gamma[:, home_ts_idx]
-        away_team_effect = gamma[:, away_ts_idx]
+        # Team effects (fallback team-seasons decay by the AR(1) persistence)
+        _wh = self._fallback_decay(self._rho_gamma_flat, sample_idx, season, home_fallback, n_samples)
+        _wa = self._fallback_decay(self._rho_gamma_flat, sample_idx, season, away_fallback, n_samples)
+        _dh = self._fallback_decay(self._rho_def_flat, sample_idx, season, home_fallback, n_samples)
+        _da = self._fallback_decay(self._rho_def_flat, sample_idx, season, away_fallback, n_samples)
+        home_team_effect = _wh * gamma[:, home_ts_idx]
+        away_team_effect = _wa * gamma[:, away_ts_idx]
 
         # Opponent defense suppresses a team's own try-scoring rate (see
         # ModelConfig.include_defense / core.py's delta_defense).
         if self._has_defense_effect:
             delta_defense = self._delta_defense_flat[sample_idx]
-            home_opponent_defense = delta_defense[:, away_ts_idx]
-            away_opponent_defense = delta_defense[:, home_ts_idx]
+            home_opponent_defense = _da * delta_defense[:, away_ts_idx]
+            away_opponent_defense = _dh * delta_defense[:, home_ts_idx]
         else:
             home_opponent_defense = np.zeros(n_samples)
             away_opponent_defense = np.zeros(n_samples)
@@ -566,6 +621,7 @@ class MatchPredictor:
         home_wins = float((home_scores > away_scores).mean())
         away_wins = float((away_scores > home_scores).mean())
         draws = float((home_scores == away_scores).mean())
+        home_wins, away_wins = self._apply_temperature(home_wins, away_wins, draws)
 
         margin = home_scores - away_scores
 
@@ -597,6 +653,7 @@ class MatchPredictor:
                     home_team=match.home_team,
                     away_team=match.away_team,
                     season=season,
+                    competition=getattr(match, "competition", None),
                 )
 
                 predictions.append({

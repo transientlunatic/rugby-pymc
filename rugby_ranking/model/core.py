@@ -60,6 +60,24 @@ class ModelConfig:
     home_advantage_prior_mean: float = 0.1
     home_advantage_prior_sd: float = 0.1
 
+    # Per-competition home advantage (build_joint only). eta_home becomes
+    # (n_score_types, n_competitions): a pooled mean (informed by the empirical
+    # home/away ratio in the training data) plus a per-competition offset.
+    competition_home_advantage: bool = False
+    home_advantage_mean_sd: float = 0.05  # prior sd on pooled mean around empirical
+    home_advantage_comp_sd: float = 0.2  # HalfNormal scale of between-competition sd
+    # Competitions with at least this many training matches use their empirical
+    # tries home/away log-ratio directly at prediction time.
+    empirical_home_min_matches: int = 150
+
+    # AR(1) team-season strength within each team (build_joint only): a
+    # team's offence/defence carries over between seasons with persistence rho.
+    team_ar1: bool = False
+
+    # Temperature applied to the home/away win-probability logit at prediction
+    # time (>1 = less confident). Fitted on rolling-origin backtests.
+    win_prob_temperature: float = 1.0
+
     # Exposure
     reference_minutes: float = 80.0  # Full match
 
@@ -74,6 +92,42 @@ class ModelConfig:
     player_trend_sd: float = 0.1  # Prior SD for player trend slopes
     team_trend_sd: float = 0.1  # Prior SD for team trend slopes
     season_evolution_sd: float = 0.2  # Prior SD for season-to-season base changes
+
+
+def season_sort_key(season: str) -> float:
+    """Order season labels chronologically ('2024-2025' -> 2024, 'cup-2023' -> 2023.5)."""
+    import re
+
+    years = [int(y) for y in re.findall(r"\d{4}", str(season))]
+    if not years:
+        return 0.0
+    return years[0] + (0.5 if str(season).startswith("cup") else 0.0)
+
+
+def _ar1_design(team_season_ids: dict[tuple[str, str], int]):
+    """Lag matrices for a per-team AR(1) over chronologically ordered seasons."""
+    n = len(team_season_ids)
+    by_team: dict[str, list[tuple[float, int]]] = {}
+    for (team, season), i in team_season_ids.items():
+        by_team.setdefault(team, []).append((season_sort_key(season), i))
+    lag = np.zeros((n, n))
+    mask = np.zeros((n, n))
+    first = np.zeros(n)
+    for entries in by_team.values():
+        entries.sort()
+        for k, (_, i) in enumerate(entries):
+            first[i] = 1.0 if k == 0 else 0.0
+            for j in range(k + 1):
+                mask[i, entries[j][1]] = 1.0
+                lag[i, entries[j][1]] = k - j
+    return lag, mask, first
+
+
+def _ar1_effect(name: str, eps, rho, design):
+    """Stationary unit-variance AR(1) per team as a deterministic transform of iid noise."""
+    lag, mask, first = design
+    c = first + (1 - first) * pt.sqrt(1 - rho**2)
+    return pm.Deterministic(name, pt.dot(mask * pt.power(rho, lag), c * eps))
 
 
 class RugbyModel:
@@ -108,6 +162,10 @@ class RugbyModel:
         self._season_ids: dict[str, int] = {}
         self._team_season_ids: dict[tuple[str, str], int] = {}
         self._position_ids: dict[int, int] = {}  # Map raw position to 0-indexed
+        self._comp_ids: dict[str, int] = {}
+        self._eta_empirical: dict[str, float] = {}  # tries log(home/away) by competition
+        self._eta_n_matches: dict[str, int] = {}
+        self._eta_pooled: float | None = None
 
     def build(self, df: pd.DataFrame, score_type: str = "tries") -> pm.Model:
         """
@@ -297,15 +355,30 @@ class RugbyModel:
                 lambda_player = pm.HalfNormal("lambda_player", sigma=0.5, shape=n_score_types)
 
             # Team-season offensive effect (shared)
-            gamma_team_season_raw = pm.Normal(
-                "gamma_team_season_raw", mu=0, sigma=1, shape=n_team_seasons
-            )
+            if self.config.team_ar1:
+                ar_design = _ar1_design(self._team_season_ids)
+                rho_team = pm.Beta("rho_team", 4, 2)
+                gamma_eps = pm.Normal("gamma_eps", 0, 1, shape=n_team_seasons)
+                gamma_team_season_raw = _ar1_effect(
+                    "gamma_team_season_raw", gamma_eps, rho_team, ar_design
+                )
+            else:
+                gamma_team_season_raw = pm.Normal(
+                    "gamma_team_season_raw", mu=0, sigma=1, shape=n_team_seasons
+                )
 
             # Team-season defensive effect (shared)
             if self.config.include_defense:
-                delta_defense_raw = pm.Normal(
-                    "delta_defense_raw", mu=0, sigma=1, shape=n_team_seasons
-                )
+                if self.config.team_ar1:
+                    rho_def = pm.Beta("rho_def", 4, 2)
+                    delta_eps = pm.Normal("delta_eps", 0, 1, shape=n_team_seasons)
+                    delta_defense_raw = _ar1_effect(
+                        "delta_defense_raw", delta_eps, rho_def, ar_design
+                    )
+                else:
+                    delta_defense_raw = pm.Normal(
+                        "delta_defense_raw", mu=0, sigma=1, shape=n_team_seasons
+                    )
 
             # === Score-Type Specific Parameters ===
             # Intercepts for each score type
@@ -328,12 +401,31 @@ class RugbyModel:
             )
 
             # Home advantage per score type
-            eta_home = pm.Normal(
-                "eta_home",
-                mu=self.config.home_advantage_prior_mean,
-                sigma=self.config.home_advantage_prior_sd,
-                shape=n_score_types,
-            )
+            if self.config.competition_home_advantage:
+                n_comp = len(self._comp_ids)
+                played = df[df["minutes_played"] > 0]
+                home_tot = (
+                    played.assign(h=played["is_home"].astype(int))
+                    .groupby("h")[list(self.config.score_types)]
+                    .sum()
+                )
+                eta_emp = np.log(home_tot.loc[1] / home_tot.loc[0]).values
+                eta_mu = pm.Normal(
+                    "eta_mu", mu=eta_emp, sigma=self.config.home_advantage_mean_sd,
+                    shape=n_score_types,
+                )
+                eta_comp_sd = pm.HalfNormal("eta_sd", sigma=self.config.home_advantage_comp_sd)
+                eta_raw = pm.Normal("eta_raw", 0, 1, shape=(n_score_types, n_comp))
+                eta_home = pm.Deterministic(
+                    "eta_home", eta_mu[:, None] + eta_comp_sd * eta_raw
+                )
+            else:
+                eta_home = pm.Normal(
+                    "eta_home",
+                    mu=self.config.home_advantage_prior_mean,
+                    sigma=self.config.home_advantage_prior_sd,
+                    shape=n_score_types,
+                )
 
             # === Build likelihood for each score type ===
             for s, score_type in enumerate(self.config.score_types):
@@ -349,6 +441,8 @@ class RugbyModel:
                 )
                 position_idx = pm.Data(f"position_idx_{score_type}", data["position_idx"])
                 is_home_data = pm.Data(f"is_home_{score_type}", data["is_home"])
+                if self.config.competition_home_advantage:
+                    comp_idx = pm.Data(f"comp_idx_{score_type}", data["comp_idx"])
                 exposure = pm.Data(f"exposure_{score_type}", data["exposure"])
                 observed = pm.Data(f"observed_{score_type}", data["observed"])
 
@@ -376,7 +470,7 @@ class RugbyModel:
                     alpha[s]
                     + gamma_team_season[team_season_idx]
                     + theta_position[s, position_idx]  # Already 0-indexed
-                    + eta_home[s] * is_home_data
+                    + (eta_home[s, comp_idx] if self.config.competition_home_advantage else eta_home[s]) * is_home_data
                     + pt.log(exposure)
                 )
                 if beta_player is not None:
@@ -934,6 +1028,17 @@ class RugbyModel:
         unique_positions = sorted(df["position"].unique())
         self._position_ids = {pos: i for i, pos in enumerate(unique_positions)}
 
+        # Competitions and their empirical tries home/away log-ratio
+        if "competition" in df.columns:
+            self._comp_ids = {c: i for i, c in enumerate(sorted(df["competition"].unique()))}
+            played = df[df["minutes_played"] > 0].assign(h=lambda d: d["is_home"].astype(int))
+            tot = played.groupby(["competition", "h"])["tries"].sum().unstack("h")
+            ratio = np.log(tot[1] / tot[0]).replace([np.inf, -np.inf], np.nan).dropna()
+            self._eta_empirical = {c: float(v) for c, v in ratio.items()}
+            self._eta_n_matches = played.groupby("competition")["match_id"].nunique().to_dict()
+            pooled = played.groupby("h")["tries"].sum()
+            self._eta_pooled = float(np.log(pooled[1] / pooled[0]))
+
     def _prepare_data(self, df: pd.DataFrame, score_type: str) -> dict[str, np.ndarray]:
         """Prepare data arrays for PyMC model."""
         # Filter to observations with positive exposure
@@ -995,6 +1100,11 @@ class RugbyModel:
             "exposure": exposure,
             "observed": observed,
         }
+
+        if self._comp_ids and "competition" in df_filtered.columns:
+            result["comp_idx"] = np.array(
+                [self._comp_ids[c] for c in df_filtered["competition"]]
+            )
 
         if season_progress is not None:
             result["season_progress"] = season_progress

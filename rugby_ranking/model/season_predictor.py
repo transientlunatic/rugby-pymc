@@ -177,6 +177,7 @@ class SeasonPredictor:
                     away_team=fixture['away_team'],
                     season=season,
                     n_samples=1000,
+                    competition=fixture.get('competition', None),
                 )
 
                 # Estimate tries from score samples

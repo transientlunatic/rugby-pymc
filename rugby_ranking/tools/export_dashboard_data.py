@@ -279,6 +279,7 @@ def export_upcoming_predictions(
             away_team=match.away_team,
             season=match.season,
             n_samples=500,
+            competition=getattr(match, "competition", None),
         )
         if archive and archiver is not None:
             from rugby_ranking.model.prediction_archive import MatchMetadata
