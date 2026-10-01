@@ -1,0 +1,62 @@
+[
+  {
+    "team": "Toulouse",
+    "playoff_probability": 0.997
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "playoff_probability": 0.903
+  },
+  {
+    "team": "Bayonne",
+    "playoff_probability": 0.85
+  },
+  {
+    "team": "Pau",
+    "playoff_probability": 0.825
+  },
+  {
+    "team": "Montpellier",
+    "playoff_probability": 0.777
+  },
+  {
+    "team": "Lyon",
+    "playoff_probability": 0.709
+  },
+  {
+    "team": "Clermont",
+    "playoff_probability": 0.68
+  },
+  {
+    "team": "Perpignan",
+    "playoff_probability": 0.656
+  },
+  {
+    "team": "Stade Francais",
+    "playoff_probability": 0.561
+  },
+  {
+    "team": "Toulon",
+    "playoff_probability": 0.27
+  },
+  {
+    "team": "Castres",
+    "playoff_probability": 0.266
+  },
+  {
+    "team": "Racing 92",
+    "playoff_probability": 0.23
+  },
+  {
+    "team": "La Rochelle",
+    "playoff_probability": 0.203
+  },
+  {
+    "team": "Vannes",
+    "playoff_probability": 0.073
+  },
+  {
+    "team": "TBC",
+    "playoff_probability": 0.0
+  }
+]
