@@ -1,0 +1,155 @@
+[
+  {
+    "prediction_id": "2026-10-04T08:12:00_dragons-rfc-vs-perpignan_2026-10-16",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.178329+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-challenge_2026-10-16_Dragons RFC-vs-Perpignan",
+      "competition": "euro-challenge",
+      "season": "2026-2027",
+      "date": "2026-10-16T19:00:00+00:00",
+      "home_team": "Dragons RFC",
+      "away_team": "Perpignan",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Dragons RFC",
+        "mean": 38.058,
+        "std": 16.384585316693247,
+        "median": 36.0,
+        "ci_lower": 14.0,
+        "ci_upper": 68.0
+      },
+      "away": {
+        "team": "Perpignan",
+        "mean": 27.906,
+        "std": 13.238019640414498,
+        "median": 26.0,
+        "ci_lower": 10.0,
+        "ci_upper": 52.049999999999955
+      },
+      "home_win_prob": 0.672,
+      "away_win_prob": 0.308,
+      "draw_prob": 0.02,
+      "predicted_margin": 10.152,
+      "margin_std": 21.270846151481607,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-04T08:12:00_edinburgh-rugby-vs-toulon_2026-10-16",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.181123+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-challenge_2026-10-16_Edinburgh Rugby-vs-Toulon",
+      "competition": "euro-challenge",
+      "season": "2026-2027",
+      "date": "2026-10-16T19:00:00+00:00",
+      "home_team": "Edinburgh Rugby",
+      "away_team": "Toulon",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Edinburgh Rugby",
+        "mean": 35.822,
+        "std": 15.434322660875015,
+        "median": 35.0,
+        "ci_lower": 14.0,
+        "ci_upper": 62.0
+      },
+      "away": {
+        "team": "Toulon",
+        "mean": 24.226,
+        "std": 12.504196255657538,
+        "median": 23.0,
+        "ci_lower": 6.0,
+        "ci_upper": 47.0
+      },
+      "home_win_prob": 0.692,
+      "away_win_prob": 0.296,
+      "draw_prob": 0.012,
+      "predicted_margin": 11.596,
+      "margin_std": 20.44320875009596,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-04T08:12:00_gloucester-rugby-vs-bordeaux-begles_2026-10-16",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.184046+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-champions_2026-10-16_Gloucester Rugby-vs-Bordeaux-Begles",
+      "competition": "euro-champions",
+      "season": "2026-2027",
+      "date": "2026-10-16T19:00:00+00:00",
+      "home_team": "Gloucester Rugby",
+      "away_team": "Bordeaux-Begles",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Gloucester Rugby",
+        "mean": 46.06,
+        "std": 19.227906802353708,
+        "median": 45.0,
+        "ci_lower": 17.0,
+        "ci_upper": 80.0
+      },
+      "away": {
+        "team": "Bordeaux-Begles",
+        "mean": 31.008,
+        "std": 14.680733496661535,
+        "median": 29.0,
+        "ci_lower": 9.0,
+        "ci_upper": 56.0
+      },
+      "home_win_prob": 0.724,
+      "away_win_prob": 0.262,
+      "draw_prob": 0.014,
+      "predicted_margin": 15.052,
+      "margin_std": 23.579594907461832,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  }
+]

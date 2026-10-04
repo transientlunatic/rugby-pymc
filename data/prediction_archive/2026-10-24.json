@@ -1,0 +1,155 @@
+[
+  {
+    "prediction_id": "2026-10-04T08:12:00_vodacom-bulls-vs-ulster-rugby_2026-10-24",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.263644+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "celtic_2026-10-24_Vodacom Bulls-vs-Ulster Rugby",
+      "competition": "celtic",
+      "season": "2026-2027",
+      "date": "2026-10-24T11:45:00+00:00",
+      "home_team": "Vodacom Bulls",
+      "away_team": "Ulster Rugby",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Vodacom Bulls",
+        "mean": 42.586,
+        "std": 19.135271202677007,
+        "median": 41.0,
+        "ci_lower": 14.0,
+        "ci_upper": 77.04999999999995
+      },
+      "away": {
+        "team": "Ulster Rugby",
+        "mean": 26.098,
+        "std": 13.073193794937794,
+        "median": 25.0,
+        "ci_lower": 7.950000000000003,
+        "ci_upper": 51.049999999999955
+      },
+      "home_win_prob": 0.746,
+      "away_win_prob": 0.242,
+      "draw_prob": 0.012,
+      "predicted_margin": 16.488,
+      "margin_std": 23.7131578664673,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-04T08:12:00_vannes-vs-clermont_2026-10-24",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.267165+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "top14_2026-10-24_Vannes-vs-Clermont",
+      "competition": "top14",
+      "season": "2026-2027",
+      "date": "2026-10-24T12:30:00+00:00",
+      "home_team": "Vannes",
+      "away_team": "Clermont",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Vannes",
+        "mean": 28.908,
+        "std": 13.657361970746768,
+        "median": 27.0,
+        "ci_lower": 9.0,
+        "ci_upper": 54.0
+      },
+      "away": {
+        "team": "Clermont",
+        "mean": 25.676,
+        "std": 12.590274977140094,
+        "median": 25.0,
+        "ci_lower": 7.0,
+        "ci_upper": 49.049999999999955
+      },
+      "home_win_prob": 0.566,
+      "away_win_prob": 0.42,
+      "draw_prob": 0.014,
+      "predicted_margin": 3.232,
+      "margin_std": 18.431445304153442,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-04T08:12:00_dhl-stormers-vs-scarlets_2026-10-24",
+    "prediction_metadata": {
+      "timestamp": "2026-10-04T08:12:00.270756+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "celtic_2026-10-24_DHL Stormers-vs-Scarlets",
+      "competition": "celtic",
+      "season": "2026-2027",
+      "date": "2026-10-24T14:00:00+00:00",
+      "home_team": "DHL Stormers",
+      "away_team": "Scarlets",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "DHL Stormers",
+        "mean": 35.736,
+        "std": 15.955635493454968,
+        "median": 34.0,
+        "ci_lower": 13.0,
+        "ci_upper": 68.0
+      },
+      "away": {
+        "team": "Scarlets",
+        "mean": 25.394,
+        "std": 12.591535410743203,
+        "median": 24.0,
+        "ci_lower": 7.0,
+        "ci_upper": 49.0
+      },
+      "home_win_prob": 0.678,
+      "away_win_prob": 0.306,
+      "draw_prob": 0.016,
+      "predicted_margin": 10.342,
+      "margin_std": 21.736996940699974,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  }
+]

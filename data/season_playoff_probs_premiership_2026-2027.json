@@ -1,0 +1,46 @@
+[
+  {
+    "team": "Gloucester Rugby",
+    "playoff_probability": 0.995
+  },
+  {
+    "team": "Northampton Saints",
+    "playoff_probability": 0.981
+  },
+  {
+    "team": "Saracens",
+    "playoff_probability": 0.981
+  },
+  {
+    "team": "Bath Rugby",
+    "playoff_probability": 0.961
+  },
+  {
+    "team": "Bristol Bears",
+    "playoff_probability": 0.941
+  },
+  {
+    "team": "Leicester Tigers",
+    "playoff_probability": 0.806
+  },
+  {
+    "team": "Newcastle Falcons",
+    "playoff_probability": 0.801
+  },
+  {
+    "team": "Exeter Chiefs",
+    "playoff_probability": 0.656
+  },
+  {
+    "team": "Harlequins",
+    "playoff_probability": 0.549
+  },
+  {
+    "team": "Sale Sharks",
+    "playoff_probability": 0.329
+  },
+  {
+    "team": "TBC",
+    "playoff_probability": 0.0
+  }
+]
