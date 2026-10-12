@@ -11,7 +11,14 @@ import arviz as az
 import pytest
 
 from rugby_ranking.model.core import ModelConfig, RugbyModel
-from rugby_ranking.model.predictions import MatchPredictor
+from datetime import datetime, timezone
+
+from rugby_ranking.model.data import MatchData
+from rugby_ranking.model.predictions import (
+    ALL_COMPETITIONS,
+    MatchPredictor,
+    estimate_kicking_rates,
+)
 
 
 def _tiny_two_team_df():
@@ -143,3 +150,85 @@ class TestOpponentDefenseInPredictions:
             home_team="TeamA", away_team="TeamB", season="2024", n_samples=1000
         )
         assert pred.home.mean == pytest.approx(pred.away.mean, abs=1.0)
+
+
+def _match(competition, season, home_events, away_events, i=0):
+    return MatchData(
+        match_id=f"{competition}_{season}_{i}",
+        date=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        season=season,
+        competition=competition,
+        stadium="",
+        home_team="A",
+        away_team="B",
+        home_score=10,
+        away_score=10,
+        home_lineup={},
+        away_lineup={},
+        home_scores=home_events,
+        away_scores=away_events,
+    )
+
+
+def _events(tries=0, convs=0, pens=0, penalty_tries=0):
+    return (
+        [{"type": "Try"}] * tries
+        + [{"type": "Conversion"}] * convs
+        + [{"type": "Penalty"}] * pens
+        + [{"type": "Penalty Try"}] * penalty_tries
+        + [{"type": "Missed conversion"}] * 5  # must not count as a conversion
+    )
+
+
+class TestEstimateKickingRates:
+    def test_rates_by_competition_and_pooled(self):
+        # prem: 4 team-games, 4 tries + 1 penalty try, 3 conversions, 2 penalties
+        prem = [_match("prem", "2025-2026", _events(tries=2, convs=1, pens=1),
+                       _events(tries=2, convs=2, pens=1, penalty_tries=1), i=i) for i in range(1)]
+        prem += [_match("prem", "2025-2026", _events(), _events(), i=1)]
+        t14 = [_match("t14", "2025-2026", _events(tries=1, convs=1, pens=3),
+                      _events(tries=1, convs=0, pens=3), i=0)]
+        rates = estimate_kicking_rates(prem + t14, min_team_games=2)
+        # prem: 4 team-games, 5 tries (incl. penalty try), 3 convs, 2 pens
+        assert rates["prem"] == pytest.approx((2 / 4, 3 / 5))
+        assert rates["t14"] == pytest.approx((3.0, 0.5))
+        # pooled: 6 team-games, 7 tries, 4 convs, 8 pens
+        assert rates[ALL_COMPETITIONS] == pytest.approx((8 / 6, 4 / 7))
+
+    def test_uses_only_recent_seasons_and_skips_thin_competitions(self):
+        old = _match("prem", "2020-2021", _events(tries=1, pens=9), _events(tries=1, pens=9))
+        new = _match("prem", "2025-2026", _events(tries=1, convs=1, pens=1), _events(tries=1, convs=1, pens=1))
+        thin = _match("rare", "2025-2026", _events(tries=1, pens=4), _events(tries=1, pens=4))
+        rates = estimate_kicking_rates([old, new, thin], n_recent_seasons=1, min_team_games=2)
+        assert rates["prem"] == pytest.approx((1.0, 1.0))
+        assert "rare" in rates  # exactly 2 team-games meets the minimum
+        rates = estimate_kicking_rates([old, new, thin], n_recent_seasons=1, min_team_games=3)
+        assert "rare" not in rates and "prem" not in rates
+
+    def test_no_data_gives_empty(self):
+        assert estimate_kicking_rates([]) == {}
+        assert estimate_kicking_rates([_match("prem", "2025-2026", [], [])]) == {}
+
+
+class TestKickingRatesInPredictions:
+    def test_penalty_rate_shifts_totals_per_competition(self):
+        model, trace = _build_model_and_trace({"TeamA": 0.0, "TeamB": 0.0})
+        low = MatchPredictor(model, trace, kicking_rates={"prem": (0.5, 0.7)})
+        high = MatchPredictor(model, trace, kicking_rates={"prem": (4.5, 0.7)})
+        kw = dict(home_team="TeamA", away_team="TeamB", season="2024", n_samples=20000)
+        np.random.seed(0)
+        p_low = low.predict_teams_only(competition="prem", **kw)
+        np.random.seed(0)
+        p_high = high.predict_teams_only(competition="prem", **kw)
+        # +4 penalties * 3 points, per team
+        assert p_high.home.mean - p_low.home.mean == pytest.approx(12.0, abs=0.5)
+        assert p_high.away.mean - p_low.away.mean == pytest.approx(12.0, abs=0.5)
+
+    def test_unknown_competition_falls_back_to_pooled_then_constants(self):
+        model, trace = _build_model_and_trace({"TeamA": 0.0, "TeamB": 0.0})
+        assert MatchPredictor(model, trace)._kicking_rates_for("prem") == (2.5, 0.70)
+        rates = {"prem": (0.8, 0.73), ALL_COMPETITIONS: (1.2, 0.72)}
+        predictor = MatchPredictor(model, trace, kicking_rates=rates)
+        assert predictor._kicking_rates_for("prem") == (0.8, 0.73)
+        assert predictor._kicking_rates_for("other") == (1.2, 0.72)
+        assert predictor._kicking_rates_for(None) == (1.2, 0.72)

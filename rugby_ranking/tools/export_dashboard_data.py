@@ -12,7 +12,7 @@ import numpy as np
 from rugby_ranking.model.data import MatchDataset
 from rugby_ranking.model.core import RugbyModel, ModelConfig
 from rugby_ranking.model.inference import ModelFitter, InferenceConfig
-from rugby_ranking.model.predictions import MatchPredictor
+from rugby_ranking.model.predictions import MatchPredictor, estimate_kicking_rates
 from rugby_ranking.model.season_predictor import SeasonPredictor
 from rugby_ranking.model.paths_to_victory import PathsAnalyzer
 from rugby_ranking.model.squad_analysis import SquadAnalyzer
@@ -245,7 +245,7 @@ def export_upcoming_predictions(
     """
     print("  - Upcoming match predictions...")
 
-    match_predictor = MatchPredictor(model, trace)
+    match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
     predictions_data = []
 
     now = datetime.now(timezone.utc)
@@ -550,7 +550,7 @@ def export_season_prediction(
             print(f"    [WARNING] Skipping season prediction export for {competition} {season}: missing or empty match data.")
             return
         
-        match_predictor = MatchPredictor(model, trace)
+        match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
         season_predictor = SeasonPredictor(
             match_predictor=match_predictor, competition=competition, playoff_spots=playoff_spots
         )
@@ -1246,7 +1246,7 @@ def export_dashboard_data(
     )
 
     try:
-        match_predictor = MatchPredictor(model, trace)
+        match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
         for season in recent_seasons:
             export_paths_to_victory(match_predictor, df_recent, season, output_dir)
     except Exception as e:
