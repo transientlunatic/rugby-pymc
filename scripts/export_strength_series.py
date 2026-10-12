@@ -7,9 +7,9 @@ Two models are covered, the ones that carry a per-team strength:
   the most recent 3000 matches, as ``EloForecaster`` does, but regressing to the
   mean once a year (see ``elo_season_ends``). We record each team's rating after
   its last match of each season.
-* **Bayesian**: the team-season strength from ``dashboard/data/team_strength_rankings.json``
-  (expected margin against a reference side, with a 90% interval). Those
-  files only exist for the seasons the model has been exported for.
+* **Bayesian**: the team-season strength (expected margin against a reference side,
+  with a 90% interval) from ``dashboard/data/team_strength_rankings.json``, or from
+  ``--bayes-file`` (the output of ``fit_strength_history.py``, which covers more seasons).
 
 Teams and seasons follow ``dashboard/data/league_placings.json`` so the strength
 chart lines up with the bump chart of final placings. Output is one JSON file.
@@ -90,9 +90,14 @@ def elo_season_ends(data_dir: Path) -> dict[tuple[str, str, str], float]:
     return last
 
 
-def bayes_strengths(path: Path) -> dict[tuple[str, str], dict]:
+def bayes_strengths(path: Path, min_matches: int = 0) -> dict[tuple[str, str], dict]:
+    """Team-season strengths, skipping team-seasons whose estimate rests on fewer than
+    ``min_matches`` matches (rows carry ``n_matches`` when written by
+    ``fit_strength_history.py``; the dashboard export has no such field)."""
     acc = collections.defaultdict(list)
     for r in json.load(open(path)):
+        if r.get('n_matches', min_matches) < min_matches:
+            continue
         acc[(CANON.get(r['team'], r['team']), r['season'])].append(r)
     mean = lambda rows, k: sum(x[k] for x in rows) / len(rows)  # noqa: E731
     return {key: dict(mean=mean(rows, 'ref_margin_mean'), lo=mean(rows, 'ref_margin_lower'),
@@ -100,10 +105,10 @@ def bayes_strengths(path: Path) -> dict[tuple[str, str], dict]:
             for key, rows in acc.items()}
 
 
-def build(data_dir: Path) -> list[dict]:
+def build(data_dir: Path, bayes_file: Path | None = None, min_matches: int = 8) -> list[dict]:
     placings = json.load(open(data_dir / 'dashboard/data/league_placings.json'))
     elo = elo_season_ends(data_dir)
-    bayes = bayes_strengths(data_dir / 'dashboard/data/team_strength_rankings.json')
+    bayes = bayes_strengths(bayes_file or data_dir / 'dashboard/data/team_strength_rankings.json', min_matches)
     out = []
     for league in placings:
         seasons = []
@@ -123,8 +128,13 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--data-dir', type=Path, required=True, help='Rugby-Data checkout')
     ap.add_argument('--out', type=Path, required=True)
+    ap.add_argument('--bayes-file', type=Path,
+                    help='team-strength rows (default: the dashboard export; use the output of '
+                         'fit_strength_history.py for a longer history)')
+    ap.add_argument('--min-matches', type=int, default=8,
+                    help='drop Bayesian team-seasons with fewer fitted matches than this')
     args = ap.parse_args()
-    data = build(args.data_dir)
+    data = build(args.data_dir, args.bayes_file, args.min_matches)
     args.out.write_text(json.dumps(data, separators=(',', ':')))
     for lg in data:
         have = sum(1 for s in lg['seasons'] for t in s['teams'] if t['bayes'])
