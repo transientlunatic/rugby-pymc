@@ -63,75 +63,15 @@ def _season_fallback_date(season: str) -> datetime:
     return datetime(year, 9, 1, tzinfo=timezone.utc)
 
 
-# Team name normalization mapping
-# Maps variant names to canonical names
-TEAM_NAME_ALIASES = {
-    # Typos / punctuation variants in the source data
-    "Crusaders |": "Crusaders",
-    "Cheetahs |": "Cheetahs",
-    "Neath\u2013Swansea Ospreys": "Neath-Swansea Ospreys",
-    # URC/Celtic teams with variants
-    "Glasgow ": "Glasgow Warriors",
-    "Glasgow": "Glasgow Warriors",
-    "Edinburgh": "Edinburgh Rugby",
-    "Leinster": "Leinster Rugby",
-    "Munster": "Munster Rugby",
-    "Ulster": "Ulster Rugby",
-    "Connacht": "Connacht Rugby",
-    "Cardiff": "Cardiff Rugby",
-    "Cardiff Blues": "Cardiff Rugby",
-    "Dragons": "Dragons RFC",
-    "Benetton": "Benetton Rugby",
-    "Zebre": "Zebre Parma",
-    # South African teams
-    "Sharks": "Hollywoodbets Sharks",
-    "Lions": "Emirates Lions",
-    "Stormers": "DHL Stormers",
-    "Blue Bulls": "Vodacom Bulls",
-    "Bulls": "Vodacom Bulls",
-    # Premiership teams (common variants)
-    "Northampton": "Northampton Saints",
-    "Newcastle Red Bulls": "Newcastle Falcons",
-    "Leicester": "Leicester Tigers",
-    "Bath": "Bath Rugby",
-    "Sale": "Sale Sharks",
-    "Exeter": "Exeter Chiefs",
-    "Harlequins": "Harlequins",
-    "Wasps": "Wasps",
-    "Saracens": "Saracens",
-    "Newcastle": "Newcastle Falcons",
-    "Worcester": "Worcester Warriors",
-    "Bristol": "Bristol Bears",
-    "Gloucester": "Gloucester Rugby",
-    "London Irish": "London Irish",
-    # French Teams
-    "Lyon O.U.": "Lyon",
-    "Racing": "Racing 92",
-    "Stade Francais Paris": "Stade Francais",
-    "Clermont Auvergne": "Clermont",
-    "Bordeaux-Beg": "Bordeaux-Begles",
-    "Castres Olympique": "Castres",
-    "Biarritz Olympique": "Biarritz",
-}
-
-
-def normalize_season_label(label: str) -> str:
-    """Put a "YYYY-YYYY" season label in ascending order.
-
-    Some source files are named with the years reversed (e.g.
-    ``top14-2011-2010.json`` holds the 2010-2011 season), which would make the
-    season's start year read a year late.
-    """
-    m = re.fullmatch(r"(\d{4})-(\d{4})", label)
-    if m and int(m.group(2)) < int(m.group(1)):
-        return f"{m.group(2)}-{m.group(1)}"
-    return label
-
-
 def normalize_team_name(name: str) -> str:
-    """Normalize team name to canonical form."""
-    name = name.strip()
-    return TEAM_NAME_ALIASES.get(name, name)
+    """Team name as it appears in the data, with surrounding whitespace removed.
+
+    Names are made canonical (one spelling per club) in the Rugby-Data
+    repository when data is written -- see ``rugby/team_names.py`` there --
+    so no alias table is needed here. This is the single hook for team names:
+    callers pass raw names through it.
+    """
+    return name.strip()
 
 
 # ============================================================================
@@ -520,7 +460,7 @@ class MatchDataset:
         parts = stem.rsplit("-", 2)
         if len(parts) >= 3:
             competition = "-".join(parts[:-2])
-            season = normalize_season_label(f"{parts[-2]}-{parts[-1]}")
+            season = f"{parts[-2]}-{parts[-1]}"
         else:
             competition = stem
             season = "unknown"

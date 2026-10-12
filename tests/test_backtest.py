@@ -263,11 +263,3 @@ class TestDataQuality:
         _, report = clean_matches(df)
         gaps = report[report["issue"] == "missing_season"]["season"].tolist()
         assert gaps == ["2020-2021", "2021-2022"]
-
-
-def test_reversed_season_labels_are_put_in_order():
-    from rugby_ranking.model.data import normalize_season_label
-    assert normalize_season_label("2011-2010") == "2010-2011"
-    assert normalize_season_label("2012-2011") == "2011-2012"
-    assert normalize_season_label("2023-2024") == "2023-2024"
-    assert normalize_season_label("cup-2023") == "cup-2023"
