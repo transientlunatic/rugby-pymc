@@ -204,3 +204,70 @@ def test_store_validates_input():
     store = make_store(n_rounds=5)
     with pytest.raises(RuntimeError):
         store.player_rows(before="2030-01-01")
+
+
+class TestDataQuality:
+    @staticmethod
+    def raw(rows):
+        base = dict(season="2023-2024", competition="c", home_score=20.0, away_score=10.0)
+        out = []
+        for i, r in enumerate(rows):
+            d = {**base, "match_id": f"m{i}", "date": pd.Timestamp("2024-01-01", tz="UTC") + pd.Timedelta(days=i)}
+            out.append({**d, **r})
+        return pd.DataFrame(out)
+
+    def test_each_rule(self):
+        from rugby_ranking.forecast.store import clean_matches
+        df = self.raw([
+            dict(home_team="A", away_team="B"),                                   # fine
+            dict(home_team="", away_team=""),                                     # blank names
+            dict(home_team="  ", away_team="B"),                                  # blank (whitespace)
+            dict(home_team="C", away_team="C"),                                   # plays itself
+            dict(home_team="A", away_team="D", home_score=0.0, away_score=0.0),   # scoreless placeholder
+            dict(home_team="E", away_team="F", season="2011-2010"),               # odd label
+        ])
+        dup = df.iloc[[0]].assign(match_id="dup")                                 # same teams and kickoff
+        clean, report = clean_matches(pd.concat([df, dup], ignore_index=True))
+        report = report[report["issue"] != "missing_season"]   # covered separately
+        issues = report.groupby("issue")["match_id"].apply(sorted).to_dict()
+        assert issues == {
+            "blank_team": ["m1", "m2"], "same_team": ["m3"], "duplicate": ["dup"],
+            "scoreless_draw": ["m4"], "odd_season_label": ["m5"],
+        }
+        assert set(clean["match_id"]) == {"m0", "m4", "m5"}
+        row = clean[clean["match_id"] == "m4"].iloc[0]
+        assert np.isnan(row["home_score"]) and np.isnan(row["away_score"])      # unplayed, not deleted
+        assert report.set_index("match_id").loc["m5", "action"] == "reported only"
+
+    def test_clean_data_reports_nothing_and_changes_nothing(self):
+        from rugby_ranking.forecast.store import clean_matches
+        df = self.raw([dict(home_team="A", away_team="B"), dict(home_team="B", away_team="A")])
+        clean, report = clean_matches(df)
+        assert report.empty and clean.equals(df.reset_index(drop=True))
+
+    def test_scoreless_matches_do_not_reach_forecasters(self):
+        from rugby_ranking.forecast.store import clean_matches
+        df = self.raw([dict(home_team="A", away_team="B", home_score=0.0, away_score=0.0)] * 1
+                      + [dict(home_team="A", away_team="B")])
+        clean, report = clean_matches(df)
+        store = MatchStore(clean, quality=report)
+        assert len(store.played) == 1
+        assert store.quality_summary()["n"].sum() == 1
+
+    def test_missing_seasons_are_reported(self):
+        from rugby_ranking.forecast.store import clean_matches
+        df = self.raw([
+            dict(home_team="A", away_team="B", season="2019-2020"),
+            dict(home_team="A", away_team="B", season="2022-2023"),
+        ])
+        _, report = clean_matches(df)
+        gaps = report[report["issue"] == "missing_season"]["season"].tolist()
+        assert gaps == ["2020-2021", "2021-2022"]
+
+
+def test_reversed_season_labels_are_put_in_order():
+    from rugby_ranking.model.data import normalize_season_label
+    assert normalize_season_label("2011-2010") == "2010-2011"
+    assert normalize_season_label("2012-2011") == "2011-2012"
+    assert normalize_season_label("2023-2024") == "2023-2024"
+    assert normalize_season_label("cup-2023") == "cup-2023"

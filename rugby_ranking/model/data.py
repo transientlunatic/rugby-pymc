@@ -66,6 +66,10 @@ def _season_fallback_date(season: str) -> datetime:
 # Team name normalization mapping
 # Maps variant names to canonical names
 TEAM_NAME_ALIASES = {
+    # Typos / punctuation variants in the source data
+    "Crusaders |": "Crusaders",
+    "Cheetahs |": "Cheetahs",
+    "Neath\u2013Swansea Ospreys": "Neath-Swansea Ospreys",
     # URC/Celtic teams with variants
     "Glasgow ": "Glasgow Warriors",
     "Glasgow": "Glasgow Warriors",
@@ -109,6 +113,19 @@ TEAM_NAME_ALIASES = {
     "Castres Olympique": "Castres",
     "Biarritz Olympique": "Biarritz",
 }
+
+
+def normalize_season_label(label: str) -> str:
+    """Put a "YYYY-YYYY" season label in ascending order.
+
+    Some source files are named with the years reversed (e.g.
+    ``top14-2011-2010.json`` holds the 2010-2011 season), which would make the
+    season's start year read a year late.
+    """
+    m = re.fullmatch(r"(\d{4})-(\d{4})", label)
+    if m and int(m.group(2)) < int(m.group(1)):
+        return f"{m.group(2)}-{m.group(1)}"
+    return label
 
 
 def normalize_team_name(name: str) -> str:
@@ -503,7 +520,7 @@ class MatchDataset:
         parts = stem.rsplit("-", 2)
         if len(parts) >= 3:
             competition = "-".join(parts[:-2])
-            season = f"{parts[-2]}-{parts[-1]}"
+            season = normalize_season_label(f"{parts[-2]}-{parts[-1]}")
         else:
             competition = stem
             season = "unknown"
