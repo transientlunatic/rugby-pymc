@@ -152,17 +152,22 @@ class TestOpponentDefenseInPredictions:
         assert pred.home.mean == pytest.approx(pred.away.mean, abs=1.0)
 
 
-def _match(competition, season, home_events, away_events, i=0):
+def _match(competition, season, home_events, away_events, i=0, home_score=None, away_score=None):
+    """A played match. Final scores default to what the events add up to, i.e.
+    a source that records everything; pass scores to model one that doesn't."""
+    from rugby_ranking.sport import RUGBY_UNION
+
+    when = datetime(2025, 1, 1, tzinfo=timezone.utc)
     return MatchData(
         match_id=f"{competition}_{season}_{i}",
-        date=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        date=when,
         season=season,
         competition=competition,
         stadium="",
         home_team="A",
         away_team="B",
-        home_score=10,
-        away_score=10,
+        home_score=RUGBY_UNION.event_points(home_events, when)[0] if home_score is None else home_score,
+        away_score=RUGBY_UNION.event_points(away_events, when)[0] if away_score is None else away_score,
         home_lineup={},
         away_lineup={},
         home_scores=home_events,
@@ -182,18 +187,17 @@ def _events(tries=0, convs=0, pens=0, penalty_tries=0):
 
 class TestEstimateKickingRates:
     def test_rates_by_competition_and_pooled(self):
-        # prem: 4 team-games, 4 tries + 1 penalty try, 3 conversions, 2 penalties
         prem = [_match("prem", "2025-2026", _events(tries=2, convs=1, pens=1),
                        _events(tries=2, convs=2, pens=1, penalty_tries=1), i=i) for i in range(1)]
         prem += [_match("prem", "2025-2026", _events(), _events(), i=1)]
         t14 = [_match("t14", "2025-2026", _events(tries=1, convs=1, pens=3),
                       _events(tries=1, convs=0, pens=3), i=0)]
         rates = estimate_kicking_rates(prem + t14, min_team_games=2)
-        # prem: 4 team-games, 5 tries (incl. penalty try), 3 convs, 2 pens
-        assert rates["prem"] == pytest.approx((2 / 4, 3 / 5))
+        # prem: 4 team-games, 4 kickable tries (the penalty try is excluded), 3 convs, 2 pens
+        assert rates["prem"] == pytest.approx((2 / 4, 3 / 4))
         assert rates["t14"] == pytest.approx((3.0, 0.5))
-        # pooled: 6 team-games, 7 tries, 4 convs, 8 pens
-        assert rates[ALL_COMPETITIONS] == pytest.approx((8 / 6, 4 / 7))
+        # pooled: 6 team-games, 6 kickable tries, 4 convs, 8 pens
+        assert rates[ALL_COMPETITIONS] == pytest.approx((8 / 6, 4 / 6))
 
     def test_uses_only_recent_seasons_and_skips_thin_competitions(self):
         old = _match("prem", "2020-2021", _events(tries=1, pens=9), _events(tries=1, pens=9))
@@ -204,6 +208,22 @@ class TestEstimateKickingRates:
         assert "rare" in rates  # exactly 2 team-games meets the minimum
         rates = estimate_kicking_rates([old, new, thin], n_recent_seasons=1, min_team_games=3)
         assert "rare" not in rates and "prem" not in rates
+
+    def test_team_games_whose_events_miss_the_final_score_are_ignored(self):
+        # A source that records tries but not kicks: 3 tries + 2 conversions
+        # + a penalty scored (22) but only the tries (15) are in the events.
+        tries_only = _match("super", "2025-2026", _events(tries=3), _events(tries=3), home_score=22, away_score=22)
+        complete = _match("prem", "2025-2026", _events(tries=2, convs=2, pens=1), _events(tries=2, convs=1, pens=3))
+        rates = estimate_kicking_rates([tries_only, complete], min_team_games=1)
+        assert "super" not in rates
+        # pooled uses only the complete match: 4 tries, 3 conversions, 4 penalties, 2 team-games
+        assert rates[ALL_COMPETITIONS] == pytest.approx((4 / 2, 3 / 4))
+
+    def test_penalty_try_with_its_implied_conversion_still_reconciles(self):
+        m = _match("prem", "2025-2026", _events(tries=1, convs=1, penalty_tries=1), _events())
+        assert m.home_score == 14                     # 5 + 2 + (5 + 2 implied)
+        rates = estimate_kicking_rates([m], min_team_games=1)
+        assert rates["prem"] == pytest.approx((0.0, 1.0))     # the kicked try was converted; the penalty try is excluded
 
     def test_no_data_gives_empty(self):
         assert estimate_kicking_rates([]) == {}
@@ -232,3 +252,37 @@ class TestKickingRatesInPredictions:
         assert predictor._kicking_rates_for("prem") == (0.8, 0.73)
         assert predictor._kicking_rates_for("other") == (1.2, 0.72)
         assert predictor._kicking_rates_for(None) == (1.2, 0.72)
+
+
+class TestStrengthRankingsKicking:
+    """Reference-margin rankings use the predictor's empirical kicking rates
+    (the same for both sides), not a fixed 2.5 penalties per team."""
+
+    @staticmethod
+    def rank(rates, competition=None):
+        from rugby_ranking.model.strength_rankings import compute_team_rankings
+
+        model, trace = _build_model_and_trace({"TeamA": 0.0, "TeamB": 0.0})
+        predictor = MatchPredictor(model, trace, kicking_rates=rates)
+        df = compute_team_rankings(predictor, season="2024", n_samples=20000, seed=0, competition=competition)
+        return df.set_index("team").loc["TeamA"]
+
+    def test_penalty_rate_sets_the_spread_not_the_mean(self):
+        quiet = self.rank({ALL_COMPETITIONS: (0.2, 0.7)})
+        noisy = self.rank({ALL_COMPETITIONS: (8.0, 0.7)})
+        assert noisy.ref_margin_mean == pytest.approx(quiet.ref_margin_mean, abs=0.6)
+        width = lambda r: r.ref_margin_upper - r.ref_margin_lower
+        assert width(noisy) > width(quiet) + 4
+
+    def test_competition_argument_selects_that_competitions_rates(self):
+        rates = {ALL_COMPETITIONS: (0.2, 0.7), "kicky": (8.0, 0.7)}
+        width = lambda r: r.ref_margin_upper - r.ref_margin_lower
+        assert width(self.rank(rates, competition="kicky")) > width(self.rank(rates)) + 4
+        # unknown competition falls back to the pooled rates
+        assert width(self.rank(rates, competition="other")) == pytest.approx(width(self.rank(rates)))
+
+    def test_without_rates_the_old_constants_apply(self):
+        default = self.rank(None)
+        explicit = self.rank({ALL_COMPETITIONS: (2.5, 0.70)})
+        assert default.ref_margin_lower == explicit.ref_margin_lower
+        assert default.ref_margin_upper == explicit.ref_margin_upper

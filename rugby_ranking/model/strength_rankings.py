@@ -30,8 +30,6 @@ import pandas as pd
 
 from rugby_ranking.model.core import RugbyModel
 from rugby_ranking.model.predictions import (
-    CONVERSION_RATE,
-    PENALTIES_PER_MATCH,
     STARTERS,
     team_points,
     MatchPredictor,
@@ -158,8 +156,14 @@ def _simulate_reference_margin(
     rng: np.random.Generator,
     reference_gamma: float = 0.0,
     reference_delta: float = 0.0,
+    penalties_per_team: float = 2.5,
+    conversion_rate: float = 0.70,
 ) -> np.ndarray:
     """Simulate (n_samples,) points-margin distribution for one team vs reference.
+
+    Both sides use the same ``penalties_per_team`` / ``conversion_rate``: the
+    ranking is league-neutral, so kicking volume must not favour either side.
+    It then barely moves the mean margin but sets how noisy the margin is.
 
     Team T attacks against the reference's defense (``reference_delta``).
     The reference attacks against team T's defense (``delta_flat[:, team_idx]``).
@@ -200,11 +204,11 @@ def _simulate_reference_margin(
     team_tries = rng.poisson(team_try_rate)
     ref_tries = rng.poisson(ref_try_rate)
 
-    team_conv = rng.binomial(team_tries, CONVERSION_RATE)
-    ref_conv = rng.binomial(ref_tries, CONVERSION_RATE)
+    team_conv = rng.binomial(team_tries, conversion_rate)
+    ref_conv = rng.binomial(ref_tries, conversion_rate)
 
-    team_pen = rng.poisson(PENALTIES_PER_MATCH, size=n_samples)
-    ref_pen = rng.poisson(PENALTIES_PER_MATCH, size=n_samples)
+    team_pen = rng.poisson(penalties_per_team, size=n_samples)
+    ref_pen = rng.poisson(penalties_per_team, size=n_samples)
 
     team_score = team_points(team_tries, team_conv, team_pen)
     ref_score = team_points(ref_tries, ref_conv, ref_pen)
@@ -221,6 +225,7 @@ def compute_team_rankings(
     seed: int | None = None,
     reference_gamma: float = 0.0,
     reference_delta: float = 0.0,
+    competition: str | None = None,
 ) -> pd.DataFrame:
     """Compute combined team rankings for a given season.
 
@@ -262,8 +267,15 @@ def compute_team_rankings(
         Default 0.0 = prior mean = "average team across all data".
         Pass the posterior mean over international teams to use an
         "average international" reference instead.
+    competition:
+        Whose kicking rates (penalties per team, conversion rate) to simulate
+        with, for both the team and the reference. ``None`` uses the pooled
+        rates across competitions, which keeps a cross-league ranking neutral.
+        Rates come from the predictor's ``kicking_rates``; without them the
+        fixed fallback constants apply.
     """
     model = predictor.model
+    penalties_per_team, conversion_rate = predictor._kicking_rates_for(competition)
     rng = np.random.default_rng(seed)
     lo = (1.0 - ci) / 2 * 100
     hi = 100.0 - lo
@@ -309,6 +321,8 @@ def compute_team_rankings(
             predictor, ts_idx, delta_flat, n_samples, rng,
             reference_gamma=reference_gamma,
             reference_delta=reference_delta,
+            penalties_per_team=penalties_per_team,
+            conversion_rate=conversion_rate,
         )
         ref_mean = float(margin.mean())
         ref_lo = float(np.percentile(margin, lo))
