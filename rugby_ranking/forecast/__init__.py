@@ -7,6 +7,7 @@ the backtest harness (``rugby_ranking.backtest``) draws from.
 
 from rugby_ranking.forecast.base import Forecast, Forecaster, History
 from rugby_ranking.forecast.baselines import ConstantBaseline, EloForecaster
+from rugby_ranking.forecast.rating import RatingConfig, RatingForecaster
 from rugby_ranking.forecast.store import MatchStore
 
 __all__ = [
@@ -16,4 +17,6 @@ __all__ = [
     "MatchStore",
     "ConstantBaseline",
     "EloForecaster",
+    "RatingForecaster",
+    "RatingConfig",
 ]
