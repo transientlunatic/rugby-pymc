@@ -5,9 +5,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import pandas as pd
-
 from rugby_ranking.backtest import BacktestConfig, run_backtest
+from rugby_ranking.backtest.report import print_report
 from rugby_ranking.forecast import ConstantBaseline, EloForecaster, MatchStore
 
 
@@ -47,16 +46,7 @@ def main(argv=None) -> None:
     res = run_backtest(store, _build(args.forecasters.split(","), args), cfg,
                        log=(lambda m: None) if args.quiet else print)
 
-    pd.set_option("display.width", 200, "display.float_format", "{:.3f}".format)
-    print(f"\n{res.n_fixtures} fixtures; coverage:\n{res.coverage().to_string()}")
-    print("\nOverall (matches every forecaster predicted):\n", res.summary().to_string())
-    print("\nBy competition:\n", res.summary(by=["competition"]).to_string())
-    names = res.forecasters
-    for a in names[1:]:
-        for b in names[:1]:
-            print(f"\nPaired difference {a} - {b} (negative favours {a}):\n", res.compare(a, b).to_string())
-    if res.failures:
-        print(f"\n{len(res.failures)} failed fits, e.g. {res.failures[0]}")
+    print_report(res)
     if args.out:
         res.frame.to_csv(args.out, index=False)
 
