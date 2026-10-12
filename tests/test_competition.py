@@ -60,6 +60,22 @@ class TestRanking:
         assert iid_se * 0.85 < eff_diff_sd < iid_se * 2.2
 
 
+class TestDiagnostics:
+    def test_split_rhat_flags_chains_that_disagree(self):
+        from rugby_ranking.competition.analysis import _split_rhat
+
+        rng = np.random.default_rng(0)
+        agree = rng.normal(0, 1, (4, 500))
+        disagree = agree + np.array([[0.0], [0.0], [3.0], [3.0]])        # two chains stuck elsewhere
+        assert _split_rhat(agree) == pytest.approx(1.0, abs=0.02)
+        assert _split_rhat(disagree) > 1.5
+
+    def test_analysis_reports_convergence(self):
+        a = analyse_losses(synth({"x": 0.0, "y": 0.02}, per_block=40), **FAST)
+        assert a.diagnostics["max_rhat"] < 1.1
+        assert a.diagnostics["divergences"] == 0
+
+
 class TestUncertainty:
     def test_period_to_period_swings_widen_the_intervals(self):
         flat = analyse_losses(synth({"x": 0.0, "y": 0.02}, block_sd=0.0, seed=3), **FAST)

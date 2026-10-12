@@ -67,8 +67,17 @@ class CompetitionAnalysis:
         )
 
 
-def _centre(x, axis):
-    return x - x.mean(axis=axis, keepdims=True)
+def _split_rhat(x: np.ndarray) -> float:
+    """Split R-hat of one scalar parameter; ``x`` is (chains, draws)."""
+    x = np.asarray(x, float)
+    half = x.shape[1] // 2
+    chains = np.concatenate([x[:, :half], x[:, half: 2 * half]], axis=0)     # (2*chains, half)
+    n = chains.shape[1]
+    within = chains.var(axis=1, ddof=1).mean()
+    between = n * chains.mean(axis=1).var(ddof=1)
+    if within == 0:
+        return float("nan")
+    return float(np.sqrt(((n - 1) / n * within + between / n) / within))
 
 
 def analyse_competition(frame: pd.DataFrame, metric: str = "logloss", **kwargs) -> CompetitionAnalysis:
@@ -165,17 +174,15 @@ def analyse_losses(
                              n_matches=int((league == ci).sum())))
     by_league = pd.DataFrame(rows)
 
-    summ = {}
-    try:
-        import arviz as az
-        s = az.summary(idata, var_names=["tau_block", "tau_league", "sigma", "a_raw"])
-        summ = {"max_rhat": float(s["r_hat"].max()), "min_ess_bulk": float(s["ess_bulk"].min())}
-    except Exception:  # diagnostics are a courtesy
-        pass
+    # Diagnostics on the identified quantities only: the raw b/g parameters keep a
+    # free mean across entrants (removed by centring), so their r-hat is meaningless.
+    rhats = [_split_rhat(post[v].values) for v in ("tau_block", "tau_league", "sigma")]
+    rhats += [_split_rhat(post["a"].values[..., j]) for j in range(J)]
     n_div = int(idata.sample_stats["diverging"].sum()) if "diverging" in idata.sample_stats else None
+    diagnostics = {"max_rhat": float(max(rhats)), "divergences": n_div}
 
     return CompetitionAnalysis(
         entrants=entrants, metric=metric, n_matches=M, n_blocks=O, leaderboard=board, pairwise=pair,
         by_league=by_league, block_sd=float(post["tau_block"].mean()), league_sd=float(post["tau_league"].mean()),
-        diagnostics={**summ, "divergences": n_div},
+        diagnostics=diagnostics,
     )

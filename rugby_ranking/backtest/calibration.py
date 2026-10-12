@@ -40,7 +40,7 @@ _POOLED = "__pooled__"
 @dataclass(frozen=True)
 class CalibrationConfig:
     level: bool = True
-    margin: bool = True
+    margin: bool = False             # off by default: shifts learned from few matches overfit (see docs)
     spread: bool = True
     shrinkage: float = 40.0          # pseudo-matches pulling a league toward pooled
     pooled_shrinkage: float = 20.0   # pseudo-matches pulling pooled corrections toward zero

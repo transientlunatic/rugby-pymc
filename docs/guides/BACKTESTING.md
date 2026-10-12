@@ -114,7 +114,7 @@ res.compare("bayes-prod+cal", "bayes-prod")
 Per competition, with shrinkage toward pooled values:
 
 - **level**: shift the predicted total by the mean total error;
-- **margin**: shift the predicted margin by the mean margin error (a home-advantage correction);
+- **margin** (off by default): shift the predicted margin by the mean margin error (a home-advantage correction). Shifts learned from a few dozen matches per league overfit and made margin error worse, both on a year and on three years of `bayes-prod` forecasts;
 - **spread**: re-derive the win probability from Normal(margin, s) with `s` learned from the margin errors, and rescale the score intervals. The base draw probability is kept.
 
 Forecasts at origin *k* are corrected using only results from origins before *k*;
@@ -149,3 +149,24 @@ a test now guards against that.)
 On a year of forecasts the plain bootstrap called Elo's lead over the Bayesian
 model significant; with only five independent periods the hierarchical analysis
 puts P(Elo best) at about 0.8 and cannot separate the two Bayesian variants.
+
+### Result on three years of forecasts (2022-10 to 2026-10)
+
+2,835 matches in 25 time blocks, every entrant calibrated the same way
+(level + spread), mean three-way log loss, lower is better:
+
+| entrant | raw mean loss | effect (94% interval) | P(best) |
+|---|---|---|---|
+| bayes-prod+cal | 0.670 | -0.016 (-0.026, -0.005) | 0.77 |
+| elo+cal | 0.683 | -0.010 (-0.020, 0.001) | 0.22 |
+| elo | 0.696 | 0.003 | 0.005 |
+| bayes-prod | 0.695 | 0.005 | 0.002 |
+| constant | 0.692 | 0.007 | 0.001 |
+
+Uncalibrated, none of the models beat the constant baseline on win probability:
+their probabilities are overconfident. The Bayesian model's *margins* are the
+best of the three (error 12.7 against 12.8 for Elo and 13.2 for the constant),
+so its team-strength signal is real; the spread layer fixes the scale that turns
+margins into probabilities. Calibration also helps Elo, but not the constant
+baseline, which has nothing to correct. Elo is better than the Bayesian model
+in the Championship.
