@@ -1221,6 +1221,24 @@ def export_dashboard_data(
     except Exception as e:
         print(f"    Result ingestion skipped: {e}")
 
+    # Out-of-sample match-outcome calibration, one prediction per match. Written
+    # here (runs several times a week) rather than only by the monthly
+    # run_diagnostics job, so it tracks the season as results come in.
+    try:
+        calibration = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "latest_prematch": archiver.calibration_report(snapshot="latest"),
+            "earliest_prematch": archiver.calibration_report(snapshot="earliest"),
+        }
+        cal_dir = output_dir / "model_diagnostics"
+        cal_dir.mkdir(parents=True, exist_ok=True)
+        with open(cal_dir / "match_outcome_calibration.json", "w") as f:
+            json.dump(calibration, f, indent=2)
+        n_scored = calibration["latest_prematch"].get("n", 0)
+        print(f"    Match-outcome calibration written ({n_scored} matches scored)")
+    except Exception as e:
+        print(f"    Match-outcome calibration skipped: {e}")
+
     # Export upcoming predictions using actual unplayed matches
     export_upcoming_predictions(
         model, trace, dataset, output_dir,
