@@ -61,6 +61,9 @@ def main() -> None:
     ap.add_argument("--vi-iterations", type=int, default=30000)
     ap.add_argument("--n-samples", type=int, default=1000, help="posterior draws per season for the reference margin")
     ap.add_argument("--save-as", help="also save the fitted model as this checkpoint name")
+    ap.add_argument("--checkpoint-every", type=int,
+                    help="save a checkpoint every N iterations (needs --save-as); a rerun resumes from the latest")
+    ap.add_argument("--vi-samples", type=int, default=500, help="posterior samples drawn from the VI fit")
     args = ap.parse_args()
 
     dataset, df = load_observations(args.data_dir, args.start_year, args.min_recorded)
@@ -73,9 +76,34 @@ def main() -> None:
     log(f"built model: {len(model._player_ids):,} players, {len(model._team_season_ids)} team-seasons")
 
     t = time.time()
-    fitter = ModelFitter(model, config=InferenceConfig(vi_n_iterations=args.vi_iterations, vi_method="advi"))
-    trace = fitter.fit_vi(progressbar=False, random_seed=42)
-    log(f"VI fit took {time.time() - t:.0f}s for {args.vi_iterations:,} iterations")
+    done, fitter = 0, None
+    if args.checkpoint_every and args.save_as:
+        # resume after a restart: pick up the latest <save-as>_iter<N> checkpoint
+        # (a resumed run's iteration counter restarts at 0, so its checkpoints are named
+        # <save-as>_r<iterations done before>_iter<N>)
+        cache = Path("~/.cache/rugby_ranking").expanduser()
+        pat = re.compile(rf"{re.escape(args.save_as)}(?:_r(\d+))?_iter(\d+)$")
+        found = sorted(((int(m.group(1) or 0) + int(m.group(2)), d.name)
+                        for d in cache.glob(f"{args.save_as}*_iter*") if (m := pat.fullmatch(d.name))),
+                       reverse=True)
+        for k, name in found:
+            try:
+                fitter = ModelFitter.load(name, model)
+                done = k
+                log(f"resuming from checkpoint {name} ({k:,} iterations done)")
+                break
+            except Exception as e:  # an interrupted save can leave a partial checkpoint
+                log(f"could not load {name}: {e}")
+    cfg = InferenceConfig(vi_n_iterations=max(args.vi_iterations - done, 1), vi_method="advi")
+    if fitter is None:
+        fitter = ModelFitter(model, config=cfg)
+    else:
+        fitter.config = cfg
+    trace = fitter.fit_vi(warm_start=done > 0, progressbar=False, random_seed=42, n_samples=args.vi_samples,
+                          sample_batch_size=50, checkpoint_every=args.checkpoint_every,
+                          checkpoint_name=(f"{args.save_as}_r{done}" if done else args.save_as) or "strength_history_vi",
+                          verbose=True)
+    log(f"VI fit took {time.time() - t:.0f}s ({args.vi_iterations - done:,} iterations this run)")
     hist = getattr(getattr(fitter, "_vi_approx", None), "hist", None)
     if hist is not None and len(hist) >= 4000:
         # a crude convergence check: mean loss over the last 1000 iterations vs the 1000 before
