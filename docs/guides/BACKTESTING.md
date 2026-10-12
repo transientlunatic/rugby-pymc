@@ -10,7 +10,7 @@ python -m rugby_ranking.backtest --data-dir ../Rugby-Data \
     --competitions premiership,top14,celtic
 ```
 
-`bayes` is also available but refits the hierarchical model at every origin
+`bayes` (plain joint model) and `bayes-prod` (the weekly job's configuration) are also available but refit the hierarchical model at every origin
 (minutes each with `--vi-iterations 8000`), so use a coarse `--step-days` for it.
 
 ## How it works
@@ -73,3 +73,21 @@ res.calibration("mine")              # predicted vs observed home-win rate
 - `ConstantBaseline`: recent per-competition average match, no team information.
   A model that cannot beat it has learned nothing.
 - `EloForecaster`: global Elo with a linear rating-difference-to-margin map.
+
+## Data quality
+
+`MatchStore.from_data_dir` cleans known source problems and records what it
+touched in `store.quality` (summary: `store.quality_summary()`):
+
+| issue | action |
+|---|---|
+| `blank_team`, `same_team` | excluded (international fixtures whose team names failed to parse) |
+| `duplicate` | excluded (same teams and kickoff) |
+| `scoreless_draw` | kept as **unplayed** (0-0 placeholders for cancelled or Covid-era fixtures) |
+| `odd_season_label` | reported only |
+| `missing_season` | reported only (e.g. Top 14 2012-13, 2016-17, 2019-21; Championship 2023-25) |
+
+Pass `clean=False` to see the raw data. Season labels written with reversed
+years in a filename (`top14-2011-2010.json`) are put in order by the loader.
+Reconciliation of scoring events against final scores is a separate check:
+`python -m rugby_ranking.sport audit` (see `SPORT_SPEC.md`).

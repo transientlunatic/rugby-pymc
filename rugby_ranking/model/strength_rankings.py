@@ -33,6 +33,7 @@ from rugby_ranking.model.predictions import (
     CONVERSION_RATE,
     PENALTIES_PER_MATCH,
     STARTERS,
+    team_points,
     MatchPredictor,
     _get_team_season_index_with_fallback,
 )
@@ -205,8 +206,8 @@ def _simulate_reference_margin(
     team_pen = rng.poisson(PENALTIES_PER_MATCH, size=n_samples)
     ref_pen = rng.poisson(PENALTIES_PER_MATCH, size=n_samples)
 
-    team_score = team_tries * 5 + team_conv * 2 + team_pen * 3
-    ref_score = ref_tries * 5 + ref_conv * 2 + ref_pen * 3
+    team_score = team_points(team_tries, team_conv, team_pen)
+    ref_score = team_points(ref_tries, ref_conv, ref_pen)
 
     return (team_score - ref_score).astype(float)
 

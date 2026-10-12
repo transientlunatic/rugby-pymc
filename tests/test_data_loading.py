@@ -13,15 +13,15 @@ from rugby_ranking.model.data import MatchDataset, normalize_team_name
 class TestNormalizeTeamName:
     """Test team name normalization."""
 
-    def test_basic_normalization(self):
-        """Test known-alias resolution (exact-string lookup, not case-folding --
-        see TEAM_NAME_ALIASES in rugby_ranking.model.data)."""
-        assert normalize_team_name("Leinster") == "Leinster Rugby"
+    def test_names_pass_through(self):
+        """Canonical names are made in the data repo (Rugby-Data's
+        rugby/team_names.py), so the loader does not rewrite them."""
+        assert normalize_team_name("Leinster Rugby") == "Leinster Rugby"
         assert normalize_team_name("Some Unlisted Team") == "Some Unlisted Team"
 
     def test_strip_whitespace(self):
         """Test whitespace handling."""
-        assert normalize_team_name("  Leinster  ") == "Leinster Rugby"
+        assert normalize_team_name("  Leinster Rugby  ") == "Leinster Rugby"
         assert normalize_team_name("  Some Unlisted Team  ") == "Some Unlisted Team"
 
     def test_accent_removal(self):
