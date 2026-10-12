@@ -31,6 +31,9 @@ def main(argv=None) -> None:
     p.add_argument("--half-life", type=float, default=None, help="origins; down-weights older errors")
     p.add_argument("--min-history", type=int, default=CalibrationConfig.min_history)
     p.add_argument("--no-by-competition", action="store_true")
+    p.add_argument("--analyse", action="store_true",
+                   help="Bayesian leaderboard (P(best), expected rank, pairwise) instead of the plain tables")
+    p.add_argument("--metric", default="logloss", help="loss for --analyse (lower is better)")
     args = p.parse_args(argv)
 
     res = BacktestResult.from_csv(*args.csv)
@@ -43,7 +46,16 @@ def main(argv=None) -> None:
     if args.only:
         keep = set(args.only.split(","))
         res = BacktestResult.from_frame(res.frame[res.frame["forecaster"].isin(keep)])
-    print_report(res, args.reference, by_competition=not args.no_by_competition)
+    if args.analyse:
+        from rugby_ranking.competition import analyse_competition
+
+        analysis = analyse_competition(res.frame, metric=args.metric)
+        print(analysis)
+        print("\nBy league (effect on", args.metric + ", lower is better, shrunk toward the overall effect):")
+        print(analysis.by_league.pivot(index="competition", columns="entrant", values="effect").to_string())
+        print("\ndiagnostics:", analysis.diagnostics)
+    else:
+        print_report(res, args.reference, by_competition=not args.no_by_competition)
 
 
 if __name__ == "__main__":

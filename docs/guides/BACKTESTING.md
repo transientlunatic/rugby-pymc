@@ -121,3 +121,31 @@ Forecasts at origin *k* are corrected using only results from origins before *k*
 a test poisons later results and checks nothing changes. Origins with fewer than
 `min_history` past forecasts are returned unchanged. `half_life_origins` lets
 corrections follow drift. Calibrated forecasters are named `<name>+cal`.
+
+## Comparing many models
+
+With several entrants, a table of pairwise paired differences misleads: some
+pair always looks significant by chance, and matches within a period or league
+are not independent. `rugby_ranking.competition` fits a hierarchical model to
+the per-match losses instead:
+
+```bash
+python -m rugby_ranking.backtest.replay forecasts.csv --calibrate --analyse --metric logloss
+```
+
+It reports each entrant's effect (mean loss relative to the average entrant, with
+a 94% interval), P(best), expected rank and P(row beats column). Match
+difficulty is shared across entrants; period (backtest origin) and league
+effects are random, so uncertainty reflects the number of independent *periods*,
+not just the number of games; and league-specific results are shrunk toward the
+overall effect so a lucky league isn't read as skill.
+
+The target is each entrant's **mean** loss: errors are Gaussian, not
+heavy-tailed. A proper scoring rule rewards the average, and the occasional
+confident miss is the point, not an outlier to down-weight. (A Student-t error
+estimates the typical match and ranked a worse model first in an early version;
+a test now guards against that.)
+
+On a year of forecasts the plain bootstrap called Elo's lead over the Bayesian
+model significant; with only five independent periods the hierarchical analysis
+puts P(Elo best) at about 0.8 and cannot separate the two Bayesian variants.
