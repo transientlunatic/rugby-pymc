@@ -392,8 +392,13 @@ class PlayerMatchObservation:
 
     @property
     def total_points(self) -> int:
-        return (self.tries * 5 + self.conversions * 2 +
-                self.penalties * 3 + self.drop_goals * 3)
+        from rugby_ranking.sport import RUGBY_UNION
+
+        return RUGBY_UNION.score(
+            {"try": self.tries, "conversion": self.conversions,
+             "penalty": self.penalties, "drop_goal": self.drop_goals},
+            self.date,
+        )
 
     @property
     def match_result(self) -> str:

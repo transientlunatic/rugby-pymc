@@ -17,6 +17,7 @@ import arviz as az
 
 from rugby_ranking.model.core import RugbyModel, season_sort_key
 from rugby_ranking.model.data import normalize_team_name
+from rugby_ranking.sport import RUGBY_UNION
 
 
 # Rugby scoring constants. These are only the fallback when no empirical
@@ -26,6 +27,12 @@ from rugby_ranking.model.data import normalize_team_name
 # single constant biases team totals by several points.
 CONVERSION_RATE = 0.70  # Typical conversion success rate
 PENALTIES_PER_MATCH = 2.5  # Average penalties per team per match
+
+def team_points(tries, conversions, penalties, when=None):
+    """Points from try / conversion / penalty counts (scalars or arrays) under
+    the rugby union rules in force on ``when`` (default: current rules)."""
+    return RUGBY_UNION.score({"try": tries, "conversion": conversions, "penalty": penalties}, when)
+
 
 ALL_COMPETITIONS = "__all__"  # key for the pooled rates in estimate_kicking_rates
 
@@ -550,8 +557,8 @@ class MatchPredictor:
         home_penalties = np.random.poisson(penalties_per_team, size=n_samples)
         away_penalties = np.random.poisson(penalties_per_team, size=n_samples)
 
-        home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
-        away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
+        home_scores = team_points(home_tries, home_conversions, home_penalties)
+        away_scores = team_points(away_tries, away_conversions, away_penalties)
 
         return self._build_prediction(
             home_team, away_team, home_scores, away_scores, home_season_used, away_season_used
@@ -678,8 +685,8 @@ class MatchPredictor:
         home_penalties = np.random.poisson(penalties_per_team, size=n_samples)
         away_penalties = np.random.poisson(penalties_per_team, size=n_samples)
 
-        home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
-        away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
+        home_scores = team_points(home_tries, home_conversions, home_penalties)
+        away_scores = team_points(away_tries, away_conversions, away_penalties)
 
         return self._build_prediction(
             home_team, away_team, home_scores, away_scores, home_season_used, away_season_used
