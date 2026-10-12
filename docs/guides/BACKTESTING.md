@@ -10,7 +10,7 @@ python -m rugby_ranking.backtest --data-dir ../Rugby-Data \
     --competitions premiership,top14,celtic
 ```
 
-`bayes` (plain joint model) and `bayes-prod` (the weekly job's configuration) are also available but refit the hierarchical model at every origin
+`rating` (Bayesian rating model, seconds), `bayes` (plain joint model) and `bayes-prod` (the weekly job's configuration) are also available but refit the hierarchical model at every origin
 (minutes each with `--vi-iterations 8000`), so use a coarse `--step-days` for it.
 
 ## How it works
@@ -170,3 +170,40 @@ so its team-strength signal is real; the spread layer fixes the scale that turns
 margins into probabilities. Calibration also helps Elo, but not the constant
 baseline, which has nothing to correct. Elo is better than the Bayesian model
 in the Championship.
+
+## The rating model
+
+`RatingForecaster` (`rugby_ranking/forecast/rating.py`) keeps a Gaussian rating
+per team (expected margin against an average side) and updates it after every
+match with an exact Kalman step, using the full margin of victory, not just the
+result. Per league it learns the home advantage and the margin noise online.
+Variance grows with elapsed days, and at each new season ratings regress toward
+average and gain turnover variance, so a promoted or long-absent team gets
+honestly wider predictions. Win, draw and away probabilities come from the
+integer margin. It backtests in seconds.
+
+Defaults were tuned on 2019-09 to 2022-09 only (log loss 0.6601 to 0.6559, a
+flat optimum). On the later period, with every entrant raw and calibrated and
+the same fixtures (2,835 matches, 25 blocks, 2022-10 to 2026-10):
+
+| entrant | mean log loss | accuracy | margin MAE | P(best) |
+|---|---|---|---|---|
+| **rating** | **0.634** | 74.0% | 11.96 | 0.49 |
+| **rating+cal** | **0.633** | – | – | 0.51 |
+| bayes-prod+cal | 0.670 | – | – | 0.000 |
+| elo+cal | 0.683 | – | – | 0.000 |
+| elo | 0.696 | 71.6% | 12.84 | 0.000 |
+| bayes-prod | 0.695 | 71.6% | 12.71 | 0.000 |
+| constant | 0.692 | 71.3% | 13.15 | 0.000 |
+
+It beats every other entrant with probability about 1, in all seven leagues
+(most in the Celtic and Championship, least in the French leagues), in 22 of 25
+blocks and in each of five seasons, and calibration adds nothing to it (its win
+probabilities are already well calibrated). `tests/test_rating.py` checks the
+Kalman update against a hand computation and that predictions ignore results
+from the origin onward.
+
+Why it wins: it uses the whole margin, where Elo uses only win/loss, and it
+carries uncertainty, where the event-level model's team strengths come from a
+costly refit every few weeks. This is a development-period result; the
+prospective arena is the real test.
