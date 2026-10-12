@@ -12,7 +12,7 @@ import numpy as np
 from rugby_ranking.model.data import MatchDataset
 from rugby_ranking.model.core import RugbyModel, ModelConfig
 from rugby_ranking.model.inference import ModelFitter, InferenceConfig
-from rugby_ranking.model.predictions import MatchPredictor
+from rugby_ranking.model.predictions import MatchPredictor, estimate_kicking_rates
 from rugby_ranking.model.season_predictor import SeasonPredictor
 from rugby_ranking.model.paths_to_victory import PathsAnalyzer
 from rugby_ranking.model.squad_analysis import SquadAnalyzer
@@ -245,7 +245,7 @@ def export_upcoming_predictions(
     """
     print("  - Upcoming match predictions...")
 
-    match_predictor = MatchPredictor(model, trace)
+    match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
     predictions_data = []
 
     now = datetime.now(timezone.utc)
@@ -550,7 +550,7 @@ def export_season_prediction(
             print(f"    [WARNING] Skipping season prediction export for {competition} {season}: missing or empty match data.")
             return
         
-        match_predictor = MatchPredictor(model, trace)
+        match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
         season_predictor = SeasonPredictor(
             match_predictor=match_predictor, competition=competition, playoff_spots=playoff_spots
         )
@@ -1221,6 +1221,24 @@ def export_dashboard_data(
     except Exception as e:
         print(f"    Result ingestion skipped: {e}")
 
+    # Out-of-sample match-outcome calibration, one prediction per match. Written
+    # here (runs several times a week) rather than only by the monthly
+    # run_diagnostics job, so it tracks the season as results come in.
+    try:
+        calibration = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "latest_prematch": archiver.calibration_report(snapshot="latest"),
+            "earliest_prematch": archiver.calibration_report(snapshot="earliest"),
+        }
+        cal_dir = output_dir / "model_diagnostics"
+        cal_dir.mkdir(parents=True, exist_ok=True)
+        with open(cal_dir / "match_outcome_calibration.json", "w") as f:
+            json.dump(calibration, f, indent=2)
+        n_scored = calibration["latest_prematch"].get("n", 0)
+        print(f"    Match-outcome calibration written ({n_scored} matches scored)")
+    except Exception as e:
+        print(f"    Match-outcome calibration skipped: {e}")
+
     # Export upcoming predictions using actual unplayed matches
     export_upcoming_predictions(
         model, trace, dataset, output_dir,
@@ -1228,7 +1246,7 @@ def export_dashboard_data(
     )
 
     try:
-        match_predictor = MatchPredictor(model, trace)
+        match_predictor = MatchPredictor(model, trace, kicking_rates=estimate_kicking_rates(dataset.matches))
         for season in recent_seasons:
             export_paths_to_victory(match_predictor, df_recent, season, output_dir)
     except Exception as e:

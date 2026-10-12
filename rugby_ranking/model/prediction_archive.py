@@ -361,7 +361,11 @@ class PredictionArchiver:
             }
 
         # Load Rugby-Data matches
-        dataset = MatchDataset(rugby_data_dir)
+        # Only teams/scores are needed here, so skip the (slow) fuzzy player
+        # name matching. load_json_files() is required: constructing the
+        # dataset alone leaves `matches` empty.
+        dataset = MatchDataset(rugby_data_dir, fuzzy_match_names=False)
+        dataset.load_json_files()
         all_matches = dataset.matches
 
         # Filter by date range if specified
@@ -775,12 +779,22 @@ class PredictionArchiver:
         self,
         competition: Optional[str] = None,
         season: Optional[str] = None,
+        snapshot: str = "latest",
     ) -> Dict[str, Any]:
         """
-        Aggregate calibration metrics across all predictions that have results.
+        Aggregate calibration metrics across predictions that have results.
+
+        A match is normally predicted several times before kickoff (weekly
+        refreshes plus lineup updates), so counting every snapshot would
+        weight matches by how often they were refreshed and overstate ``n``.
+
+        Args:
+            snapshot: Which prediction to score per match -- "latest" (the
+                final pre-kickoff forecast, default), "earliest" (the
+                longest-lead forecast), or "all" (every snapshot).
 
         Returns a dict with:
-          - n: number of scored predictions
+          - n: number of scored predictions (matches, unless snapshot="all")
           - outcome_accuracy: fraction of correct winner predictions
           - mean_home_error: mean signed error on home score
           - mean_away_error: mean signed error on away score
@@ -796,6 +810,24 @@ class PredictionArchiver:
             season=season,
             has_result=True,
         )
+
+        if snapshot not in ("latest", "earliest", "all"):
+            raise ValueError(f"snapshot must be 'latest', 'earliest' or 'all', got {snapshot!r}")
+
+        if snapshot != "all":
+            chosen: Dict[tuple, ArchivedPrediction] = {}
+            for pred in predictions:
+                mm = pred.match_metadata
+                key = (mm.competition, mm.season, mm.match_id)
+                best = chosen.get(key)
+                ts = pred.prediction_metadata.timestamp
+                if (
+                    best is None
+                    or (snapshot == "latest" and ts > best.prediction_metadata.timestamp)
+                    or (snapshot == "earliest" and ts < best.prediction_metadata.timestamp)
+                ):
+                    chosen[key] = pred
+            predictions = list(chosen.values())
 
         if not predictions:
             return {"n": 0}

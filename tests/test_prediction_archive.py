@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
 import json
+import time
 
 from rugby_ranking.model.predictions import MatchPrediction, ScorePrediction
 from rugby_ranking.model.prediction_archive import (
@@ -523,6 +524,44 @@ class TestCalibrationReport:
         assert report_other == {"n": 0}
 
 
+    def test_calibration_report_one_prediction_per_match(
+        self, temp_archive_dir, sample_prediction, sample_match_metadata, sample_actual_result
+    ):
+        """Several pre-match snapshots of one match must count once."""
+        archiver = PredictionArchiver(archive_dir=temp_archive_dir)
+
+        # Early snapshot predicts the wrong winner; later snapshot the right one.
+        early = MatchPrediction(
+            home=ScorePrediction(team="France", mean=15.0, std=8.0, median=15.0, ci_lower=2.0, ci_upper=30.0),
+            away=ScorePrediction(team="Wales", mean=25.0, std=8.0, median=25.0, ci_lower=10.0, ci_upper=40.0),
+            home_win_prob=0.2, away_win_prob=0.78, draw_prob=0.02,
+            predicted_margin=-10.0, margin_std=11.0,
+        )
+        for i, pred in enumerate((early, sample_prediction)):
+            if i:
+                time.sleep(1.1)  # prediction IDs embed a seconds-resolution timestamp
+            archiver.archive_prediction(
+                prediction=pred,
+                match_metadata=sample_match_metadata,
+                model_checkpoint="test-checkpoint",
+                prediction_type="teams_only",
+            )
+        archiver.update_with_result(
+            match_id=sample_match_metadata.match_id,
+            actual_result=sample_actual_result,
+        )
+
+        assert archiver.calibration_report(snapshot="all")["n"] == 2
+        latest = archiver.calibration_report()
+        assert latest["n"] == 1
+        assert latest["outcome_accuracy"] == 1.0
+        earliest = archiver.calibration_report(snapshot="earliest")
+        assert earliest["n"] == 1
+        assert earliest["outcome_accuracy"] == 0.0
+        with pytest.raises(ValueError):
+            archiver.calibration_report(snapshot="bogus")
+
+
 class TestPredictionID:
     """Tests for prediction ID generation."""
 
@@ -579,3 +618,45 @@ class TestPredictionID:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestIngestResults:
+    """Regression: ingestion used to build a MatchDataset without loading it,
+    so no prediction was ever matched to a result."""
+
+    def test_ingest_results_from_rugby_data(
+        self, temp_archive_dir, sample_prediction, sample_match_metadata
+    ):
+        archiver = PredictionArchiver(archive_dir=temp_archive_dir / "archive")
+        archiver.archive_prediction(
+            prediction=sample_prediction,
+            match_metadata=sample_match_metadata,
+            model_checkpoint="test-checkpoint",
+            prediction_type="teams_only",
+            model_inputs={"season": "2026-2027"},
+        )
+
+        data_dir = temp_archive_dir / "Rugby-Data"
+        (data_dir / "json").mkdir(parents=True)
+        side = lambda team, score: {
+            "team": team, "score": score, "lineup": {}, "scores": [], "conference": None,
+        }
+        match = {
+            "home": side("France", 36),
+            "away": side("Wales", 17),
+            "date": "2026-02-14T21:10:00.000Z",
+            "round": 2,
+            "round_type": "league",
+            "stadium": "Stade de France",
+        }
+        with open(data_dir / "json" / "six-nations-2026-2027.json", "w") as f:
+            json.dump([match], f)
+
+        stats = archiver.ingest_results_from_rugby_data(data_dir)
+
+        assert stats["matched"] == 1
+        assert stats["updated"] == 1
+        assert stats["unmatched"] == 0
+        report = archiver.calibration_report()
+        assert report["n"] == 1
+        assert report["outcome_accuracy"] == 1.0

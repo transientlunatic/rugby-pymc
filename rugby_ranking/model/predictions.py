@@ -19,12 +19,85 @@ from rugby_ranking.model.core import RugbyModel, season_sort_key
 from rugby_ranking.model.data import normalize_team_name
 
 
-# Rugby scoring constants
+# Rugby scoring constants. These are only the fallback when no empirical
+# rates are supplied (see ``estimate_kicking_rates``): the real penalty rate
+# varies a lot by competition (2024-26 averages from the match data: ~0.8 per
+# team in the Premiership, ~0.9 Celtic, ~0.6 Championship, ~1.9 Top 14), so a
+# single constant biases team totals by several points.
 CONVERSION_RATE = 0.70  # Typical conversion success rate
 PENALTIES_PER_MATCH = 2.5  # Average penalties per team per match
 
+ALL_COMPETITIONS = "__all__"  # key for the pooled rates in estimate_kicking_rates
+
 # Number of players on field per team
 STARTERS = 15
+
+
+def estimate_kicking_rates(
+    matches,
+    n_recent_seasons: int = 2,
+    min_team_games: int = 40,
+) -> dict[str, tuple[float, float]]:
+    """
+    Empirical (penalties per team per match, conversion rate) by competition.
+
+    Uses each competition's ``n_recent_seasons`` most recent seasons that have
+    scoring events. Competitions with fewer than ``min_team_games`` team-games
+    of evidence are omitted (callers fall back to the pooled
+    ``ALL_COMPETITIONS`` entry). Only played matches with scoring events count.
+
+    Args:
+        matches: iterable of ``MatchData`` (e.g. ``MatchDataset.matches``).
+
+    Returns:
+        ``{competition: (penalties_per_team, conversion_rate)}`` plus an
+        ``ALL_COMPETITIONS`` pooled entry, or ``{}`` if there is no usable data.
+    """
+    import re
+    from collections import Counter, defaultdict
+
+    by_comp_season: dict[tuple[str, int], list[int]] = defaultdict(lambda: [0, 0, 0, 0])
+    for m in matches:
+        if not m.is_played:
+            continue
+        year_match = re.search(r"(\d{4})", m.season or "")
+        if not year_match:
+            continue
+        year = int(year_match.group(1))
+        for events in (m.home_scores, m.away_scores):
+            if not events:
+                continue
+            counts = Counter((e.get("type") or "").lower() for e in events)
+            row = by_comp_season[(m.competition, year)]
+            row[0] += 1
+            row[1] += counts["try"] + counts["penalty try"]
+            row[2] += counts["conversion"]
+            row[3] += counts["penalty"]
+
+    years_by_comp: dict[str, list[int]] = defaultdict(list)
+    for comp, year in by_comp_season:
+        years_by_comp[comp].append(year)
+
+    totals = {}
+    for comp, years in years_by_comp.items():
+        agg = [0, 0, 0, 0]
+        for year in sorted(years, reverse=True)[:n_recent_seasons]:
+            agg = [a + b for a, b in zip(agg, by_comp_season[(comp, year)])]
+        totals[comp] = agg
+
+    def _rates(agg):
+        games, tries, convs, pens = agg
+        if games == 0 or tries == 0:
+            return None
+        return pens / games, convs / tries
+
+    rates: dict[str, tuple[float, float]] = {}
+    for comp, agg in totals.items():
+        if agg[0] >= min_team_games and (r := _rates(agg)):
+            rates[comp] = r
+    if (pooled := _rates([sum(col) for col in zip(*totals.values())])) if totals else None:
+        rates[ALL_COMPETITIONS] = pooled
+    return rates
 
 
 def _get_team_season_index_with_fallback(
@@ -121,9 +194,23 @@ class MatchPredictor:
     5. Add penalty contribution
     """
 
-    def __init__(self, model: RugbyModel, trace: az.InferenceData | None = None):
+    def __init__(
+        self,
+        model: RugbyModel,
+        trace: az.InferenceData | None = None,
+        kicking_rates: dict[str, tuple[float, float]] | None = None,
+    ):
+        """
+        Args:
+            kicking_rates: Optional ``{competition: (penalties_per_team,
+                conversion_rate)}`` from ``estimate_kicking_rates``. When
+                given, replaces the fixed ``PENALTIES_PER_MATCH`` /
+                ``CONVERSION_RATE`` constants (per competition, falling back
+                to the pooled entry, then the constants).
+        """
         self.model = model
         self.trace = trace or model.trace
+        self.kicking_rates = kicking_rates or {}
 
         if self.trace is None:
             raise ValueError("No trace available. Fit the model first.")
@@ -335,6 +422,15 @@ class MatchPredictor:
         gap = max(1, round(season_sort_key(season) - season_sort_key(used_season)))
         return rho_flat[sample_idx] ** gap
 
+    def _kicking_rates_for(self, competition: str | None) -> tuple[float, float]:
+        """(penalties per team per match, conversion rate) for a competition."""
+        rates = self.kicking_rates
+        return (
+            rates.get(competition)
+            or rates.get(ALL_COMPETITIONS)
+            or (PENALTIES_PER_MATCH, CONVERSION_RATE)
+        )
+
     def _apply_temperature(self, home_wins: float, away_wins: float, draws: float):
         T = getattr(self.model.config, "win_prob_temperature", 1.0)
         if T == 1.0 or home_wins <= 0 or away_wins <= 0:
@@ -447,11 +543,12 @@ class MatchPredictor:
         away_tries = np.random.poisson(away_tries_expected)
 
         # Convert to points
-        home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
-        away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
+        penalties_per_team, conversion_rate = self._kicking_rates_for(competition)
+        home_conversions = np.random.binomial(home_tries, conversion_rate)
+        away_conversions = np.random.binomial(away_tries, conversion_rate)
 
-        home_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
-        away_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
+        home_penalties = np.random.poisson(penalties_per_team, size=n_samples)
+        away_penalties = np.random.poisson(penalties_per_team, size=n_samples)
 
         home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
         away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
@@ -574,11 +671,12 @@ class MatchPredictor:
         away_tries = np.random.poisson(away_tries_expected)
 
         # Convert to points
-        home_conversions = np.random.binomial(home_tries, CONVERSION_RATE)
-        away_conversions = np.random.binomial(away_tries, CONVERSION_RATE)
+        penalties_per_team, conversion_rate = self._kicking_rates_for(competition)
+        home_conversions = np.random.binomial(home_tries, conversion_rate)
+        away_conversions = np.random.binomial(away_tries, conversion_rate)
 
-        home_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
-        away_penalties = np.random.poisson(PENALTIES_PER_MATCH, size=n_samples)
+        home_penalties = np.random.poisson(penalties_per_team, size=n_samples)
+        away_penalties = np.random.poisson(penalties_per_team, size=n_samples)
 
         home_scores = home_tries * 5 + home_conversions * 2 + home_penalties * 3
         away_scores = away_tries * 5 + away_conversions * 2 + away_penalties * 3
