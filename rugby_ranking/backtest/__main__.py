@@ -18,11 +18,13 @@ def _build(names: list[str], args) -> list:
             out.append(ConstantBaseline())
         elif n == "elo":
             out.append(EloForecaster())
-        elif n == "bayes":
-            from rugby_ranking.forecast.bayes import BayesianForecaster
-            out.append(BayesianForecaster(vi_iterations=args.vi_iterations))
+        elif n in ("bayes", "bayes-prod"):
+            from rugby_ranking.forecast.bayes import BayesianForecaster, production_config
+            out.append(BayesianForecaster(
+                config=production_config() if n == "bayes-prod" else None,
+                vi_iterations=args.vi_iterations, name=n))
         else:
-            raise SystemExit(f"unknown forecaster {n!r} (choose from constant, elo, bayes)")
+            raise SystemExit(f"unknown forecaster {n!r} (choose from constant, elo, bayes, bayes-prod)")
     return out
 
 

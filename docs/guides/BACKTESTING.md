@@ -10,7 +10,7 @@ python -m rugby_ranking.backtest --data-dir ../Rugby-Data \
     --competitions premiership,top14,celtic
 ```
 
-`bayes` is also available but refits the hierarchical model at every origin
+`bayes` (plain joint model) and `bayes-prod` (the weekly job's configuration) are also available but refit the hierarchical model at every origin
 (minutes each with `--vi-iterations 8000`), so use a coarse `--step-days` for it.
 
 ## How it works

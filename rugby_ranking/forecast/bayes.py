@@ -9,13 +9,28 @@ import pandas as pd
 from rugby_ranking.forecast.base import Forecast, History
 
 
+def production_config():
+    """The configuration the weekly training job uses (see Rugby-Data's
+    train-model-weekly workflow). Keep in step with it."""
+    from rugby_ranking.model.core import ModelConfig
+
+    return ModelConfig(
+        include_defense=True,
+        separate_kicking_effect=True,
+        competition_home_advantage=True,
+        team_ar1=True,
+        win_prob_temperature=1.4,
+    )
+
+
 class BayesianForecaster:
     """Refits the joint model (variational inference by default) on the most
     recent seasons before each origin and predicts with team-only forecasts,
     which is what the production pipeline archives before lineups are known.
 
     Fitting dominates a backtest's cost (minutes per origin), so use a coarse
-    ``step_days`` for this one.
+    ``step_days`` for this one. ``config`` defaults to a plain joint model;
+    pass ``production_config()`` to benchmark what is actually deployed.
     """
 
     def __init__(
