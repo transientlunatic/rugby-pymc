@@ -91,3 +91,33 @@ Pass `clean=False` to see the raw data. Season labels written with reversed
 years in a filename (`top14-2011-2010.json`) are put in order by the loader.
 Reconciliation of scoring events against final scores is a separate check:
 `python -m rugby_ranking.sport audit` (see `SPORT_SPEC.md`).
+
+## Calibration layer
+
+A forecaster's scoring level, home advantage or spread can be wrong for one
+league without its team strengths being wrong. `rugby_ranking.backtest.calibration`
+learns those corrections from the forecaster's own *earlier* out-of-sample
+errors and applies them to later forecasts, so an idea can be tried in seconds
+on forecasts that are already stored (no refit):
+
+```bash
+python -m rugby_ranking.backtest --data-dir ../Rugby-Data --start 2022-10-01 \
+    --forecasters elo,bayes-prod --step-days 56 --out forecasts.csv      # slow, once
+python -m rugby_ranking.backtest.replay forecasts.csv --calibrate --reference elo
+```
+
+```python
+res = BacktestResult.from_csv("forecasts.csv").with_calibration(CalibrationConfig(margin=False))
+res.compare("bayes-prod+cal", "bayes-prod")
+```
+
+Per competition, with shrinkage toward pooled values:
+
+- **level**: shift the predicted total by the mean total error;
+- **margin**: shift the predicted margin by the mean margin error (a home-advantage correction);
+- **spread**: re-derive the win probability from Normal(margin, s) with `s` learned from the margin errors, and rescale the score intervals. The base draw probability is kept.
+
+Forecasts at origin *k* are corrected using only results from origins before *k*;
+a test poisons later results and checks nothing changes. Origins with fewer than
+`min_history` past forecasts are returned unchanged. `half_life_origins` lets
+corrections follow drift. Calibrated forecasters are named `<name>+cal`.

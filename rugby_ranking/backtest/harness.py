@@ -30,6 +30,27 @@ class BacktestResult:
     n_fixtures: int                  # matches scored in total (before forecasters opted out)
     failures: list[tuple] = field(default_factory=list)  # (origin, forecaster, message)
 
+    @classmethod
+    def from_frame(cls, frame: pd.DataFrame) -> "BacktestResult":
+        return cls(frame=frame, n_fixtures=int(frame["match_id"].nunique()))
+
+    @classmethod
+    def from_csv(cls, *paths) -> "BacktestResult":
+        """Reload stored forecasts (the CLI's ``--out``); several files are
+        concatenated, so runs over different periods can be joined."""
+        frames = [pd.read_csv(p, parse_dates=["date", "origin"]) for p in paths]
+        frame = pd.concat(frames, ignore_index=True)
+        for col in ("date", "origin"):
+            frame[col] = pd.to_datetime(frame[col], utc=True)
+        return cls.from_frame(frame)
+
+    def with_calibration(self, config=None, forecasters=None) -> "BacktestResult":
+        """This result plus ``<name>+cal`` forecasters whose forecasts are
+        corrected from earlier origins' errors (see ``calibration``)."""
+        from rugby_ranking.backtest.calibration import add_calibrated
+
+        return BacktestResult(add_calibrated(self.frame, config, forecasters), self.n_fixtures, self.failures)
+
     @property
     def forecasters(self) -> list[str]:
         return sorted(self.frame["forecaster"].unique())
