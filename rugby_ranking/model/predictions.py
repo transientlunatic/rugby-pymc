@@ -49,7 +49,8 @@ def estimate_kicking_rates(
     Empirical (penalties per team per match, conversion rate) by competition.
 
     Uses each competition's ``n_recent_seasons`` most recent seasons that have
-    scoring events. Competitions with fewer than ``min_team_games`` team-games
+    scoring events whose points add up to the final score (see the note in the
+    loop). Competitions with fewer than ``min_team_games`` team-games
     of evidence are omitted (callers fall back to the pooled
     ``ALL_COMPETITIONS`` entry). Only played matches with scoring events count.
 
@@ -71,13 +72,20 @@ def estimate_kicking_rates(
         if not year_match:
             continue
         year = int(year_match.group(1))
-        for events in (m.home_scores, m.away_scores):
+        for events, final_score in ((m.home_scores, m.home_score), (m.away_scores, m.away_score)):
             if not events:
+                continue
+            # Some sources record tries but not kicks (Super Rugby, NPC, Currie
+            # Cup). Counting those team-games would read "no kicks recorded" as
+            # "no kicks scored" and drag the rates down, so keep only team-games
+            # whose recorded events add up to the final score.
+            points, _ = RUGBY_UNION.event_points(events, m.date)
+            if points != final_score:
                 continue
             counts = Counter((e.get("type") or "").lower() for e in events)
             row = by_comp_season[(m.competition, year)]
             row[0] += 1
-            row[1] += counts["try"] + counts["penalty try"]
+            row[1] += counts["try"]   # penalty tries are converted automatically, not by a kick
             row[2] += counts["conversion"]
             row[3] += counts["penalty"]
 
