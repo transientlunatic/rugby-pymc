@@ -63,6 +63,70 @@ def _season_fallback_date(season: str) -> datetime:
     return datetime(year, 9, 1, tzinfo=timezone.utc)
 
 
+_SCORE_TYPES = {
+    "try": "tries",
+    "conversion": "conversions",
+    "penalty": "penalties",
+    "drop goal": "drop_goals",
+    "dropgoal": "drop_goals",
+}
+
+
+def _name_key(name: str) -> str:
+    """Case-, spacing- and punctuation-insensitive form of a name for comparing scorers to lineups."""
+    return " ".join(name.replace(".", " ").casefold().split())
+
+
+def attribute_scores(lineup_names: list[str], scores: list[dict]) -> list[dict[str, int]]:
+    """Credit each scoring event to a player in one team's lineup.
+
+    Scorers appear in the source data as a full name (recent seasons), an initial and surname
+    ("S Simmonds") or a surname alone (older seasons), in any capitalisation. An event is credited
+    to a player only when it identifies exactly one player in the lineup, tried in this order:
+
+    1. the full name, ignoring case, spacing and full stops;
+    2. an initial plus surname, when exactly one player has that initial and surname;
+    3. a surname alone, when exactly one player has that surname.
+
+    A surname shared by two lineup players (brothers, say) or by nobody is left unattributed rather
+    than credited to all of them or to the first one listed. Compound surnames ("van der Flier") are
+    handled by trying every trailing run of name parts as the surname.
+
+    Returns one ``{"tries": n, "conversions": n, "penalties": n, "drop_goals": n}`` per lineup name.
+    """
+    counts = [{"tries": 0, "conversions": 0, "penalties": 0, "drop_goals": 0} for _ in lineup_names]
+    keys = [_name_key(n) for n in lineup_names]
+    parts = [k.split() for k in keys]
+
+    def matches(i: int, scorer: str) -> int:
+        """How well lineup player i matches the scorer: 3 full name, 2 initial+surname, 1 surname, 0 no."""
+        if scorer == keys[i]:
+            return 3
+        first, rest = parts[i][0], parts[i][1:]
+        tokens = scorer.split()
+        for k in range(len(rest)):            # every trailing run of parts is a possible surname
+            surname = " ".join(rest[k:])
+            if scorer == surname:
+                return 1
+            if len(tokens) >= 2 and tokens[0] == first[:1] and len(tokens[0]) == 1 and " ".join(tokens[1:]) == surname:
+                return 2
+        return 0
+
+    for score in scores:
+        kind = _SCORE_TYPES.get(str(score.get("type", "")).lower())
+        scorer = _name_key(str(score.get("player", "") or ""))
+        if not kind or not scorer:
+            continue
+        for level in (3, 2, 1):
+            hits = [i for i in range(len(keys)) if matches(i, scorer) == level]
+            if len(hits) == 1:
+                counts[hits[0]][kind] += 1
+                break
+            if len(hits) > 1:
+                break                         # ambiguous at this level: leave unattributed
+    return counts
+
+
 def normalize_team_name(name: str) -> str:
     """Team name as it appears in the data, with surrounding whitespace removed.
 
@@ -723,52 +787,15 @@ class MatchDataset:
         return min(total_minutes, match_duration)
 
     def _count_scoring_events(
-        self, player_name: str, scores: list[dict]
+        self, player_name: str, scores: list[dict], lineup_names: list[str] | None = None
     ) -> dict[str, int]:
+        """Scoring events credited to one player; see :func:`attribute_scores`.
+
+        ``lineup_names`` is the whole team's lineup, which a surname-only scorer has to be told
+        apart within. Without it the player is treated as the only one in the lineup.
         """
-        Count scoring events for a player.
-
-        Handles both full name matching (recent data) and surname-only matching
-        (older data where scores use surnames but lineups have full names).
-        """
-        counts = {"tries": 0, "conversions": 0, "penalties": 0, "drop_goals": 0}
-
-        type_mapping = {
-            "try": "tries",
-            "conversion": "conversions",
-            "penalty": "penalties",
-            "drop goal": "drop_goals",
-            "dropgoal": "drop_goals",
-        }
-
-        # Extract surname for fallback matching
-        # Handle compound surnames like "van der Merwe"
-        name_parts = player_name.split()
-        if len(name_parts) >= 2:
-            # Check for compound surname prefixes
-            compound_prefixes = {"van", "de", "du", "le", "o'", "mc", "mac"}
-            if name_parts[-2].lower() in compound_prefixes:
-                surname = " ".join(name_parts[-2:])
-            else:
-                surname = name_parts[-1]
-        else:
-            surname = player_name
-
-        for score in scores:
-            scorer = score.get("player", "")
-            score_type = score.get("type", "").lower()
-
-            if score_type not in type_mapping:
-                continue
-
-            # Try exact match first (recent data format)
-            if scorer == player_name:
-                counts[type_mapping[score_type]] += 1
-            # Fallback: surname match (older data format)
-            elif scorer.lower() == surname.lower():
-                counts[type_mapping[score_type]] += 1
-
-        return counts
+        names = lineup_names or [player_name]
+        return attribute_scores(names, scores)[names.index(player_name)]
 
     def iter_player_observations(
         self,
@@ -828,6 +855,13 @@ class MatchDataset:
         min_minutes: float,
     ) -> Iterator[PlayerMatchObservation]:
         """Extract observations for all players in a team's lineup."""
+        lineup_names: list[str] = []
+        slot_of: dict[str, int] = {}          # lineup position -> index into lineup_names
+        for position_str, d in lineup.items():
+            if isinstance(d, dict) and d.get("name"):
+                slot_of[position_str] = len(lineup_names)
+                lineup_names.append(self._name_matcher.get_canonical(d["name"]) if self._fuzzy_match else d["name"])
+        credited = attribute_scores(lineup_names, scores)
         for position_str, player_data in lineup.items():
             if not isinstance(player_data, dict):
                 continue
@@ -856,7 +890,7 @@ class MatchDataset:
             started = 0 in on_times
             was_substituted = len(off_times) > 0
 
-            scoring = self._count_scoring_events(player_name, scores)
+            scoring = credited[slot_of[position_str]]
 
             yellow_minutes = player_data.get("yellows", [])
             red_minutes = player_data.get("reds", [])
