@@ -32,13 +32,9 @@ sys.path.insert(0, str(ROOT))
 CANON = {'Borders': 'Border Reivers', 'Llanelli Scarlets': 'Scarlets',
          'Newport Gwent Dragons': 'Dragons RFC', 'DHL Stormers': 'Stormers',
          'Vodacom Bulls': 'Bulls', 'Hollywoodbets Sharks': 'Sharks',
-         'Emirates Lions': 'Lions'}
+         'Emirates Lions': 'Lions', 'Fidelity SecureDrive Lions': 'Lions'}
 # Non-club fixtures that leak into celtic-2013-2014.json.
 EXCLUDE = {'England', 'Canada Women', 'France Women', 'Ireland Women'}
-# The Celtic 2017-18 and 2018-19 files carry the wrong calendar year on their
-# Aug-Dec dates (Rugby-Data issue #33); without a fix they interleave with the
-# next season's matches and trigger spurious season regressions.
-BAD_YEAR_SEASONS = {'2017-2018', '2018-2019'}
 
 
 def _import_light():
@@ -68,8 +64,9 @@ def elo_season_ends(data_dir: Path) -> dict[tuple[str, str, str], float]:
 
     m = MatchStore.from_data_dir(data_dir).played.copy()
     m = m[~m['home_team'].isin(EXCLUDE) & ~m['away_team'].isin(EXCLUDE)]
-    bad = m['competition'].eq('celtic') & m['season'].isin(BAD_YEAR_SEASONS) & (m['date'].dt.month >= 8)
-    m.loc[bad, 'date'] = m.loc[bad, 'date'].apply(lambda d: d.replace(year=d.year - 1))
+    # one name per franchise, so a club's Elo carries across a sponsor rename
+    m['home_team'] = m['home_team'].replace(CANON)
+    m['away_team'] = m['away_team'].replace(CANON)
     m = m.sort_values('date', kind='stable').reset_index(drop=True)
 
     # EloRatingSystem regresses all ratings toward the mean whenever the season
