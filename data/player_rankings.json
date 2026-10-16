@@ -1,0 +1,2402 @@
+[
+  {
+    "player": "Thomas Moukoro",
+    "score_type": "tries",
+    "effect_mean": 0.9933280314484653,
+    "effect_std": 0.2776965989188358,
+    "effect_lower": 0.44751417025898527,
+    "effect_upper": 1.5286415426259565
+  },
+  {
+    "player": "Thomas du Toit",
+    "score_type": "tries",
+    "effect_mean": 0.8162766436071932,
+    "effect_std": 0.24781758922273633,
+    "effect_lower": 0.32153275934525066,
+    "effect_upper": 1.2976310290035522
+  },
+  {
+    "player": "Sacha Feinberg-Mngomezulu",
+    "score_type": "tries",
+    "effect_mean": 0.8131065246130769,
+    "effect_std": 0.24254423492893248,
+    "effect_lower": 0.33714978475337526,
+    "effect_upper": 1.288118710778805
+  },
+  {
+    "player": "Louis Bielle-Biarrey",
+    "score_type": "tries",
+    "effect_mean": 0.799442135509927,
+    "effect_std": 0.13595595400031737,
+    "effect_lower": 0.5396347468602565,
+    "effect_upper": 1.0824022919534408
+  },
+  {
+    "player": "Carlo Tizzano",
+    "score_type": "tries",
+    "effect_mean": 0.7649003020232108,
+    "effect_std": 0.2549931345780632,
+    "effect_lower": 0.25061101790749113,
+    "effect_upper": 1.2407907848971025
+  },
+  {
+    "player": "Senitiki Nayalo",
+    "score_type": "tries",
+    "effect_mean": 0.7117165322224139,
+    "effect_std": 0.25433057379319174,
+    "effect_lower": 0.21868596138641538,
+    "effect_upper": 1.2005560997726628
+  },
+  {
+    "player": "Noah Caluori",
+    "score_type": "tries",
+    "effect_mean": 0.7058274916961975,
+    "effect_std": 0.21203395516163137,
+    "effect_lower": 0.300256024408865,
+    "effect_upper": 1.1346748791247054
+  },
+  {
+    "player": "Nolann le Garrec",
+    "score_type": "tries",
+    "effect_mean": 0.7007752549515295,
+    "effect_std": 0.20240932164807227,
+    "effect_lower": 0.30675393395103784,
+    "effect_upper": 1.102599561450851
+  },
+  {
+    "player": "James Cherry",
+    "score_type": "tries",
+    "effect_mean": 0.6778368920598032,
+    "effect_std": 0.22612412942710966,
+    "effect_lower": 0.22980064493928556,
+    "effect_upper": 1.1341390118817412
+  },
+  {
+    "player": "Oliver Hearn",
+    "score_type": "tries",
+    "effect_mean": 0.6744193797514215,
+    "effect_std": 0.23140171433586124,
+    "effect_lower": 0.2083127893879895,
+    "effect_upper": 1.1264379286832542
+  },
+  {
+    "player": "Dorian Marco Pena",
+    "score_type": "tries",
+    "effect_mean": 0.6696057326679333,
+    "effect_std": 0.20899958089287152,
+    "effect_lower": 0.27132144929747154,
+    "effect_upper": 1.0854582704920241
+  },
+  {
+    "player": "Siya Kolisi",
+    "score_type": "tries",
+    "effect_mean": 0.6536464158393279,
+    "effect_std": 0.24618942643514688,
+    "effect_lower": 0.16702248832374292,
+    "effect_upper": 1.1234824995813448
+  },
+  {
+    "player": "Peceli Yato",
+    "score_type": "tries",
+    "effect_mean": 0.6295164619687427,
+    "effect_std": 0.2520413789007895,
+    "effect_lower": 0.14324081322189172,
+    "effect_upper": 1.1100399163862784
+  },
+  {
+    "player": "Lucas da Silva",
+    "score_type": "tries",
+    "effect_mean": 0.6277955236118884,
+    "effect_std": 0.2154414795554936,
+    "effect_lower": 0.19695458066038593,
+    "effect_upper": 1.0380691908228727
+  },
+  {
+    "player": "Evan Roos",
+    "score_type": "tries",
+    "effect_mean": 0.6036840323019709,
+    "effect_std": 0.2229949055477637,
+    "effect_lower": 0.18133170316622388,
+    "effect_upper": 1.0577848850863047
+  },
+  {
+    "player": "Alex Coles",
+    "score_type": "tries",
+    "effect_mean": 0.5987220260214449,
+    "effect_std": 0.24238337668807247,
+    "effect_lower": 0.13126005147535305,
+    "effect_upper": 1.073842712770257
+  },
+  {
+    "player": "Wilfrid Hounkpatin",
+    "score_type": "tries",
+    "effect_mean": 0.5797415232906145,
+    "effect_std": 0.28377361775824156,
+    "effect_lower": 0.019605435471620174,
+    "effect_upper": 1.1467633281146972
+  },
+  {
+    "player": "George Horne",
+    "score_type": "tries",
+    "effect_mean": 0.5698918025423247,
+    "effect_std": 0.19570243124277928,
+    "effect_lower": 0.19261656754613385,
+    "effect_upper": 0.9681149455755036
+  },
+  {
+    "player": "Gabin Lorre",
+    "score_type": "tries",
+    "effect_mean": 0.5670969467303564,
+    "effect_std": 0.21350738766900812,
+    "effect_lower": 0.1335226907045728,
+    "effect_upper": 0.9637198620493413
+  },
+  {
+    "player": "Dan Sheehan",
+    "score_type": "tries",
+    "effect_mean": 0.5645648231264225,
+    "effect_std": 0.18784063622892266,
+    "effect_lower": 0.19400904466147714,
+    "effect_upper": 0.9341548249875355
+  },
+  {
+    "player": "Alex Masibaka",
+    "score_type": "tries",
+    "effect_mean": 0.5637367523419576,
+    "effect_std": 0.23743432649334448,
+    "effect_lower": 0.0727958510433616,
+    "effect_upper": 1.0259491981637878
+  },
+  {
+    "player": "Sol Moody",
+    "score_type": "tries",
+    "effect_mean": 0.559854387160681,
+    "effect_std": 0.24196723780644874,
+    "effect_lower": 0.07500882835977868,
+    "effect_upper": 1.0206048265012972
+  },
+  {
+    "player": "Allan Ferrie",
+    "score_type": "tries",
+    "effect_mean": 0.554134407927403,
+    "effect_std": 0.26783620300987787,
+    "effect_lower": 0.023551263988506904,
+    "effect_upper": 1.0861349726435154
+  },
+  {
+    "player": "Sam Tuifua",
+    "score_type": "tries",
+    "effect_mean": 0.5398411350644389,
+    "effect_std": 0.2565057947326215,
+    "effect_lower": 0.052407323036308524,
+    "effect_upper": 1.0412069833964472
+  },
+  {
+    "player": "Siva Naulago",
+    "score_type": "tries",
+    "effect_mean": 0.5389348714789319,
+    "effect_std": 0.257575978318627,
+    "effect_lower": 0.037972195344268274,
+    "effect_upper": 1.0419777505029708
+  },
+  {
+    "player": "Hayden Hyde",
+    "score_type": "tries",
+    "effect_mean": 0.5359859475746467,
+    "effect_std": 0.2522297609980594,
+    "effect_lower": 0.053289959469901824,
+    "effect_upper": 1.0229259932559571
+  },
+  {
+    "player": "Emilien Gailleton",
+    "score_type": "tries",
+    "effect_mean": 0.5299421660197897,
+    "effect_std": 0.22026997421538003,
+    "effect_lower": 0.11957100965994845,
+    "effect_upper": 0.9635642115115651
+  },
+  {
+    "player": "Allan Alaalatoa",
+    "score_type": "tries",
+    "effect_mean": 0.5291863795599596,
+    "effect_std": 0.30284648151110455,
+    "effect_lower": -0.042437556542814434,
+    "effect_upper": 1.1205461345863463
+  },
+  {
+    "player": "Alun Walker",
+    "score_type": "tries",
+    "effect_mean": 0.5286187856741374,
+    "effect_std": 0.2166879791861197,
+    "effect_lower": 0.09814060118274533,
+    "effect_upper": 0.9627316997981636
+  },
+  {
+    "player": "Clement Martinez",
+    "score_type": "tries",
+    "effect_mean": 0.5284458752395961,
+    "effect_std": 0.22782962406133164,
+    "effect_lower": 0.06000986592768875,
+    "effect_upper": 0.987555995514508
+  },
+  {
+    "player": "Ga\u00ebl Drean",
+    "score_type": "tries",
+    "effect_mean": 0.5277831606285829,
+    "effect_std": 0.18663635486844068,
+    "effect_lower": 0.1527667658642229,
+    "effect_upper": 0.8956027304333046
+  },
+  {
+    "player": "Esteban Capilla",
+    "score_type": "tries",
+    "effect_mean": 0.5254932915144667,
+    "effect_std": 0.2552058124564646,
+    "effect_lower": 0.018369935460522725,
+    "effect_upper": 1.044335656980964
+  },
+  {
+    "player": "Nathan Hughes",
+    "score_type": "tries",
+    "effect_mean": 0.5253862368862263,
+    "effect_std": 0.275108990760793,
+    "effect_lower": -0.008801008769277585,
+    "effect_upper": 1.0637079907715767
+  },
+  {
+    "player": "Michael Ruru",
+    "score_type": "tries",
+    "effect_mean": 0.5202439937399265,
+    "effect_std": 0.22069326665150116,
+    "effect_lower": 0.07978229708300047,
+    "effect_upper": 0.9541569295247941
+  },
+  {
+    "player": "Sireli Maqala",
+    "score_type": "tries",
+    "effect_mean": 0.5180678684696074,
+    "effect_std": 0.21461956734218357,
+    "effect_lower": 0.10298358565158561,
+    "effect_upper": 0.9560977993250306
+  },
+  {
+    "player": "Tommy Freeman",
+    "score_type": "tries",
+    "effect_mean": 0.5168980439350236,
+    "effect_std": 0.15015227914990753,
+    "effect_lower": 0.22386097258348397,
+    "effect_upper": 0.8115525416604606
+  },
+  {
+    "player": "Hoskins Sotutu",
+    "score_type": "tries",
+    "effect_mean": 0.5153169635051275,
+    "effect_std": 0.23917670544748307,
+    "effect_lower": 0.03977566855491967,
+    "effect_upper": 0.9604522364528714
+  },
+  {
+    "player": "Henry Pollock",
+    "score_type": "tries",
+    "effect_mean": 0.5134649225971062,
+    "effect_std": 0.20809600648088544,
+    "effect_lower": 0.10744098340982478,
+    "effect_upper": 0.9243086838311289
+  },
+  {
+    "player": "Yanis Charcosset",
+    "score_type": "tries",
+    "effect_mean": 0.5124023100780436,
+    "effect_std": 0.25442950306362244,
+    "effect_lower": 0.030833584116946217,
+    "effect_upper": 1.0230519334062373
+  },
+  {
+    "player": "Louis Morland",
+    "score_type": "tries",
+    "effect_mean": 0.5098404533428494,
+    "effect_std": 0.2523661844239832,
+    "effect_lower": 0.031059577525612433,
+    "effect_upper": 1.0023654700596478
+  },
+  {
+    "player": "Matthieu Jalibert",
+    "score_type": "tries",
+    "effect_mean": 0.5087553685130789,
+    "effect_std": 0.22917229902899566,
+    "effect_lower": 0.08153029997493268,
+    "effect_upper": 0.9717266976652623
+  },
+  {
+    "player": "Fehi Fineanganofo",
+    "score_type": "tries",
+    "effect_mean": 0.5033696226001174,
+    "effect_std": 0.2533498150681023,
+    "effect_lower": 0.017566037113420835,
+    "effect_upper": 0.9896586768701227
+  },
+  {
+    "player": "Brian Alainu'uese",
+    "score_type": "tries",
+    "effect_mean": 0.4966748039267799,
+    "effect_std": 0.270131988306607,
+    "effect_lower": -0.03211289009086839,
+    "effect_upper": 1.0255874136533591
+  },
+  {
+    "player": "Antoine Dupont",
+    "score_type": "tries",
+    "effect_mean": 0.4962346862284012,
+    "effect_std": 0.21410006150747232,
+    "effect_lower": 0.07916030457989845,
+    "effect_upper": 0.9083659041242326
+  },
+  {
+    "player": "Cameron Woki",
+    "score_type": "tries",
+    "effect_mean": 0.4957233399879911,
+    "effect_std": 0.21956593136986244,
+    "effect_lower": 0.07411107730869954,
+    "effect_upper": 0.9136395825748207
+  },
+  {
+    "player": "Esteban Gonzalez",
+    "score_type": "tries",
+    "effect_mean": 0.4907535682267749,
+    "effect_std": 0.28199824073378743,
+    "effect_lower": -0.06725337009813667,
+    "effect_upper": 1.0427783251135871
+  },
+  {
+    "player": "Harry Short",
+    "score_type": "tries",
+    "effect_mean": 0.4906807921992662,
+    "effect_std": 0.26053027097916864,
+    "effect_lower": -0.01616083307728595,
+    "effect_upper": 1.0033097350052909
+  },
+  {
+    "player": "Alex Kendellen",
+    "score_type": "tries",
+    "effect_mean": 0.48748342198459116,
+    "effect_std": 0.25622155082289555,
+    "effect_lower": -0.019741373709754793,
+    "effect_upper": 1.0061086524203808
+  },
+  {
+    "player": "Matt Cornish",
+    "score_type": "tries",
+    "effect_mean": 0.4847140999924132,
+    "effect_std": 0.2679500029994556,
+    "effect_lower": -0.01798085834543056,
+    "effect_upper": 1.0005228275592628
+  },
+  {
+    "player": "Jiuta Wainiqolo",
+    "score_type": "tries",
+    "effect_mean": 0.4828738685074661,
+    "effect_std": 0.17478907236032115,
+    "effect_lower": 0.1390401649967497,
+    "effect_upper": 0.8471726830505407
+  },
+  {
+    "player": "Juan Martin Gonzalez",
+    "score_type": "tries",
+    "effect_mean": 0.4828729980714284,
+    "effect_std": 0.2748132319835053,
+    "effect_lower": -0.06760497773314683,
+    "effect_upper": 1.0106208130232572
+  },
+  {
+    "player": "Pierre Schoeman",
+    "score_type": "tries",
+    "effect_mean": 0.48155354600441524,
+    "effect_std": 0.2572657251705586,
+    "effect_lower": -0.025407400344210743,
+    "effect_upper": 0.9822500823851402
+  },
+  {
+    "player": "Justo Piccardo",
+    "score_type": "tries",
+    "effect_mean": 0.48062301861099904,
+    "effect_std": 0.25805691649502005,
+    "effect_lower": -0.03939208968359389,
+    "effect_upper": 0.964632877376767
+  },
+  {
+    "player": "Nicolas Depoortere",
+    "score_type": "tries",
+    "effect_mean": 0.47457098305461193,
+    "effect_std": 0.21803995617760855,
+    "effect_lower": 0.07443581912521562,
+    "effect_upper": 0.9090837587818644
+  },
+  {
+    "player": "Tupou Vaa'i",
+    "score_type": "tries",
+    "effect_mean": 0.4745321543451069,
+    "effect_std": 0.2891071295463376,
+    "effect_lower": -0.10181393263546286,
+    "effect_upper": 1.0399333109131177
+  },
+  {
+    "player": "Ben Tameifuna",
+    "score_type": "tries",
+    "effect_mean": 0.47444106808357084,
+    "effect_std": 0.2785626132054522,
+    "effect_lower": -0.05691383720026869,
+    "effect_upper": 1.0199053359958337
+  },
+  {
+    "player": "Rodrigo Marta",
+    "score_type": "tries",
+    "effect_mean": 0.4737702789645414,
+    "effect_std": 0.20704580051190757,
+    "effect_lower": 0.06073768789606421,
+    "effect_upper": 0.8840847369986935
+  },
+  {
+    "player": "George Hendy",
+    "score_type": "tries",
+    "effect_mean": 0.473311501081547,
+    "effect_std": 0.20430908499692568,
+    "effect_lower": 0.06654140108374541,
+    "effect_upper": 0.8593681371668994
+  },
+  {
+    "player": "Raffaele Storti",
+    "score_type": "tries",
+    "effect_mean": 0.47186869760266353,
+    "effect_std": 0.22410276234043594,
+    "effect_lower": 0.023921633268718743,
+    "effect_upper": 0.89842007505907
+  },
+  {
+    "player": "Giorgi Javakhia",
+    "score_type": "tries",
+    "effect_mean": 0.46928203801984003,
+    "effect_std": 0.28081009856325806,
+    "effect_lower": -0.10403406520676697,
+    "effect_upper": 1.0153139450921105
+  },
+  {
+    "player": "Lucas Martin",
+    "score_type": "tries",
+    "effect_mean": 0.46869509963557554,
+    "effect_std": 0.21234825014157857,
+    "effect_lower": 0.05664986988453203,
+    "effect_upper": 0.8874599085863751
+  },
+  {
+    "player": "Daniel Rona",
+    "score_type": "tries",
+    "effect_mean": 0.4674593256763774,
+    "effect_std": 0.23466792614349855,
+    "effect_lower": -0.002883190093855203,
+    "effect_upper": 0.9157128912647535
+  },
+  {
+    "player": "Romain Taofifenua",
+    "score_type": "tries",
+    "effect_mean": 0.46721408069795284,
+    "effect_std": 0.2717051024197103,
+    "effect_lower": -0.06687967035285168,
+    "effect_upper": 1.002394457633488
+  },
+  {
+    "player": "Dan Edwards",
+    "score_type": "tries",
+    "effect_mean": 0.46310737572800376,
+    "effect_std": 0.2372244054648033,
+    "effect_lower": -0.013145815246220821,
+    "effect_upper": 0.9496919733554865
+  },
+  {
+    "player": "Cam Roigard",
+    "score_type": "tries",
+    "effect_mean": 0.46299946814105547,
+    "effect_std": 0.2564773497504815,
+    "effect_lower": -0.03976497903003807,
+    "effect_upper": 0.9589953598903023
+  },
+  {
+    "player": "Paul Boudehent",
+    "score_type": "tries",
+    "effect_mean": 0.458555611505139,
+    "effect_std": 0.24620340240863095,
+    "effect_lower": -0.012533078562650691,
+    "effect_upper": 0.948637980122987
+  },
+  {
+    "player": "Louis Marrou",
+    "score_type": "tries",
+    "effect_mean": 0.4566224273065999,
+    "effect_std": 0.24919154302878366,
+    "effect_lower": -0.02603122233774137,
+    "effect_upper": 0.9618775018923335
+  },
+  {
+    "player": "Dallas McLeod",
+    "score_type": "tries",
+    "effect_mean": 0.4563571392101243,
+    "effect_std": 0.2525438113037553,
+    "effect_lower": -0.04053909182346461,
+    "effect_upper": 0.9477255929581996
+  },
+  {
+    "player": "Will Jordan",
+    "score_type": "tries",
+    "effect_mean": 0.4550881008249479,
+    "effect_std": 0.2520111940179512,
+    "effect_lower": -0.05379278535941659,
+    "effect_upper": 0.9598674052759784
+  },
+  {
+    "player": "Lucas Casey",
+    "score_type": "tries",
+    "effect_mean": 0.45468648487915353,
+    "effect_std": 0.3187370605421303,
+    "effect_lower": -0.15515299340622335,
+    "effect_upper": 1.0920083678941905
+  },
+  {
+    "player": "Alex Dombrandt",
+    "score_type": "tries",
+    "effect_mean": 0.4535676039665085,
+    "effect_std": 0.22295283965115173,
+    "effect_lower": 0.009096606213112295,
+    "effect_upper": 0.8755625597787378
+  },
+  {
+    "player": "Will Cave",
+    "score_type": "tries",
+    "effect_mean": 0.45267185357543793,
+    "effect_std": 0.26333799208868763,
+    "effect_lower": -0.0556253645193054,
+    "effect_upper": 0.9662043454818744
+  },
+  {
+    "player": "Emmanuel Meafou",
+    "score_type": "tries",
+    "effect_mean": 0.4485337261471655,
+    "effect_std": 0.2490645915925658,
+    "effect_lower": -0.061905766803808784,
+    "effect_upper": 0.9166270325556803
+  },
+  {
+    "player": "Jimi Maximin",
+    "score_type": "tries",
+    "effect_mean": 0.4484383729144794,
+    "effect_std": 0.288050703112002,
+    "effect_lower": -0.10908162872854268,
+    "effect_upper": 1.0252616102691317
+  },
+  {
+    "player": "Efi Ma'afu",
+    "score_type": "tries",
+    "effect_mean": 0.4474842434616263,
+    "effect_std": 0.24219559969756219,
+    "effect_lower": -0.01952306573800285,
+    "effect_upper": 0.9165051082827965
+  },
+  {
+    "player": "Boan Venter",
+    "score_type": "tries",
+    "effect_mean": 0.446583133134238,
+    "effect_std": 0.28562971654186153,
+    "effect_lower": -0.10988238536594445,
+    "effect_upper": 1.0189981540583348
+  },
+  {
+    "player": "Sean Jansen",
+    "score_type": "tries",
+    "effect_mean": 0.4455644059580199,
+    "effect_std": 0.234251843476548,
+    "effect_lower": -0.020045950020754284,
+    "effect_upper": 0.91277237005363
+  },
+  {
+    "player": "Dean Adamson",
+    "score_type": "tries",
+    "effect_mean": 0.44520089242323363,
+    "effect_std": 0.1974193779413878,
+    "effect_lower": 0.07487088095018439,
+    "effect_upper": 0.8387798938026676
+  },
+  {
+    "player": "Ruan Venter",
+    "score_type": "tries",
+    "effect_mean": 0.4434979122284409,
+    "effect_std": 0.26347326558781475,
+    "effect_lower": -0.0668609114103109,
+    "effect_upper": 0.9490153420163203
+  },
+  {
+    "player": "Stanley Solomon",
+    "score_type": "tries",
+    "effect_mean": 0.4382516607216228,
+    "effect_std": 0.2886043600555969,
+    "effect_lower": -0.15080022969712248,
+    "effect_upper": 1.020296993870211
+  },
+  {
+    "player": "Kieran Hardy",
+    "score_type": "tries",
+    "effect_mean": 0.4366070133983024,
+    "effect_std": 0.23010443788605184,
+    "effect_lower": -0.013922207039649064,
+    "effect_upper": 0.883150937986542
+  },
+  {
+    "player": "Noah Nene",
+    "score_type": "tries",
+    "effect_mean": 0.4348113122817457,
+    "effect_std": 0.26522140146023815,
+    "effect_lower": -0.08828815103374617,
+    "effect_upper": 0.9626367888478923
+  },
+  {
+    "player": "Tamaiti Williams",
+    "score_type": "tries",
+    "effect_mean": 0.43459273149301464,
+    "effect_std": 0.3118390827223517,
+    "effect_lower": -0.1745563167393292,
+    "effect_upper": 1.044161371097951
+  },
+  {
+    "player": "Shamus Hurley-Langton",
+    "score_type": "tries",
+    "effect_mean": 0.43302137385805944,
+    "effect_std": 0.25198099844648936,
+    "effect_lower": -0.05656765940479751,
+    "effect_upper": 0.9407522503967153
+  },
+  {
+    "player": "Ollie Sleightholme",
+    "score_type": "tries",
+    "effect_mean": 0.43212618296556854,
+    "effect_std": 0.20521756011816683,
+    "effect_lower": 0.031842901900394356,
+    "effect_upper": 0.8450183728214045
+  },
+  {
+    "player": "George Moala",
+    "score_type": "tries",
+    "effect_mean": 0.43110041265318877,
+    "effect_std": 0.2825310252325857,
+    "effect_lower": -0.11003128620148289,
+    "effect_upper": 0.9979487633609732
+  },
+  {
+    "player": "Marcel van der Merwe",
+    "score_type": "tries",
+    "effect_mean": 0.42206782983707364,
+    "effect_std": 0.30201165826958326,
+    "effect_lower": -0.17185429561651766,
+    "effect_upper": 1.0010092133867743
+  },
+  {
+    "player": "Jacopo Trulla",
+    "score_type": "tries",
+    "effect_mean": 0.42079845808258226,
+    "effect_std": 0.2404399545042259,
+    "effect_lower": -0.03746081688195005,
+    "effect_upper": 0.8857109422657566
+  },
+  {
+    "player": "Tim Anstee",
+    "score_type": "tries",
+    "effect_mean": 0.42078312898253006,
+    "effect_std": 0.2405023274025168,
+    "effect_lower": -0.04123789134939339,
+    "effect_upper": 0.8801146657881752
+  },
+  {
+    "player": "Kieran Marmion",
+    "score_type": "tries",
+    "effect_mean": 0.4188987579477234,
+    "effect_std": 0.24066823444887972,
+    "effect_lower": -0.05910719132226725,
+    "effect_upper": 0.8782583975592203
+  },
+  {
+    "player": "Henco van Wyk",
+    "score_type": "tries",
+    "effect_mean": 0.4182580734176077,
+    "effect_std": 0.25490511828438106,
+    "effect_lower": -0.060562756309165876,
+    "effect_upper": 0.9221510070333402
+  },
+  {
+    "player": "Gabriel Hamer-Webb",
+    "score_type": "tries",
+    "effect_mean": 0.4176732656324962,
+    "effect_std": 0.2724696937745421,
+    "effect_lower": -0.10886385726044573,
+    "effect_upper": 0.9393460431398567
+  },
+  {
+    "player": "Sekou Macalou",
+    "score_type": "tries",
+    "effect_mean": 0.417551162588327,
+    "effect_std": 0.26849264714481735,
+    "effect_lower": -0.1060244204228937,
+    "effect_upper": 0.9524228403953621
+  },
+  {
+    "player": "Ange Capuozzo",
+    "score_type": "tries",
+    "effect_mean": 0.4169094520746423,
+    "effect_std": 0.18122548415125933,
+    "effect_lower": 0.07551700474395925,
+    "effect_upper": 0.7707246476541605
+  },
+  {
+    "player": "John Hodnett",
+    "score_type": "tries",
+    "effect_mean": 0.41538504393066183,
+    "effect_std": 0.25159480115286614,
+    "effect_lower": -0.07630017351998138,
+    "effect_upper": 0.9193445131710902
+  },
+  {
+    "player": "Matthew Devine",
+    "score_type": "tries",
+    "effect_mean": 0.4144308834492084,
+    "effect_std": 0.2693400173669874,
+    "effect_lower": -0.11255167885790615,
+    "effect_upper": 0.9244066828003437
+  },
+  {
+    "player": "Josh Jacomb",
+    "score_type": "tries",
+    "effect_mean": 0.4123272366706346,
+    "effect_std": 0.2607347021030876,
+    "effect_lower": -0.11690305457299868,
+    "effect_upper": 0.9159015649453537
+  },
+  {
+    "player": "Giorgi Melikidze",
+    "score_type": "tries",
+    "effect_mean": 0.4117920689634722,
+    "effect_std": 0.2681453365658253,
+    "effect_lower": -0.10888528913286852,
+    "effect_upper": 0.9388065280925616
+  },
+  {
+    "player": "Peter Sullivan",
+    "score_type": "tries",
+    "effect_mean": 0.410100884343902,
+    "effect_std": 0.24424826473640185,
+    "effect_lower": -0.06274390806130675,
+    "effect_upper": 0.8932406185830625
+  },
+  {
+    "player": "Arthur Green",
+    "score_type": "tries",
+    "effect_mean": 0.4089024006467371,
+    "effect_std": 0.29205406361014874,
+    "effect_lower": -0.16726409219130453,
+    "effect_upper": 0.9818853442864892
+  },
+  {
+    "player": "Christophe Loustalot",
+    "score_type": "penalties",
+    "effect_mean": 4.187756290309213,
+    "effect_std": 0.18398807449121896,
+    "effect_lower": 3.8399025948671803,
+    "effect_upper": 4.54755284000297
+  },
+  {
+    "player": "Lloyd Hayes",
+    "score_type": "penalties",
+    "effect_mean": 4.0805268950844145,
+    "effect_std": 0.42215157433206946,
+    "effect_lower": 3.2605709356672232,
+    "effect_upper": 4.919840992456179
+  },
+  {
+    "player": "Romain Trouilloud",
+    "score_type": "penalties",
+    "effect_mean": 3.814453500942875,
+    "effect_std": 0.17286318365959105,
+    "effect_lower": 3.4875996986807003,
+    "effect_upper": 4.169662821809902
+  },
+  {
+    "player": "Samuel Marques",
+    "score_type": "penalties",
+    "effect_mean": 3.8085399931781474,
+    "effect_std": 0.15026087225331056,
+    "effect_lower": 3.5245285124967314,
+    "effect_upper": 4.118442852324842
+  },
+  {
+    "player": "Alin Conache",
+    "score_type": "penalties",
+    "effect_mean": 3.800276938403888,
+    "effect_std": 0.2868475416685497,
+    "effect_lower": 3.23575628731722,
+    "effect_upper": 4.3562497742877015
+  },
+  {
+    "player": "Jeremy Fernandez",
+    "score_type": "penalties",
+    "effect_mean": 3.7863103936419455,
+    "effect_std": 0.1611313475665986,
+    "effect_lower": 3.485688705531501,
+    "effect_upper": 4.108584862357944
+  },
+  {
+    "player": "Melvyn Jaminet",
+    "score_type": "penalties",
+    "effect_mean": 3.7832614705337777,
+    "effect_std": 0.15200961174360456,
+    "effect_lower": 3.4967702813103236,
+    "effect_upper": 4.093189943711845
+  },
+  {
+    "player": "Nolann le Garrec",
+    "score_type": "penalties",
+    "effect_mean": 3.7514222501811485,
+    "effect_std": 0.14178163058272225,
+    "effect_lower": 3.4752881486837506,
+    "effect_upper": 4.031085391019877
+  },
+  {
+    "player": "Alex Lozowski",
+    "score_type": "penalties",
+    "effect_mean": 3.4008406578546655,
+    "effect_std": 0.2299326383176826,
+    "effect_lower": 2.963175046911119,
+    "effect_upper": 3.843952383990294
+  },
+  {
+    "player": "Henry Slade",
+    "score_type": "penalties",
+    "effect_mean": 3.2948146958259117,
+    "effect_std": 0.1392436695795747,
+    "effect_lower": 3.030340492645863,
+    "effect_upper": 3.5702342419889814
+  },
+  {
+    "player": "Rhys Carr\u00e9",
+    "score_type": "penalties",
+    "effect_mean": 3.2229356269500733,
+    "effect_std": 1.0307487580754686,
+    "effect_lower": 1.2245531100598321,
+    "effect_upper": 5.290440436952977
+  },
+  {
+    "player": "Franck Pourteau",
+    "score_type": "penalties",
+    "effect_mean": 3.2058237311161726,
+    "effect_std": 0.166690923684338,
+    "effect_lower": 2.8802908516330685,
+    "effect_upper": 3.536414028004309
+  },
+  {
+    "player": "Gonzalo L\u00f3pez-Bontempo",
+    "score_type": "penalties",
+    "effect_mean": 3.1997725066146883,
+    "effect_std": 0.35482469662693755,
+    "effect_lower": 2.4808041646155092,
+    "effect_upper": 3.8789842401568526
+  },
+  {
+    "player": "Dachi Papunashvili",
+    "score_type": "penalties",
+    "effect_mean": 3.1329478387057486,
+    "effect_std": 0.19936007293753402,
+    "effect_lower": 2.7507596026509593,
+    "effect_upper": 3.5323934319882975
+  },
+  {
+    "player": "Sam Gilbert",
+    "score_type": "penalties",
+    "effect_mean": 3.1272512590340313,
+    "effect_std": 0.15887012080217464,
+    "effect_lower": 2.8103082822794225,
+    "effect_upper": 3.438182358308069
+  },
+  {
+    "player": "Tommaso Allan",
+    "score_type": "penalties",
+    "effect_mean": 3.1209826216596332,
+    "effect_std": 0.1459449893117907,
+    "effect_lower": 2.831210226775698,
+    "effect_upper": 3.396282540452051
+  },
+  {
+    "player": "Jimmy Gopperth",
+    "score_type": "penalties",
+    "effect_mean": 3.120329108235296,
+    "effect_std": 0.26960423519300536,
+    "effect_lower": 2.588850763411842,
+    "effect_upper": 3.660306556900133
+  },
+  {
+    "player": "Leo Coly",
+    "score_type": "penalties",
+    "effect_mean": 3.111922172280194,
+    "effect_std": 0.17688907409794422,
+    "effect_lower": 2.767956587843954,
+    "effect_upper": 3.462666229100987
+  },
+  {
+    "player": "Antoine Aucagne",
+    "score_type": "penalties",
+    "effect_mean": 3.106871256009258,
+    "effect_std": 0.17028671042754817,
+    "effect_lower": 2.7792286923980716,
+    "effect_upper": 3.4538046646864577
+  },
+  {
+    "player": "Lucas Meret",
+    "score_type": "penalties",
+    "effect_mean": 3.078986560370117,
+    "effect_std": 0.1147150233018922,
+    "effect_lower": 2.8530081239669176,
+    "effect_upper": 3.317645034368913
+  },
+  {
+    "player": "Richie Asiata",
+    "score_type": "penalties",
+    "effect_mean": 3.062118638917145,
+    "effect_std": 0.7795971974938906,
+    "effect_lower": 1.6113896625498696,
+    "effect_upper": 4.655234948342423
+  },
+  {
+    "player": "Joe Simmonds",
+    "score_type": "penalties",
+    "effect_mean": 2.975662981099713,
+    "effect_std": 0.12395470881724842,
+    "effect_lower": 2.7350673659586344,
+    "effect_upper": 3.2173744638920643
+  },
+  {
+    "player": "Cohen Jasper",
+    "score_type": "penalties",
+    "effect_mean": 2.9586788038352854,
+    "effect_std": 0.5783368129230716,
+    "effect_lower": 1.8209023898796928,
+    "effect_upper": 4.074970629157885
+  },
+  {
+    "player": "Thomas Ramos",
+    "score_type": "penalties",
+    "effect_mean": 2.9100098326617974,
+    "effect_std": 0.11359036324343384,
+    "effect_lower": 2.6998436669102355,
+    "effect_upper": 3.1376923965226142
+  },
+  {
+    "player": "Nathan Doak",
+    "score_type": "penalties",
+    "effect_mean": 2.909880015238969,
+    "effect_std": 0.15279376777792986,
+    "effect_lower": 2.606816338633171,
+    "effect_upper": 3.2010856895456508
+  },
+  {
+    "player": "Maxime Lucu",
+    "score_type": "penalties",
+    "effect_mean": 2.840989200967901,
+    "effect_std": 0.1422979654569719,
+    "effect_lower": 2.5728604892052322,
+    "effect_upper": 3.1313871722735382
+  },
+  {
+    "player": "John Cooney",
+    "score_type": "penalties",
+    "effect_mean": 2.834321973589858,
+    "effect_std": 0.1880080014789164,
+    "effect_lower": 2.476015535604783,
+    "effect_upper": 3.211123655468928
+  },
+  {
+    "player": "Jerome Bosviel",
+    "score_type": "penalties",
+    "effect_mean": 2.833733670753751,
+    "effect_std": 0.13312365886058436,
+    "effect_lower": 2.567506933243925,
+    "effect_upper": 3.0914960064478327
+  },
+  {
+    "player": "Edgar Retiere",
+    "score_type": "penalties",
+    "effect_mean": 2.830726387619721,
+    "effect_std": 0.1694304677452353,
+    "effect_lower": 2.4964365165189637,
+    "effect_upper": 3.165616087480679
+  },
+  {
+    "player": "Zack Holmes",
+    "score_type": "penalties",
+    "effect_mean": 2.8185355907648595,
+    "effect_std": 0.1800789299948988,
+    "effect_lower": 2.4747453914182977,
+    "effect_upper": 3.178934493537049
+  },
+  {
+    "player": "Iban Laclau",
+    "score_type": "penalties",
+    "effect_mean": 2.8118160224836797,
+    "effect_std": 0.21331244901295812,
+    "effect_lower": 2.390222568653778,
+    "effect_upper": 3.239911593830157
+  },
+  {
+    "player": "Romuald Seguy",
+    "score_type": "penalties",
+    "effect_mean": 2.809228812417778,
+    "effect_std": 0.12789817364374348,
+    "effect_lower": 2.5553202386683016,
+    "effect_upper": 3.066859975136588
+  },
+  {
+    "player": "Paul Berges",
+    "score_type": "penalties",
+    "effect_mean": 2.7918155805070586,
+    "effect_std": 0.21724745275408447,
+    "effect_lower": 2.3711607321247383,
+    "effect_upper": 3.2271126221643995
+  },
+  {
+    "player": "Nicol\u00e1s Garafulic",
+    "score_type": "penalties",
+    "effect_mean": 2.7816937841438323,
+    "effect_std": 0.7339445308826055,
+    "effect_lower": 1.3548626495085145,
+    "effect_upper": 4.219718132452719
+  },
+  {
+    "player": "Sam Davies",
+    "score_type": "penalties",
+    "effect_mean": 2.772252774829274,
+    "effect_std": 0.15222588331236495,
+    "effect_lower": 2.4675028418767786,
+    "effect_upper": 3.06167693665445
+  },
+  {
+    "player": "Jules Plisson",
+    "score_type": "penalties",
+    "effect_mean": 2.753522939444028,
+    "effect_std": 0.17974499433297317,
+    "effect_lower": 2.3993678142628143,
+    "effect_upper": 3.101878403258077
+  },
+  {
+    "player": "Marc Palmier",
+    "score_type": "penalties",
+    "effect_mean": 2.744149797442671,
+    "effect_std": 0.1612931398907238,
+    "effect_lower": 2.4317779101187855,
+    "effect_upper": 3.0733524121775777
+  },
+  {
+    "player": "Camille Lopez",
+    "score_type": "penalties",
+    "effect_mean": 2.7423525391945267,
+    "effect_std": 0.19545972760640726,
+    "effect_lower": 2.3429509033172176,
+    "effect_upper": 3.1134653353172927
+  },
+  {
+    "player": "L\u00e9o Berdeu",
+    "score_type": "penalties",
+    "effect_mean": 2.730133767606565,
+    "effect_std": 0.11748690176824818,
+    "effect_lower": 2.498319193324108,
+    "effect_upper": 2.9528638733393135
+  },
+  {
+    "player": "Robert du Preez",
+    "score_type": "penalties",
+    "effect_mean": 2.7272518897109106,
+    "effect_std": 0.2085893051434816,
+    "effect_lower": 2.314599763227887,
+    "effect_upper": 3.146196533866779
+  },
+  {
+    "player": "Hugo Cerisier",
+    "score_type": "penalties",
+    "effect_mean": 2.724160114302929,
+    "effect_std": 0.15685754374808974,
+    "effect_lower": 2.425516179742828,
+    "effect_upper": 3.043851891068822
+  },
+  {
+    "player": "Zack Henry",
+    "score_type": "penalties",
+    "effect_mean": 2.722289284699132,
+    "effect_std": 0.15793770827102674,
+    "effect_lower": 2.4080804184477986,
+    "effect_upper": 3.0393806249926834
+  },
+  {
+    "player": "Paddy Jackson",
+    "score_type": "penalties",
+    "effect_mean": 2.7181440478063075,
+    "effect_std": 0.2358797303405502,
+    "effect_lower": 2.2653879934732712,
+    "effect_upper": 3.1805965406601104
+  },
+  {
+    "player": "Enzo Selponi",
+    "score_type": "penalties",
+    "effect_mean": 2.7114033766224277,
+    "effect_std": 0.22342998535016634,
+    "effect_lower": 2.285738429049465,
+    "effect_upper": 3.131068078189023
+  },
+  {
+    "player": "Theo Vidal",
+    "score_type": "penalties",
+    "effect_mean": 2.6980039644577807,
+    "effect_std": 0.38312886718009365,
+    "effect_lower": 1.9410384052531415,
+    "effect_upper": 3.4353470293027675
+  },
+  {
+    "player": "Joris Segonds",
+    "score_type": "penalties",
+    "effect_mean": 2.697157582697476,
+    "effect_std": 0.1158734979509349,
+    "effect_lower": 2.473952979195076,
+    "effect_upper": 2.9298297501969524
+  },
+  {
+    "player": "Thomas Salles",
+    "score_type": "penalties",
+    "effect_mean": 2.6891615558649145,
+    "effect_std": 0.18808918666003682,
+    "effect_lower": 2.3284629046552814,
+    "effect_upper": 3.058143437296293
+  },
+  {
+    "player": "Angus O'Brien",
+    "score_type": "penalties",
+    "effect_mean": 2.67288212932417,
+    "effect_std": 0.1486768204160764,
+    "effect_lower": 2.395640721097958,
+    "effect_upper": 2.9722903548072948
+  },
+  {
+    "player": "Callum Grieve",
+    "score_type": "penalties",
+    "effect_mean": 2.6725313289611328,
+    "effect_std": 0.1575112139304332,
+    "effect_lower": 2.365911082854072,
+    "effect_upper": 2.9942979271137924
+  },
+  {
+    "player": "Domingo Miotti",
+    "score_type": "penalties",
+    "effect_mean": 2.6686716627383658,
+    "effect_std": 0.12817573958422682,
+    "effect_lower": 2.414808823160737,
+    "effect_upper": 2.929303802207908
+  },
+  {
+    "player": "Enzo Herve",
+    "score_type": "penalties",
+    "effect_mean": 2.6528402877246062,
+    "effect_std": 0.14145395436751806,
+    "effect_lower": 2.373215297791588,
+    "effect_upper": 2.9335645943060618
+  },
+  {
+    "player": "Axel Desperes",
+    "score_type": "penalties",
+    "effect_mean": 2.641661082331308,
+    "effect_std": 0.12717787403858027,
+    "effect_lower": 2.397767946041843,
+    "effect_upper": 2.8910500507478547
+  },
+  {
+    "player": "Johnny McPhillips",
+    "score_type": "penalties",
+    "effect_mean": 2.64112707287871,
+    "effect_std": 0.1834454710210177,
+    "effect_lower": 2.2798301504909424,
+    "effect_upper": 3.011576224608988
+  },
+  {
+    "player": "Pete Lydon",
+    "score_type": "penalties",
+    "effect_mean": 2.6314903413500885,
+    "effect_std": 0.5168865432943328,
+    "effect_lower": 1.6653009402987355,
+    "effect_upper": 3.6508622444334624
+  },
+  {
+    "player": "Thomas Dolhagaray",
+    "score_type": "penalties",
+    "effect_mean": 2.6280074392437536,
+    "effect_std": 0.13770164857213846,
+    "effect_lower": 2.362446718974911,
+    "effect_upper": 2.9006821895925516
+  },
+  {
+    "player": "Shaun Reynolds",
+    "score_type": "penalties",
+    "effect_mean": 2.625923101971857,
+    "effect_std": 0.13830375221895969,
+    "effect_lower": 2.3637531698804417,
+    "effect_upper": 2.899428188733911
+  },
+  {
+    "player": "Thibault Santoro",
+    "score_type": "penalties",
+    "effect_mean": 2.622214566379076,
+    "effect_std": 0.308236277825873,
+    "effect_lower": 2.01854619964331,
+    "effect_upper": 3.2241420831932373
+  },
+  {
+    "player": "Martin Meliande",
+    "score_type": "penalties",
+    "effect_mean": 2.621328043653305,
+    "effect_std": 0.14358758310995517,
+    "effect_lower": 2.3402539075985764,
+    "effect_upper": 2.9023035183634427
+  },
+  {
+    "player": "Willie du Plessis",
+    "score_type": "penalties",
+    "effect_mean": 2.6179176365630945,
+    "effect_std": 0.1414290026904717,
+    "effect_lower": 2.3439605806658528,
+    "effect_upper": 2.8864709084555313
+  },
+  {
+    "player": "Dan Sheehan",
+    "score_type": "penalties",
+    "effect_mean": 2.610938549670392,
+    "effect_std": 0.40705860882313527,
+    "effect_lower": 1.8119063509624955,
+    "effect_upper": 3.442442626036656
+  },
+  {
+    "player": "Tanguy Menoret",
+    "score_type": "penalties",
+    "effect_mean": 2.6052713074898763,
+    "effect_std": 0.2780121713181159,
+    "effect_lower": 2.0758471699776475,
+    "effect_upper": 3.1479712660363948
+  },
+  {
+    "player": "Hugo Reus",
+    "score_type": "penalties",
+    "effect_mean": 2.5929493678264732,
+    "effect_std": 0.16550279131309364,
+    "effect_lower": 2.2769784651650093,
+    "effect_upper": 2.9303076237014256
+  },
+  {
+    "player": "Jamie Shillcock",
+    "score_type": "penalties",
+    "effect_mean": 2.5922586587136416,
+    "effect_std": 0.14067440215020258,
+    "effect_lower": 2.319774877036148,
+    "effect_upper": 2.87520834796193
+  },
+  {
+    "player": "Ewan Ashman",
+    "score_type": "penalties",
+    "effect_mean": 2.5828425731029854,
+    "effect_std": 0.44711171437408886,
+    "effect_lower": 1.7333191123068021,
+    "effect_upper": 3.4666066414582475
+  },
+  {
+    "player": "George Barton",
+    "score_type": "penalties",
+    "effect_mean": 2.576420931663173,
+    "effect_std": 0.19617514670411426,
+    "effect_lower": 2.1970220678871697,
+    "effect_upper": 2.979839472361845
+  },
+  {
+    "player": "Ben Botica",
+    "score_type": "penalties",
+    "effect_mean": 2.5642737025174718,
+    "effect_std": 0.1385024835800883,
+    "effect_lower": 2.298187954609185,
+    "effect_upper": 2.838792164086673
+  },
+  {
+    "player": "Joaquin de la Vega Mendia",
+    "score_type": "penalties",
+    "effect_mean": 2.5624883143031885,
+    "effect_std": 0.1754398769918902,
+    "effect_lower": 2.231180979635624,
+    "effect_upper": 2.911723238382043
+  },
+  {
+    "player": "Yohan le Bourhis",
+    "score_type": "penalties",
+    "effect_mean": 2.5587727211387135,
+    "effect_std": 0.18143850005818332,
+    "effect_lower": 2.1985883973943405,
+    "effect_upper": 2.9178468231933103
+  },
+  {
+    "player": "Justin Bouraux",
+    "score_type": "penalties",
+    "effect_mean": 2.5351847747850083,
+    "effect_std": 0.1305894467979977,
+    "effect_lower": 2.2795994634640895,
+    "effect_upper": 2.79083157859483
+  },
+  {
+    "player": "Marius Domon",
+    "score_type": "penalties",
+    "effect_mean": 2.5307801875366245,
+    "effect_std": 0.19065417903242982,
+    "effect_lower": 2.1546218802048425,
+    "effect_upper": 2.9109958845020754
+  },
+  {
+    "player": "Louis Carbonel",
+    "score_type": "penalties",
+    "effect_mean": 2.525070886376896,
+    "effect_std": 0.1177113880503218,
+    "effect_lower": 2.2960249407300037,
+    "effect_upper": 2.765870806739111
+  },
+  {
+    "player": "Ugo Seunes",
+    "score_type": "penalties",
+    "effect_mean": 2.5231319258312865,
+    "effect_std": 0.13094794780798244,
+    "effect_lower": 2.2720785263652843,
+    "effect_upper": 2.777648439941668
+  },
+  {
+    "player": "Baptiste Germain",
+    "score_type": "penalties",
+    "effect_mean": 2.523046632667025,
+    "effect_std": 0.2807625398582762,
+    "effect_lower": 1.9827075373116665,
+    "effect_upper": 3.076311569581886
+  },
+  {
+    "player": "Valentin Delpy",
+    "score_type": "penalties",
+    "effect_mean": 2.5189407608743344,
+    "effect_std": 0.13573364586618286,
+    "effect_lower": 2.2610537669581485,
+    "effect_upper": 2.777895644429227
+  },
+  {
+    "player": "Craig Willis",
+    "score_type": "penalties",
+    "effect_mean": 2.5179337453349184,
+    "effect_std": 0.15306547196067202,
+    "effect_lower": 2.2276052785769274,
+    "effect_upper": 2.8295145011975382
+  },
+  {
+    "player": "Chris Smith",
+    "score_type": "penalties",
+    "effect_mean": 2.510257791063569,
+    "effect_std": 0.12766625058699305,
+    "effect_lower": 2.271891307855556,
+    "effect_upper": 2.7679071217300915
+  },
+  {
+    "player": "Romain Riguet",
+    "score_type": "penalties",
+    "effect_mean": 2.5009111362741083,
+    "effect_std": 0.31533388131868867,
+    "effect_lower": 1.8879013838506635,
+    "effect_upper": 3.1068906898020248
+  },
+  {
+    "player": "Thomas Fortunel",
+    "score_type": "penalties",
+    "effect_mean": 2.4928332456732076,
+    "effect_std": 0.17000623098830744,
+    "effect_lower": 2.173894212927839,
+    "effect_upper": 2.8323124188372173
+  },
+  {
+    "player": "Ben Urdapilleta",
+    "score_type": "penalties",
+    "effect_mean": 2.466554024699433,
+    "effect_std": 0.13358636751629357,
+    "effect_lower": 2.212446144368431,
+    "effect_upper": 2.730884936856194
+  },
+  {
+    "player": "Maxime Lafage",
+    "score_type": "penalties",
+    "effect_mean": 2.4658621161240815,
+    "effect_std": 0.11165165170197766,
+    "effect_lower": 2.248805180731396,
+    "effect_upper": 2.690332527561534
+  },
+  {
+    "player": "Jurie Matthee",
+    "score_type": "penalties",
+    "effect_mean": 2.463902602829614,
+    "effect_std": 0.1614169726952802,
+    "effect_lower": 2.142331784224697,
+    "effect_upper": 2.779225458707735
+  },
+  {
+    "player": "Tristan Tedder",
+    "score_type": "penalties",
+    "effect_mean": 2.4477099863178453,
+    "effect_std": 0.21552429215810384,
+    "effect_lower": 2.0059616837927763,
+    "effect_upper": 2.8643658548718567
+  },
+  {
+    "player": "Kurt Eklund",
+    "score_type": "penalties",
+    "effect_mean": 2.4280086449291702,
+    "effect_std": 0.7373223644061027,
+    "effect_lower": 1.0264047984468156,
+    "effect_upper": 3.851222462592725
+  },
+  {
+    "player": "Ugo Pacome",
+    "score_type": "penalties",
+    "effect_mean": 2.4247676725280605,
+    "effect_std": 0.22226037566914025,
+    "effect_lower": 1.994129469221378,
+    "effect_upper": 2.858999528945122
+  },
+  {
+    "player": "Corentin Glenat",
+    "score_type": "penalties",
+    "effect_mean": 2.4162796226597005,
+    "effect_std": 0.21151317393466418,
+    "effect_lower": 2.002722117887784,
+    "effect_upper": 2.8217128516517724
+  },
+  {
+    "player": "Tedo Abzhandadze",
+    "score_type": "penalties",
+    "effect_mean": 2.405333832185083,
+    "effect_std": 0.14662389185675043,
+    "effect_lower": 2.1190130302298,
+    "effect_upper": 2.6877015510450932
+  },
+  {
+    "player": "Santiago Videla",
+    "score_type": "penalties",
+    "effect_mean": 2.4048980923163557,
+    "effect_std": 0.6172565362310188,
+    "effect_lower": 1.2087429619444292,
+    "effect_upper": 3.614375553495956
+  },
+  {
+    "player": "Jules Gimbert",
+    "score_type": "penalties",
+    "effect_mean": 2.4001162424296503,
+    "effect_std": 0.38246504199274467,
+    "effect_lower": 1.6251791368102262,
+    "effect_upper": 3.1562706545774555
+  },
+  {
+    "player": "Curwin Bosch",
+    "score_type": "penalties",
+    "effect_mean": 2.399619262625406,
+    "effect_std": 0.15208819150835173,
+    "effect_lower": 2.1096149660443975,
+    "effect_upper": 2.7065983076511273
+  },
+  {
+    "player": "Jules Soulan",
+    "score_type": "penalties",
+    "effect_mean": 2.3818598728864364,
+    "effect_std": 0.19008663238331514,
+    "effect_lower": 2.0144364034408415,
+    "effect_upper": 2.7571075849513766
+  },
+  {
+    "player": "Matt Faessler",
+    "score_type": "penalties",
+    "effect_mean": 2.368600658538469,
+    "effect_std": 0.7298069528132187,
+    "effect_lower": 0.9940366078801238,
+    "effect_upper": 3.8641906734448233
+  },
+  {
+    "player": "Josh Hodge",
+    "score_type": "penalties",
+    "effect_mean": 2.366236022897935,
+    "effect_std": 0.23217681505169413,
+    "effect_lower": 1.9178453004897968,
+    "effect_upper": 2.824546112017999
+  },
+  {
+    "player": "Baptiste Serin",
+    "score_type": "penalties",
+    "effect_mean": 2.365743333380896,
+    "effect_std": 0.19089768343646588,
+    "effect_lower": 1.9934153126937852,
+    "effect_upper": 2.74679396522882
+  },
+  {
+    "player": "Tom Raffy",
+    "score_type": "penalties",
+    "effect_mean": 2.3631008551318033,
+    "effect_std": 0.2992608158853602,
+    "effect_lower": 1.7723057069489832,
+    "effect_upper": 2.949418525837377
+  },
+  {
+    "player": "Luka Keletaona",
+    "score_type": "penalties",
+    "effect_mean": 2.3618711503740206,
+    "effect_std": 0.38105491315344525,
+    "effect_lower": 1.614787073104134,
+    "effect_upper": 3.107096385536585
+  },
+  {
+    "player": "Hugo Verdu",
+    "score_type": "penalties",
+    "effect_mean": 2.3596238065088233,
+    "effect_std": 0.3405399681228552,
+    "effect_lower": 1.6900076030873326,
+    "effect_upper": 3.0397098516999823
+  },
+  {
+    "player": "Stuart Hogg",
+    "score_type": "penalties",
+    "effect_mean": 2.35730283735399,
+    "effect_std": 0.17540298421240216,
+    "effect_lower": 2.0234476119897318,
+    "effect_upper": 2.709406747028257
+  },
+  {
+    "player": "Josh Bellamy",
+    "score_type": "penalties",
+    "effect_mean": 2.3427562724792548,
+    "effect_std": 0.3420045339889932,
+    "effect_lower": 1.6752435805869759,
+    "effect_upper": 3.0062405145870184
+  },
+  {
+    "player": "Jos\u00e9 Paiva dos Santos",
+    "score_type": "penalties",
+    "effect_mean": 2.3373617539129037,
+    "effect_std": 0.8803867908762558,
+    "effect_lower": 0.7089561644677678,
+    "effect_upper": 4.048119314947513
+  },
+  {
+    "player": "Jules Lebail",
+    "score_type": "penalties",
+    "effect_mean": 2.3307441515961798,
+    "effect_std": 0.47065373141620676,
+    "effect_lower": 1.400821710390036,
+    "effect_upper": 3.278448278650708
+  },
+  {
+    "player": "Christophe Loustalot",
+    "score_type": "conversions",
+    "effect_mean": 4.082834042335342,
+    "effect_std": 0.1787862625422112,
+    "effect_lower": 3.7523886290342703,
+    "effect_upper": 4.435548754251142
+  },
+  {
+    "player": "Lloyd Hayes",
+    "score_type": "conversions",
+    "effect_mean": 3.9781321154466305,
+    "effect_std": 0.41021653563110894,
+    "effect_lower": 3.2004457628646876,
+    "effect_upper": 4.7849671881159574
+  },
+  {
+    "player": "Romain Trouilloud",
+    "score_type": "conversions",
+    "effect_mean": 3.7190579889258073,
+    "effect_std": 0.1716586998227472,
+    "effect_lower": 3.389906635228094,
+    "effect_upper": 4.053776446444505
+  },
+  {
+    "player": "Samuel Marques",
+    "score_type": "conversions",
+    "effect_mean": 3.71312287892966,
+    "effect_std": 0.1459243963224256,
+    "effect_lower": 3.4371118108071945,
+    "effect_upper": 4.012341260008328
+  },
+  {
+    "player": "Alin Conache",
+    "score_type": "conversions",
+    "effect_mean": 3.705103992437143,
+    "effect_std": 0.27978577743493876,
+    "effect_lower": 3.159383233259685,
+    "effect_upper": 4.246478515497338
+  },
+  {
+    "player": "Jeremy Fernandez",
+    "score_type": "conversions",
+    "effect_mean": 3.6915079065636784,
+    "effect_std": 0.15806669586907976,
+    "effect_lower": 3.3902700482657786,
+    "effect_upper": 4.016503412613
+  },
+  {
+    "player": "Melvyn Jaminet",
+    "score_type": "conversions",
+    "effect_mean": 3.688453736483534,
+    "effect_std": 0.1471333273484901,
+    "effect_lower": 3.4166511459037525,
+    "effect_upper": 3.9778594110077
+  },
+  {
+    "player": "Nolann le Garrec",
+    "score_type": "conversions",
+    "effect_mean": 3.6574968915384534,
+    "effect_std": 0.1393813960146487,
+    "effect_lower": 3.3877183375944826,
+    "effect_upper": 3.9312783074641278
+  },
+  {
+    "player": "Alex Lozowski",
+    "score_type": "conversions",
+    "effect_mean": 3.315629895662401,
+    "effect_std": 0.22384398370841502,
+    "effect_lower": 2.892395332957943,
+    "effect_upper": 3.762858705593282
+  },
+  {
+    "player": "Henry Slade",
+    "score_type": "conversions",
+    "effect_mean": 3.2122855905491075,
+    "effect_std": 0.1356935144708032,
+    "effect_lower": 2.9497006154191148,
+    "effect_upper": 3.48407908898744
+  },
+  {
+    "player": "Rhys Carr\u00e9",
+    "score_type": "conversions",
+    "effect_mean": 3.1417604669730848,
+    "effect_std": 1.0029231562724474,
+    "effect_lower": 1.1879949474907614,
+    "effect_upper": 5.118263132495474
+  },
+  {
+    "player": "Franck Pourteau",
+    "score_type": "conversions",
+    "effect_mean": 3.1256408844682935,
+    "effect_std": 0.16481063310995747,
+    "effect_lower": 2.797824077419381,
+    "effect_upper": 3.453162265273446
+  },
+  {
+    "player": "Gonzalo L\u00f3pez-Bontempo",
+    "score_type": "conversions",
+    "effect_mean": 3.1199046389853162,
+    "effect_std": 0.3482746383517531,
+    "effect_lower": 2.4229863021934377,
+    "effect_upper": 3.7994959909032415
+  },
+  {
+    "player": "Dachi Papunashvili",
+    "score_type": "conversions",
+    "effect_mean": 3.0544848096052157,
+    "effect_std": 0.1945059856083659,
+    "effect_lower": 2.676216187290591,
+    "effect_upper": 3.4572034483517364
+  },
+  {
+    "player": "Sam Gilbert",
+    "score_type": "conversions",
+    "effect_mean": 3.0489751997761414,
+    "effect_std": 0.156011771973076,
+    "effect_lower": 2.738107831794818,
+    "effect_upper": 3.357328392734545
+  },
+  {
+    "player": "Tommaso Allan",
+    "score_type": "conversions",
+    "effect_mean": 3.042885041029552,
+    "effect_std": 0.1441131697528498,
+    "effect_lower": 2.7660100800022662,
+    "effect_upper": 3.3327710194912337
+  },
+  {
+    "player": "Jimmy Gopperth",
+    "score_type": "conversions",
+    "effect_mean": 3.0422929968995183,
+    "effect_std": 0.2643966034539335,
+    "effect_lower": 2.526374610726358,
+    "effect_upper": 3.556563023022358
+  },
+  {
+    "player": "Leo Coly",
+    "score_type": "conversions",
+    "effect_mean": 3.033788676172517,
+    "effect_std": 0.16908802152344632,
+    "effect_lower": 2.7124438612427726,
+    "effect_upper": 3.3732695582959744
+  },
+  {
+    "player": "Antoine Aucagne",
+    "score_type": "conversions",
+    "effect_mean": 3.0290853848791146,
+    "effect_std": 0.16674390708919581,
+    "effect_lower": 2.7000704056722054,
+    "effect_upper": 3.3639518235667247
+  },
+  {
+    "player": "Lucas Meret",
+    "score_type": "conversions",
+    "effect_mean": 3.0018521207129245,
+    "effect_std": 0.11154968310723991,
+    "effect_lower": 2.791003691075242,
+    "effect_upper": 3.226675581011375
+  },
+  {
+    "player": "Richie Asiata",
+    "score_type": "conversions",
+    "effect_mean": 2.9852882435649604,
+    "effect_std": 0.7591569445888692,
+    "effect_lower": 1.5878177854317947,
+    "effect_upper": 4.516266009535063
+  },
+  {
+    "player": "Joe Simmonds",
+    "score_type": "conversions",
+    "effect_mean": 2.90110050297118,
+    "effect_std": 0.12021471616325898,
+    "effect_lower": 2.670258619496822,
+    "effect_upper": 3.146353436514623
+  },
+  {
+    "player": "Cohen Jasper",
+    "score_type": "conversions",
+    "effect_mean": 2.884195437225462,
+    "effect_std": 0.5614995808855933,
+    "effect_lower": 1.7705145527064095,
+    "effect_upper": 3.9721823908770557
+  },
+  {
+    "player": "Nathan Doak",
+    "score_type": "conversions",
+    "effect_mean": 2.837087180273785,
+    "effect_std": 0.1507030947401584,
+    "effect_lower": 2.542489566233694,
+    "effect_upper": 3.120058839680318
+  },
+  {
+    "player": "Thomas Ramos",
+    "score_type": "conversions",
+    "effect_mean": 2.837053178350402,
+    "effect_std": 0.10901605213950119,
+    "effect_lower": 2.6298468925463676,
+    "effect_upper": 3.0562626128197383
+  },
+  {
+    "player": "Maxime Lucu",
+    "score_type": "conversions",
+    "effect_mean": 2.7698878042087984,
+    "effect_std": 0.13979464409889597,
+    "effect_lower": 2.5049193985591933,
+    "effect_upper": 3.0517077749175017
+  },
+  {
+    "player": "John Cooney",
+    "score_type": "conversions",
+    "effect_mean": 2.7633164981997362,
+    "effect_std": 0.18308402506357627,
+    "effect_lower": 2.416466039172427,
+    "effect_upper": 3.1314401647563836
+  },
+  {
+    "player": "Jerome Bosviel",
+    "score_type": "conversions",
+    "effect_mean": 2.7626858593641583,
+    "effect_std": 0.1283665270096635,
+    "effect_lower": 2.511885244202288,
+    "effect_upper": 3.0124593738633263
+  },
+  {
+    "player": "Edgar Retiere",
+    "score_type": "conversions",
+    "effect_mean": 2.7597792629663944,
+    "effect_std": 0.16449140190722267,
+    "effect_lower": 2.437257567702383,
+    "effect_upper": 3.0889162878871947
+  },
+  {
+    "player": "Zack Holmes",
+    "score_type": "conversions",
+    "effect_mean": 2.7481467446162613,
+    "effect_std": 0.17892924919297581,
+    "effect_lower": 2.411682732941568,
+    "effect_upper": 3.1114586454130415
+  },
+  {
+    "player": "Iban Laclau",
+    "score_type": "conversions",
+    "effect_mean": 2.7414013364400476,
+    "effect_std": 0.20794548222000528,
+    "effect_lower": 2.3276660988506856,
+    "effect_upper": 3.1550449701703247
+  },
+  {
+    "player": "Romuald Seguy",
+    "score_type": "conversions",
+    "effect_mean": 2.7389306308571895,
+    "effect_std": 0.1262228223059596,
+    "effect_lower": 2.49964569149467,
+    "effect_upper": 3.0019503404378276
+  },
+  {
+    "player": "Paul Berges",
+    "score_type": "conversions",
+    "effect_mean": 2.7220165569075023,
+    "effect_std": 0.21358360990462252,
+    "effect_lower": 2.309379879181409,
+    "effect_upper": 3.1334021673527
+  },
+  {
+    "player": "Nicol\u00e1s Garafulic",
+    "score_type": "conversions",
+    "effect_mean": 2.7116578621852585,
+    "effect_std": 0.7147828635098722,
+    "effect_lower": 1.3375885781035735,
+    "effect_upper": 4.122096421218691
+  },
+  {
+    "player": "Sam Davies",
+    "score_type": "conversions",
+    "effect_mean": 2.7027759318985787,
+    "effect_std": 0.14776300741241533,
+    "effect_lower": 2.411746200571717,
+    "effect_upper": 2.989502381775854
+  },
+  {
+    "player": "Jules Plisson",
+    "score_type": "conversions",
+    "effect_mean": 2.684591391086777,
+    "effect_std": 0.17596574974717633,
+    "effect_lower": 2.3402333195585427,
+    "effect_upper": 3.0416283996698414
+  },
+  {
+    "player": "Marc Palmier",
+    "score_type": "conversions",
+    "effect_mean": 2.675290279034969,
+    "effect_std": 0.15513143503621524,
+    "effect_lower": 2.3780005105547652,
+    "effect_upper": 2.9831294008559817
+  },
+  {
+    "player": "Camille Lopez",
+    "score_type": "conversions",
+    "effect_mean": 2.6736748285747485,
+    "effect_std": 0.1908570862373517,
+    "effect_lower": 2.2892665447856406,
+    "effect_upper": 3.0399769797488956
+  },
+  {
+    "player": "L\u00e9o Berdeu",
+    "score_type": "conversions",
+    "effect_mean": 2.661793321356619,
+    "effect_std": 0.11574328813051642,
+    "effect_lower": 2.4509157840754385,
+    "effect_upper": 2.8862555801250878
+  },
+  {
+    "player": "Robert du Preez",
+    "score_type": "conversions",
+    "effect_mean": 2.6589822532065486,
+    "effect_std": 0.20415240985494923,
+    "effect_lower": 2.2615367399851,
+    "effect_upper": 3.0662605362601916
+  },
+  {
+    "player": "Hugo Cerisier",
+    "score_type": "conversions",
+    "effect_mean": 2.655879896518398,
+    "effect_std": 0.15203642678252133,
+    "effect_lower": 2.350439759622345,
+    "effect_upper": 2.9624997203838124
+  },
+  {
+    "player": "Zack Henry",
+    "score_type": "conversions",
+    "effect_mean": 2.654058272439887,
+    "effect_std": 0.15309534463083693,
+    "effect_lower": 2.353150107312542,
+    "effect_upper": 2.9469102292000846
+  },
+  {
+    "player": "Paddy Jackson",
+    "score_type": "conversions",
+    "effect_mean": 2.6504259059250788,
+    "effect_std": 0.23415515425212455,
+    "effect_lower": 2.187155301185672,
+    "effect_upper": 3.1112194964266333
+  },
+  {
+    "player": "Enzo Selponi",
+    "score_type": "conversions",
+    "effect_mean": 2.643379001468491,
+    "effect_std": 0.2161712569214377,
+    "effect_lower": 2.2222087794292493,
+    "effect_upper": 3.0593547839367465
+  },
+  {
+    "player": "Theo Vidal",
+    "score_type": "conversions",
+    "effect_mean": 2.6307951043459195,
+    "effect_std": 0.3760465345487268,
+    "effect_lower": 1.8987988097445416,
+    "effect_upper": 3.3495435595264227
+  },
+  {
+    "player": "Joris Segonds",
+    "score_type": "conversions",
+    "effect_mean": 2.6295516889448742,
+    "effect_std": 0.11175096001180346,
+    "effect_lower": 2.40843330793221,
+    "effect_upper": 2.850128066010574
+  },
+  {
+    "player": "Thomas Salles",
+    "score_type": "conversions",
+    "effect_mean": 2.621893957633917,
+    "effect_std": 0.18481548074210777,
+    "effect_lower": 2.2687031875218806,
+    "effect_upper": 2.973132480933397
+  },
+  {
+    "player": "Angus O'Brien",
+    "score_type": "conversions",
+    "effect_mean": 2.606122665682308,
+    "effect_std": 0.1481604044028518,
+    "effect_lower": 2.326140943350885,
+    "effect_upper": 2.90183527298607
+  },
+  {
+    "player": "Callum Grieve",
+    "score_type": "conversions",
+    "effect_mean": 2.6055493755139723,
+    "effect_std": 0.15316846914821097,
+    "effect_lower": 2.315588021315263,
+    "effect_upper": 2.913780247120812
+  },
+  {
+    "player": "Domingo Miotti",
+    "score_type": "conversions",
+    "effect_mean": 2.6017667477809754,
+    "effect_std": 0.12375556830310944,
+    "effect_lower": 2.368042447393785,
+    "effect_upper": 2.8489857581965277
+  },
+  {
+    "player": "Enzo Herve",
+    "score_type": "conversions",
+    "effect_mean": 2.5864468632404827,
+    "effect_std": 0.13912140908574852,
+    "effect_lower": 2.319449508362451,
+    "effect_upper": 2.8588215491587583
+  },
+  {
+    "player": "Axel Desperes",
+    "score_type": "conversions",
+    "effect_mean": 2.5756067405914664,
+    "effect_std": 0.12646271947232138,
+    "effect_lower": 2.337283273989929,
+    "effect_upper": 2.823629283489275
+  },
+  {
+    "player": "Johnny McPhillips",
+    "score_type": "conversions",
+    "effect_mean": 2.5749568974159325,
+    "effect_std": 0.17855599655191506,
+    "effect_lower": 2.237614585339028,
+    "effect_upper": 2.9265828302643073
+  },
+  {
+    "player": "Pete Lydon",
+    "score_type": "conversions",
+    "effect_mean": 2.56494210687396,
+    "effect_std": 0.5006104878476405,
+    "effect_lower": 1.630710115574725,
+    "effect_upper": 3.5446182655222884
+  },
+  {
+    "player": "Thomas Dolhagaray",
+    "score_type": "conversions",
+    "effect_mean": 2.5621834923725038,
+    "effect_std": 0.1342446043623602,
+    "effect_lower": 2.3107409628249154,
+    "effect_upper": 2.82693320335678
+  },
+  {
+    "player": "Shaun Reynolds",
+    "score_type": "conversions",
+    "effect_mean": 2.5601911523388905,
+    "effect_std": 0.13563995496086143,
+    "effect_lower": 2.302468310581311,
+    "effect_upper": 2.8241821175169446
+  },
+  {
+    "player": "Thibault Santoro",
+    "score_type": "conversions",
+    "effect_mean": 2.5565159594969242,
+    "effect_std": 0.3002680202474968,
+    "effect_lower": 1.9500565886793497,
+    "effect_upper": 3.134177207035309
+  },
+  {
+    "player": "Martin Meliande",
+    "score_type": "conversions",
+    "effect_mean": 2.5556354177860996,
+    "effect_std": 0.13946221727798036,
+    "effect_lower": 2.2896741050722933,
+    "effect_upper": 2.828377808958131
+  },
+  {
+    "player": "Willie du Plessis",
+    "score_type": "conversions",
+    "effect_mean": 2.5524815055871835,
+    "effect_std": 0.14040328513059142,
+    "effect_lower": 2.273537121553619,
+    "effect_upper": 2.8212770400916707
+  },
+  {
+    "player": "Dan Sheehan",
+    "score_type": "conversions",
+    "effect_mean": 2.5455258160854006,
+    "effect_std": 0.396224359089679,
+    "effect_lower": 1.7557196848655594,
+    "effect_upper": 3.351196460040011
+  },
+  {
+    "player": "Tanguy Menoret",
+    "score_type": "conversions",
+    "effect_mean": 2.5399146026141732,
+    "effect_std": 0.2701488599544599,
+    "effect_lower": 2.028514246782908,
+    "effect_upper": 3.064938000343918
+  },
+  {
+    "player": "Hugo Reus",
+    "score_type": "conversions",
+    "effect_mean": 2.5279794579901083,
+    "effect_std": 0.16099048965284685,
+    "effect_lower": 2.21897690728396,
+    "effect_upper": 2.844265201837794
+  },
+  {
+    "player": "Jamie Shillcock",
+    "score_type": "conversions",
+    "effect_mean": 2.527140707458767,
+    "effect_std": 0.1334869144227891,
+    "effect_lower": 2.265395997898684,
+    "effect_upper": 2.7930636922078755
+  },
+  {
+    "player": "Ewan Ashman",
+    "score_type": "conversions",
+    "effect_mean": 2.5181056304744476,
+    "effect_std": 0.435374548743664,
+    "effect_lower": 1.6681718214982086,
+    "effect_upper": 3.388052748201309
+  },
+  {
+    "player": "George Barton",
+    "score_type": "conversions",
+    "effect_mean": 2.511998813084729,
+    "effect_std": 0.19272300634788722,
+    "effect_lower": 2.1396036143754658,
+    "effect_upper": 2.9111029929726433
+  },
+  {
+    "player": "Ben Botica",
+    "score_type": "conversions",
+    "effect_mean": 2.49994314652253,
+    "effect_std": 0.13323333317676533,
+    "effect_lower": 2.2472112979802206,
+    "effect_upper": 2.761767762875988
+  },
+  {
+    "player": "Joaquin de la Vega Mendia",
+    "score_type": "conversions",
+    "effect_mean": 2.4983759777048924,
+    "effect_std": 0.17210103158140985,
+    "effect_lower": 2.179345332666736,
+    "effect_upper": 2.8352701579901334
+  },
+  {
+    "player": "Yohan le Bourhis",
+    "score_type": "conversions",
+    "effect_mean": 2.4946053261910883,
+    "effect_std": 0.1758784713447038,
+    "effect_lower": 2.161788100123681,
+    "effect_upper": 2.8336341225956283
+  },
+  {
+    "player": "Justin Bouraux",
+    "score_type": "conversions",
+    "effect_mean": 2.4718227367163332,
+    "effect_std": 0.13000503565227112,
+    "effect_lower": 2.20884287982992,
+    "effect_upper": 2.7271535338334796
+  },
+  {
+    "player": "Marius Domon",
+    "score_type": "conversions",
+    "effect_mean": 2.4674663194727984,
+    "effect_std": 0.18694020927363802,
+    "effect_lower": 2.098251153833625,
+    "effect_upper": 2.846456747411156
+  },
+  {
+    "player": "Louis Carbonel",
+    "score_type": "conversions",
+    "effect_mean": 2.461768614700331,
+    "effect_std": 0.11362026841795642,
+    "effect_lower": 2.2488148213495274,
+    "effect_upper": 2.683981182758683
+  },
+  {
+    "player": "Ugo Seunes",
+    "score_type": "conversions",
+    "effect_mean": 2.4599192026451644,
+    "effect_std": 0.12749812994924234,
+    "effect_lower": 2.2096389963811345,
+    "effect_upper": 2.7107386989239015
+  },
+  {
+    "player": "Baptiste Germain",
+    "score_type": "conversions",
+    "effect_mean": 2.4598053518934133,
+    "effect_std": 0.2739515766059696,
+    "effect_lower": 1.9373596283620567,
+    "effect_upper": 2.999561886471634
+  },
+  {
+    "player": "Valentin Delpy",
+    "score_type": "conversions",
+    "effect_mean": 2.4559733067947564,
+    "effect_std": 0.13463150867010465,
+    "effect_lower": 2.1967595562389524,
+    "effect_upper": 2.719455199493542
+  },
+  {
+    "player": "Craig Willis",
+    "score_type": "conversions",
+    "effect_mean": 2.4549771298605703,
+    "effect_std": 0.15105339342802251,
+    "effect_lower": 2.1709001649483817,
+    "effect_upper": 2.755500810354274
+  },
+  {
+    "player": "Chris Smith",
+    "score_type": "conversions",
+    "effect_mean": 2.447408800375279,
+    "effect_std": 0.12512182679573766,
+    "effect_lower": 2.2090331363472324,
+    "effect_upper": 2.6989735342739496
+  },
+  {
+    "player": "Romain Riguet",
+    "score_type": "conversions",
+    "effect_mean": 2.4379487981172905,
+    "effect_std": 0.30502678389122645,
+    "effect_lower": 1.8505537413116977,
+    "effect_upper": 3.0201658560269533
+  },
+  {
+    "player": "Thomas Fortunel",
+    "score_type": "conversions",
+    "effect_mean": 2.430455908178549,
+    "effect_std": 0.16671105932379782,
+    "effect_lower": 2.115215216032164,
+    "effect_upper": 2.7554067780846188
+  },
+  {
+    "player": "Ben Urdapilleta",
+    "score_type": "conversions",
+    "effect_mean": 2.404804986846932,
+    "effect_std": 0.1308750790251989,
+    "effect_lower": 2.155777050249354,
+    "effect_upper": 2.6635109547750324
+  },
+  {
+    "player": "Maxime Lafage",
+    "score_type": "conversions",
+    "effect_mean": 2.404079651452078,
+    "effect_std": 0.10841493942175974,
+    "effect_lower": 2.1993949879820014,
+    "effect_upper": 2.6113400666115467
+  },
+  {
+    "player": "Jurie Matthee",
+    "score_type": "conversions",
+    "effect_mean": 2.402216125494166,
+    "effect_std": 0.15799613033048213,
+    "effect_lower": 2.0902575486809805,
+    "effect_upper": 2.7183406748866306
+  },
+  {
+    "player": "Tristan Tedder",
+    "score_type": "conversions",
+    "effect_mean": 2.386169064598986,
+    "effect_std": 0.20770508999989806,
+    "effect_lower": 1.9629793908607838,
+    "effect_upper": 2.798436663427007
+  },
+  {
+    "player": "Kurt Eklund",
+    "score_type": "conversions",
+    "effect_mean": 2.3669967702184684,
+    "effect_std": 0.7177820353363487,
+    "effect_lower": 1.0090075164648982,
+    "effect_upper": 3.7387453680118217
+  },
+  {
+    "player": "Ugo Pacome",
+    "score_type": "conversions",
+    "effect_mean": 2.364074261429638,
+    "effect_std": 0.21713755429916456,
+    "effect_lower": 1.9330516735003258,
+    "effect_upper": 2.795594162205001
+  },
+  {
+    "player": "Corentin Glenat",
+    "score_type": "conversions",
+    "effect_mean": 2.355747982250579,
+    "effect_std": 0.20631433039948627,
+    "effect_lower": 1.9615827753846762,
+    "effect_upper": 2.7453219453609807
+  },
+  {
+    "player": "Tedo Abzhandadze",
+    "score_type": "conversions",
+    "effect_mean": 2.3450818163620033,
+    "effect_std": 0.14281484858076457,
+    "effect_lower": 2.0635917078210553,
+    "effect_upper": 2.635716463327858
+  },
+  {
+    "player": "Santiago Videla",
+    "score_type": "conversions",
+    "effect_mean": 2.3442819093968197,
+    "effect_std": 0.6000721305133748,
+    "effect_lower": 1.1732667563160073,
+    "effect_upper": 3.4993499465978015
+  },
+  {
+    "player": "Jules Gimbert",
+    "score_type": "conversions",
+    "effect_mean": 2.3399416643138955,
+    "effect_std": 0.37247111081515233,
+    "effect_lower": 1.5808524010187204,
+    "effect_upper": 3.0575764278410134
+  },
+  {
+    "player": "Curwin Bosch",
+    "score_type": "conversions",
+    "effect_mean": 2.339410137271639,
+    "effect_std": 0.14681243048894835,
+    "effect_lower": 2.059238599082204,
+    "effect_upper": 2.6366112951759253
+  },
+  {
+    "player": "Jules Soulan",
+    "score_type": "conversions",
+    "effect_mean": 2.3222270149177513,
+    "effect_std": 0.18574395546584513,
+    "effect_lower": 1.963813779572191,
+    "effect_upper": 2.6791071941484677
+  },
+  {
+    "player": "Matt Faessler",
+    "score_type": "conversions",
+    "effect_mean": 2.309272380518662,
+    "effect_std": 0.7118223135840568,
+    "effect_lower": 0.9682855935271166,
+    "effect_upper": 3.734461851898338
+  },
+  {
+    "player": "Josh Hodge",
+    "score_type": "conversions",
+    "effect_mean": 2.307048643597419,
+    "effect_std": 0.2270346322241548,
+    "effect_lower": 1.8543304496207347,
+    "effect_upper": 2.744181604785378
+  },
+  {
+    "player": "Baptiste Serin",
+    "score_type": "conversions",
+    "effect_mean": 2.306552036436806,
+    "effect_std": 0.18704364979746954,
+    "effect_lower": 1.9371843925235892,
+    "effect_upper": 2.683429472487339
+  },
+  {
+    "player": "Tom Raffy",
+    "score_type": "conversions",
+    "effect_mean": 2.303978370565845,
+    "effect_std": 0.29193243492891235,
+    "effect_lower": 1.7358082230190652,
+    "effect_upper": 2.878629421222538
+  },
+  {
+    "player": "Luka Keletaona",
+    "score_type": "conversions",
+    "effect_mean": 2.3027203932404245,
+    "effect_std": 0.3717785255188004,
+    "effect_lower": 1.5667421301597164,
+    "effect_upper": 3.019682088603127
+  },
+  {
+    "player": "Hugo Verdu",
+    "score_type": "conversions",
+    "effect_mean": 2.3005244746171902,
+    "effect_std": 0.3322202499294971,
+    "effect_lower": 1.650031453477493,
+    "effect_upper": 2.9684032523282005
+  },
+  {
+    "player": "Stuart Hogg",
+    "score_type": "conversions",
+    "effect_mean": 2.298304011452694,
+    "effect_std": 0.17159078509962455,
+    "effect_lower": 1.9711282802415118,
+    "effect_upper": 2.6382249940907085
+  },
+  {
+    "player": "Josh Bellamy",
+    "score_type": "conversions",
+    "effect_mean": 2.2841182634523456,
+    "effect_std": 0.3334610756462453,
+    "effect_lower": 1.6362490956452556,
+    "effect_upper": 2.9482476578897043
+  },
+  {
+    "player": "Jos\u00e9 Paiva dos Santos",
+    "score_type": "conversions",
+    "effect_mean": 2.278938372898238,
+    "effect_std": 0.8601105609432483,
+    "effect_lower": 0.694932598371748,
+    "effect_upper": 3.9530678014418337
+  },
+  {
+    "player": "Jules Lebail",
+    "score_type": "conversions",
+    "effect_mean": 2.2725127173901036,
+    "effect_std": 0.46005997840835544,
+    "effect_lower": 1.368954014465873,
+    "effect_upper": 3.204877032198339
+  }
+]

@@ -1,0 +1,2002 @@
+[
+  {
+    "player": "Lucas Meret",
+    "primary_position": 10,
+    "n_matches": 49,
+    "vorp_mean": 16.516605637506892,
+    "vorp_lower": 13.595450897471824,
+    "vorp_upper": 20.182067715661894,
+    "vorp_tries_mean": -0.08540628395192804,
+    "vorp_kicking_mean": 16.602011921458818
+  },
+  {
+    "player": "Joe Simmonds",
+    "primary_position": 10,
+    "n_matches": 40,
+    "vorp_mean": 14.906753254806906,
+    "vorp_lower": 11.892708623156993,
+    "vorp_upper": 18.36691996885548,
+    "vorp_tries_mean": 0.04222155212141233,
+    "vorp_kicking_mean": 14.864531702685493
+  },
+  {
+    "player": "Christophe Loustalot",
+    "primary_position": 9,
+    "n_matches": 37,
+    "vorp_mean": 14.579271000431174,
+    "vorp_lower": 10.486326484146268,
+    "vorp_upper": 19.770990357050277,
+    "vorp_tries_mean": -0.13608203649937134,
+    "vorp_kicking_mean": 14.715353036930546
+  },
+  {
+    "player": "Edgar Retiere",
+    "primary_position": 10,
+    "n_matches": 39,
+    "vorp_mean": 12.987688107867237,
+    "vorp_lower": 9.591632010678033,
+    "vorp_upper": 17.249048192361986,
+    "vorp_tries_mean": 0.10286165701179727,
+    "vorp_kicking_mean": 12.88482645085544
+  },
+  {
+    "player": "Jerome Bosviel",
+    "primary_position": 10,
+    "n_matches": 39,
+    "vorp_mean": 12.79735835203977,
+    "vorp_lower": 9.965932768540046,
+    "vorp_upper": 15.97802061196688,
+    "vorp_tries_mean": -0.04320041405989747,
+    "vorp_kicking_mean": 12.840558766099669
+  },
+  {
+    "player": "Zack Holmes",
+    "primary_position": 10,
+    "n_matches": 25,
+    "vorp_mean": 12.682853565339169,
+    "vorp_lower": 8.96435347292345,
+    "vorp_upper": 17.14732010025815,
+    "vorp_tries_mean": -0.01998928469915343,
+    "vorp_kicking_mean": 12.702842850038321
+  },
+  {
+    "player": "Paul Berges",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 12.44453383226875,
+    "vorp_lower": 8.458367040109163,
+    "vorp_upper": 17.729470993866546,
+    "vorp_tries_mean": 0.01458285994885842,
+    "vorp_kicking_mean": 12.42995097231989
+  },
+  {
+    "player": "Romuald Seguy",
+    "primary_position": 10,
+    "n_matches": 46,
+    "vorp_mean": 12.311627154922618,
+    "vorp_lower": 9.612775482781942,
+    "vorp_upper": 15.479426708258481,
+    "vorp_tries_mean": -0.12895866579710108,
+    "vorp_kicking_mean": 12.440585820719718
+  },
+  {
+    "player": "Sam Davies",
+    "primary_position": 10,
+    "n_matches": 39,
+    "vorp_mean": 12.06030606666879,
+    "vorp_lower": 9.070058839420259,
+    "vorp_upper": 15.765392960462508,
+    "vorp_tries_mean": 0.008408155856878707,
+    "vorp_kicking_mean": 12.051897910811913
+  },
+  {
+    "player": "Camille Lopez",
+    "primary_position": 10,
+    "n_matches": 26,
+    "vorp_mean": 11.930291308818946,
+    "vorp_lower": 8.115592427222838,
+    "vorp_upper": 16.68755236737391,
+    "vorp_tries_mean": 0.14531364611774114,
+    "vorp_kicking_mean": 11.784977662701207
+  },
+  {
+    "player": "Jules Plisson",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 11.834961468623204,
+    "vorp_lower": 8.43645526727075,
+    "vorp_upper": 15.865778481677419,
+    "vorp_tries_mean": -0.056596042068340284,
+    "vorp_kicking_mean": 11.891557510691545
+  },
+  {
+    "player": "Melvyn Jaminet",
+    "primary_position": 15,
+    "n_matches": 40,
+    "vorp_mean": 11.688882971313724,
+    "vorp_lower": 8.940406019790677,
+    "vorp_upper": 14.844445904034286,
+    "vorp_tries_mean": 0.44885005296566277,
+    "vorp_kicking_mean": 11.24003291834806
+  },
+  {
+    "player": "Marc Palmier",
+    "primary_position": 10,
+    "n_matches": 32,
+    "vorp_mean": 11.627867475284951,
+    "vorp_lower": 8.632930842795318,
+    "vorp_upper": 15.332790320193961,
+    "vorp_tries_mean": -0.09332597315312029,
+    "vorp_kicking_mean": 11.721193448438072
+  },
+  {
+    "player": "L\u00e9o Berdeu",
+    "primary_position": 10,
+    "n_matches": 53,
+    "vorp_mean": 11.444871122727617,
+    "vorp_lower": 9.230438752614791,
+    "vorp_upper": 13.959479345468383,
+    "vorp_tries_mean": -0.003787982787913676,
+    "vorp_kicking_mean": 11.448659105515533
+  },
+  {
+    "player": "Enzo Selponi",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 11.432365421562883,
+    "vorp_lower": 7.469459047192822,
+    "vorp_upper": 16.44908724578137,
+    "vorp_tries_mean": 0.028599421651823144,
+    "vorp_kicking_mean": 11.403765999911059
+  },
+  {
+    "player": "Zack Henry",
+    "primary_position": 10,
+    "n_matches": 29,
+    "vorp_mean": 11.353613183862507,
+    "vorp_lower": 8.498020694891228,
+    "vorp_upper": 14.802632497747085,
+    "vorp_tries_mean": -0.08513428763910987,
+    "vorp_kicking_mean": 11.438747471501614
+  },
+  {
+    "player": "Hugo Cerisier",
+    "primary_position": 10,
+    "n_matches": 47,
+    "vorp_mean": 11.337475638352574,
+    "vorp_lower": 8.487419104062363,
+    "vorp_upper": 14.989477516662664,
+    "vorp_tries_mean": -0.0969188713214806,
+    "vorp_kicking_mean": 11.434394509674055
+  },
+  {
+    "player": "Joris Segonds",
+    "primary_position": 10,
+    "n_matches": 62,
+    "vorp_mean": 10.898708532296071,
+    "vorp_lower": 8.700920785335558,
+    "vorp_upper": 13.430717660038281,
+    "vorp_tries_mean": -0.13998724650395655,
+    "vorp_kicking_mean": 11.03869577880003
+  },
+  {
+    "player": "Domingo Miotti",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 10.791742042222348,
+    "vorp_lower": 8.66050823502532,
+    "vorp_upper": 13.654982195513623,
+    "vorp_tries_mean": 0.024928120113611892,
+    "vorp_kicking_mean": 10.766813922108735
+  },
+  {
+    "player": "Nolann le Garrec",
+    "primary_position": 9,
+    "n_matches": 50,
+    "vorp_mean": 10.567517093717615,
+    "vorp_lower": 8.24198111570549,
+    "vorp_upper": 13.105109353257552,
+    "vorp_tries_mean": 1.2045177558633144,
+    "vorp_kicking_mean": 9.362999337854301
+  },
+  {
+    "player": "Thibault Santoro",
+    "primary_position": 10,
+    "n_matches": 5,
+    "vorp_mean": 10.562824055289083,
+    "vorp_lower": 5.621930600419909,
+    "vorp_upper": 17.256497429888352,
+    "vorp_tries_mean": -0.009166824752052478,
+    "vorp_kicking_mean": 10.571990880041136
+  },
+  {
+    "player": "Enzo Herve",
+    "primary_position": 10,
+    "n_matches": 45,
+    "vorp_mean": 10.494120250241565,
+    "vorp_lower": 8.011194013578494,
+    "vorp_upper": 13.403895058120883,
+    "vorp_tries_mean": -0.07744533395895796,
+    "vorp_kicking_mean": 10.571565584200526
+  },
+  {
+    "player": "Johnny McPhillips",
+    "primary_position": 10,
+    "n_matches": 17,
+    "vorp_mean": 10.426038345896318,
+    "vorp_lower": 7.437395453294185,
+    "vorp_upper": 14.065951394498668,
+    "vorp_tries_mean": -0.05513273049416932,
+    "vorp_kicking_mean": 10.481171076390488
+  },
+  {
+    "player": "Axel Desperes",
+    "primary_position": 10,
+    "n_matches": 60,
+    "vorp_mean": 10.387491220534818,
+    "vorp_lower": 8.13215463893393,
+    "vorp_upper": 12.837065652434879,
+    "vorp_tries_mean": 0.004166041491128659,
+    "vorp_kicking_mean": 10.383325179043688
+  },
+  {
+    "player": "Tanguy Menoret",
+    "primary_position": 10,
+    "n_matches": 9,
+    "vorp_mean": 10.353224328342666,
+    "vorp_lower": 5.967766741957507,
+    "vorp_upper": 16.111252452518702,
+    "vorp_tries_mean": 0.0511134740539199,
+    "vorp_kicking_mean": 10.302110854288745
+  },
+  {
+    "player": "Thomas Dolhagaray",
+    "primary_position": 10,
+    "n_matches": 36,
+    "vorp_mean": 10.291460978766976,
+    "vorp_lower": 7.93760997020758,
+    "vorp_upper": 13.131552594774892,
+    "vorp_tries_mean": 0.07027830330913083,
+    "vorp_kicking_mean": 10.221182675457845
+  },
+  {
+    "player": "Shaun Reynolds",
+    "primary_position": 10,
+    "n_matches": 34,
+    "vorp_mean": 10.236223431671377,
+    "vorp_lower": 7.998842103451663,
+    "vorp_upper": 12.830810070270507,
+    "vorp_tries_mean": -0.0015285362281777938,
+    "vorp_kicking_mean": 10.237751967899554
+  },
+  {
+    "player": "Samuel Marques",
+    "primary_position": 9,
+    "n_matches": 43,
+    "vorp_mean": 10.109337205116868,
+    "vorp_lower": 7.681522066023764,
+    "vorp_upper": 13.19591118391681,
+    "vorp_tries_mean": 0.11785475583208045,
+    "vorp_kicking_mean": 9.991482449284788
+  },
+  {
+    "player": "Alin Conache",
+    "primary_position": 9,
+    "n_matches": 9,
+    "vorp_mean": 10.08401583144593,
+    "vorp_lower": 5.825629812402114,
+    "vorp_upper": 15.675310524323628,
+    "vorp_tries_mean": -0.024900247995306806,
+    "vorp_kicking_mean": 10.108916079441236
+  },
+  {
+    "player": "Willie du Plessis",
+    "primary_position": 10,
+    "n_matches": 40,
+    "vorp_mean": 10.07104185815151,
+    "vorp_lower": 7.55558679650091,
+    "vorp_upper": 12.66826599047977,
+    "vorp_tries_mean": -0.11006521987718315,
+    "vorp_kicking_mean": 10.181107078028694
+  },
+  {
+    "player": "Hugo Reus",
+    "primary_position": 10,
+    "n_matches": 44,
+    "vorp_mean": 9.93995712202336,
+    "vorp_lower": 7.235441867257762,
+    "vorp_upper": 13.311642850451491,
+    "vorp_tries_mean": 0.008289373237033135,
+    "vorp_kicking_mean": 9.931667748786326
+  },
+  {
+    "player": "Jeremy Fernandez",
+    "primary_position": 9,
+    "n_matches": 58,
+    "vorp_mean": 9.87056279905991,
+    "vorp_lower": 7.4309089302962565,
+    "vorp_upper": 12.904128639320904,
+    "vorp_tries_mean": 0.12387794546685277,
+    "vorp_kicking_mean": 9.746684853593054
+  },
+  {
+    "player": "Jamie Shillcock",
+    "primary_position": 10,
+    "n_matches": 42,
+    "vorp_mean": 9.845054477994177,
+    "vorp_lower": 7.551319690630744,
+    "vorp_upper": 12.468115824801632,
+    "vorp_tries_mean": -0.06848021420914852,
+    "vorp_kicking_mean": 9.913534692203324
+  },
+  {
+    "player": "Ben Botica",
+    "primary_position": 10,
+    "n_matches": 39,
+    "vorp_mean": 9.747443532740217,
+    "vorp_lower": 7.421788341776167,
+    "vorp_upper": 12.34885346676207,
+    "vorp_tries_mean": 0.19980327000570086,
+    "vorp_kicking_mean": 9.547640262734516
+  },
+  {
+    "player": "Joaquin de la Vega Mendia",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 9.72523314576032,
+    "vorp_lower": 7.038712936551954,
+    "vorp_upper": 13.055925791185398,
+    "vorp_tries_mean": 0.10596027836354734,
+    "vorp_kicking_mean": 9.619272867396772
+  },
+  {
+    "player": "Yohan le Bourhis",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 9.529803679321743,
+    "vorp_lower": 6.66383513333782,
+    "vorp_upper": 13.155250202220635,
+    "vorp_tries_mean": -0.058764162040638314,
+    "vorp_kicking_mean": 9.588567841362384
+  },
+  {
+    "player": "Justin Bouraux",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 9.483691040416057,
+    "vorp_lower": 7.3184506428885365,
+    "vorp_upper": 11.9354148347618,
+    "vorp_tries_mean": 0.22605262893888647,
+    "vorp_kicking_mean": 9.25763841147717
+  },
+  {
+    "player": "Romain Riguet",
+    "primary_position": 10,
+    "n_matches": 11,
+    "vorp_mean": 9.365439882285491,
+    "vorp_lower": 4.87339462144332,
+    "vorp_upper": 15.867743778448952,
+    "vorp_tries_mean": -0.03421181160673045,
+    "vorp_kicking_mean": 9.399651693892222
+  },
+  {
+    "player": "Ugo Seunes",
+    "primary_position": 10,
+    "n_matches": 45,
+    "vorp_mean": 9.227805016601598,
+    "vorp_lower": 7.190295105267866,
+    "vorp_upper": 11.515601258886377,
+    "vorp_tries_mean": 0.027995671308102706,
+    "vorp_kicking_mean": 9.199809345293495
+  },
+  {
+    "player": "Louis Carbonel",
+    "primary_position": 10,
+    "n_matches": 49,
+    "vorp_mean": 9.159675383550287,
+    "vorp_lower": 7.374833196033282,
+    "vorp_upper": 11.23387692222792,
+    "vorp_tries_mean": -0.0056509941291156785,
+    "vorp_kicking_mean": 9.165326377679403
+  },
+  {
+    "player": "Craig Willis",
+    "primary_position": 10,
+    "n_matches": 25,
+    "vorp_mean": 9.122563488393942,
+    "vorp_lower": 6.7495673864361505,
+    "vorp_upper": 12.003147958978678,
+    "vorp_tries_mean": -0.08279956028931909,
+    "vorp_kicking_mean": 9.205363048683262
+  },
+  {
+    "player": "Valentin Delpy",
+    "primary_position": 10,
+    "n_matches": 32,
+    "vorp_mean": 9.086765487898493,
+    "vorp_lower": 7.030401563027326,
+    "vorp_upper": 11.543461988961509,
+    "vorp_tries_mean": -0.061937217701814845,
+    "vorp_kicking_mean": 9.148702705600307
+  },
+  {
+    "player": "Chris Smith",
+    "primary_position": 10,
+    "n_matches": 45,
+    "vorp_mean": 8.952325127639806,
+    "vorp_lower": 7.0370192450052,
+    "vorp_upper": 11.271648352014633,
+    "vorp_tries_mean": -0.06550516205891554,
+    "vorp_kicking_mean": 9.017830289698722
+  },
+  {
+    "player": "Thomas Fortunel",
+    "primary_position": 10,
+    "n_matches": 35,
+    "vorp_mean": 8.888790028848845,
+    "vorp_lower": 6.382813735853269,
+    "vorp_upper": 11.948113275922408,
+    "vorp_tries_mean": -0.02186990137141128,
+    "vorp_kicking_mean": 8.910659930220257
+  },
+  {
+    "player": "Jurie Matthee",
+    "primary_position": 10,
+    "n_matches": 29,
+    "vorp_mean": 8.673171703677998,
+    "vorp_lower": 6.262905196524991,
+    "vorp_upper": 11.336377410838097,
+    "vorp_tries_mean": 0.02287960302455975,
+    "vorp_kicking_mean": 8.650292100653438
+  },
+  {
+    "player": "Ben Urdapilleta",
+    "primary_position": 10,
+    "n_matches": 43,
+    "vorp_mean": 8.514740218318952,
+    "vorp_lower": 6.563021796176146,
+    "vorp_upper": 10.755795007078914,
+    "vorp_tries_mean": -0.10201206528673755,
+    "vorp_kicking_mean": 8.61675228360569
+  },
+  {
+    "player": "Maxime Lafage",
+    "primary_position": 10,
+    "n_matches": 49,
+    "vorp_mean": 8.47950511607755,
+    "vorp_lower": 6.8084710577631675,
+    "vorp_upper": 10.287144589730627,
+    "vorp_tries_mean": -0.09547657915323385,
+    "vorp_kicking_mean": 8.574981695230784
+  },
+  {
+    "player": "Corentin Glenat",
+    "primary_position": 10,
+    "n_matches": 18,
+    "vorp_mean": 8.168208942942476,
+    "vorp_lower": 5.258996899295192,
+    "vorp_upper": 11.63028476007058,
+    "vorp_tries_mean": -0.03593225775842798,
+    "vorp_kicking_mean": 8.204141200700905
+  },
+  {
+    "player": "Curwin Bosch",
+    "primary_position": 10,
+    "n_matches": 34,
+    "vorp_mean": 8.143233464563904,
+    "vorp_lower": 6.002858927578559,
+    "vorp_upper": 10.629169423112968,
+    "vorp_tries_mean": 0.061894775623277956,
+    "vorp_kicking_mean": 8.081338688940624
+  },
+  {
+    "player": "Tedo Abzhandadze",
+    "primary_position": 10,
+    "n_matches": 43,
+    "vorp_mean": 8.13643617382998,
+    "vorp_lower": 6.064703264209071,
+    "vorp_upper": 10.529140586275963,
+    "vorp_tries_mean": 0.006057895976124822,
+    "vorp_kicking_mean": 8.130378277853856
+  },
+  {
+    "player": "Jules Soulan",
+    "primary_position": 10,
+    "n_matches": 28,
+    "vorp_mean": 7.882908810209417,
+    "vorp_lower": 5.47733170200948,
+    "vorp_upper": 10.703881119945072,
+    "vorp_tries_mean": 0.017031139494848843,
+    "vorp_kicking_mean": 7.865877670714569
+  },
+  {
+    "player": "Stuart Hogg",
+    "primary_position": 10,
+    "n_matches": 32,
+    "vorp_mean": 7.82325265232451,
+    "vorp_lower": 5.572418751430138,
+    "vorp_upper": 10.704023456703123,
+    "vorp_tries_mean": 0.09732273461670135,
+    "vorp_kicking_mean": 7.725929917707808
+  },
+  {
+    "player": "Kade Wolhuter",
+    "primary_position": 10,
+    "n_matches": 9,
+    "vorp_mean": 7.596573695368266,
+    "vorp_lower": 4.490981480230556,
+    "vorp_upper": 11.30853178530343,
+    "vorp_tries_mean": 0.024585670754541482,
+    "vorp_kicking_mean": 7.5719880246137246
+  },
+  {
+    "player": "Louis le Brun",
+    "primary_position": 10,
+    "n_matches": 38,
+    "vorp_mean": 7.4289392737930395,
+    "vorp_lower": 5.478728845112189,
+    "vorp_upper": 9.688789514773594,
+    "vorp_tries_mean": 0.03546619421678626,
+    "vorp_kicking_mean": 7.393473079576253
+  },
+  {
+    "player": "Thomas Vincent",
+    "primary_position": 10,
+    "n_matches": 34,
+    "vorp_mean": 7.3657148393309795,
+    "vorp_lower": 5.028766416444471,
+    "vorp_upper": 10.241163470354198,
+    "vorp_tries_mean": -0.04583755169190927,
+    "vorp_kicking_mean": 7.411552391022889
+  },
+  {
+    "player": "Theo Giral",
+    "primary_position": 10,
+    "n_matches": 31,
+    "vorp_mean": 7.356033368600492,
+    "vorp_lower": 5.137685385855913,
+    "vorp_upper": 10.146005643540247,
+    "vorp_tries_mean": 0.055160045304177265,
+    "vorp_kicking_mean": 7.300873323296316
+  },
+  {
+    "player": "Pierre Popelin",
+    "primary_position": 10,
+    "n_matches": 30,
+    "vorp_mean": 7.332856106606636,
+    "vorp_lower": 5.168912351499503,
+    "vorp_upper": 9.950443822174666,
+    "vorp_tries_mean": -0.016804239815890135,
+    "vorp_kicking_mean": 7.349660346422526
+  },
+  {
+    "player": "Franck Pourteau",
+    "primary_position": 21,
+    "n_matches": 28,
+    "vorp_mean": 7.090443263545613,
+    "vorp_lower": 5.033068896515566,
+    "vorp_upper": 9.515555822684673,
+    "vorp_tries_mean": -0.17182237105573234,
+    "vorp_kicking_mean": 7.262265634601346
+  },
+  {
+    "player": "Keagan Johannes",
+    "primary_position": 10,
+    "n_matches": 32,
+    "vorp_mean": 7.009637583125309,
+    "vorp_lower": 4.892260329071652,
+    "vorp_upper": 9.735633209559303,
+    "vorp_tries_mean": 0.05336029897379872,
+    "vorp_kicking_mean": 6.95627728415151
+  },
+  {
+    "player": "Luka Matkava",
+    "primary_position": 10,
+    "n_matches": 31,
+    "vorp_mean": 6.982496838496883,
+    "vorp_lower": 4.948806430370797,
+    "vorp_upper": 9.359011661607333,
+    "vorp_tries_mean": 0.01565649610088456,
+    "vorp_kicking_mean": 6.966840342395997
+  },
+  {
+    "player": "Anthony Belleau",
+    "primary_position": 10,
+    "n_matches": 41,
+    "vorp_mean": 6.862592178879695,
+    "vorp_lower": 5.247273529292695,
+    "vorp_upper": 8.79098273253751,
+    "vorp_tries_mean": 0.09851937403936759,
+    "vorp_kicking_mean": 6.764072804840327
+  },
+  {
+    "player": "Sacha Feinberg-Mngomezulu",
+    "primary_position": 10,
+    "n_matches": 39,
+    "vorp_mean": 6.854294001892056,
+    "vorp_lower": 5.245576404117441,
+    "vorp_upper": 8.708601849205188,
+    "vorp_tries_mean": 0.7558601317910871,
+    "vorp_kicking_mean": 6.098433870100967
+  },
+  {
+    "player": "Jacob Umaga",
+    "primary_position": 10,
+    "n_matches": 42,
+    "vorp_mean": 6.777754469084276,
+    "vorp_lower": 5.2943365302711385,
+    "vorp_upper": 8.67540351821059,
+    "vorp_tries_mean": 0.25063507867490936,
+    "vorp_kicking_mean": 6.527119390409367
+  },
+  {
+    "player": "Antoine Hastoy",
+    "primary_position": 10,
+    "n_matches": 64,
+    "vorp_mean": 6.688461470691036,
+    "vorp_lower": 5.252637849056039,
+    "vorp_upper": 8.37764407985189,
+    "vorp_tries_mean": 0.005869924938487172,
+    "vorp_kicking_mean": 6.6825915457525475
+  },
+  {
+    "player": "Harry Bazalgette",
+    "primary_position": 10,
+    "n_matches": 31,
+    "vorp_mean": 6.670127498394622,
+    "vorp_lower": 5.113742663807417,
+    "vorp_upper": 8.501612445322053,
+    "vorp_tries_mean": -0.13951626295756978,
+    "vorp_kicking_mean": 6.809643761352192
+  },
+  {
+    "player": "Ioan Lloyd",
+    "primary_position": 10,
+    "n_matches": 48,
+    "vorp_mean": 6.5864362935675755,
+    "vorp_lower": 4.869002208213782,
+    "vorp_upper": 8.575175720824577,
+    "vorp_tries_mean": -0.11415871497741299,
+    "vorp_kicking_mean": 6.700595008544988
+  },
+  {
+    "player": "Handre Pollard",
+    "primary_position": 10,
+    "n_matches": 42,
+    "vorp_mean": 6.55558336467467,
+    "vorp_lower": 5.243195047273397,
+    "vorp_upper": 8.2511144429148,
+    "vorp_tries_mean": 0.000861530550441011,
+    "vorp_kicking_mean": 6.554721834124229
+  },
+  {
+    "player": "Mathis Viard",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 6.484782576536897,
+    "vorp_lower": 3.2442583512823426,
+    "vorp_upper": 11.185845080117655,
+    "vorp_tries_mean": -0.016526868515866315,
+    "vorp_kicking_mean": 6.5013094450527635
+  },
+  {
+    "player": "Owen Farrell",
+    "primary_position": 10,
+    "n_matches": 41,
+    "vorp_mean": 6.38430413391794,
+    "vorp_lower": 4.7130244481886026,
+    "vorp_upper": 8.394664103210623,
+    "vorp_tries_mean": -0.10919864916119286,
+    "vorp_kicking_mean": 6.4935027830791325
+  },
+  {
+    "player": "Diego Jurd",
+    "primary_position": 10,
+    "n_matches": 12,
+    "vorp_mean": 6.334923439019994,
+    "vorp_lower": 3.3404304234932667,
+    "vorp_upper": 10.278795704937583,
+    "vorp_tries_mean": -0.024245292768987382,
+    "vorp_kicking_mean": 6.359168731788981
+  },
+  {
+    "player": "Antoine Gibert",
+    "primary_position": 10,
+    "n_matches": 60,
+    "vorp_mean": 6.286305381888828,
+    "vorp_lower": 4.654116785568214,
+    "vorp_upper": 8.377398370416275,
+    "vorp_tries_mean": -0.004102239548782567,
+    "vorp_kicking_mean": 6.290407621437609
+  },
+  {
+    "player": "Lloyd Evans",
+    "primary_position": 10,
+    "n_matches": 13,
+    "vorp_mean": 6.184359831996862,
+    "vorp_lower": 3.527944202890712,
+    "vorp_upper": 9.59285712081961,
+    "vorp_tries_mean": 0.016654907976968104,
+    "vorp_kicking_mean": 6.167704924019894
+  },
+  {
+    "player": "Gianni Lombard",
+    "primary_position": 10,
+    "n_matches": 15,
+    "vorp_mean": 6.174021577169388,
+    "vorp_lower": 3.658973684353589,
+    "vorp_upper": 9.45576261532506,
+    "vorp_tries_mean": 0.03764706296244871,
+    "vorp_kicking_mean": 6.136374514206938
+  },
+  {
+    "player": "Harry Plummer",
+    "primary_position": 10,
+    "n_matches": 58,
+    "vorp_mean": 6.171913017274641,
+    "vorp_lower": 4.876866627414666,
+    "vorp_upper": 7.660588585900218,
+    "vorp_tries_mean": 0.13592070796158454,
+    "vorp_kicking_mean": 6.035992309313056
+  },
+  {
+    "player": "Flavio Asquini",
+    "primary_position": 10,
+    "n_matches": 12,
+    "vorp_mean": 6.10858684551152,
+    "vorp_lower": 2.688784085503443,
+    "vorp_upper": 10.912995928299377,
+    "vorp_tries_mean": 0.0058166663878901495,
+    "vorp_kicking_mean": 6.102770179123631
+  },
+  {
+    "player": "Mat\u00e9o Garcia",
+    "primary_position": 10,
+    "n_matches": 27,
+    "vorp_mean": 6.10412081520189,
+    "vorp_lower": 4.08080721816776,
+    "vorp_upper": 8.729152415671896,
+    "vorp_tries_mean": -0.046735310732663106,
+    "vorp_kicking_mean": 6.1508561259345536
+  },
+  {
+    "player": "Finn Keylock",
+    "primary_position": 10,
+    "n_matches": 11,
+    "vorp_mean": 6.064086324938613,
+    "vorp_lower": 3.841799274229936,
+    "vorp_upper": 8.69338378644235,
+    "vorp_tries_mean": 0.011101097998043102,
+    "vorp_kicking_mean": 6.052985226940571
+  },
+  {
+    "player": "Johan Goosen",
+    "primary_position": 10,
+    "n_matches": 12,
+    "vorp_mean": 6.042989565114834,
+    "vorp_lower": 3.5445928634496124,
+    "vorp_upper": 9.05414279660373,
+    "vorp_tries_mean": -0.02407112681596905,
+    "vorp_kicking_mean": 6.067060691930804
+  },
+  {
+    "player": "Giacomo da Re",
+    "primary_position": 10,
+    "n_matches": 38,
+    "vorp_mean": 6.01661418894259,
+    "vorp_lower": 4.355564006936937,
+    "vorp_upper": 8.298006038586971,
+    "vorp_tries_mean": -0.038380518015203466,
+    "vorp_kicking_mean": 6.054994706957793
+  },
+  {
+    "player": "Dachi Papunashvili",
+    "primary_position": 15,
+    "n_matches": 30,
+    "vorp_mean": 5.894695410367035,
+    "vorp_lower": 4.142030819243556,
+    "vorp_upper": 8.276049654419689,
+    "vorp_tries_mean": 0.11138874689019806,
+    "vorp_kicking_mean": 5.783306663476837
+  },
+  {
+    "player": "Harry Byrne",
+    "primary_position": 10,
+    "n_matches": 38,
+    "vorp_mean": 5.864963226131558,
+    "vorp_lower": 4.351517848045462,
+    "vorp_upper": 7.682239527209433,
+    "vorp_tries_mean": -0.02047230681667024,
+    "vorp_kicking_mean": 5.885435532948228
+  },
+  {
+    "player": "Tommaso Allan",
+    "primary_position": 15,
+    "n_matches": 48,
+    "vorp_mean": 5.8020676115099,
+    "vorp_lower": 4.344871200124755,
+    "vorp_upper": 7.492078094514075,
+    "vorp_tries_mean": 0.11607573517298865,
+    "vorp_kicking_mean": 5.685991876336911
+  },
+  {
+    "player": "Sam Gilbert",
+    "primary_position": 15,
+    "n_matches": 53,
+    "vorp_mean": 5.776911882859284,
+    "vorp_lower": 4.224695289097696,
+    "vorp_upper": 7.468960111423188,
+    "vorp_tries_mean": 0.055308374253757626,
+    "vorp_kicking_mean": 5.721603508605526
+  },
+  {
+    "player": "Antoine Aucagne",
+    "primary_position": 15,
+    "n_matches": 30,
+    "vorp_mean": 5.702398884349265,
+    "vorp_lower": 4.133420506386454,
+    "vorp_upper": 7.673518767473267,
+    "vorp_tries_mean": 0.07319279133340946,
+    "vorp_kicking_mean": 5.629206093015855
+  },
+  {
+    "player": "Ihaia West",
+    "primary_position": 10,
+    "n_matches": 44,
+    "vorp_mean": 5.511882960812787,
+    "vorp_lower": 3.7408416531683186,
+    "vorp_upper": 7.6831232513570535,
+    "vorp_tries_mean": 0.005241558536740688,
+    "vorp_kicking_mean": 5.5066414022760455
+  },
+  {
+    "player": "Billy Searle",
+    "primary_position": 10,
+    "n_matches": 45,
+    "vorp_mean": 5.485509377777784,
+    "vorp_lower": 4.251506332630297,
+    "vorp_upper": 6.828347198118847,
+    "vorp_tries_mean": 0.11945835864936835,
+    "vorp_kicking_mean": 5.366051019128415
+  },
+  {
+    "player": "Romain Trouilloud",
+    "primary_position": 12,
+    "n_matches": 29,
+    "vorp_mean": 5.370737399411575,
+    "vorp_lower": 3.856710190106901,
+    "vorp_upper": 7.160112375613313,
+    "vorp_tries_mean": 0.05353598557007422,
+    "vorp_kicking_mean": 5.317201413841501
+  },
+  {
+    "player": "Marcus Smith",
+    "primary_position": 10,
+    "n_matches": 61,
+    "vorp_mean": 5.29257284085532,
+    "vorp_lower": 4.2099430304316,
+    "vorp_upper": 6.53464020353762,
+    "vorp_tries_mean": 0.1936165970508016,
+    "vorp_kicking_mean": 5.098956243804519
+  },
+  {
+    "player": "Jordan Hendrikse",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 5.245748172965512,
+    "vorp_lower": 3.862550512738343,
+    "vorp_upper": 6.887867598542318,
+    "vorp_tries_mean": -0.08924543120370561,
+    "vorp_kicking_mean": 5.3349936041692185
+  },
+  {
+    "player": "Russell Bennett",
+    "primary_position": 10,
+    "n_matches": 25,
+    "vorp_mean": 5.120580426087474,
+    "vorp_lower": 3.6210065709299704,
+    "vorp_upper": 6.999536824240088,
+    "vorp_tries_mean": -0.023768801188030705,
+    "vorp_kicking_mean": 5.144349227275505
+  },
+  {
+    "player": "Sam Francis",
+    "primary_position": 10,
+    "n_matches": 9,
+    "vorp_mean": 5.019307561625209,
+    "vorp_lower": 2.1920180403404337,
+    "vorp_upper": 9.08394729250508,
+    "vorp_tries_mean": 0.03908616317029964,
+    "vorp_kicking_mean": 4.980221398454909
+  },
+  {
+    "player": "Will Maisey",
+    "primary_position": 10,
+    "n_matches": 31,
+    "vorp_mean": 4.995758902586987,
+    "vorp_lower": 3.8282259435531096,
+    "vorp_upper": 6.349900064405908,
+    "vorp_tries_mean": 0.05539306546982785,
+    "vorp_kicking_mean": 4.9403658371171595
+  },
+  {
+    "player": "Gwyn Parks",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 4.955555258715339,
+    "vorp_lower": 3.593805609494354,
+    "vorp_upper": 6.622128175304195,
+    "vorp_tries_mean": -0.0848117337079343,
+    "vorp_kicking_mean": 5.040366992423275
+  },
+  {
+    "player": "Leo Coly",
+    "primary_position": 9,
+    "n_matches": 47,
+    "vorp_mean": 4.914370159846978,
+    "vorp_lower": 3.4556281480004665,
+    "vorp_upper": 6.717763286687714,
+    "vorp_tries_mean": 0.043679773204210945,
+    "vorp_kicking_mean": 4.870690386642767
+  },
+  {
+    "player": "George Ford",
+    "primary_position": 10,
+    "n_matches": 57,
+    "vorp_mean": 4.885459662888865,
+    "vorp_lower": 3.8563598325424877,
+    "vorp_upper": 6.085174202402678,
+    "vorp_tries_mean": -0.11033639053770486,
+    "vorp_kicking_mean": 4.99579605342657
+  },
+  {
+    "player": "Jean-Pascal Barraque",
+    "primary_position": 10,
+    "n_matches": 9,
+    "vorp_mean": 4.856730190999423,
+    "vorp_lower": 1.54213426518792,
+    "vorp_upper": 10.550680342502094,
+    "vorp_tries_mean": 0.03790155471879989,
+    "vorp_kicking_mean": 4.818828636280623
+  },
+  {
+    "player": "Tommy Mathews",
+    "primary_position": 10,
+    "n_matches": 31,
+    "vorp_mean": 4.849909634362613,
+    "vorp_lower": 3.5689783346140214,
+    "vorp_upper": 6.332273889450517,
+    "vorp_tries_mean": -0.06924783126667597,
+    "vorp_kicking_mean": 4.919157465629289
+  },
+  {
+    "player": "Iban Laclau",
+    "primary_position": 21,
+    "n_matches": 25,
+    "vorp_mean": 4.768112476744387,
+    "vorp_lower": 3.022571144892198,
+    "vorp_upper": 6.946718689943967,
+    "vorp_tries_mean": -0.10709537925015994,
+    "vorp_kicking_mean": 4.875207855994548
+  },
+  {
+    "player": "Brett Connon",
+    "primary_position": 10,
+    "n_matches": 40,
+    "vorp_mean": 4.761059432837921,
+    "vorp_lower": 3.415211661370514,
+    "vorp_upper": 6.2848180339847595,
+    "vorp_tries_mean": -0.1280181614473395,
+    "vorp_kicking_mean": 4.8890775942852605
+  },
+  {
+    "player": "Gonzalo Vinuesa",
+    "primary_position": 10,
+    "n_matches": 8,
+    "vorp_mean": 4.755375120383017,
+    "vorp_lower": 2.2325172119538457,
+    "vorp_upper": 8.6001866883203,
+    "vorp_tries_mean": 0.028308369266574984,
+    "vorp_kicking_mean": 4.727066751116443
+  },
+  {
+    "player": "Sam Costelow",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 4.688066371655703,
+    "vorp_lower": 3.3374994837740184,
+    "vorp_upper": 6.266745867695106,
+    "vorp_tries_mean": -0.080697472274543,
+    "vorp_kicking_mean": 4.768763843930245
+  },
+  {
+    "player": "Joey Carbery",
+    "primary_position": 10,
+    "n_matches": 36,
+    "vorp_mean": 4.687440198971936,
+    "vorp_lower": 3.1502248160850725,
+    "vorp_upper": 6.61070488156319,
+    "vorp_tries_mean": -0.07873654010168242,
+    "vorp_kicking_mean": 4.766176739073619
+  },
+  {
+    "player": "Josh Thomas",
+    "primary_position": 10,
+    "n_matches": 19,
+    "vorp_mean": 4.667690386261373,
+    "vorp_lower": 3.188525043066417,
+    "vorp_upper": 6.463343599774165,
+    "vorp_tries_mean": 0.07522451463243403,
+    "vorp_kicking_mean": 4.592465871628939
+  },
+  {
+    "player": "Peter Nelson",
+    "primary_position": 10,
+    "n_matches": 8,
+    "vorp_mean": 4.641946520691113,
+    "vorp_lower": 1.7343557046618976,
+    "vorp_upper": 8.773572756544207,
+    "vorp_tries_mean": -0.029197361009824375,
+    "vorp_kicking_mean": 4.671143881700938
+  },
+  {
+    "player": "Giovanni Montemauri",
+    "primary_position": 10,
+    "n_matches": 36,
+    "vorp_mean": 4.550643594006791,
+    "vorp_lower": 2.7056149904183795,
+    "vorp_upper": 6.906502460454628,
+    "vorp_tries_mean": -0.09233552614999573,
+    "vorp_kicking_mean": 4.642979120156786
+  },
+  {
+    "player": "Theo Vidal",
+    "primary_position": 21,
+    "n_matches": 6,
+    "vorp_mean": 4.500607077855735,
+    "vorp_lower": 2.0171498748810723,
+    "vorp_upper": 7.953082327251929,
+    "vorp_tries_mean": 0.006921753400492924,
+    "vorp_kicking_mean": 4.493685324455242
+  },
+  {
+    "player": "Thomas Ramos",
+    "primary_position": 15,
+    "n_matches": 66,
+    "vorp_mean": 4.440982673400222,
+    "vorp_lower": 3.514124518797736,
+    "vorp_upper": 5.52359449178145,
+    "vorp_tries_mean": -0.07635679547661474,
+    "vorp_kicking_mean": 4.517339468876837
+  },
+  {
+    "player": "Fin Smith",
+    "primary_position": 10,
+    "n_matches": 58,
+    "vorp_mean": 4.405192620826701,
+    "vorp_lower": 3.519374423896133,
+    "vorp_upper": 5.431994683574493,
+    "vorp_tries_mean": 0.04194418849600019,
+    "vorp_kicking_mean": 4.3632484323307
+  },
+  {
+    "player": "Ross Thompson",
+    "primary_position": 10,
+    "n_matches": 50,
+    "vorp_mean": 4.366823513929155,
+    "vorp_lower": 3.2602202402707263,
+    "vorp_upper": 5.623467833648493,
+    "vorp_tries_mean": 0.03228245868218369,
+    "vorp_kicking_mean": 4.334541055246972
+  },
+  {
+    "player": "Paddy Jackson",
+    "primary_position": 21,
+    "n_matches": 18,
+    "vorp_mean": 4.348080454995528,
+    "vorp_lower": 2.6201224791931645,
+    "vorp_upper": 6.557673679947713,
+    "vorp_tries_mean": -0.05182022318111912,
+    "vorp_kicking_mean": 4.399900678176648
+  },
+  {
+    "player": "Nathan Chamberlain",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 4.298259165493869,
+    "vorp_lower": 3.076446215101342,
+    "vorp_upper": 5.813206283816344,
+    "vorp_tries_mean": -0.06044534896977641,
+    "vorp_kicking_mean": 4.358704514463645
+  },
+  {
+    "player": "Martin Roger Farias",
+    "primary_position": 10,
+    "n_matches": 18,
+    "vorp_mean": 4.208808956538932,
+    "vorp_lower": 2.097040319612344,
+    "vorp_upper": 7.079046454477872,
+    "vorp_tries_mean": -0.04847469918348318,
+    "vorp_kicking_mean": 4.257283655722414
+  },
+  {
+    "player": "Damian McKenzie",
+    "primary_position": 10,
+    "n_matches": 34,
+    "vorp_mean": 4.168565576907007,
+    "vorp_lower": 2.814235365703308,
+    "vorp_upper": 5.761184151307815,
+    "vorp_tries_mean": 0.14088349910527756,
+    "vorp_kicking_mean": 4.027682077801728
+  },
+  {
+    "player": "Caleb Muntz",
+    "primary_position": 10,
+    "n_matches": 34,
+    "vorp_mean": 4.144708657270023,
+    "vorp_lower": 2.9003594071437924,
+    "vorp_upper": 5.736815180445729,
+    "vorp_tries_mean": 0.09528592538820681,
+    "vorp_kicking_mean": 4.0494227318818155
+  },
+  {
+    "player": "Dan Edwards",
+    "primary_position": 10,
+    "n_matches": 50,
+    "vorp_mean": 4.134772651166974,
+    "vorp_lower": 3.201063163526729,
+    "vorp_upper": 5.193507453937657,
+    "vorp_tries_mean": 0.364026297705459,
+    "vorp_kicking_mean": 3.7707463534615147
+  },
+  {
+    "player": "Matthieu Jalibert",
+    "primary_position": 10,
+    "n_matches": 61,
+    "vorp_mean": 4.092734980439847,
+    "vorp_lower": 3.184450381085017,
+    "vorp_upper": 5.119842732908279,
+    "vorp_tries_mean": 0.4049452703020605,
+    "vorp_kicking_mean": 3.687789710137786
+  },
+  {
+    "player": "Tomas Albornoz",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 4.079485208090898,
+    "vorp_lower": 2.8507218407910617,
+    "vorp_upper": 5.558672605537294,
+    "vorp_tries_mean": 0.10161286429398718,
+    "vorp_kicking_mean": 3.977872343796911
+  },
+  {
+    "player": "Sam Prendergast",
+    "primary_position": 10,
+    "n_matches": 51,
+    "vorp_mean": 3.9905135354889807,
+    "vorp_lower": 3.051396845684043,
+    "vorp_upper": 5.034715811217833,
+    "vorp_tries_mean": 0.1372881963165184,
+    "vorp_kicking_mean": 3.8532253391724627
+  },
+  {
+    "player": "Brett Herron",
+    "primary_position": 10,
+    "n_matches": 8,
+    "vorp_mean": 3.9694892726278814,
+    "vorp_lower": 1.7106801388094037,
+    "vorp_upper": 7.045122511234587,
+    "vorp_tries_mean": 0.09915759637933286,
+    "vorp_kicking_mean": 3.8703316762485485
+  },
+  {
+    "player": "Will Reed",
+    "primary_position": 10,
+    "n_matches": 42,
+    "vorp_mean": 3.937250322008552,
+    "vorp_lower": 2.9577888002873345,
+    "vorp_upper": 4.992522867984088,
+    "vorp_tries_mean": 0.19792007293897274,
+    "vorp_kicking_mean": 3.7393302490695786
+  },
+  {
+    "player": "Isaiah Armstrong-Ravula",
+    "primary_position": 10,
+    "n_matches": 33,
+    "vorp_mean": 3.814082158670655,
+    "vorp_lower": 2.157111678416742,
+    "vorp_upper": 5.918885440793506,
+    "vorp_tries_mean": -0.0014467945642096186,
+    "vorp_kicking_mean": 3.8155289532348644
+  },
+  {
+    "player": "John Cooney",
+    "primary_position": 9,
+    "n_matches": 35,
+    "vorp_mean": 3.7996070014742163,
+    "vorp_lower": 2.64906648340477,
+    "vorp_upper": 5.339813053800248,
+    "vorp_tries_mean": 0.14794182308757375,
+    "vorp_kicking_mean": 3.6516651783866427
+  },
+  {
+    "player": "Maxime Lucu",
+    "primary_position": 9,
+    "n_matches": 65,
+    "vorp_mean": 3.7829696620534965,
+    "vorp_lower": 2.812255185045401,
+    "vorp_upper": 4.979494891266983,
+    "vorp_tries_mean": 0.12988474364727623,
+    "vorp_kicking_mean": 3.6530849184062197
+  },
+  {
+    "player": "Martin Meliande",
+    "primary_position": 21,
+    "n_matches": 55,
+    "vorp_mean": 3.7388312726654553,
+    "vorp_lower": 2.7174146890480992,
+    "vorp_upper": 4.990045614650681,
+    "vorp_tries_mean": -0.18367702878456982,
+    "vorp_kicking_mean": 3.922508301450025
+  },
+  {
+    "player": "Luke Davidson",
+    "primary_position": 10,
+    "n_matches": 10,
+    "vorp_mean": 3.73747051272882,
+    "vorp_lower": 2.2889249090023225,
+    "vorp_upper": 5.444486022378213,
+    "vorp_tries_mean": 0.19054247777406874,
+    "vorp_kicking_mean": 3.5469280349547505
+  },
+  {
+    "player": "Joseph Laharrague",
+    "primary_position": 10,
+    "n_matches": 15,
+    "vorp_mean": 3.7243510273423923,
+    "vorp_lower": 1.771137489209073,
+    "vorp_upper": 6.660550681918662,
+    "vorp_tries_mean": 0.1283750939504124,
+    "vorp_kicking_mean": 3.59597593339198
+  },
+  {
+    "player": "George Worboys",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 3.723031790308957,
+    "vorp_lower": 2.391366450406382,
+    "vorp_upper": 5.484820067356902,
+    "vorp_tries_mean": -0.034378962867014126,
+    "vorp_kicking_mean": 3.757410753175971
+  },
+  {
+    "player": "Nathan Doak",
+    "primary_position": 9,
+    "n_matches": 45,
+    "vorp_mean": 3.7104579925221715,
+    "vorp_lower": 2.6796437957879427,
+    "vorp_upper": 4.886275884014645,
+    "vorp_tries_mean": -0.19948031288609885,
+    "vorp_kicking_mean": 3.90993830540827
+  },
+  {
+    "player": "AJ MacGinty",
+    "primary_position": 10,
+    "n_matches": 26,
+    "vorp_mean": 3.6672818049523235,
+    "vorp_lower": 2.5545624306583283,
+    "vorp_upper": 4.972082447448479,
+    "vorp_tries_mean": -0.031363319269883415,
+    "vorp_kicking_mean": 3.698645124222207
+  },
+  {
+    "player": "Jean Cotarmanac'h",
+    "primary_position": 10,
+    "n_matches": 13,
+    "vorp_mean": 3.6353716496451516,
+    "vorp_lower": 1.650602450546376,
+    "vorp_upper": 6.272082348736362,
+    "vorp_tries_mean": -0.01678766887368289,
+    "vorp_kicking_mean": 3.652159318518835
+  },
+  {
+    "player": "Jack Crowley",
+    "primary_position": 10,
+    "n_matches": 55,
+    "vorp_mean": 3.610002382318434,
+    "vorp_lower": 2.7168427192612317,
+    "vorp_upper": 4.6954988423721975,
+    "vorp_tries_mean": 0.12266428350439765,
+    "vorp_kicking_mean": 3.4873380988140363
+  },
+  {
+    "player": "Finn Russell",
+    "primary_position": 10,
+    "n_matches": 66,
+    "vorp_mean": 3.5832532328628526,
+    "vorp_lower": 2.9164674579703282,
+    "vorp_upper": 4.3721789047016975,
+    "vorp_tries_mean": -0.03738619479973969,
+    "vorp_kicking_mean": 3.6206394276625926
+  },
+  {
+    "player": "Thomas Salles",
+    "primary_position": 15,
+    "n_matches": 30,
+    "vorp_mean": 3.546582982965412,
+    "vorp_lower": 2.3354883476876536,
+    "vorp_upper": 5.035139612136336,
+    "vorp_tries_mean": -0.03425792706784805,
+    "vorp_kicking_mean": 3.58084091003326
+  },
+  {
+    "player": "Dan Jones",
+    "primary_position": 10,
+    "n_matches": 18,
+    "vorp_mean": 3.483664289306238,
+    "vorp_lower": 2.3770874501842507,
+    "vorp_upper": 4.773576003505366,
+    "vorp_tries_mean": 0.033569807595587906,
+    "vorp_kicking_mean": 3.45009448171065
+  },
+  {
+    "player": "William Havili",
+    "primary_position": 10,
+    "n_matches": 42,
+    "vorp_mean": 3.4178791719877095,
+    "vorp_lower": 2.1772935864159892,
+    "vorp_upper": 5.085550034212274,
+    "vorp_tries_mean": 0.042943817965573235,
+    "vorp_kicking_mean": 3.3749353540221363
+  },
+  {
+    "player": "Angus O'Brien",
+    "primary_position": 15,
+    "n_matches": 38,
+    "vorp_mean": 3.3323189567767604,
+    "vorp_lower": 2.436280935906828,
+    "vorp_upper": 4.47240728986442,
+    "vorp_tries_mean": -0.19881075821288854,
+    "vorp_kicking_mean": 3.5311297149896492
+  },
+  {
+    "player": "Louie Johnson",
+    "primary_position": 10,
+    "n_matches": 7,
+    "vorp_mean": 3.3173877153697484,
+    "vorp_lower": 1.5673334055208725,
+    "vorp_upper": 5.7247946226503075,
+    "vorp_tries_mean": -0.01390556871017298,
+    "vorp_kicking_mean": 3.3312932840799214
+  },
+  {
+    "player": "Callum Grieve",
+    "primary_position": 15,
+    "n_matches": 30,
+    "vorp_mean": 3.2999728353617073,
+    "vorp_lower": 2.276680209509119,
+    "vorp_upper": 4.526761626729255,
+    "vorp_tries_mean": -0.2339219938033665,
+    "vorp_kicking_mean": 3.533894829165074
+  },
+  {
+    "player": "Callum Sheedy",
+    "primary_position": 10,
+    "n_matches": 44,
+    "vorp_mean": 3.2993189605675806,
+    "vorp_lower": 2.3098085892142453,
+    "vorp_upper": 4.440944671077292,
+    "vorp_tries_mean": -0.12357616035335843,
+    "vorp_kicking_mean": 3.4228951209209395
+  },
+  {
+    "player": "Ben Coen",
+    "primary_position": 10,
+    "n_matches": 5,
+    "vorp_mean": 3.2862078848416196,
+    "vorp_lower": 0.7602258408163555,
+    "vorp_upper": 7.766820912826026,
+    "vorp_tries_mean": 0.012693553318504448,
+    "vorp_kicking_mean": 3.273514331523115
+  },
+  {
+    "player": "Handr\u00e9 Pollard",
+    "primary_position": 10,
+    "n_matches": 8,
+    "vorp_mean": 3.2856177088147334,
+    "vorp_lower": 1.5910404649572136,
+    "vorp_upper": 5.612290056843205,
+    "vorp_tries_mean": 0.021495541949134164,
+    "vorp_kicking_mean": 3.264122166865599
+  },
+  {
+    "player": "Dan Biggar",
+    "primary_position": 10,
+    "n_matches": 12,
+    "vorp_mean": 3.283785475385989,
+    "vorp_lower": 1.0242871746922986,
+    "vorp_upper": 7.084438507110507,
+    "vorp_tries_mean": -0.01879451642542074,
+    "vorp_kicking_mean": 3.30257999181141
+  },
+  {
+    "player": "George Barton",
+    "primary_position": 15,
+    "n_matches": 29,
+    "vorp_mean": 3.2230109611595545,
+    "vorp_lower": 2.0756994530266266,
+    "vorp_upper": 4.66129918389487,
+    "vorp_tries_mean": 0.02673656075087394,
+    "vorp_kicking_mean": 3.1962744004086803
+  },
+  {
+    "player": "Luka Keletaona",
+    "primary_position": 22,
+    "n_matches": 8,
+    "vorp_mean": 3.186375271392685,
+    "vorp_lower": 1.3793513223154794,
+    "vorp_upper": 5.715098683974086,
+    "vorp_tries_mean": -0.01650619238024333,
+    "vorp_kicking_mean": 3.2028814637729286
+  },
+  {
+    "player": "Jules Lebail",
+    "primary_position": 21,
+    "n_matches": 15,
+    "vorp_mean": 3.179275047896253,
+    "vorp_lower": 1.001483046253486,
+    "vorp_upper": 6.5757764901178515,
+    "vorp_tries_mean": 0.05443226394016742,
+    "vorp_kicking_mean": 3.124842783956086
+  },
+  {
+    "player": "Fraser Honey",
+    "primary_position": 10,
+    "n_matches": 18,
+    "vorp_mean": 3.104138077345459,
+    "vorp_lower": 1.4652956782732711,
+    "vorp_upper": 5.118693714370037,
+    "vorp_tries_mean": -0.05965196087593705,
+    "vorp_kicking_mean": 3.1637900382213964
+  },
+  {
+    "player": "Aaron Cruden",
+    "primary_position": 10,
+    "n_matches": 14,
+    "vorp_mean": 3.100825346160561,
+    "vorp_lower": 0.982609867899267,
+    "vorp_upper": 6.31078100008719,
+    "vorp_tries_mean": 0.08236937839976385,
+    "vorp_kicking_mean": 3.0184559677607967
+  },
+  {
+    "player": "Gabriel Rupanu",
+    "primary_position": 21,
+    "n_matches": 8,
+    "vorp_mean": 3.0640191808564348,
+    "vorp_lower": 0.2655482696797442,
+    "vorp_upper": 9.458986066159941,
+    "vorp_tries_mean": 0.016085656538530294,
+    "vorp_kicking_mean": 3.0479335243179038
+  },
+  {
+    "player": "Hugo Verdu",
+    "primary_position": 21,
+    "n_matches": 27,
+    "vorp_mean": 3.031671110443057,
+    "vorp_lower": 1.347446917098464,
+    "vorp_upper": 5.335581070466606,
+    "vorp_tries_mean": -0.07894429728954083,
+    "vorp_kicking_mean": 3.1106154077325976
+  },
+  {
+    "player": "Gonzalo L\u00f3pez-Bontempo",
+    "primary_position": 12,
+    "n_matches": 5,
+    "vorp_mean": 2.989990669502634,
+    "vorp_lower": 1.4636420050191588,
+    "vorp_upper": 4.980764512051869,
+    "vorp_tries_mean": 0.044718437065390346,
+    "vorp_kicking_mean": 2.9452722324372433
+  },
+  {
+    "player": "Marius Domon",
+    "primary_position": 15,
+    "n_matches": 45,
+    "vorp_mean": 2.9776036428503936,
+    "vorp_lower": 1.9637354590638265,
+    "vorp_upper": 4.2128439447572354,
+    "vorp_tries_mean": -0.08600678906227875,
+    "vorp_kicking_mean": 3.0636104319126725
+  },
+  {
+    "player": "Tane Edmed",
+    "primary_position": 10,
+    "n_matches": 37,
+    "vorp_mean": 2.9760856532009674,
+    "vorp_lower": 1.6587030122604771,
+    "vorp_upper": 4.6276119095807955,
+    "vorp_tries_mean": 0.07544152509366174,
+    "vorp_kicking_mean": 2.900644128107306
+  },
+  {
+    "player": "Baptiste Germain",
+    "primary_position": 9,
+    "n_matches": 44,
+    "vorp_mean": 2.9705818945520504,
+    "vorp_lower": 1.7191110065040993,
+    "vorp_upper": 4.568866667617224,
+    "vorp_tries_mean": 0.33099073148278374,
+    "vorp_kicking_mean": 2.6395911630692668
+  },
+  {
+    "player": "Tom Raffy",
+    "primary_position": 21,
+    "n_matches": 19,
+    "vorp_mean": 2.970460874223172,
+    "vorp_lower": 1.4510442776822217,
+    "vorp_upper": 4.9052453025767235,
+    "vorp_tries_mean": -0.05753463179003162,
+    "vorp_kicking_mean": 3.027995506013204
+  },
+  {
+    "player": "Tom\u00e1s Albornoz",
+    "primary_position": 10,
+    "n_matches": 8,
+    "vorp_mean": 2.884816448454135,
+    "vorp_lower": 1.2436781411807076,
+    "vorp_upper": 5.122940639461761,
+    "vorp_tries_mean": 0.08000040187014133,
+    "vorp_kicking_mean": 2.8048160465839937
+  },
+  {
+    "player": "Tristan Tedder",
+    "primary_position": 15,
+    "n_matches": 33,
+    "vorp_mean": 2.8754454752514804,
+    "vorp_lower": 1.7597833250442707,
+    "vorp_upper": 4.244764607003756,
+    "vorp_tries_mean": 0.05922275395408042,
+    "vorp_kicking_mean": 2.8162227212973994
+  },
+  {
+    "player": "Gabin Michet",
+    "primary_position": 21,
+    "n_matches": 18,
+    "vorp_mean": 2.8739501826155065,
+    "vorp_lower": 1.3644907487329043,
+    "vorp_upper": 5.03404136972437,
+    "vorp_tries_mean": -0.05753319274118057,
+    "vorp_kicking_mean": 2.9314833753566867
+  },
+  {
+    "player": "Thibault Debaes",
+    "primary_position": 21,
+    "n_matches": 37,
+    "vorp_mean": 2.8478205852206138,
+    "vorp_lower": 1.8231257595485515,
+    "vorp_upper": 4.012066606179239,
+    "vorp_tries_mean": 0.27556287763600756,
+    "vorp_kicking_mean": 2.5722577075846065
+  },
+  {
+    "player": "Ben Dufficy",
+    "primary_position": 22,
+    "n_matches": 9,
+    "vorp_mean": 2.84286823187769,
+    "vorp_lower": 0.1924948952624224,
+    "vorp_upper": 8.095621457248013,
+    "vorp_tries_mean": 0.02504282127161263,
+    "vorp_kicking_mean": 2.8178254106060776
+  },
+  {
+    "player": "Billy Burns",
+    "primary_position": 10,
+    "n_matches": 11,
+    "vorp_mean": 2.839974464748076,
+    "vorp_lower": 1.1475218814840331,
+    "vorp_upper": 5.0812507426440705,
+    "vorp_tries_mean": -0.015007454464046738,
+    "vorp_kicking_mean": 2.8549819192121224
+  },
+  {
+    "player": "Arwel Robson",
+    "primary_position": 10,
+    "n_matches": 28,
+    "vorp_mean": 2.8316712346674593,
+    "vorp_lower": 1.963981093509442,
+    "vorp_upper": 3.9941021810135333,
+    "vorp_tries_mean": -0.08526061785678396,
+    "vorp_kicking_mean": 2.9169318525242436
+  },
+  {
+    "player": "George Horne",
+    "primary_position": 9,
+    "n_matches": 62,
+    "vorp_mean": 2.810859746197378,
+    "vorp_lower": 2.0065825779272286,
+    "vorp_upper": 3.796822601090093,
+    "vorp_tries_mean": 0.9319042137486153,
+    "vorp_kicking_mean": 1.8789555324487623
+  },
+  {
+    "player": "Josh Hodge",
+    "primary_position": 15,
+    "n_matches": 27,
+    "vorp_mean": 2.8081099872428728,
+    "vorp_lower": 1.686892704715402,
+    "vorp_upper": 4.132668015613715,
+    "vorp_tries_mean": 0.23579360639497,
+    "vorp_kicking_mean": 2.572316380847903
+  },
+  {
+    "player": "Ugo Pacome",
+    "primary_position": 15,
+    "n_matches": 30,
+    "vorp_mean": 2.808003109490827,
+    "vorp_lower": 1.6729233562003323,
+    "vorp_upper": 4.2111546342317565,
+    "vorp_tries_mean": 0.029805775760574648,
+    "vorp_kicking_mean": 2.7781973337302523
+  },
+  {
+    "player": "JJ Hanrahan",
+    "primary_position": 10,
+    "n_matches": 30,
+    "vorp_mean": 2.7368553781153593,
+    "vorp_lower": 1.739508227632092,
+    "vorp_upper": 3.998673220635331,
+    "vorp_tries_mean": -0.11126690715354401,
+    "vorp_kicking_mean": 2.848122285268903
+  },
+  {
+    "player": "Jimmy Gopperth",
+    "primary_position": 12,
+    "n_matches": 19,
+    "vorp_mean": 2.7357523240520387,
+    "vorp_lower": 1.5912538815113022,
+    "vorp_upper": 4.175626631593296,
+    "vorp_tries_mean": 0.08814513231587352,
+    "vorp_kicking_mean": 2.647607191736165
+  },
+  {
+    "player": "Ben Volavola",
+    "primary_position": 22,
+    "n_matches": 8,
+    "vorp_mean": 2.721442199414168,
+    "vorp_lower": 0.17913744012068103,
+    "vorp_upper": 8.576899094045315,
+    "vorp_tries_mean": 0.016986423585971307,
+    "vorp_kicking_mean": 2.704455775828197
+  },
+  {
+    "player": "Ciaran Donoghue",
+    "primary_position": 10,
+    "n_matches": 12,
+    "vorp_mean": 2.680746306150019,
+    "vorp_lower": 1.3205213257692208,
+    "vorp_upper": 4.603460405400709,
+    "vorp_tries_mean": 0.007968184049128524,
+    "vorp_kicking_mean": 2.672778122100891
+  },
+  {
+    "player": "Gabin Lorre",
+    "primary_position": 15,
+    "n_matches": 44,
+    "vorp_mean": 2.669046537853299,
+    "vorp_lower": 1.764002068926062,
+    "vorp_upper": 3.764209933301951,
+    "vorp_tries_mean": 0.8434858095039341,
+    "vorp_kicking_mean": 1.8255607283493653
+  },
+  {
+    "player": "Aurelien Barreau",
+    "primary_position": 21,
+    "n_matches": 21,
+    "vorp_mean": 2.658588578343308,
+    "vorp_lower": 1.2398724395899723,
+    "vorp_upper": 4.673092789699546,
+    "vorp_tries_mean": 0.15247111038970051,
+    "vorp_kicking_mean": 2.506117467953607
+  },
+  {
+    "player": "Adam Hastings",
+    "primary_position": 10,
+    "n_matches": 50,
+    "vorp_mean": 2.649385467897779,
+    "vorp_lower": 1.818127920505774,
+    "vorp_upper": 3.6665525260354697,
+    "vorp_tries_mean": -0.026137404494090067,
+    "vorp_kicking_mean": 2.675522872391869
+  },
+  {
+    "player": "Shane O'Leary",
+    "primary_position": 10,
+    "n_matches": 10,
+    "vorp_mean": 2.6413812175061677,
+    "vorp_lower": 1.1664217683669293,
+    "vorp_upper": 4.644345137586619,
+    "vorp_tries_mean": 0.062237612613777006,
+    "vorp_kicking_mean": 2.5791436048923906
+  },
+  {
+    "player": "Jean Smith",
+    "primary_position": 22,
+    "n_matches": 17,
+    "vorp_mean": 2.5941678737676837,
+    "vorp_lower": 1.434643873155585,
+    "vorp_upper": 4.057801154139055,
+    "vorp_tries_mean": -0.050714318812820666,
+    "vorp_kicking_mean": 2.644882192580504
+  },
+  {
+    "player": "Kieran Wilkinson",
+    "primary_position": 10,
+    "n_matches": 38,
+    "vorp_mean": 2.5635513026316725,
+    "vorp_lower": 1.673467914311193,
+    "vorp_upper": 3.6036800603629406,
+    "vorp_tries_mean": -0.01645303010043359,
+    "vorp_kicking_mean": 2.580004332732106
+  },
+  {
+    "player": "Sean Naughton",
+    "primary_position": 22,
+    "n_matches": 21,
+    "vorp_mean": 2.543441799658019,
+    "vorp_lower": 1.4405768595103936,
+    "vorp_upper": 3.8890907264437287,
+    "vorp_tries_mean": 0.07555936069983249,
+    "vorp_kicking_mean": 2.467882438958187
+  },
+  {
+    "player": "Noah Lolesio",
+    "primary_position": 10,
+    "n_matches": 27,
+    "vorp_mean": 2.5426632984935145,
+    "vorp_lower": 1.3875875804775786,
+    "vorp_upper": 4.015865175987888,
+    "vorp_tries_mean": -0.048328679192677644,
+    "vorp_kicking_mean": 2.5909919776861923
+  },
+  {
+    "player": "Jules Gimbert",
+    "primary_position": 9,
+    "n_matches": 20,
+    "vorp_mean": 2.5356385125971763,
+    "vorp_lower": 1.0012493581631547,
+    "vorp_upper": 4.635270256645664,
+    "vorp_tries_mean": 0.12654749622319245,
+    "vorp_kicking_mean": 2.4090910163739845
+  },
+  {
+    "player": "Juan-Cruz Mallia",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 2.519722778909076,
+    "vorp_lower": 1.3936751739299285,
+    "vorp_upper": 3.8879877238155363,
+    "vorp_tries_mean": 0.0464995866113335,
+    "vorp_kicking_mean": 2.4732231922977426
+  },
+  {
+    "player": "Fergus Burke",
+    "primary_position": 10,
+    "n_matches": 54,
+    "vorp_mean": 2.51864420044563,
+    "vorp_lower": 1.7676726041934563,
+    "vorp_upper": 3.32992505053821,
+    "vorp_tries_mean": 0.17051743269374464,
+    "vorp_kicking_mean": 2.348126767751885
+  },
+  {
+    "player": "Baptiste Serin",
+    "primary_position": 9,
+    "n_matches": 68,
+    "vorp_mean": 2.5018493130027033,
+    "vorp_lower": 1.634107326382428,
+    "vorp_upper": 3.518021861145337,
+    "vorp_tries_mean": 0.3054916370714791,
+    "vorp_kicking_mean": 2.1963576759312238
+  },
+  {
+    "player": "Josh Bellamy",
+    "primary_position": 15,
+    "n_matches": 13,
+    "vorp_mean": 2.4605693807521174,
+    "vorp_lower": 1.0510953892092354,
+    "vorp_upper": 4.325593221279575,
+    "vorp_tries_mean": -0.11642270176282334,
+    "vorp_kicking_mean": 2.5769920825149413
+  },
+  {
+    "player": "Cohen Jasper",
+    "primary_position": 23,
+    "n_matches": 5,
+    "vorp_mean": 2.4139418370513486,
+    "vorp_lower": 0.6325392685457151,
+    "vorp_upper": 5.044563852347252,
+    "vorp_tries_mean": 0.03157637314171307,
+    "vorp_kicking_mean": 2.3823654639096357
+  },
+  {
+    "player": "Alex Lozowski",
+    "primary_position": 13,
+    "n_matches": 22,
+    "vorp_mean": 2.409911192328711,
+    "vorp_lower": 1.4054266298825782,
+    "vorp_upper": 3.639875404673265,
+    "vorp_tries_mean": -0.2431270226873728,
+    "vorp_kicking_mean": 2.653038215016084
+  },
+  {
+    "player": "Louis Grimoldby",
+    "primary_position": 10,
+    "n_matches": 16,
+    "vorp_mean": 2.3997135020033356,
+    "vorp_lower": 1.2889483398714385,
+    "vorp_upper": 3.8481275145466727,
+    "vorp_tries_mean": -0.0224269561389446,
+    "vorp_kicking_mean": 2.4221404581422803
+  },
+  {
+    "player": "Louis Bielle-Biarrey",
+    "primary_position": 11,
+    "n_matches": 69,
+    "vorp_mean": 2.385606941215463,
+    "vorp_lower": 1.5507593281754513,
+    "vorp_upper": 3.3687676431923737,
+    "vorp_tries_mean": 2.1704195691881023,
+    "vorp_kicking_mean": 0.21518737202736082
+  },
+  {
+    "player": "Henry Slade",
+    "primary_position": 13,
+    "n_matches": 60,
+    "vorp_mean": 2.3648489783464584,
+    "vorp_lower": 1.681327523563567,
+    "vorp_upper": 3.17581497637978,
+    "vorp_tries_mean": 0.02751324555965799,
+    "vorp_kicking_mean": 2.3373357327867996
+  },
+  {
+    "player": "Tom Deleuze",
+    "primary_position": 15,
+    "n_matches": 21,
+    "vorp_mean": 2.3550062474082227,
+    "vorp_lower": 1.2316823989557824,
+    "vorp_upper": 3.817572133481712,
+    "vorp_tries_mean": -0.00462223675718303,
+    "vorp_kicking_mean": 2.359628484165406
+  },
+  {
+    "player": "Nils Chalies",
+    "primary_position": 15,
+    "n_matches": 9,
+    "vorp_mean": 2.3310407411321967,
+    "vorp_lower": 0.6030570831036277,
+    "vorp_upper": 5.360419854028635,
+    "vorp_tries_mean": 0.3723260395179957,
+    "vorp_kicking_mean": 1.9587147016142008
+  },
+  {
+    "player": "D'Angelo Leuila",
+    "primary_position": 10,
+    "n_matches": 11,
+    "vorp_mean": 2.265349398929172,
+    "vorp_lower": 0.6254905650405462,
+    "vorp_upper": 4.647482253481378,
+    "vorp_tries_mean": 0.26553907112325115,
+    "vorp_kicking_mean": 1.9998103278059207
+  },
+  {
+    "player": "Ben Healy",
+    "primary_position": 22,
+    "n_matches": 35,
+    "vorp_mean": 2.229850514476523,
+    "vorp_lower": 1.3380629393814225,
+    "vorp_upper": 3.2532236273069115,
+    "vorp_tries_mean": -0.11229687046218467,
+    "vorp_kicking_mean": 2.342147384938708
+  },
+  {
+    "player": "Max Auriac",
+    "primary_position": 22,
+    "n_matches": 14,
+    "vorp_mean": 2.170796060114895,
+    "vorp_lower": 0.9313090684905457,
+    "vorp_upper": 3.832475952875393,
+    "vorp_tries_mean": 0.03189218886096802,
+    "vorp_kicking_mean": 2.138903871253927
+  },
+  {
+    "player": "Santiago \u00c1lvarez",
+    "primary_position": 9,
+    "n_matches": 9,
+    "vorp_mean": 2.1324516987950237,
+    "vorp_lower": 0.8311871475200155,
+    "vorp_upper": 3.9577916675707847,
+    "vorp_tries_mean": -0.006269816902151532,
+    "vorp_kicking_mean": 2.138721515697176
+  },
+  {
+    "player": "Morgan Bunting",
+    "primary_position": 10,
+    "n_matches": 22,
+    "vorp_mean": 2.0652085135136673,
+    "vorp_lower": 0.913782143834262,
+    "vorp_upper": 3.6361312843507383,
+    "vorp_tries_mean": -0.07576928504919273,
+    "vorp_kicking_mean": 2.1409777985628597
+  },
+  {
+    "player": "Riley Hohepa",
+    "primary_position": 10,
+    "n_matches": 24,
+    "vorp_mean": 2.045961248319373,
+    "vorp_lower": 0.5993467476945227,
+    "vorp_upper": 4.070101154002707,
+    "vorp_tries_mean": -0.04361599138439965,
+    "vorp_kicking_mean": 2.0895772397037726
+  },
+  {
+    "player": "Sanele Nohamba",
+    "primary_position": 21,
+    "n_matches": 10,
+    "vorp_mean": 2.0002325712058973,
+    "vorp_lower": 0.4348286384773435,
+    "vorp_upper": 4.4924514901805574,
+    "vorp_tries_mean": -0.02099617039291131,
+    "vorp_kicking_mean": 2.021228741598809
+  },
+  {
+    "player": "Jamie Annand",
+    "primary_position": 10,
+    "n_matches": 13,
+    "vorp_mean": 1.9803283658508668,
+    "vorp_lower": 0.6921209130371708,
+    "vorp_upper": 3.7247241857170277,
+    "vorp_tries_mean": 0.04090400622654869,
+    "vorp_kicking_mean": 1.939424359624318
+  },
+  {
+    "player": "Rhyno Smith",
+    "primary_position": 15,
+    "n_matches": 37,
+    "vorp_mean": 1.9693475002750438,
+    "vorp_lower": 1.1562857637158583,
+    "vorp_upper": 3.0538710774775626,
+    "vorp_tries_mean": 0.3191057129593493,
+    "vorp_kicking_mean": 1.6502417873156945
+  },
+  {
+    "player": "Takuya Yamasawa",
+    "primary_position": 10,
+    "n_matches": 5,
+    "vorp_mean": 1.9587492940802198,
+    "vorp_lower": 0.03897362695863132,
+    "vorp_upper": 5.04491570662034,
+    "vorp_tries_mean": 0.05420514058175646,
+    "vorp_kicking_mean": 1.9045441534984635
+  },
+  {
+    "player": "Massimo Ortolan",
+    "primary_position": 15,
+    "n_matches": 6,
+    "vorp_mean": 1.9552462736704292,
+    "vorp_lower": 0.3532208961013658,
+    "vorp_upper": 4.5212186725439025,
+    "vorp_tries_mean": -0.05165602982593299,
+    "vorp_kicking_mean": 2.0069023034963624
+  },
+  {
+    "player": "Emile Dayral",
+    "primary_position": 21,
+    "n_matches": 17,
+    "vorp_mean": 1.9410423831293762,
+    "vorp_lower": 0.45309129084362554,
+    "vorp_upper": 4.155801408591692,
+    "vorp_tries_mean": -0.045998731764892824,
+    "vorp_kicking_mean": 1.987041114894269
+  }
+]

@@ -1,0 +1,4052 @@
+[
+  {
+    "team": "Connacht Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.3181228731347976,
+    "offense_std": 0.04687266714191869,
+    "offense_lower": 0.2251527440960035,
+    "offense_upper": 0.4130254723199023
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.27995231012998945,
+    "offense_std": 0.0365021249845774,
+    "offense_lower": 0.2086215935030535,
+    "offense_upper": 0.3526536032691781
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.26818404979031163,
+    "offense_std": 0.0441080696291418,
+    "offense_lower": 0.18065860897251207,
+    "offense_upper": 0.3566610520051693
+  },
+  {
+    "team": "Australia",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.23475828020861284,
+    "offense_std": 0.07733759694720962,
+    "offense_lower": 0.08656139555628309,
+    "offense_upper": 0.3877527688703047
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.2161176936416763,
+    "offense_std": 0.04065248812478238,
+    "offense_lower": 0.1383863305948163,
+    "offense_upper": 0.2986959389173436
+  },
+  {
+    "team": "Queensland Reds",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.20660687534948594,
+    "offense_std": 0.11412365845369646,
+    "offense_lower": -0.01584812807826458,
+    "offense_upper": 0.4416630503286498
+  },
+  {
+    "team": "Toulouse",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.20121796823443477,
+    "offense_std": 0.032697983226917075,
+    "offense_lower": 0.13818309190272904,
+    "offense_upper": 0.2651178095948533
+  },
+  {
+    "team": "Argentina",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.18693955131489945,
+    "offense_std": 0.07603015520603683,
+    "offense_lower": 0.04279756441364107,
+    "offense_upper": 0.34511395738727974
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.1829142853850892,
+    "offense_std": 0.03882946421461949,
+    "offense_lower": 0.10782725914374161,
+    "offense_upper": 0.25824455736990015
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.17609589990573843,
+    "offense_std": 0.04044694146131225,
+    "offense_lower": 0.10089566494671609,
+    "offense_upper": 0.2598095765613194
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.13818139625891993,
+    "offense_std": 0.041327804174598456,
+    "offense_lower": 0.05920321481612688,
+    "offense_upper": 0.2226707840254839
+  },
+  {
+    "team": "Scotland",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.1336715862091237,
+    "offense_std": 0.04760885457162946,
+    "offense_lower": 0.04275905080284952,
+    "offense_upper": 0.22786257842251142
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.1254918785682613,
+    "offense_std": 0.17291825154098048,
+    "offense_lower": -0.22567639747385748,
+    "offense_upper": 0.45976350827431545
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.11948087369880359,
+    "offense_std": 0.13585490694859098,
+    "offense_lower": -0.14679613581613987,
+    "offense_upper": 0.3863429641693877
+  },
+  {
+    "team": "South Africa",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.10976882081452591,
+    "offense_std": 0.08145059957618488,
+    "offense_lower": -0.04642588508674928,
+    "offense_upper": 0.2752588403564635
+  },
+  {
+    "team": "Saracens",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.10781300844955764,
+    "offense_std": 0.04488089927511194,
+    "offense_lower": 0.018663977767625774,
+    "offense_upper": 0.19973639961468528
+  },
+  {
+    "team": "Samoa",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.10641857691384947,
+    "offense_std": 0.12217277418829837,
+    "offense_lower": -0.127590136525643,
+    "offense_upper": 0.338340658831127
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.10156902779404567,
+    "offense_std": 0.03957301196580061,
+    "offense_lower": 0.022742786495694937,
+    "offense_upper": 0.17866166137239795
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.0989629708512534,
+    "offense_std": 0.04500462950235959,
+    "offense_lower": 0.011148821058431832,
+    "offense_upper": 0.18911493787989253
+  },
+  {
+    "team": "Ireland",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.09489267581072439,
+    "offense_std": 0.06329706802981844,
+    "offense_lower": -0.029085846769970416,
+    "offense_upper": 0.21725515867697545
+  },
+  {
+    "team": "Ospreys",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.08273419847531321,
+    "offense_std": 0.04628189295261037,
+    "offense_lower": -0.008504750806945259,
+    "offense_upper": 0.17536950143747998
+  },
+  {
+    "team": "New Zealand",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.08203057012571448,
+    "offense_std": 0.07252399014903092,
+    "offense_lower": -0.06585494792294552,
+    "offense_upper": 0.21427013248163013
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.08125523644375864,
+    "offense_std": 0.04588111177179622,
+    "offense_lower": -0.007519826470975165,
+    "offense_upper": 0.1709038409019753
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.07933865633335709,
+    "offense_std": 0.03216064800754358,
+    "offense_lower": 0.017549746085245333,
+    "offense_upper": 0.14370109893413355
+  },
+  {
+    "team": "Harlequins",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.07873308580747576,
+    "offense_std": 0.04638621613278428,
+    "offense_lower": -0.009333930196858572,
+    "offense_upper": 0.17488755613033555
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.07641485419716208,
+    "offense_std": 0.0392269404907804,
+    "offense_lower": 0.002390714825643901,
+    "offense_upper": 0.15597366962862758
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.07638123946979443,
+    "offense_std": 0.052751528921720414,
+    "offense_lower": -0.028403865576968407,
+    "offense_upper": 0.17815233262938218
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.07148187431759717,
+    "offense_std": 0.04187463738583405,
+    "offense_lower": -0.009841396553032712,
+    "offense_upper": 0.15449350249126215
+  },
+  {
+    "team": "Portugal",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.06668233858889802,
+    "offense_std": 0.0952472137232304,
+    "offense_lower": -0.12378449916028429,
+    "offense_upper": 0.2593957810308386
+  },
+  {
+    "team": "",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.050579290109047284,
+    "offense_std": 0.06621269519193262,
+    "offense_lower": -0.07962206847857291,
+    "offense_upper": 0.17556343286758708
+  },
+  {
+    "team": "Wales",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.03386927469777683,
+    "offense_std": 0.06819144513964716,
+    "offense_lower": -0.09912565292342936,
+    "offense_upper": 0.16743462249736482
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.03088898840520438,
+    "offense_std": 0.0501125949018135,
+    "offense_lower": -0.06598990302119814,
+    "offense_upper": 0.12593346078120418
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": 0.006271646968031793,
+    "offense_std": 0.04538553118479049,
+    "offense_lower": -0.08222837012769803,
+    "offense_upper": 0.09401656022470482
+  },
+  {
+    "team": "Brazil",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.006907266843390672,
+    "offense_std": 0.19709039701239053,
+    "offense_lower": -0.38154403168452267,
+    "offense_upper": 0.38739686349616065
+  },
+  {
+    "team": "Japan",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.008177638948470449,
+    "offense_std": 0.09161468515789449,
+    "offense_lower": -0.19282316680500058,
+    "offense_upper": 0.17348031748705622
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.011271976827338033,
+    "offense_std": 0.05014217393429795,
+    "offense_lower": -0.11330169590946701,
+    "offense_upper": 0.08426395104214361
+  },
+  {
+    "team": "Chile",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.01594530961598984,
+    "offense_std": 0.12161628797703238,
+    "offense_lower": -0.26686386524270833,
+    "offense_upper": 0.2255436092460627
+  },
+  {
+    "team": "United States",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.02120787770097844,
+    "offense_std": 0.08784689563332077,
+    "offense_lower": -0.1929577114188815,
+    "offense_upper": 0.14853007215555158
+  },
+  {
+    "team": "Scarlets",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.02854068551563239,
+    "offense_std": 0.04867402966520738,
+    "offense_lower": -0.12448734550625024,
+    "offense_upper": 0.06661622882794944
+  },
+  {
+    "team": "Uruguay",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.03939171568737142,
+    "offense_std": 0.09892090881158748,
+    "offense_lower": -0.23781709646991825,
+    "offense_upper": 0.15404477502018404
+  },
+  {
+    "team": "Vannes",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.04177699337308389,
+    "offense_std": 0.04029998855090174,
+    "offense_lower": -0.12091412256533068,
+    "offense_upper": 0.03554660131281382
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.0523097560438625,
+    "offense_std": 0.05601568269299392,
+    "offense_lower": -0.16345579560820972,
+    "offense_upper": 0.05509236116007117
+  },
+  {
+    "team": "Grenoble",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.05268442196738934,
+    "offense_std": 0.040258690064614175,
+    "offense_lower": -0.13140915065488065,
+    "offense_upper": 0.02506086609412793
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.05495347578422963,
+    "offense_std": 0.04615749003394932,
+    "offense_lower": -0.14378623002962515,
+    "offense_upper": 0.03751719110368997
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.06243794679181104,
+    "offense_std": 0.04361931621526455,
+    "offense_lower": -0.14758837985787956,
+    "offense_upper": 0.022207823228038628
+  },
+  {
+    "team": "Tonga",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.06275081167116675,
+    "offense_std": 0.10252111421508449,
+    "offense_lower": -0.2691076865013625,
+    "offense_upper": 0.13810178828585562
+  },
+  {
+    "team": "Colomiers",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.06669549567898712,
+    "offense_std": 0.04328863488472171,
+    "offense_lower": -0.1521018395762402,
+    "offense_upper": 0.019003433356257916
+  },
+  {
+    "team": "Clermont",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.0682499139624285,
+    "offense_std": 0.04062133174283518,
+    "offense_lower": -0.14665481588260115,
+    "offense_upper": 0.012924985575876291
+  },
+  {
+    "team": "Fiji",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.0703470408609973,
+    "offense_std": 0.10137761024465038,
+    "offense_lower": -0.2662720977100087,
+    "offense_upper": 0.12794838922658644
+  },
+  {
+    "team": "England",
+    "season": "2024-2025",
+    "score_type": "tries",
+    "offense_mean": -0.07373176262946593,
+    "offense_std": 0.06059588253174081,
+    "offense_lower": -0.18616284116637624,
+    "offense_upper": 0.04592967038407219
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.003968217675286519,
+    "offense_std": 0.0043768204788306965,
+    "offense_lower": 0.0004629030954402116,
+    "offense_upper": 0.014970590103260144
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0034878891119104693,
+    "offense_std": 0.0038546264063072213,
+    "offense_lower": 0.000411488840316247,
+    "offense_upper": 0.012957034959494863
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.003341570195706709,
+    "offense_std": 0.0037135714144159613,
+    "offense_lower": 0.00037989837306271287,
+    "offense_upper": 0.013316398762042938
+  },
+  {
+    "team": "Australia",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0029041022279364262,
+    "offense_std": 0.0034425762692138965,
+    "offense_lower": 0.0002737670116091143,
+    "offense_upper": 0.01151835524997491
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0027023684808616106,
+    "offense_std": 0.003086694776886452,
+    "offense_lower": 0.00032010389055557657,
+    "offense_upper": 0.010195241572350794
+  },
+  {
+    "team": "Queensland Reds",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0025997081851030167,
+    "offense_std": 0.0033677153969045104,
+    "offense_lower": -7.911362546088115e-05,
+    "offense_upper": 0.011671634145927062
+  },
+  {
+    "team": "Toulouse",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0024796792119622176,
+    "offense_std": 0.002661371068428454,
+    "offense_lower": 0.0002920345260643552,
+    "offense_upper": 0.009279131976762523
+  },
+  {
+    "team": "Argentina",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.002333392082605653,
+    "offense_std": 0.0029291619241875342,
+    "offense_lower": 0.0001597676132712152,
+    "offense_upper": 0.00904118946667327
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.002280428769847631,
+    "offense_std": 0.0026054839934617586,
+    "offense_lower": 0.00026861095225739904,
+    "offense_upper": 0.008653591115330829
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0021966215331740767,
+    "offense_std": 0.0024319749488836678,
+    "offense_lower": 0.00024897008736447904,
+    "offense_upper": 0.008669508733218843
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0017236750057679794,
+    "offense_std": 0.002109987512668636,
+    "offense_lower": 0.00017222392527144453,
+    "offense_upper": 0.006840847957981808
+  },
+  {
+    "team": "Scotland",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0016498457898822209,
+    "offense_std": 0.0019478018922741162,
+    "offense_lower": 0.0001434877929704194,
+    "offense_upper": 0.006512020764117905
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0014559828899573868,
+    "offense_std": 0.0028250037928751774,
+    "offense_lower": -0.001983549605748293,
+    "offense_upper": 0.008057523984154836
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0014479574944231998,
+    "offense_std": 0.0033043733876557844,
+    "offense_lower": -0.0031178913376646313,
+    "offense_upper": 0.009448511722183087
+  },
+  {
+    "team": "Samoa",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0013903096806584818,
+    "offense_std": 0.0027710643388046065,
+    "offense_lower": -0.0015907635165698189,
+    "offense_upper": 0.007993290823588512
+  },
+  {
+    "team": "Saracens",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0013525312003435847,
+    "offense_std": 0.0016939876036812702,
+    "offense_lower": 7.32511180816556e-05,
+    "offense_upper": 0.005869921075617641
+  },
+  {
+    "team": "South Africa",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.001317440666166816,
+    "offense_std": 0.0019819906492056865,
+    "offense_lower": -0.0005188824257117545,
+    "offense_upper": 0.006024519694628084
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0012724231849118605,
+    "offense_std": 0.0015235735198228164,
+    "offense_lower": 8.980548059780743e-05,
+    "offense_upper": 0.005432443772644838
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0012506811458688524,
+    "offense_std": 0.0016051603497738171,
+    "offense_lower": 4.8569304526426295e-05,
+    "offense_upper": 0.005598197354552499
+  },
+  {
+    "team": "Ireland",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0011924634072809706,
+    "offense_std": 0.0017213766275415705,
+    "offense_lower": -0.0002622889539907805,
+    "offense_upper": 0.005790582325924375
+  },
+  {
+    "team": "New Zealand",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0010566888337419655,
+    "offense_std": 0.0018277918193102146,
+    "offense_lower": -0.0007556750758111741,
+    "offense_upper": 0.005471668789016245
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0010076855871599332,
+    "offense_std": 0.0013700132370415689,
+    "offense_lower": -7.105289198786261e-05,
+    "offense_upper": 0.004200860684274668
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0010074677478186657,
+    "offense_std": 0.0012982948517463583,
+    "offense_lower": 6.244570439049217e-05,
+    "offense_upper": 0.004137999393057464
+  },
+  {
+    "team": "Ospreys",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0010045262969098552,
+    "offense_std": 0.0012783465913570476,
+    "offense_lower": -7.856705169115835e-05,
+    "offense_upper": 0.004263950973193448
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0009607486429730808,
+    "offense_std": 0.0013137744567511037,
+    "offense_lower": 1.1173817263061672e-05,
+    "offense_upper": 0.004052031356133245
+  },
+  {
+    "team": "Harlequins",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0009584424592039557,
+    "offense_std": 0.0012059123157559875,
+    "offense_lower": -5.7496151095601776e-05,
+    "offense_upper": 0.0040661682645452245
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0009483740401446748,
+    "offense_std": 0.0013605310537297213,
+    "offense_lower": -0.00025547923459834056,
+    "offense_upper": 0.004639783805976084
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0009011103022215931,
+    "offense_std": 0.0012029300811497658,
+    "offense_lower": -8.37395275628542e-05,
+    "offense_upper": 0.004108267370482639
+  },
+  {
+    "team": "Portugal",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0008261676801904485,
+    "offense_std": 0.0017964821908156917,
+    "offense_lower": -0.0014762170349405658,
+    "offense_upper": 0.005435136262878831
+  },
+  {
+    "team": "",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0006254556732754377,
+    "offense_std": 0.0013243281328245084,
+    "offense_lower": -0.0010210578665389887,
+    "offense_upper": 0.0037407580198860024
+  },
+  {
+    "team": "Wales",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.0004269317262160498,
+    "offense_std": 0.0013632451915984768,
+    "offense_lower": -0.001385512309615075,
+    "offense_upper": 0.0032952130750628014
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 0.00037938728884968085,
+    "offense_std": 0.0009888949980464262,
+    "offense_lower": -0.0010159869812227885,
+    "offense_upper": 0.002766675146444101
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": 9.022417824504203e-05,
+    "offense_std": 0.0008949368953351065,
+    "offense_lower": -0.0014079663887826771,
+    "offense_upper": 0.0016281364863504591
+  },
+  {
+    "team": "Japan",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -6.638240040411357e-05,
+    "offense_std": 0.0016739419853249002,
+    "offense_lower": -0.003439081531794583,
+    "offense_upper": 0.002950654291916351
+  },
+  {
+    "team": "Brazil",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -9.413484769101213e-05,
+    "offense_std": 0.0035766843739308447,
+    "offense_lower": -0.007073370224528421,
+    "offense_upper": 0.006486771603126783
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.00011989481673118424,
+    "offense_std": 0.0009030434381899276,
+    "offense_lower": -0.0016944577976802256,
+    "offense_upper": 0.001490002710209554
+  },
+  {
+    "team": "Chile",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.00025010232644317727,
+    "offense_std": 0.002250073286861719,
+    "offense_lower": -0.005151000527676304,
+    "offense_upper": 0.0033797395389237594
+  },
+  {
+    "team": "United States",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0002589127386715808,
+    "offense_std": 0.0016036556665416201,
+    "offense_lower": -0.003587120167780273,
+    "offense_upper": 0.0022803041909292
+  },
+  {
+    "team": "Scarlets",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.00034362839007674777,
+    "offense_std": 0.0009090212389219696,
+    "offense_lower": -0.0024761540793481495,
+    "offense_upper": 0.001063068346058643
+  },
+  {
+    "team": "Vannes",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.000520597090463512,
+    "offense_std": 0.0009462741810864739,
+    "offense_lower": -0.0028910837136761577,
+    "offense_upper": 0.00043847762249085796
+  },
+  {
+    "team": "Uruguay",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0005475404046442569,
+    "offense_std": 0.0019103608066034087,
+    "offense_lower": -0.0050399299725132265,
+    "offense_upper": 0.002140107152371004
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.000605553835951485,
+    "offense_std": 0.0010468544512212247,
+    "offense_lower": -0.0031194267966796157,
+    "offense_upper": 0.0007505827769507216
+  },
+  {
+    "team": "Grenoble",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0006701262786779635,
+    "offense_std": 0.0010927668014152723,
+    "offense_lower": -0.0033987607111046793,
+    "offense_upper": 0.00021011675118643244
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0006725323273486624,
+    "offense_std": 0.001033503691998651,
+    "offense_lower": -0.003177541335530267,
+    "offense_upper": 0.0003353449519016793
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0007670762891418503,
+    "offense_std": 0.0011122555181432659,
+    "offense_lower": -0.003459212849066167,
+    "offense_upper": 0.0002268031773296033
+  },
+  {
+    "team": "Colomiers",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0008143997620403659,
+    "offense_std": 0.0012624495494176539,
+    "offense_lower": -0.003531035345452725,
+    "offense_upper": 0.00018681568914324288
+  },
+  {
+    "team": "Tonga",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.000819057159437383,
+    "offense_std": 0.0021349511985988335,
+    "offense_lower": -0.005675210887517811,
+    "offense_upper": 0.0017559925047970844
+  },
+  {
+    "team": "Clermont",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0008385644511142875,
+    "offense_std": 0.0010880757501626262,
+    "offense_lower": -0.00388330129377635,
+    "offense_upper": 0.00010282583821291904
+  },
+  {
+    "team": "Fiji",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0008438253857396562,
+    "offense_std": 0.001987077241387139,
+    "offense_lower": -0.0058234448777613945,
+    "offense_upper": 0.0017173565918967024
+  },
+  {
+    "team": "England",
+    "season": "2024-2025",
+    "score_type": "penalties",
+    "offense_mean": -0.0008918424360073735,
+    "offense_std": 0.001327094398633283,
+    "offense_lower": -0.004135793164853721,
+    "offense_upper": 0.00046949496718866503
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 1.0193256652176321,
+    "offense_std": 0.14534771367988492,
+    "offense_lower": 0.7244447235550852,
+    "offense_upper": 1.3064383801906583
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.8970781743496612,
+    "offense_std": 0.11307689104993478,
+    "offense_lower": 0.6778341081088863,
+    "offense_upper": 1.1226808774961512
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.8591808570963029,
+    "offense_std": 0.13697700903132498,
+    "offense_lower": 0.5789728483727955,
+    "offense_upper": 1.13381164545194
+  },
+  {
+    "team": "Australia",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.7518001408507715,
+    "offense_std": 0.24448605490100764,
+    "offense_lower": 0.26784870652330445,
+    "offense_upper": 1.2424433354864237
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.6926016291539729,
+    "offense_std": 0.12834092181069234,
+    "offense_lower": 0.45133856376033876,
+    "offense_upper": 0.949037346074732
+  },
+  {
+    "team": "Queensland Reds",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.6615987795253279,
+    "offense_std": 0.3630224423937037,
+    "offense_lower": -0.052186257689588865,
+    "offense_upper": 1.394597750492533
+  },
+  {
+    "team": "Toulouse",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.6446826108412814,
+    "offense_std": 0.10151358021228768,
+    "offense_lower": 0.44532754766610255,
+    "offense_upper": 0.8430132055017328
+  },
+  {
+    "team": "Argentina",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.5986829948627972,
+    "offense_std": 0.24174171669187178,
+    "offense_lower": 0.1362839000838571,
+    "offense_upper": 1.085101888084708
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.5858012231241541,
+    "offense_std": 0.12146413864483685,
+    "offense_lower": 0.3478113128273567,
+    "offense_upper": 0.8281943514102251
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.5643152224155328,
+    "offense_std": 0.1277542658407836,
+    "offense_lower": 0.3151247909908089,
+    "offense_upper": 0.8249943652396542
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.44266673422065483,
+    "offense_std": 0.13107027007268568,
+    "offense_lower": 0.18924090193959547,
+    "offense_upper": 0.7052362645193514
+  },
+  {
+    "team": "Scotland",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.42834951408657584,
+    "offense_std": 0.15152649676663296,
+    "offense_lower": 0.13263639368233915,
+    "offense_upper": 0.726586461386403
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.4026525135679153,
+    "offense_std": 0.5541729140944013,
+    "offense_lower": -0.7437812699002285,
+    "offense_upper": 1.4917909391356634
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.38373138227261067,
+    "offense_std": 0.43583480416114767,
+    "offense_lower": -0.4637696846003186,
+    "offense_upper": 1.2382550296797312
+  },
+  {
+    "team": "South Africa",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.3514748669852084,
+    "offense_std": 0.2609775718801783,
+    "offense_lower": -0.1510875193716888,
+    "offense_upper": 0.8749667796975007
+  },
+  {
+    "team": "Saracens",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.3456261583069934,
+    "offense_std": 0.14332402585653792,
+    "offense_lower": 0.06318923752604334,
+    "offense_upper": 0.630826070970114
+  },
+  {
+    "team": "Samoa",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.3400859162297477,
+    "offense_std": 0.3912654297161262,
+    "offense_lower": -0.4182393125443893,
+    "offense_upper": 1.088579680475194
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.32532682091623644,
+    "offense_std": 0.1253832386489298,
+    "offense_lower": 0.07374645550488437,
+    "offense_upper": 0.5661877765262272
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.31691752997271916,
+    "offense_std": 0.14286466474376774,
+    "offense_lower": 0.03714319761557115,
+    "offense_upper": 0.6069207155576964
+  },
+  {
+    "team": "Ireland",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.30443714727966126,
+    "offense_std": 0.20295508128007467,
+    "offense_lower": -0.09238085789900545,
+    "offense_upper": 0.6960112071661879
+  },
+  {
+    "team": "Ospreys",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.26490283841583995,
+    "offense_std": 0.14755844084365888,
+    "offense_lower": -0.027238367898746237,
+    "offense_upper": 0.5507148623689073
+  },
+  {
+    "team": "New Zealand",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.26294557260607143,
+    "offense_std": 0.2315625958476543,
+    "offense_lower": -0.21585053819590294,
+    "offense_upper": 0.6901313882212865
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.2604095243805887,
+    "offense_std": 0.14656877381820044,
+    "offense_lower": -0.023983540344739873,
+    "offense_upper": 0.543809400744347
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.2543509196969653,
+    "offense_std": 0.10271469803681547,
+    "offense_lower": 0.05978067545010439,
+    "offense_upper": 0.45475035322227514
+  },
+  {
+    "team": "Harlequins",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.2523726298090519,
+    "offense_std": 0.14842566381039574,
+    "offense_lower": -0.02935524570097503,
+    "offense_upper": 0.5550001924631572
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.2448524930093446,
+    "offense_std": 0.16932399244836646,
+    "offense_lower": -0.09667790853407279,
+    "offense_upper": 0.5693015137130456
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.24480805142851475,
+    "offense_std": 0.12528618877741465,
+    "offense_lower": 0.007281764131224018,
+    "offense_upper": 0.4924373243865078
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.22907539234230698,
+    "offense_std": 0.1339909361211379,
+    "offense_lower": -0.031109351989732574,
+    "offense_upper": 0.499961698698995
+  },
+  {
+    "team": "Portugal",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.2139803932509258,
+    "offense_std": 0.3052603625708187,
+    "offense_lower": -0.3934236310927814,
+    "offense_upper": 0.8299368214350847
+  },
+  {
+    "team": "",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.16216955047676596,
+    "offense_std": 0.2119839215591188,
+    "offense_lower": -0.2564176272978799,
+    "offense_upper": 0.5646602394785796
+  },
+  {
+    "team": "Wales",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.10916386686954088,
+    "offense_std": 0.2182667630299458,
+    "offense_lower": -0.32147561925659895,
+    "offense_upper": 0.5308791965997696
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.09885238511913721,
+    "offense_std": 0.1603714273482942,
+    "offense_lower": -0.21383843332122016,
+    "offense_upper": 0.41067971286761834
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": 0.02017573136093534,
+    "offense_std": 0.14502673653588904,
+    "offense_lower": -0.2656944752796316,
+    "offense_upper": 0.30487073919593377
+  },
+  {
+    "team": "Brazil",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.0220509297155766,
+    "offense_std": 0.6315276129535552,
+    "offense_lower": -1.2466172552845505,
+    "offense_upper": 1.2519244729768875
+  },
+  {
+    "team": "Japan",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.02601715765702214,
+    "offense_std": 0.29245929799925846,
+    "offense_lower": -0.6128709679661726,
+    "offense_upper": 0.5498053516663417
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.0358397008616594,
+    "offense_std": 0.16033534845770078,
+    "offense_lower": -0.3586095206583085,
+    "offense_upper": 0.2696096958299083
+  },
+  {
+    "team": "Chile",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.05061420238556085,
+    "offense_std": 0.3891829025503939,
+    "offense_lower": -0.8290630364603556,
+    "offense_upper": 0.719712238009998
+  },
+  {
+    "team": "United States",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.06795290779648636,
+    "offense_std": 0.28093064530298956,
+    "offense_lower": -0.6167538768026362,
+    "offense_upper": 0.46903960610983464
+  },
+  {
+    "team": "Scarlets",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.09166412980892266,
+    "offense_std": 0.15604264421226416,
+    "offense_lower": -0.3939294813613925,
+    "offense_upper": 0.21439853952120866
+  },
+  {
+    "team": "Uruguay",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.1263994727058474,
+    "offense_std": 0.31700976069832504,
+    "offense_lower": -0.7594081575874425,
+    "offense_upper": 0.47663313996401196
+  },
+  {
+    "team": "Vannes",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.13380369583350232,
+    "offense_std": 0.12864050071670197,
+    "offense_lower": -0.3806481911769462,
+    "offense_upper": 0.11858061545186689
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.16761375225053368,
+    "offense_std": 0.17932286724979613,
+    "offense_lower": -0.5211427058836966,
+    "offense_upper": 0.17153935592778902
+  },
+  {
+    "team": "Grenoble",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.16877132261797836,
+    "offense_std": 0.12857795164632618,
+    "offense_lower": -0.418306534624636,
+    "offense_upper": 0.08028933003147762
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.1759466306819199,
+    "offense_std": 0.1476344127091043,
+    "offense_lower": -0.4615713640388275,
+    "offense_upper": 0.12120463201111022
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.19999048860371044,
+    "offense_std": 0.1395246878698423,
+    "offense_lower": -0.47493523127605597,
+    "offense_upper": 0.06930953736301579
+  },
+  {
+    "team": "Tonga",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.20097412090830144,
+    "offense_std": 0.3281764043415441,
+    "offense_lower": -0.8691911427468355,
+    "offense_upper": 0.4357463311728184
+  },
+  {
+    "team": "Colomiers",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.21371568904289465,
+    "offense_std": 0.1382888845941157,
+    "offense_lower": -0.48629752198788406,
+    "offense_upper": 0.061909578514428194
+  },
+  {
+    "team": "Clermont",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.21851097989690785,
+    "offense_std": 0.12942337275284307,
+    "offense_lower": -0.46730370233666907,
+    "offense_upper": 0.03967982885196398
+  },
+  {
+    "team": "Fiji",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.22543293572181722,
+    "offense_std": 0.3255773533360369,
+    "offense_lower": -0.8480746907022545,
+    "offense_upper": 0.40340923301366755
+  },
+  {
+    "team": "England",
+    "season": "2024-2025",
+    "score_type": "conversions",
+    "offense_mean": -0.23616429455653665,
+    "offense_std": 0.1936504687897298,
+    "offense_lower": -0.6027988673361053,
+    "offense_upper": 0.14508018871656939
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.36199322457476796,
+    "offense_std": 0.03857433351902126,
+    "offense_lower": 0.28844303746781746,
+    "offense_upper": 0.44364026184427013
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.3090051078592889,
+    "offense_std": 0.144790404840372,
+    "offense_lower": 0.016588883606403572,
+    "offense_upper": 0.5935850319167493
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.3009012670371013,
+    "offense_std": 0.03840454852352519,
+    "offense_lower": 0.2280829592049309,
+    "offense_upper": 0.3798961109523771
+  },
+  {
+    "team": "Coventry",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.2945103345720593,
+    "offense_std": 0.03707186130570137,
+    "offense_lower": 0.22481086505006817,
+    "offense_upper": 0.37033572413420074
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.27915607662948605,
+    "offense_std": 0.04370911680006967,
+    "offense_lower": 0.19412458742462874,
+    "offense_upper": 0.3663504539644808
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.2675093050626083,
+    "offense_std": 0.03801867135468056,
+    "offense_lower": 0.194728050537804,
+    "offense_upper": 0.34783608828711843
+  },
+  {
+    "team": "South Africa",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.2529556295370884,
+    "offense_std": 0.05428901859794716,
+    "offense_lower": 0.14597986164486412,
+    "offense_upper": 0.3603883400308364
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.2526215136013964,
+    "offense_std": 0.04165098928554685,
+    "offense_lower": 0.17120312526329118,
+    "offense_upper": 0.3352625205793521
+  },
+  {
+    "team": "Ampthill",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.24970154770574104,
+    "offense_std": 0.04006424011233219,
+    "offense_lower": 0.1696945367269697,
+    "offense_upper": 0.3310855361923223
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.24181180948457276,
+    "offense_std": 0.03215438588577806,
+    "offense_lower": 0.18134646619856598,
+    "offense_upper": 0.30771532293230835
+  },
+  {
+    "team": "Argentina",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.24042047213221204,
+    "offense_std": 0.071924018428084,
+    "offense_lower": 0.10669986974664204,
+    "offense_upper": 0.38006757832302945
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.23327715315143085,
+    "offense_std": 0.04122877986625038,
+    "offense_lower": 0.1549871794407132,
+    "offense_upper": 0.31562046546194267
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.23243849351283033,
+    "offense_std": 0.03548822742711504,
+    "offense_lower": 0.1662603020389147,
+    "offense_upper": 0.3047918708255352
+  },
+  {
+    "team": "New Zealand",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.22239833179659005,
+    "offense_std": 0.06982535999392833,
+    "offense_lower": 0.08445039274001413,
+    "offense_upper": 0.35766440949576456
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.19844107432427266,
+    "offense_std": 0.0419458881936106,
+    "offense_lower": 0.11789238719060838,
+    "offense_upper": 0.2823486876979465
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.1951539552555922,
+    "offense_std": 0.03826431584467513,
+    "offense_lower": 0.12169816242302847,
+    "offense_upper": 0.2704556785995197
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.19015038723433386,
+    "offense_std": 0.05680232849256856,
+    "offense_lower": 0.08397618472545826,
+    "offense_upper": 0.30938624903024425
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.17701697179402998,
+    "offense_std": 0.040626390709039346,
+    "offense_lower": 0.0989184312048585,
+    "offense_upper": 0.2583896635559151
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.17584425602843531,
+    "offense_std": 0.0416689145564464,
+    "offense_lower": 0.09620151097244613,
+    "offense_upper": 0.25796846390869455
+  },
+  {
+    "team": "Uruguay",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.16853160518564134,
+    "offense_std": 0.08138569934844718,
+    "offense_lower": 0.010667175160005173,
+    "offense_upper": 0.32500093784561573
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.16575426421315037,
+    "offense_std": 0.03995964691172446,
+    "offense_lower": 0.09247730168314539,
+    "offense_upper": 0.24462818483768548
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.1507014760030664,
+    "offense_std": 0.041361368598948935,
+    "offense_lower": 0.07091381438270178,
+    "offense_upper": 0.2322283068472773
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.1491513301488164,
+    "offense_std": 0.03660193268874537,
+    "offense_lower": 0.07548930984533012,
+    "offense_upper": 0.22184103942178943
+  },
+  {
+    "team": "Vannes",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.13615187812242843,
+    "offense_std": 0.03756318906495668,
+    "offense_lower": 0.0614631147399068,
+    "offense_upper": 0.20852097823316032
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.12314748918881342,
+    "offense_std": 0.053748146911690386,
+    "offense_lower": 0.020512211111152794,
+    "offense_upper": 0.22934965395180137
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.11570822548355258,
+    "offense_std": 0.04691870407534873,
+    "offense_lower": 0.029380966819798845,
+    "offense_upper": 0.21231214294856685
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.11490753880787606,
+    "offense_std": 0.04048858652485477,
+    "offense_lower": 0.037505156063056655,
+    "offense_upper": 0.19645368217452924
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.10772687768088782,
+    "offense_std": 0.032050205820209766,
+    "offense_lower": 0.04546189056152417,
+    "offense_upper": 0.1721024496602584
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.10741985358807962,
+    "offense_std": 0.04126596369643921,
+    "offense_lower": 0.029721266791286997,
+    "offense_upper": 0.18769883076270416
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.10609971045790008,
+    "offense_std": 0.04125459159182348,
+    "offense_lower": 0.02715302853393131,
+    "offense_upper": 0.18981042760387634
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.10433769617953165,
+    "offense_std": 0.04054557738085979,
+    "offense_lower": 0.024584323594123856,
+    "offense_upper": 0.18340472964581755
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.10341823014625515,
+    "offense_std": 0.046496334177491744,
+    "offense_lower": 0.012394139371604612,
+    "offense_upper": 0.1985894005211671
+  },
+  {
+    "team": "Caldy",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.09945393175354626,
+    "offense_std": 0.050024943225603524,
+    "offense_lower": 0.0039023747295764077,
+    "offense_upper": 0.19715919596388215
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.09875346002218027,
+    "offense_std": 0.10746907385050122,
+    "offense_lower": -0.11338423737933756,
+    "offense_upper": 0.30943372660137936
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.09413782433928933,
+    "offense_std": 0.048755997113999965,
+    "offense_lower": -4.6379145076659905e-05,
+    "offense_upper": 0.19100804777542235
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.08922388232913259,
+    "offense_std": 0.04139124370268826,
+    "offense_lower": 0.008515468588369548,
+    "offense_upper": 0.17103828137179872
+  },
+  {
+    "team": "Chile",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.08282204029550787,
+    "offense_std": 0.124259857902656,
+    "offense_lower": -0.15787850775030518,
+    "offense_upper": 0.32385320446042354
+  },
+  {
+    "team": "Hartpury",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.0823476692060217,
+    "offense_std": 0.037757993145375916,
+    "offense_lower": 0.010456829308931374,
+    "offense_upper": 0.15560298620566979
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.07873628448592515,
+    "offense_std": 0.05235872199205988,
+    "offense_lower": -0.02412782644312046,
+    "offense_upper": 0.18221848858778247
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.07604029234200385,
+    "offense_std": 0.03882111943927333,
+    "offense_lower": 0.000657842555915752,
+    "offense_upper": 0.1524181473373427
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.07458943718916851,
+    "offense_std": 0.03213681470108947,
+    "offense_lower": 0.01511590006755988,
+    "offense_upper": 0.13797358893376116
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.07045960752578634,
+    "offense_std": 0.0374459673044255,
+    "offense_lower": -0.0007119644249919243,
+    "offense_upper": 0.14410527675547374
+  },
+  {
+    "team": "Australia",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.06114378271431042,
+    "offense_std": 0.08022780908258899,
+    "offense_lower": -0.0959187410237577,
+    "offense_upper": 0.2136389716992152
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.05873487882983431,
+    "offense_std": 0.05037643279822951,
+    "offense_lower": -0.03960827579923615,
+    "offense_upper": 0.1585867891436983
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.055485186561778595,
+    "offense_std": 0.12363331710378446,
+    "offense_lower": -0.18366706567575114,
+    "offense_upper": 0.29568447834743605
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.05538230549400984,
+    "offense_std": 0.0435039563720146,
+    "offense_lower": -0.029208567856330202,
+    "offense_upper": 0.14165901944589623
+  },
+  {
+    "team": "Fiji",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.05110794736183228,
+    "offense_std": 0.09465380022985057,
+    "offense_lower": -0.1352543585862871,
+    "offense_upper": 0.2323436403423067
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.05013976939032517,
+    "offense_std": 0.03577805575626003,
+    "offense_lower": -0.02424294088002295,
+    "offense_upper": 0.11888963620249764
+  },
+  {
+    "team": "",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.041456852521463486,
+    "offense_std": 0.09406515994686787,
+    "offense_lower": -0.142697475194667,
+    "offense_upper": 0.23069749310859297
+  },
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "score_type": "tries",
+    "offense_mean": 0.017222324754872235,
+    "offense_std": 0.05215439164099398,
+    "offense_lower": -0.07782506762495177,
+    "offense_upper": 0.12498286411824422
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.004513599936093713,
+    "offense_std": 0.004915861872771346,
+    "offense_lower": 0.0005182349873229969,
+    "offense_upper": 0.01782676528179313
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0038455228102378444,
+    "offense_std": 0.0052462869046070535,
+    "offense_lower": 0.00011750300096573853,
+    "offense_upper": 0.0169293660109568
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0037459278867990275,
+    "offense_std": 0.004103733383070033,
+    "offense_lower": 0.00045592197371809604,
+    "offense_upper": 0.014128826880037295
+  },
+  {
+    "team": "Coventry",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.003675671081321841,
+    "offense_std": 0.004050630521382976,
+    "offense_lower": 0.0004345826954099895,
+    "offense_upper": 0.014509426618190201
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0034829316670591127,
+    "offense_std": 0.0038629584390584733,
+    "offense_lower": 0.0004199614372718036,
+    "offense_upper": 0.012916368552479988
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0033238236127744185,
+    "offense_std": 0.003610506956620204,
+    "offense_lower": 0.00039236786538686527,
+    "offense_upper": 0.01270052585952923
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.003142654400379663,
+    "offense_std": 0.0034533798134362406,
+    "offense_lower": 0.0003645343279595306,
+    "offense_upper": 0.012097102919456423
+  },
+  {
+    "team": "South Africa",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0031416608186129557,
+    "offense_std": 0.0035124835595438005,
+    "offense_lower": 0.00035264269818922206,
+    "offense_upper": 0.01242388863259544
+  },
+  {
+    "team": "Ampthill",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.003112669002938187,
+    "offense_std": 0.003468070063712436,
+    "offense_lower": 0.0003674113186139842,
+    "offense_upper": 0.012133308588280513
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.003012365326666334,
+    "offense_std": 0.003328598809779768,
+    "offense_lower": 0.00036758675090257123,
+    "offense_upper": 0.011568563289823378
+  },
+  {
+    "team": "Argentina",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0029917893247603357,
+    "offense_std": 0.003335034423301093,
+    "offense_lower": 0.00029354034018579854,
+    "offense_upper": 0.01276260339223671
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0029018217337110613,
+    "offense_std": 0.0032366019009071514,
+    "offense_lower": 0.0003474341627452204,
+    "offense_upper": 0.010900585756634202
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0029009570852578017,
+    "offense_std": 0.003197846365762181,
+    "offense_lower": 0.00035880556161917013,
+    "offense_upper": 0.010889080637530088
+  },
+  {
+    "team": "New Zealand",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0028179710759541573,
+    "offense_std": 0.003334255917656844,
+    "offense_lower": 0.00024515546800277883,
+    "offense_upper": 0.011536918807223795
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0024665448073439254,
+    "offense_std": 0.002819260732445656,
+    "offense_lower": 0.00028247017681345347,
+    "offense_upper": 0.009470448438636687
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.002441449289871462,
+    "offense_std": 0.0027760981421312385,
+    "offense_lower": 0.0002725775315937811,
+    "offense_upper": 0.00978769083477044
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0023529143841952383,
+    "offense_std": 0.0027124358003453087,
+    "offense_lower": 0.0002273403822950927,
+    "offense_upper": 0.008917764929079372
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0022080887538173987,
+    "offense_std": 0.0026100071198938,
+    "offense_lower": 0.00025420424939997274,
+    "offense_upper": 0.00914983460993415
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.002202880341552687,
+    "offense_std": 0.002459682460535588,
+    "offense_lower": 0.0002440056630499441,
+    "offense_upper": 0.00877466056447035
+  },
+  {
+    "team": "Uruguay",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0021029088870549236,
+    "offense_std": 0.002707019805065347,
+    "offense_lower": 4.7259808155810064e-05,
+    "offense_upper": 0.008663184535762829
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.002077744730253775,
+    "offense_std": 0.0023789251607008476,
+    "offense_lower": 0.00022924870092623357,
+    "offense_upper": 0.008468658087784268
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0018678672822139515,
+    "offense_std": 0.0021224953774214178,
+    "offense_lower": 0.00021299041377046267,
+    "offense_upper": 0.007288242207321722
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0018413263392384428,
+    "offense_std": 0.0020650750734977153,
+    "offense_lower": 0.00020235991043259725,
+    "offense_upper": 0.007135893549641715
+  },
+  {
+    "team": "Vannes",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0017075354247932648,
+    "offense_std": 0.002009733934780158,
+    "offense_lower": 0.000181130741576667,
+    "offense_upper": 0.006681666601768538
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.001554474563224518,
+    "offense_std": 0.0019950283230029788,
+    "offense_lower": 8.685743213808557e-05,
+    "offense_upper": 0.00693258782311452
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.001427992131777629,
+    "offense_std": 0.0017518390896504674,
+    "offense_lower": 9.711018709026222e-05,
+    "offense_upper": 0.0060883849697164595
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0014123852335337897,
+    "offense_std": 0.0016147832259841453,
+    "offense_lower": 0.00012350258547481592,
+    "offense_upper": 0.005484382843410729
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0013547652853405053,
+    "offense_std": 0.0016766067295229245,
+    "offense_lower": 0.0001248253958659295,
+    "offense_upper": 0.005603960402156819
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0013419436836961838,
+    "offense_std": 0.0016048945278867796,
+    "offense_lower": 0.00010228823526114934,
+    "offense_upper": 0.0052450526372892605
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0013327240756827953,
+    "offense_std": 0.0016495785387951251,
+    "offense_lower": 9.848808958081166e-05,
+    "offense_upper": 0.0058637332511774325
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0012956281743409914,
+    "offense_std": 0.0016259709686969781,
+    "offense_lower": 5.377146953864733e-05,
+    "offense_upper": 0.0054857558140493385
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.001284704354822996,
+    "offense_std": 0.0015518401452665218,
+    "offense_lower": 8.89847227745779e-05,
+    "offense_upper": 0.005252236410512165
+  },
+  {
+    "team": "Caldy",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0012392324443069402,
+    "offense_std": 0.0016133840918262908,
+    "offense_lower": 2.7040283020309085e-05,
+    "offense_upper": 0.005125722981292963
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0011943393239217466,
+    "offense_std": 0.0023217257317376706,
+    "offense_lower": -0.0013601158264502221,
+    "offense_upper": 0.006603863451633681
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0011787870928598523,
+    "offense_std": 0.0014972274761201802,
+    "offense_lower": -3.4553957988376037e-07,
+    "offense_upper": 0.005291633290301546
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.001088043629567491,
+    "offense_std": 0.0013532958874934325,
+    "offense_lower": 3.607579582890798e-05,
+    "offense_upper": 0.004434653283478182
+  },
+  {
+    "team": "Hartpury",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0010127838482352968,
+    "offense_std": 0.0012479592775705524,
+    "offense_lower": 4.345588545958402e-05,
+    "offense_upper": 0.004026162094866728
+  },
+  {
+    "team": "Chile",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0010103338420592964,
+    "offense_std": 0.002419749966219805,
+    "offense_lower": -0.002310035225786421,
+    "offense_upper": 0.00660639374808403
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0009703425306688224,
+    "offense_std": 0.0014495386535102472,
+    "offense_lower": -0.00023512795498939254,
+    "offense_upper": 0.00440724387186946
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0009513909679764554,
+    "offense_std": 0.0012409349466399233,
+    "offense_lower": 5.681792876048443e-06,
+    "offense_upper": 0.004197393917387636
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0009337416595877619,
+    "offense_std": 0.001148689793705869,
+    "offense_lower": 5.999246273530304e-05,
+    "offense_upper": 0.00402509082329528
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0008851246471464273,
+    "offense_std": 0.0011345872155699285,
+    "offense_lower": -7.5583045658312574e-06,
+    "offense_upper": 0.0037043317942928
+  },
+  {
+    "team": "Australia",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0007602355522166732,
+    "offense_std": 0.0016700410502711361,
+    "offense_lower": -0.0012495228122683746,
+    "offense_upper": 0.004795992413777121
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0007515011971130265,
+    "offense_std": 0.0012545574523595367,
+    "offense_lower": -0.00045734450145978005,
+    "offense_upper": 0.0037543243664929227
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0007340076584055053,
+    "offense_std": 0.002374998353921904,
+    "offense_lower": -0.0024568218203686516,
+    "offense_upper": 0.00627978327916454
+  },
+  {
+    "team": "Fiji",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0006787593924922283,
+    "offense_std": 0.0019280946452838268,
+    "offense_lower": -0.0019301270978246252,
+    "offense_upper": 0.005236231261076896
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0006768516674792439,
+    "offense_std": 0.0009947055944237299,
+    "offense_lower": -0.0002857180032004638,
+    "offense_upper": 0.0035240780609055696
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0006256946774327365,
+    "offense_std": 0.0009539803849027476,
+    "offense_lower": -0.0001970749868296161,
+    "offense_upper": 0.002885935190902108
+  },
+  {
+    "team": "",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0005021871079405563,
+    "offense_std": 0.0016868455069339921,
+    "offense_lower": -0.0021872314822635594,
+    "offense_upper": 0.00445899761106948
+  },
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "score_type": "penalties",
+    "offense_mean": 0.0002130968192977272,
+    "offense_std": 0.0009630002976210424,
+    "offense_lower": -0.0012423813840217466,
+    "offense_upper": 0.002371959196949617
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 1.1596516530487702,
+    "offense_std": 0.11339227306812535,
+    "offense_lower": 0.9454629256852138,
+    "offense_upper": 1.3894753331029464
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.9902265063373534,
+    "offense_std": 0.46165244816173484,
+    "offense_lower": 0.05339805535041437,
+    "offense_upper": 1.8873558688527046
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.9640378413140954,
+    "offense_std": 0.11681283581351559,
+    "offense_lower": 0.7337869613952548,
+    "offense_upper": 1.1945886929498322
+  },
+  {
+    "team": "Coventry",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.9436660944233176,
+    "offense_std": 0.11383931874786403,
+    "offense_lower": 0.7315152349531228,
+    "offense_upper": 1.1793013361362037
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.8941594091147917,
+    "offense_std": 0.13432749095481245,
+    "offense_lower": 0.6356432339803066,
+    "offense_upper": 1.1685259396966041
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.8571880285301101,
+    "offense_std": 0.11779283399221006,
+    "offense_lower": 0.6379165567199703,
+    "offense_upper": 1.0964306348859862
+  },
+  {
+    "team": "South Africa",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.8101758273207733,
+    "offense_std": 0.16999410231539402,
+    "offense_lower": 0.4697488029184096,
+    "offense_upper": 1.146092229628756
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.8093130191672184,
+    "offense_std": 0.1295932705641964,
+    "offense_lower": 0.5581397136864177,
+    "offense_upper": 1.064100111654875
+  },
+  {
+    "team": "Ampthill",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.800184397303811,
+    "offense_std": 0.12531035274507063,
+    "offense_lower": 0.543806494129419,
+    "offense_upper": 1.0485995050313017
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.7747238521108587,
+    "offense_std": 0.09826166315724397,
+    "offense_lower": 0.5886666295769971,
+    "offense_upper": 0.9718049996455205
+  },
+  {
+    "team": "Argentina",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.77042643649327,
+    "offense_std": 0.22883085852865911,
+    "offense_lower": 0.3349391367478608,
+    "offense_upper": 1.2189087044673057
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.747423785391448,
+    "offense_std": 0.12909780102678498,
+    "offense_lower": 0.5024324567651856,
+    "offense_upper": 0.9905913492603531
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.7446456533546952,
+    "offense_std": 0.10945664996332004,
+    "offense_lower": 0.5321775626144462,
+    "offense_upper": 0.9624262762711534
+  },
+  {
+    "team": "New Zealand",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.7125909781635688,
+    "offense_std": 0.2214965037042558,
+    "offense_lower": 0.27027243247807975,
+    "offense_upper": 1.139768968495427
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.6358219901763527,
+    "offense_std": 0.13204819111666016,
+    "offense_lower": 0.38107377497200706,
+    "offense_upper": 0.8910386880880609
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.6252026440763485,
+    "offense_std": 0.11946703802304877,
+    "offense_lower": 0.3919091315878019,
+    "offense_upper": 0.8636982698797394
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.6092695269110423,
+    "offense_std": 0.1805953440621213,
+    "offense_lower": 0.267352891742789,
+    "offense_upper": 0.9759599510187442
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.5674966627677829,
+    "offense_std": 0.1296361039766495,
+    "offense_lower": 0.3162241086740783,
+    "offense_upper": 0.8293321060689283
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.5633134103127826,
+    "offense_std": 0.13135129831463646,
+    "offense_lower": 0.3012295127183501,
+    "offense_upper": 0.8318004403429176
+  },
+  {
+    "team": "Uruguay",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.5402179316027252,
+    "offense_std": 0.2607511806298633,
+    "offense_lower": 0.03277579351834559,
+    "offense_upper": 1.0363179635795792
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.5309383927840761,
+    "offense_std": 0.1260935570745547,
+    "offense_lower": 0.3011254603071693,
+    "offense_upper": 0.7746379783234538
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.48285132004962084,
+    "offense_std": 0.13116590651093013,
+    "offense_lower": 0.2307692202025616,
+    "offense_upper": 0.7388263504067325
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.47789137025221695,
+    "offense_std": 0.11577993749045346,
+    "offense_lower": 0.2440171467834289,
+    "offense_upper": 0.6985432968725871
+  },
+  {
+    "team": "Vannes",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.43592155609344163,
+    "offense_std": 0.11802609149706682,
+    "offense_lower": 0.19604288186677082,
+    "offense_upper": 0.6685360493645714
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.394700942208164,
+    "offense_std": 0.1717669584632189,
+    "offense_lower": 0.06418051851605674,
+    "offense_upper": 0.7305747487192003
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3709502490121973,
+    "offense_std": 0.1500095562488417,
+    "offense_lower": 0.09469197665766478,
+    "offense_upper": 0.6685271897869881
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3680542720833422,
+    "offense_std": 0.12865225614863943,
+    "offense_lower": 0.11690233268528397,
+    "offense_upper": 0.6338005017433144
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3450925844713422,
+    "offense_std": 0.10167442595556958,
+    "offense_lower": 0.15069217338496874,
+    "offense_upper": 0.5461437336860709
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.34417602293908706,
+    "offense_std": 0.1313524949717963,
+    "offense_lower": 0.09713451868958246,
+    "offense_upper": 0.5986912459278471
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3400589990068704,
+    "offense_std": 0.1318818837296561,
+    "offense_lower": 0.088048496123668,
+    "offense_upper": 0.6050237277455599
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3344608857223973,
+    "offense_std": 0.12950229250928014,
+    "offense_lower": 0.08002046834540985,
+    "offense_upper": 0.5834294687247229
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.33116061779410777,
+    "offense_std": 0.14746026359570566,
+    "offense_lower": 0.042280197263109956,
+    "offense_upper": 0.6223730842695708
+  },
+  {
+    "team": "Caldy",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.31873887274582197,
+    "offense_std": 0.15954472661408092,
+    "offense_lower": 0.011639008872366498,
+    "offense_upper": 0.6378614919327592
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.31655518760579143,
+    "offense_std": 0.34411657284107566,
+    "offense_lower": -0.3695395785724806,
+    "offense_upper": 0.9760613909407069
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.3017976013026867,
+    "offense_std": 0.15635309923844665,
+    "offense_lower": -0.00015015430622391184,
+    "offense_upper": 0.6066745054175424
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.28594662062758475,
+    "offense_std": 0.13262658502707517,
+    "offense_lower": 0.02757408232638744,
+    "offense_upper": 0.5537021948442141
+  },
+  {
+    "team": "Chile",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.2654905863224046,
+    "offense_std": 0.39741039465652683,
+    "offense_lower": -0.5037054059781209,
+    "offense_upper": 1.0505510936182114
+  },
+  {
+    "team": "Hartpury",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.26388728582799853,
+    "offense_std": 0.12080472171691903,
+    "offense_lower": 0.03381913452055071,
+    "offense_upper": 0.49607328059239736
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.25260198286847424,
+    "offense_std": 0.16821174877918826,
+    "offense_lower": -0.07584162490722582,
+    "offense_upper": 0.5822264533920957
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.24370681254823148,
+    "offense_std": 0.12397418231380167,
+    "offense_lower": 0.002056760419296898,
+    "offense_upper": 0.48400820444191545
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.2389214027568385,
+    "offense_std": 0.10235985738311489,
+    "offense_lower": 0.04885160131467128,
+    "offense_upper": 0.4477987017561808
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.2258808141938708,
+    "offense_std": 0.1199923124168389,
+    "offense_lower": -0.0023346188847385265,
+    "offense_upper": 0.46354340801820687
+  },
+  {
+    "team": "Australia",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.19555663382286567,
+    "offense_std": 0.25700793960801793,
+    "offense_lower": -0.31339840966416693,
+    "offense_upper": 0.6999911456866845
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.18827917973812738,
+    "offense_std": 0.1609345348273821,
+    "offense_lower": -0.1264987478139108,
+    "offense_upper": 0.5159889879901882
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.17787750066109473,
+    "offense_std": 0.39558716008720973,
+    "offense_lower": -0.5902639594036324,
+    "offense_upper": 0.9338022713652729
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.17753671704517998,
+    "offense_std": 0.13931794959698945,
+    "offense_lower": -0.09251803637376127,
+    "offense_upper": 0.4530551287203008
+  },
+  {
+    "team": "Fiji",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.16299793410346752,
+    "offense_std": 0.3024063533081795,
+    "offense_lower": -0.4341090056565515,
+    "offense_upper": 0.7394624966022781
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.16046682854514333,
+    "offense_std": 0.11370265226744389,
+    "offense_lower": -0.07677005293064158,
+    "offense_upper": 0.38136698666375535
+  },
+  {
+    "team": "",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.13303085810267126,
+    "offense_std": 0.30141225875599925,
+    "offense_lower": -0.4627892429246853,
+    "offense_upper": 0.7280080354010487
+  },
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "score_type": "conversions",
+    "offense_mean": 0.055370821134724024,
+    "offense_std": 0.16695842043036352,
+    "offense_lower": -0.2560646674962951,
+    "offense_upper": 0.40516777836170625
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.3939058080808689,
+    "offense_std": 0.07226841438230446,
+    "offense_lower": 0.2497928531640888,
+    "offense_upper": 0.5402412803345221
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.358912312308597,
+    "offense_std": 0.09657993265346017,
+    "offense_lower": 0.17177116884290833,
+    "offense_upper": 0.560610733378594
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.34508896861199906,
+    "offense_std": 0.08185488016098,
+    "offense_lower": 0.1773970007818582,
+    "offense_upper": 0.5068348190866798
+  },
+  {
+    "team": "Coventry",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.3140459445821881,
+    "offense_std": 0.07188594769521726,
+    "offense_lower": 0.17850424448624366,
+    "offense_upper": 0.4555066540574414
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.3077357911438981,
+    "offense_std": 0.07978229381276462,
+    "offense_lower": 0.15400736362550763,
+    "offense_upper": 0.4701804309613191
+  },
+  {
+    "team": "Caldy",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.2727964697578289,
+    "offense_std": 0.08682370334844332,
+    "offense_lower": 0.11203376715681741,
+    "offense_upper": 0.44916227322418745
+  },
+  {
+    "team": "Ampthill",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.272116430477957,
+    "offense_std": 0.08428259884794032,
+    "offense_lower": 0.10892377247328246,
+    "offense_upper": 0.4420568203123206
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.27085154122880784,
+    "offense_std": 0.08945554959629211,
+    "offense_lower": 0.09893599729526416,
+    "offense_upper": 0.4473394323964873
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.2667840014276129,
+    "offense_std": 0.08847152403634564,
+    "offense_lower": 0.09785218419291347,
+    "offense_upper": 0.44062065418145213
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.2546192831407371,
+    "offense_std": 0.09452288169968324,
+    "offense_lower": 0.06879996623278012,
+    "offense_upper": 0.4382875971508812
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.24829267841911443,
+    "offense_std": 0.09000540751042571,
+    "offense_lower": 0.07496042977465517,
+    "offense_upper": 0.41767219240839815
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.197144462984523,
+    "offense_std": 0.07821810480326427,
+    "offense_lower": 0.050372489440407696,
+    "offense_upper": 0.3504246008841019
+  },
+  {
+    "team": "Toulouse",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.19643859417073353,
+    "offense_std": 0.07646312802082877,
+    "offense_lower": 0.0472807025436007,
+    "offense_upper": 0.34790584868797664
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.1898313918345319,
+    "offense_std": 0.09957748923197055,
+    "offense_lower": -0.001488142013232304,
+    "offense_upper": 0.388655434071452
+  },
+  {
+    "team": "Ospreys",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.18871217645627092,
+    "offense_std": 0.11157683420526572,
+    "offense_lower": -0.02936326753371683,
+    "offense_upper": 0.40111684943255665
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.18170048115874804,
+    "offense_std": 0.06319113016981251,
+    "offense_lower": 0.05662988517740121,
+    "offense_upper": 0.31047171237473853
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.1660706566140976,
+    "offense_std": 0.08723121472689917,
+    "offense_lower": -0.0078007494682143744,
+    "offense_upper": 0.33628553151640295
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.16277968508717863,
+    "offense_std": 0.10809851446375741,
+    "offense_lower": -0.05056294865950402,
+    "offense_upper": 0.3754137951401285
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.1617440153817718,
+    "offense_std": 0.10562496112630793,
+    "offense_lower": -0.042936268695901614,
+    "offense_upper": 0.3692997352715632
+  },
+  {
+    "team": "Richmond",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.16039723171693898,
+    "offense_std": 0.09473390625588579,
+    "offense_lower": -0.029109091387716054,
+    "offense_upper": 0.34690040126425653
+  },
+  {
+    "team": "Aurillac",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.14953538587826903,
+    "offense_std": 0.06826264285644194,
+    "offense_lower": 0.019843545275809994,
+    "offense_upper": 0.2871561698513333
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.14322566990487418,
+    "offense_std": 0.10071039130838795,
+    "offense_lower": -0.058245990004673995,
+    "offense_upper": 0.34606902183365706
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.13225234155691412,
+    "offense_std": 0.08879101416735873,
+    "offense_lower": -0.0382183596292677,
+    "offense_upper": 0.30260824614884496
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.13086734113451587,
+    "offense_std": 0.09288549863093529,
+    "offense_lower": -0.05218449731865711,
+    "offense_upper": 0.31008827603287464
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.12579008812691664,
+    "offense_std": 0.11234839428738645,
+    "offense_lower": -0.09678116892447555,
+    "offense_upper": 0.34361015700691283
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.11346891343499375,
+    "offense_std": 0.11762027492098634,
+    "offense_lower": -0.12312774380793846,
+    "offense_upper": 0.3374088596021922
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.0934077715207729,
+    "offense_std": 0.10211289598585377,
+    "offense_lower": -0.10547711168769174,
+    "offense_upper": 0.30142157209212295
+  },
+  {
+    "team": "Scotland",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.09227908128275733,
+    "offense_std": 0.07632886529389425,
+    "offense_lower": -0.06373435521975078,
+    "offense_upper": 0.23751243788830728
+  },
+  {
+    "team": "England",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.06992255666220648,
+    "offense_std": 0.08358404784221632,
+    "offense_lower": -0.0920020988747441,
+    "offense_upper": 0.23294611775225177
+  },
+  {
+    "team": "Ireland",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.069052751056339,
+    "offense_std": 0.0891810463108524,
+    "offense_lower": -0.10780982505977846,
+    "offense_upper": 0.2494174561698132
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.06418945000354691,
+    "offense_std": 0.06820389982695618,
+    "offense_lower": -0.06663984018470939,
+    "offense_upper": 0.20351975210735793
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.05816419973734142,
+    "offense_std": 0.11476202415029255,
+    "offense_lower": -0.15959373490009598,
+    "offense_upper": 0.29790627275135717
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.04133178938126095,
+    "offense_std": 0.10426369580805503,
+    "offense_lower": -0.16334498309865692,
+    "offense_upper": 0.2473272723481699
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.03512612543471505,
+    "offense_std": 0.11184528418225732,
+    "offense_lower": -0.18761712458442903,
+    "offense_upper": 0.24710859285925318
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.03479214232634149,
+    "offense_std": 0.1038226328408817,
+    "offense_lower": -0.17020819130801826,
+    "offense_upper": 0.24682914781246723
+  },
+  {
+    "team": "Dax",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.029773936645001334,
+    "offense_std": 0.06546325044171762,
+    "offense_lower": -0.09989292817479081,
+    "offense_upper": 0.15741181237598664
+  },
+  {
+    "team": "Saracens",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.02639005866137434,
+    "offense_std": 0.1087083374890232,
+    "offense_lower": -0.1820813308279704,
+    "offense_upper": 0.24268970881432939
+  },
+  {
+    "team": "Blackheath",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.02267645501322121,
+    "offense_std": 0.09018475757335935,
+    "offense_lower": -0.1566243202523447,
+    "offense_upper": 0.19817063228143947
+  },
+  {
+    "team": "Scarlets",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.021932863205644495,
+    "offense_std": 0.11538201191542213,
+    "offense_lower": -0.21337711504087278,
+    "offense_upper": 0.24518179726891304
+  },
+  {
+    "team": "France",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.018903576150706237,
+    "offense_std": 0.0679536897774741,
+    "offense_lower": -0.10608383398374842,
+    "offense_upper": 0.1527987969649154
+  },
+  {
+    "team": "Colomiers",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.014079862957645812,
+    "offense_std": 0.08008226638949335,
+    "offense_lower": -0.1403089844658598,
+    "offense_upper": 0.1726207203254514
+  },
+  {
+    "team": "Agen",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.013182658503707815,
+    "offense_std": 0.07565902155119475,
+    "offense_lower": -0.1369204567511945,
+    "offense_upper": 0.1577036019089398
+  },
+  {
+    "team": "Pau",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.011100881606137435,
+    "offense_std": 0.06182073536560784,
+    "offense_lower": -0.11293717064592966,
+    "offense_upper": 0.1322696218224554
+  },
+  {
+    "team": "Bayonne",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.009996911789810508,
+    "offense_std": 0.07289912041277763,
+    "offense_lower": -0.13457327033204675,
+    "offense_upper": 0.1479196520907304
+  },
+  {
+    "team": "Beziers",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.009718493357040387,
+    "offense_std": 0.09570663656438202,
+    "offense_lower": -0.17068216394605623,
+    "offense_upper": 0.19335830662213366
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": 0.0013443226129569638,
+    "offense_std": 0.10795677847153298,
+    "offense_lower": -0.22058597599575794,
+    "offense_upper": 0.2061579572368212
+  },
+  {
+    "team": "Perpignan",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": -0.014841047728962083,
+    "offense_std": 0.07391949506275354,
+    "offense_lower": -0.15780424473812113,
+    "offense_upper": 0.1334151987108977
+  },
+  {
+    "team": "Narbonne",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": -0.026995328668541606,
+    "offense_std": 0.0805459757370458,
+    "offense_lower": -0.1874331258514056,
+    "offense_upper": 0.1335811092601935
+  },
+  {
+    "team": "Hartpury",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": -0.029617506152098582,
+    "offense_std": 0.0963509647639788,
+    "offense_lower": -0.22847633792802838,
+    "offense_upper": 0.15582428084359437
+  },
+  {
+    "team": "Nissa Rugby",
+    "season": "2026-2027",
+    "score_type": "tries",
+    "offense_mean": -0.031120980359732982,
+    "offense_std": 0.08957269872191657,
+    "offense_lower": -0.19980395405207443,
+    "offense_upper": 0.14565561539940688
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.004899789924409735,
+    "offense_std": 0.0053240194607004085,
+    "offense_lower": 0.0005791381621633104,
+    "offense_upper": 0.019375098821680026
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0044972960010047636,
+    "offense_std": 0.005434057035781266,
+    "offense_lower": 0.0005002671872370839,
+    "offense_upper": 0.018593360332253287
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.004299827026197684,
+    "offense_std": 0.004990843897472558,
+    "offense_lower": 0.0004808654230629877,
+    "offense_upper": 0.015946608243062755
+  },
+  {
+    "team": "Coventry",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.003910291952664776,
+    "offense_std": 0.004399515369045699,
+    "offense_lower": 0.00045415252890323613,
+    "offense_upper": 0.015412931174835017
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.003849678599194591,
+    "offense_std": 0.004467261124624936,
+    "offense_lower": 0.0004263818167849638,
+    "offense_upper": 0.01468265967860816
+  },
+  {
+    "team": "Ampthill",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0034203233463236753,
+    "offense_std": 0.004162702000240923,
+    "offense_lower": 0.0003393688958830871,
+    "offense_upper": 0.012831107254577636
+  },
+  {
+    "team": "Caldy",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0034043750637283697,
+    "offense_std": 0.004102475515270437,
+    "offense_lower": 0.00032205937559888227,
+    "offense_upper": 0.013108468603928083
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.003363872155363522,
+    "offense_std": 0.004138772258644898,
+    "offense_lower": 0.0003003168591379727,
+    "offense_upper": 0.012486280473622324
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0033148387341536056,
+    "offense_std": 0.0038425110981935495,
+    "offense_lower": 0.0002977706789553586,
+    "offense_upper": 0.01447892094553416
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0031888137584902892,
+    "offense_std": 0.0038776952925242956,
+    "offense_lower": 0.00024689258022968783,
+    "offense_upper": 0.013425259481973099
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0031071650371438334,
+    "offense_std": 0.0038059572739722325,
+    "offense_lower": 0.0002523172759268579,
+    "offense_upper": 0.012999336535581643
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0024558703654660135,
+    "offense_std": 0.002989686550350985,
+    "offense_lower": 0.00016553989803066722,
+    "offense_upper": 0.00966900169691926
+  },
+  {
+    "team": "Toulouse",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.002419447369789087,
+    "offense_std": 0.002921258377719932,
+    "offense_lower": 0.00018374021807334302,
+    "offense_upper": 0.010510339540960683
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0023792120591770594,
+    "offense_std": 0.003060625954321353,
+    "offense_lower": -1.0052304967868346e-05,
+    "offense_upper": 0.010261536634107114
+  },
+  {
+    "team": "Ospreys",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.002361331957361494,
+    "offense_std": 0.0034514295446307335,
+    "offense_lower": -0.00019553672112337955,
+    "offense_upper": 0.010844411183300616
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0022916783690127996,
+    "offense_std": 0.0027982048769420245,
+    "offense_lower": 0.00019754477606847372,
+    "offense_upper": 0.00910283941163508
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0020863263852025716,
+    "offense_std": 0.002725234178579793,
+    "offense_lower": -3.721166795221415e-05,
+    "offense_upper": 0.009286691919445235
+  },
+  {
+    "team": "Richmond",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0020240212386493954,
+    "offense_std": 0.0029577801729607964,
+    "offense_lower": -0.00021026162036019572,
+    "offense_upper": 0.009725122234070016
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0020232585187854426,
+    "offense_std": 0.002839913310007144,
+    "offense_lower": -0.000361375444636751,
+    "offense_upper": 0.009124116678900826
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0020209206806471895,
+    "offense_std": 0.0029090047573152866,
+    "offense_lower": -0.0003217508563885802,
+    "offense_upper": 0.008899342027022056
+  },
+  {
+    "team": "Aurillac",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0018865025983541013,
+    "offense_std": 0.002520523513484,
+    "offense_lower": 8.75574564740397e-05,
+    "offense_upper": 0.008086864728666265
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.001803629689043894,
+    "offense_std": 0.0028042781288356365,
+    "offense_lower": -0.0004609301425107721,
+    "offense_upper": 0.008359289165705979
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.001644071899017128,
+    "offense_std": 0.0025658517364825985,
+    "offense_lower": -0.00045628718102340806,
+    "offense_upper": 0.008272681341811318
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0015900928716594742,
+    "offense_std": 0.0023005413845760985,
+    "offense_lower": -0.0004285617194846736,
+    "offense_upper": 0.007243875695290303
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0015894603131033469,
+    "offense_std": 0.0026721224052696896,
+    "offense_lower": -0.001058699671034339,
+    "offense_upper": 0.00831104108001609
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00142346436848103,
+    "offense_std": 0.0027712054821527514,
+    "offense_lower": -0.0015800693994989586,
+    "offense_upper": 0.00780775619294032
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0011738327258206628,
+    "offense_std": 0.0022516919818799594,
+    "offense_lower": -0.0012338571997393992,
+    "offense_upper": 0.006738990733103868
+  },
+  {
+    "team": "Scotland",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.001166000456072341,
+    "offense_std": 0.001915879901828202,
+    "offense_lower": -0.000661975862749472,
+    "offense_upper": 0.005778866148027939
+  },
+  {
+    "team": "England",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0008826355622564685,
+    "offense_std": 0.0017661803283459915,
+    "offense_lower": -0.0013483624061849631,
+    "offense_upper": 0.005353860247441633
+  },
+  {
+    "team": "Ireland",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0008482762231095962,
+    "offense_std": 0.001997615989880857,
+    "offense_lower": -0.0013952235643062388,
+    "offense_upper": 0.004947254008587589
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0007942752594006812,
+    "offense_std": 0.0015861053024880888,
+    "offense_lower": -0.0007464769111359747,
+    "offense_upper": 0.00413987696388508
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0007204624785083105,
+    "offense_std": 0.0021970473257811713,
+    "offense_lower": -0.0024814592431432365,
+    "offense_upper": 0.006126703447195087
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0004968960923492105,
+    "offense_std": 0.0018916004502350088,
+    "offense_lower": -0.002279267415442289,
+    "offense_upper": 0.004612782202798459
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.000477278336405784,
+    "offense_std": 0.002250283198539002,
+    "offense_lower": -0.0029438847330291616,
+    "offense_upper": 0.004931341868256577
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0004342520520291446,
+    "offense_std": 0.0019130002394464748,
+    "offense_lower": -0.002755756955300371,
+    "offense_upper": 0.004222953978221192
+  },
+  {
+    "team": "Dax",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00039088513065372877,
+    "offense_std": 0.0013174292966497045,
+    "offense_lower": -0.0014309190450479887,
+    "offense_upper": 0.0031376351798574165
+  },
+  {
+    "team": "Saracens",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00034073365719851557,
+    "offense_std": 0.0021843051733731,
+    "offense_lower": -0.003076995747705127,
+    "offense_upper": 0.004631308641595152
+  },
+  {
+    "team": "Blackheath",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0002936156127632388,
+    "offense_std": 0.0016662399553977853,
+    "offense_lower": -0.002272843170623274,
+    "offense_upper": 0.0035961616904965684
+  },
+  {
+    "team": "Scarlets",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0002757192270914297,
+    "offense_std": 0.002338084293518735,
+    "offense_lower": -0.0033408040837372426,
+    "offense_upper": 0.004312166030331745
+  },
+  {
+    "team": "France",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00025636568473864295,
+    "offense_std": 0.0013551430106755631,
+    "offense_lower": -0.0018740493176366713,
+    "offense_upper": 0.00300387701831635
+  },
+  {
+    "team": "Pau",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0001503278504075765,
+    "offense_std": 0.001082234061187946,
+    "offense_lower": -0.0015688481728622083,
+    "offense_upper": 0.0024589321643897597
+  },
+  {
+    "team": "Colomiers",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00014655170810685896,
+    "offense_std": 0.0015432378257691458,
+    "offense_lower": -0.002422775376400704,
+    "offense_upper": 0.003454294660213245
+  },
+  {
+    "team": "Agen",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.0001404464055518616,
+    "offense_std": 0.0013306045422360495,
+    "offense_lower": -0.002421085526569908,
+    "offense_upper": 0.0027933722587320134
+  },
+  {
+    "team": "Bayonne",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 0.00013099637197603114,
+    "offense_std": 0.0012525655770666284,
+    "offense_lower": -0.0021256798767681994,
+    "offense_upper": 0.0029244311158541313
+  },
+  {
+    "team": "Beziers",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 3.9156255538992685e-05,
+    "offense_std": 0.0016835113121792611,
+    "offense_lower": -0.003582074326273969,
+    "offense_upper": 0.0032867179459171603
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": 3.9023715032272475e-05,
+    "offense_std": 0.001921929594616463,
+    "offense_lower": -0.0037477477549692443,
+    "offense_upper": 0.0037458085776978806
+  },
+  {
+    "team": "Perpignan",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": -0.00016248414850726121,
+    "offense_std": 0.001299454663103143,
+    "offense_lower": -0.0029699756715284215,
+    "offense_upper": 0.0021250133873914395
+  },
+  {
+    "team": "Narbonne",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": -0.00034473393089585607,
+    "offense_std": 0.0015289416770183687,
+    "offense_lower": -0.003503694565533496,
+    "offense_upper": 0.0018909277283081134
+  },
+  {
+    "team": "Hartpury",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": -0.00035989615367628774,
+    "offense_std": 0.001825582473932462,
+    "offense_lower": -0.004405299573041595,
+    "offense_upper": 0.00247482631790965
+  },
+  {
+    "team": "Nissa Rugby",
+    "season": "2026-2027",
+    "score_type": "penalties",
+    "offense_mean": -0.00040124016901511974,
+    "offense_std": 0.0015973476070969945,
+    "offense_lower": -0.004366891211460815,
+    "offense_upper": 0.0021279539971833378
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 1.2623912493403662,
+    "offense_std": 0.22790986077875502,
+    "offense_lower": 0.8161937897953615,
+    "offense_upper": 1.7126363669423708
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 1.1491299361055158,
+    "offense_std": 0.3025142622131602,
+    "offense_lower": 0.5697861075691687,
+    "offense_upper": 1.774798922890218
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 1.1061470810748775,
+    "offense_std": 0.2608841959863401,
+    "offense_lower": 0.5734001656556884,
+    "offense_upper": 1.6185531802170674
+  },
+  {
+    "team": "Coventry",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 1.0061575724050023,
+    "offense_std": 0.22676010197313062,
+    "offense_lower": 0.5707984879980593,
+    "offense_upper": 1.436978084726486
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.9861645258594139,
+    "offense_std": 0.2526482722053528,
+    "offense_lower": 0.4969521380732484,
+    "offense_upper": 1.4958305133142502
+  },
+  {
+    "team": "Caldy",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.8740177940270971,
+    "offense_std": 0.27614361721113617,
+    "offense_lower": 0.3655596851494626,
+    "offense_upper": 1.4294696620631844
+  },
+  {
+    "team": "Ampthill",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.8722675959765105,
+    "offense_std": 0.2681804288583919,
+    "offense_lower": 0.3519745209355376,
+    "offense_upper": 1.4154769821421682
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.8677874782419193,
+    "offense_std": 0.28399830897295625,
+    "offense_lower": 0.3138403338476454,
+    "offense_upper": 1.4316079397051116
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.8545832093477189,
+    "offense_std": 0.28073963694859144,
+    "offense_lower": 0.32293232755400664,
+    "offense_upper": 1.409732822932385
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.8152775728686015,
+    "offense_std": 0.29936221950782155,
+    "offense_lower": 0.2267953202646504,
+    "offense_upper": 1.4000546575210449
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.7956836586882758,
+    "offense_std": 0.2870380935932946,
+    "offense_lower": 0.2314514716599696,
+    "offense_upper": 1.3477514600867384
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.6312885553727076,
+    "offense_std": 0.24861652908466111,
+    "offense_lower": 0.15513194933290977,
+    "offense_upper": 1.1179712364366652
+  },
+  {
+    "team": "Toulouse",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.6291514004541559,
+    "offense_std": 0.24345348469657407,
+    "offense_lower": 0.15186879816990953,
+    "offense_upper": 1.1216499769446282
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.608153007846046,
+    "offense_std": 0.31760166734252365,
+    "offense_lower": -0.005227223364551504,
+    "offense_upper": 1.2238059076389431
+  },
+  {
+    "team": "Ospreys",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.6043545751930631,
+    "offense_std": 0.3561635245543524,
+    "offense_lower": -0.09389702952759214,
+    "offense_upper": 1.2899629990310295
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.5819864098971816,
+    "offense_std": 0.2005979638625252,
+    "offense_lower": 0.18999111212160502,
+    "offense_upper": 0.9871476131060747
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.5318062092218386,
+    "offense_std": 0.27767999218615697,
+    "offense_lower": -0.026405547721015638,
+    "offense_upper": 1.0628583727636314
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.5219490109137787,
+    "offense_std": 0.3465242809826343,
+    "offense_lower": -0.15140661502091093,
+    "offense_upper": 1.2146483397258616
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.5183404817226203,
+    "offense_std": 0.3371447632504161,
+    "offense_lower": -0.14375321163392896,
+    "offense_upper": 1.1841055171971724
+  },
+  {
+    "team": "Richmond",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.5138296953485395,
+    "offense_std": 0.30260586772290177,
+    "offense_lower": -0.09459426193394785,
+    "offense_upper": 1.1147166793873435
+  },
+  {
+    "team": "Aurillac",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.47920413654497535,
+    "offense_std": 0.21781004078879548,
+    "offense_lower": 0.06483855885568905,
+    "offense_upper": 0.9030750351599607
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.45887530747973576,
+    "offense_std": 0.3220633241462776,
+    "offense_lower": -0.18145396555887353,
+    "offense_upper": 1.0801744158042084
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.42418004977712864,
+    "offense_std": 0.28414674065355133,
+    "offense_lower": -0.11847959415631709,
+    "offense_upper": 0.9792808558958119
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.4196403880925865,
+    "offense_std": 0.2981961320410102,
+    "offense_lower": -0.16275352181997604,
+    "offense_upper": 1.005367329955519
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.40387302635434175,
+    "offense_std": 0.36002907580002946,
+    "offense_lower": -0.30912529792820276,
+    "offense_upper": 1.1073684756633917
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.3639973597144617,
+    "offense_std": 0.3755602830597252,
+    "offense_lower": -0.39019684020542394,
+    "offense_upper": 1.0794863175907254
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.299563108277063,
+    "offense_std": 0.32684892763827206,
+    "offense_lower": -0.3368005470869863,
+    "offense_upper": 0.9655632788782738
+  },
+  {
+    "team": "Scotland",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.2957037708909249,
+    "offense_std": 0.2442962913942326,
+    "offense_lower": -0.20755975734025858,
+    "offense_upper": 0.762898251013001
+  },
+  {
+    "team": "England",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.22358641644298471,
+    "offense_std": 0.2673509432103218,
+    "offense_lower": -0.29961747502936503,
+    "offense_upper": 0.7384099240084078
+  },
+  {
+    "team": "Ireland",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.22164472102914776,
+    "offense_std": 0.2852695629096572,
+    "offense_lower": -0.34417443471420883,
+    "offense_upper": 0.8025635340211451
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.205142944549394,
+    "offense_std": 0.21734880331087852,
+    "offense_lower": -0.2179122155505142,
+    "offense_upper": 0.6405541827332231
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.18640492803070677,
+    "offense_std": 0.3674312253770352,
+    "offense_lower": -0.5071971532832288,
+    "offense_upper": 0.9520411420963443
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.13273498492341118,
+    "offense_std": 0.3335335427832974,
+    "offense_lower": -0.5229210378100085,
+    "offense_upper": 0.7886080043953027
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.11187730869813622,
+    "offense_std": 0.35822810886138534,
+    "offense_lower": -0.5786256363158714,
+    "offense_upper": 0.7992856372105968
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.11159842219042006,
+    "offense_std": 0.33374108460629937,
+    "offense_lower": -0.5371742186644965,
+    "offense_upper": 0.7851731907787257
+  },
+  {
+    "team": "Dax",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.09510555262005946,
+    "offense_std": 0.20869408044005655,
+    "offense_lower": -0.32004677646790664,
+    "offense_upper": 0.49884906169834986
+  },
+  {
+    "team": "Saracens",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.0840714696994329,
+    "offense_std": 0.3485173976639903,
+    "offense_lower": -0.5854765500726009,
+    "offense_upper": 0.7606512213485329
+  },
+  {
+    "team": "Blackheath",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.07293062485394297,
+    "offense_std": 0.28829879777905737,
+    "offense_lower": -0.49851214474091443,
+    "offense_upper": 0.642000474958366
+  },
+  {
+    "team": "Scarlets",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.07025853961697637,
+    "offense_std": 0.36983590906911074,
+    "offense_lower": -0.6780938729186922,
+    "offense_upper": 0.7970044013390457
+  },
+  {
+    "team": "France",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.0610770133203435,
+    "offense_std": 0.2169547256644319,
+    "offense_lower": -0.3425523845414107,
+    "offense_upper": 0.4938114946788615
+  },
+  {
+    "team": "Colomiers",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.04492044747323917,
+    "offense_std": 0.2564065465741841,
+    "offense_lower": -0.4544234869026603,
+    "offense_upper": 0.551751544937464
+  },
+  {
+    "team": "Agen",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.0419738076012131,
+    "offense_std": 0.24262642869481835,
+    "offense_lower": -0.44644312961224447,
+    "offense_upper": 0.5113324953011542
+  },
+  {
+    "team": "Pau",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.03551110951886627,
+    "offense_std": 0.1981712873782293,
+    "offense_lower": -0.35882863553617755,
+    "offense_upper": 0.4269642837642478
+  },
+  {
+    "team": "Bayonne",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.032231216515645485,
+    "offense_std": 0.23342248222918097,
+    "offense_lower": -0.4176382027098711,
+    "offense_upper": 0.4719555914391463
+  },
+  {
+    "team": "Beziers",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.031033107250261413,
+    "offense_std": 0.3064835277885444,
+    "offense_lower": -0.5582133851742577,
+    "offense_upper": 0.6077494594153837
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": 0.003615564439428901,
+    "offense_std": 0.34584827644625554,
+    "offense_lower": -0.7074211742580485,
+    "offense_upper": 0.6724033577620552
+  },
+  {
+    "team": "Perpignan",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": -0.04708778499388199,
+    "offense_std": 0.23692951014191843,
+    "offense_lower": -0.5081300189449619,
+    "offense_upper": 0.42956416463487374
+  },
+  {
+    "team": "Narbonne",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": -0.08545941726897151,
+    "offense_std": 0.2574928145734438,
+    "offense_lower": -0.5915344813652506,
+    "offense_upper": 0.44464312082086266
+  },
+  {
+    "team": "Hartpury",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": -0.095193626824333,
+    "offense_std": 0.3092735946141629,
+    "offense_lower": -0.7341693908825532,
+    "offense_upper": 0.4986536656872209
+  },
+  {
+    "team": "Nissa Rugby",
+    "season": "2026-2027",
+    "score_type": "conversions",
+    "offense_mean": -0.09936036706083909,
+    "offense_std": 0.28746255868388765,
+    "offense_lower": -0.6524046955805315,
+    "offense_upper": 0.4648881529141572
+  }
+]

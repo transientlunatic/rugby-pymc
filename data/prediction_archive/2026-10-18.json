@@ -1,0 +1,257 @@
+[
+  {
+    "prediction_id": "2026-10-16T14:15:28_harlequins-vs-vannes_2026-10-18",
+    "prediction_metadata": {
+      "timestamp": "2026-10-16T14:15:28.244498+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-challenge_2026-10-18_Harlequins-vs-Vannes",
+      "competition": "euro-challenge",
+      "season": "2026-2027",
+      "date": "2026-10-18T12:00:00+00:00",
+      "home_team": "Harlequins",
+      "away_team": "Vannes",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Harlequins",
+        "mean": 30.85,
+        "std": 15.310241670202336,
+        "median": 30.0,
+        "ci_lower": 8.0,
+        "ci_upper": 57.049999999999955
+      },
+      "away": {
+        "team": "Vannes",
+        "mean": 21.126,
+        "std": 11.37989999956063,
+        "median": 20.0,
+        "ci_lower": 5.0,
+        "ci_upper": 43.0
+      },
+      "home_win_prob": 0.678,
+      "away_win_prob": 0.31,
+      "draw_prob": 0.012,
+      "predicted_margin": 9.724,
+      "margin_std": 18.84663959436801,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-16T14:15:28_pau-vs-leicester-tigers_2026-10-18",
+    "prediction_metadata": {
+      "timestamp": "2026-10-16T14:15:28.249165+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-champions_2026-10-18_Pau-vs-Leicester Tigers",
+      "competition": "euro-champions",
+      "season": "2026-2027",
+      "date": "2026-10-18T12:00:00+00:00",
+      "home_team": "Pau",
+      "away_team": "Leicester Tigers",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Pau",
+        "mean": 31.436,
+        "std": 15.154072191988528,
+        "median": 30.0,
+        "ci_lower": 9.950000000000003,
+        "ci_upper": 59.049999999999955
+      },
+      "away": {
+        "team": "Leicester Tigers",
+        "mean": 27.944,
+        "std": 14.02015920023735,
+        "median": 26.0,
+        "ci_lower": 7.0,
+        "ci_upper": 53.0
+      },
+      "home_win_prob": 0.554,
+      "away_win_prob": 0.422,
+      "draw_prob": 0.024,
+      "predicted_margin": 3.492,
+      "margin_std": 20.519891227781883,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-16T14:15:28_toulouse-vs-exeter-chiefs_2026-10-18",
+    "prediction_metadata": {
+      "timestamp": "2026-10-16T14:15:28.253908+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-champions_2026-10-18_Toulouse-vs-Exeter Chiefs",
+      "competition": "euro-champions",
+      "season": "2026-2027",
+      "date": "2026-10-18T14:15:00+00:00",
+      "home_team": "Toulouse",
+      "away_team": "Exeter Chiefs",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Toulouse",
+        "mean": 39.366,
+        "std": 18.041508916939293,
+        "median": 38.0,
+        "ci_lower": 14.0,
+        "ci_upper": 73.04999999999995
+      },
+      "away": {
+        "team": "Exeter Chiefs",
+        "mean": 24.086,
+        "std": 12.784936605239777,
+        "median": 22.0,
+        "ci_lower": 5.0,
+        "ci_upper": 47.049999999999955
+      },
+      "home_win_prob": 0.774,
+      "away_win_prob": 0.196,
+      "draw_prob": 0.03,
+      "predicted_margin": 15.28,
+      "margin_std": 22.000036363606313,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-16T14:15:28_castres-vs-benetton-rugby_2026-10-18",
+    "prediction_metadata": {
+      "timestamp": "2026-10-16T14:15:28.258789+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-challenge_2026-10-18_Castres-vs-Benetton Rugby",
+      "competition": "euro-challenge",
+      "season": "2026-2027",
+      "date": "2026-10-18T16:30:00+00:00",
+      "home_team": "Castres",
+      "away_team": "Benetton Rugby",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Castres",
+        "mean": 26.418,
+        "std": 14.434378268564254,
+        "median": 25.0,
+        "ci_lower": 6.0,
+        "ci_upper": 55.0
+      },
+      "away": {
+        "team": "Benetton Rugby",
+        "mean": 22.152,
+        "std": 12.591937738092577,
+        "median": 21.0,
+        "ci_lower": 5.0,
+        "ci_upper": 46.0
+      },
+      "home_win_prob": 0.542,
+      "away_win_prob": 0.424,
+      "draw_prob": 0.034,
+      "predicted_margin": 4.266,
+      "margin_std": 18.97385685621139,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  },
+  {
+    "prediction_id": "2026-10-16T14:15:28_northampton-saints-vs-cardiff-rugby_2026-10-18",
+    "prediction_metadata": {
+      "timestamp": "2026-10-16T14:15:28.263802+00:00",
+      "model_checkpoint": "dashboard_export",
+      "model_version": "standard",
+      "prediction_type": "teams_only",
+      "software_version": "rugby-ranking==0.1.0"
+    },
+    "match_metadata": {
+      "match_id": "euro-champions_2026-10-18_Northampton Saints-vs-Cardiff Rugby",
+      "competition": "euro-champions",
+      "season": "2026-2027",
+      "date": "2026-10-18T16:30:00+00:00",
+      "home_team": "Northampton Saints",
+      "away_team": "Cardiff Rugby",
+      "stadium": null,
+      "round": null
+    },
+    "prediction": {
+      "home": {
+        "team": "Northampton Saints",
+        "mean": 42.246,
+        "std": 19.91887255845571,
+        "median": 41.0,
+        "ci_lower": 14.0,
+        "ci_upper": 77.0
+      },
+      "away": {
+        "team": "Cardiff Rugby",
+        "mean": 27.224,
+        "std": 13.861523148629807,
+        "median": 27.0,
+        "ci_lower": 7.0,
+        "ci_upper": 52.0
+      },
+      "home_win_prob": 0.742,
+      "away_win_prob": 0.236,
+      "draw_prob": 0.022,
+      "predicted_margin": 15.022,
+      "margin_std": 23.70589622857571,
+      "home_season_used": null,
+      "away_season_used": null
+    },
+    "model_inputs": {
+      "season": "2026-2027"
+    },
+    "actual_result": null,
+    "result_updated_at": null,
+    "calibration_metrics": null
+  }
+]

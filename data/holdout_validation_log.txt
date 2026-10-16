@@ -1,0 +1,26 @@
+[14:15:35] Loading Rugby-Data from Rugby-Data (fuzzy_match_names=False)...
+[14:15:53] Recent-seasons slice: years=[np.int64(2024), np.int64(2025), np.int64(2026)], rows=104949, matches=2285, players=5642, teams=138
+[14:15:53] Split: 1942 train matches / 343 test matches (test date range 2026-04-04 13:30:00+00:00 to 2026-10-11 19:05:00+00:00)
+[14:15:53] Building joint model on training data...
+[14:15:54] Fitting VI (ADVI, n=20000)...
+[14:21:57] VI fit done in 362.9s (18.14 ms/iter)
+[14:21:57] Sampling posterior predictive on held-out test rows...
+[14:22:02]   OOS tries        pred_mean=0.1653 obs_mean=0.1877 MACE=0.0224
+[14:22:02]   OOS penalties    pred_mean=0.0555 obs_mean=0.0351 MACE=0.0200
+[14:22:02]   OOS conversions  pred_mean=0.1261 obs_mean=0.1396 MACE=0.0434
+[14:22:02]   OOS drop_goals   pred_mean=0.0016 obs_mean=0.0002 MACE=0.0020
+[14:22:02] Building match-level test set and running teams-only predictions...
+[14:22:02]   343 test matches with recorded scores
+[14:22:02]   prediction failed for match japan-league-one_2025-2026_5 (Kobe Steelers vs Kubota Spears, 2025-2026): ValueError: Unknown team: Kobe Steelers (not found in any season). Prior-only predictions not yet implemented.
+[14:22:02]   prediction failed for match pro-d2_2026-2027_0 (Biarritz vs Nissa Rugby, 2026-2027): ValueError: Unknown team: Nissa Rugby (not found in any season). Prior-only predictions not yet implemented.
+[14:22:02]   prediction failed for match pro-d2_2026-2027_3 (Dax vs Narbonne, 2026-2027): ValueError: Unknown team: Narbonne (not found in any season). Prior-only predictions not yet implemented.
+[14:22:02]   prediction failed for match pro-d2_2026-2027_11 (Nissa Rugby vs Beziers, 2026-2027): ValueError: Unknown team: Nissa Rugby (not found in any season). Prior-only predictions not yet implemented.
+[14:22:02]   prediction failed for match pro-d2_2026-2027_13 (Narbonne vs Nevers, 2026-2027): ValueError: Unknown team: Narbonne (not found in any season). Prior-only predictions not yet implemented.
+[14:22:02]   (further prediction failures logged only as a count)
+[14:22:03]   predictions ok=319 failed=24
+[14:22:03]   MODEL   win_accuracy=67.7% brier=0.4191 score_RMSE=13.00 score_MAE=10.35
+[14:22:03]   BASELINE (train-set rates; always predict 'home') win_accuracy=68.8% brier=0.4388 score_RMSE=14.13 (predicting train-set mean score every time)
+[14:22:03] Calibrating Elo baseline on training data...
+[14:22:04]   Elo calibrated: k=32.0, home_advantage=120.0
+[14:22:04]   ELO     win_accuracy=68.8% brier=0.4297 score_RMSE=13.76
+[14:22:04] DONE. Report written to dashboard/data/holdout_validation_report.json. Total wall time 389.5s
