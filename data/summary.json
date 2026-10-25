@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-10-25T07:26:18.463533",
+  "seasons": [
+    "2024-2025",
+    "2025-2026",
+    "2026-2027"
+  ],
+  "total_matches": 2322,
+  "total_teams": 138,
+  "total_players": 5699,
+  "competitions": [
+    "six-nations",
+    "super-rugby",
+    "mid-year-internationals",
+    "npc",
+    "pro-d2",
+    "top14",
+    "celtic",
+    "premiership",
+    "end-of-year-internationals",
+    "euro-challenge",
+    "euro-champions",
+    "championship",
+    "japan-league-one"
+  ],
+  "model_config": {
+    "include_defense": true,
+    "separate_kicking_effect": true,
+    "defense_effect_sd": 0.3
+  }
+}

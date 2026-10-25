@@ -1,0 +1,77 @@
+{
+  "archive_version": "1.0",
+  "created_at": 1792914995.951516,
+  "last_updated": "2026-10-25T07:56:35.956053+00:00",
+  "total_predictions": 50,
+  "predictions_with_results": 0,
+  "competitions": [
+    "celtic",
+    "premiership",
+    "pro-d2",
+    "top14"
+  ],
+  "seasons": [
+    "2026-2027"
+  ],
+  "date_range": {
+    "first_prediction": "2026-10-25T07:56:35.408244+00:00",
+    "last_prediction": "2026-10-25T07:56:35.952952+00:00"
+  },
+  "files": [
+    {
+      "date": "2026-10-25",
+      "count": 2,
+      "file": "2026-10-25.json"
+    },
+    {
+      "date": "2026-10-29",
+      "count": 1,
+      "file": "2026-10-29.json"
+    },
+    {
+      "date": "2026-10-30",
+      "count": 10,
+      "file": "2026-10-30.json"
+    },
+    {
+      "date": "2026-10-31",
+      "count": 16,
+      "file": "2026-10-31.json"
+    },
+    {
+      "date": "2026-11-01",
+      "count": 1,
+      "file": "2026-11-01.json"
+    },
+    {
+      "date": "2026-11-05",
+      "count": 1,
+      "file": "2026-11-05.json"
+    },
+    {
+      "date": "2026-11-06",
+      "count": 7,
+      "file": "2026-11-06.json"
+    },
+    {
+      "date": "2026-11-07",
+      "count": 6,
+      "file": "2026-11-07.json"
+    },
+    {
+      "date": "2026-11-08",
+      "count": 1,
+      "file": "2026-11-08.json"
+    },
+    {
+      "date": "2026-11-19",
+      "count": 1,
+      "file": "2026-11-19.json"
+    },
+    {
+      "date": "2026-11-20",
+      "count": 4,
+      "file": "2026-11-20.json"
+    }
+  ]
+}

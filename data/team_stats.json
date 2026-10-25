@@ -1,0 +1,3192 @@
+[
+  {
+    "team": "France",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 35,
+    "total_penalties": 29,
+    "total_conversions": 31,
+    "total_points": 7889,
+    "avg_points_per_match": 31.181818181818183
+  },
+  {
+    "team": "Ireland",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 38,
+    "total_penalties": 15,
+    "total_conversions": 28,
+    "total_points": 6854,
+    "avg_points_per_match": 27.09090909090909
+  },
+  {
+    "team": "Italy",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 24,
+    "total_penalties": 21,
+    "total_conversions": 17,
+    "total_points": 5612,
+    "avg_points_per_match": 22.181818181818183
+  },
+  {
+    "team": "England",
+    "season": "2024-2025",
+    "matches": 12,
+    "total_tries": 42,
+    "total_penalties": 21,
+    "total_conversions": 29,
+    "total_points": 7820,
+    "avg_points_per_match": 28.333333333333332
+  },
+  {
+    "team": "Scotland",
+    "season": "2024-2025",
+    "matches": 13,
+    "total_tries": 62,
+    "total_penalties": 18,
+    "total_conversions": 48,
+    "total_points": 10833,
+    "avg_points_per_match": 36.23076923076923
+  },
+  {
+    "team": "Wales",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 27,
+    "total_penalties": 6,
+    "total_conversions": 21,
+    "total_points": 5129,
+    "avg_points_per_match": 20.272727272727273
+  },
+  {
+    "team": "Force",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 20,
+    "total_penalties": 13,
+    "total_conversions": 0,
+    "total_points": 3956,
+    "avg_points_per_match": 15.636363636363637
+  },
+  {
+    "team": "Hurricanes",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 52,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 8303,
+    "avg_points_per_match": 32.81818181818182
+  },
+  {
+    "team": "Crusaders",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 42,
+    "total_penalties": 11,
+    "total_conversions": 0,
+    "total_points": 6992,
+    "avg_points_per_match": 27.636363636363637
+  },
+  {
+    "team": "Chiefs",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 49,
+    "total_penalties": 18,
+    "total_conversions": 0,
+    "total_points": 8487,
+    "avg_points_per_match": 33.54545454545455
+  },
+  {
+    "team": "Rebels",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 32,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 5589,
+    "avg_points_per_match": 22.09090909090909
+  },
+  {
+    "team": "Brumbies",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 37,
+    "total_penalties": 16,
+    "total_conversions": 0,
+    "total_points": 7107,
+    "avg_points_per_match": 28.09090909090909
+  },
+  {
+    "team": "Blues",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 53,
+    "total_penalties": 3,
+    "total_conversions": 0,
+    "total_points": 9062,
+    "avg_points_per_match": 35.81818181818182
+  },
+  {
+    "team": "Drua",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 25,
+    "total_penalties": 17,
+    "total_conversions": 0,
+    "total_points": 5520,
+    "avg_points_per_match": 21.818181818181817
+  },
+  {
+    "team": "Highlanders",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 26,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 5129,
+    "avg_points_per_match": 20.272727272727273
+  },
+  {
+    "team": "Moana Pasifika",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 23,
+    "total_penalties": 12,
+    "total_conversions": 0,
+    "total_points": 4554,
+    "avg_points_per_match": 18.0
+  },
+  {
+    "team": "Reds",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 50,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 8142,
+    "avg_points_per_match": 32.18181818181818
+  },
+  {
+    "team": "Waratahs",
+    "season": "2024-2025",
+    "matches": 11,
+    "total_tries": 26,
+    "total_penalties": 13,
+    "total_conversions": 0,
+    "total_points": 4876,
+    "avg_points_per_match": 19.272727272727273
+  },
+  {
+    "team": "",
+    "season": "2024-2025",
+    "matches": 9,
+    "total_tries": 40,
+    "total_penalties": 10,
+    "total_conversions": 25,
+    "total_points": 6810,
+    "avg_points_per_match": 20.333333333333332
+  },
+  {
+    "team": "Japan",
+    "season": "2024-2025",
+    "matches": 7,
+    "total_tries": 18,
+    "total_penalties": 7,
+    "total_conversions": 12,
+    "total_points": 3105,
+    "avg_points_per_match": 19.285714285714285
+  },
+  {
+    "team": "Samoa",
+    "season": "2024-2025",
+    "matches": 2,
+    "total_tries": 8,
+    "total_penalties": 5,
+    "total_conversions": 6,
+    "total_points": 1541,
+    "avg_points_per_match": 33.5
+  },
+  {
+    "team": "Georgia",
+    "season": "2024-2025",
+    "matches": 5,
+    "total_tries": 11,
+    "total_penalties": 9,
+    "total_conversions": 8,
+    "total_points": 2415,
+    "avg_points_per_match": 21.0
+  },
+  {
+    "team": "Romania",
+    "season": "2024-2025",
+    "matches": 5,
+    "total_tries": 13,
+    "total_penalties": 16,
+    "total_conversions": 6,
+    "total_points": 2875,
+    "avg_points_per_match": 25.0
+  },
+  {
+    "team": "United States",
+    "season": "2024-2025",
+    "matches": 5,
+    "total_tries": 15,
+    "total_penalties": 3,
+    "total_conversions": 13,
+    "total_points": 2530,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "Fiji",
+    "season": "2024-2025",
+    "matches": 6,
+    "total_tries": 16,
+    "total_penalties": 7,
+    "total_conversions": 8,
+    "total_points": 2691,
+    "avg_points_per_match": 19.5
+  },
+  {
+    "team": "Chile",
+    "season": "2024-2025",
+    "matches": 3,
+    "total_tries": 10,
+    "total_penalties": 2,
+    "total_conversions": 5,
+    "total_points": 1749,
+    "avg_points_per_match": 25.666666666666668
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2024-2025",
+    "matches": 2,
+    "total_tries": 2,
+    "total_penalties": 0,
+    "total_conversions": 2,
+    "total_points": 172,
+    "avg_points_per_match": 21.5
+  },
+  {
+    "team": "Argentina",
+    "season": "2024-2025",
+    "matches": 6,
+    "total_tries": 28,
+    "total_penalties": 10,
+    "total_conversions": 20,
+    "total_points": 4991,
+    "avg_points_per_match": 36.166666666666664
+  },
+  {
+    "team": "South Africa",
+    "season": "2024-2025",
+    "matches": 6,
+    "total_tries": 25,
+    "total_penalties": 13,
+    "total_conversions": 17,
+    "total_points": 5083,
+    "avg_points_per_match": 36.833333333333336
+  },
+  {
+    "team": "Canada",
+    "season": "2024-2025",
+    "matches": 4,
+    "total_tries": 9,
+    "total_penalties": 8,
+    "total_conversions": 6,
+    "total_points": 2024,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "New Zealand",
+    "season": "2024-2025",
+    "matches": 8,
+    "total_tries": 31,
+    "total_penalties": 19,
+    "total_conversions": 22,
+    "total_points": 5888,
+    "avg_points_per_match": 32.0
+  },
+  {
+    "team": "Australia",
+    "season": "2024-2025",
+    "matches": 7,
+    "total_tries": 28,
+    "total_penalties": 15,
+    "total_conversions": 21,
+    "total_points": 5221,
+    "avg_points_per_match": 32.42857142857143
+  },
+  {
+    "team": "Uruguay",
+    "season": "2024-2025",
+    "matches": 6,
+    "total_tries": 13,
+    "total_penalties": 5,
+    "total_conversions": 11,
+    "total_points": 2737,
+    "avg_points_per_match": 19.833333333333332
+  },
+  {
+    "team": "Tonga",
+    "season": "2024-2025",
+    "matches": 6,
+    "total_tries": 13,
+    "total_penalties": 2,
+    "total_conversions": 8,
+    "total_points": 2001,
+    "avg_points_per_match": 14.5
+  },
+  {
+    "team": "Portugal",
+    "season": "2024-2025",
+    "matches": 4,
+    "total_tries": 12,
+    "total_penalties": 4,
+    "total_conversions": 12,
+    "total_points": 2208,
+    "avg_points_per_match": 24.0
+  },
+  {
+    "team": "Namibia",
+    "season": "2024-2025",
+    "matches": 1,
+    "total_tries": 1,
+    "total_penalties": 5,
+    "total_conversions": 1,
+    "total_points": 506,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "Spain",
+    "season": "2024-2025",
+    "matches": 5,
+    "total_tries": 11,
+    "total_penalties": 17,
+    "total_conversions": 8,
+    "total_points": 3082,
+    "avg_points_per_match": 26.8
+  },
+  {
+    "team": "Queensland Reds",
+    "season": "2024-2025",
+    "matches": 2,
+    "total_tries": 10,
+    "total_penalties": 1,
+    "total_conversions": 8,
+    "total_points": 1748,
+    "avg_points_per_match": 38.0
+  },
+  {
+    "team": "Brazil",
+    "season": "2024-2025",
+    "matches": 1,
+    "total_tries": 0,
+    "total_penalties": 1,
+    "total_conversions": 0,
+    "total_points": 50,
+    "avg_points_per_match": 25.0
+  },
+  {
+    "team": "Counties Manukau",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 37,
+    "total_penalties": 10,
+    "total_conversions": 0,
+    "total_points": 6877,
+    "avg_points_per_match": 29.9
+  },
+  {
+    "team": "Taranaki",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 46,
+    "total_penalties": 11,
+    "total_conversions": 0,
+    "total_points": 7475,
+    "avg_points_per_match": 32.5
+  },
+  {
+    "team": "Auckland",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 34,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 5773,
+    "avg_points_per_match": 25.1
+  },
+  {
+    "team": "Wellington",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 43,
+    "total_penalties": 13,
+    "total_conversions": 0,
+    "total_points": 7153,
+    "avg_points_per_match": 31.1
+  },
+  {
+    "team": "Northland",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 34,
+    "total_penalties": 7,
+    "total_conversions": 0,
+    "total_points": 5750,
+    "avg_points_per_match": 25.0
+  },
+  {
+    "team": "Canterbury",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 39,
+    "total_penalties": 11,
+    "total_conversions": 0,
+    "total_points": 6348,
+    "avg_points_per_match": 27.6
+  },
+  {
+    "team": "Otago",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 28,
+    "total_penalties": 0,
+    "total_conversions": 0,
+    "total_points": 5888,
+    "avg_points_per_match": 25.6
+  },
+  {
+    "team": "Southland",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 37,
+    "total_penalties": 3,
+    "total_conversions": 0,
+    "total_points": 5704,
+    "avg_points_per_match": 24.8
+  },
+  {
+    "team": "Waikato",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 35,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 6900,
+    "avg_points_per_match": 30.0
+  },
+  {
+    "team": "Bay of Plenty",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 48,
+    "total_penalties": 7,
+    "total_conversions": 0,
+    "total_points": 8050,
+    "avg_points_per_match": 35.0
+  },
+  {
+    "team": "Hawke's Bay",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 42,
+    "total_penalties": 5,
+    "total_conversions": 0,
+    "total_points": 6992,
+    "avg_points_per_match": 30.4
+  },
+  {
+    "team": "North Harbour",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 42,
+    "total_penalties": 13,
+    "total_conversions": 0,
+    "total_points": 8441,
+    "avg_points_per_match": 36.7
+  },
+  {
+    "team": "Manawatu",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 31,
+    "total_penalties": 3,
+    "total_conversions": 0,
+    "total_points": 5106,
+    "avg_points_per_match": 22.2
+  },
+  {
+    "team": "Tasman",
+    "season": "2024-2025",
+    "matches": 10,
+    "total_tries": 39,
+    "total_penalties": 21,
+    "total_conversions": 0,
+    "total_points": 7567,
+    "avg_points_per_match": 32.9
+  },
+  {
+    "team": "Brive",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 76,
+    "total_penalties": 44,
+    "total_conversions": 49,
+    "total_points": 14260,
+    "avg_points_per_match": 24.8
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 65,
+    "total_penalties": 51,
+    "total_conversions": 49,
+    "total_points": 13800,
+    "avg_points_per_match": 24.0
+  },
+  {
+    "team": "Beziers",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 71,
+    "total_penalties": 51,
+    "total_conversions": 53,
+    "total_points": 14283,
+    "avg_points_per_match": 24.84
+  },
+  {
+    "team": "Nice",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 51,
+    "total_penalties": 47,
+    "total_conversions": 29,
+    "total_points": 10741,
+    "avg_points_per_match": 18.68
+  },
+  {
+    "team": "Colomiers",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 86,
+    "total_penalties": 54,
+    "total_conversions": 61,
+    "total_points": 16491,
+    "avg_points_per_match": 28.68
+  },
+  {
+    "team": "Mont-de-Marsan",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 64,
+    "total_penalties": 68,
+    "total_conversions": 53,
+    "total_points": 14766,
+    "avg_points_per_match": 25.68
+  },
+  {
+    "team": "Dax",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 57,
+    "total_penalties": 53,
+    "total_conversions": 43,
+    "total_points": 12328,
+    "avg_points_per_match": 21.44
+  },
+  {
+    "team": "Valence-Romans",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 65,
+    "total_penalties": 76,
+    "total_conversions": 50,
+    "total_points": 15387,
+    "avg_points_per_match": 26.76
+  },
+  {
+    "team": "Montauban",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 69,
+    "total_penalties": 53,
+    "total_conversions": 55,
+    "total_points": 15134,
+    "avg_points_per_match": 26.32
+  },
+  {
+    "team": "Biarritz",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 67,
+    "total_penalties": 44,
+    "total_conversions": 46,
+    "total_points": 13340,
+    "avg_points_per_match": 23.2
+  },
+  {
+    "team": "Nevers",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 63,
+    "total_penalties": 49,
+    "total_conversions": 48,
+    "total_points": 12834,
+    "avg_points_per_match": 22.32
+  },
+  {
+    "team": "Soyaux Angouleme",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 79,
+    "total_penalties": 38,
+    "total_conversions": 54,
+    "total_points": 14513,
+    "avg_points_per_match": 25.24
+  },
+  {
+    "team": "Aurillac",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 58,
+    "total_penalties": 51,
+    "total_conversions": 50,
+    "total_points": 12926,
+    "avg_points_per_match": 22.48
+  },
+  {
+    "team": "Grenoble",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 94,
+    "total_penalties": 58,
+    "total_conversions": 74,
+    "total_points": 19044,
+    "avg_points_per_match": 33.12
+  },
+  {
+    "team": "Agen",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 69,
+    "total_penalties": 49,
+    "total_conversions": 52,
+    "total_points": 14030,
+    "avg_points_per_match": 24.4
+  },
+  {
+    "team": "Provence",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 79,
+    "total_penalties": 48,
+    "total_conversions": 59,
+    "total_points": 15663,
+    "avg_points_per_match": 27.24
+  },
+  {
+    "team": "Perpignan",
+    "season": "2024-2025",
+    "matches": 31,
+    "total_tries": 53,
+    "total_penalties": 81,
+    "total_conversions": 36,
+    "total_points": 13501,
+    "avg_points_per_match": 18.93548387096774
+  },
+  {
+    "team": "Bayonne",
+    "season": "2024-2025",
+    "matches": 33,
+    "total_tries": 92,
+    "total_penalties": 67,
+    "total_conversions": 65,
+    "total_points": 18952,
+    "avg_points_per_match": 24.96969696969697
+  },
+  {
+    "team": "Montpellier",
+    "season": "2024-2025",
+    "matches": 31,
+    "total_tries": 85,
+    "total_penalties": 64,
+    "total_conversions": 67,
+    "total_points": 17733,
+    "avg_points_per_match": 24.870967741935484
+  },
+  {
+    "team": "Lyon",
+    "season": "2024-2025",
+    "matches": 34,
+    "total_tries": 108,
+    "total_penalties": 69,
+    "total_conversions": 83,
+    "total_points": 21160,
+    "avg_points_per_match": 27.058823529411764
+  },
+  {
+    "team": "Castres",
+    "season": "2024-2025",
+    "matches": 33,
+    "total_tries": 91,
+    "total_penalties": 75,
+    "total_conversions": 63,
+    "total_points": 18607,
+    "avg_points_per_match": 24.515151515151516
+  },
+  {
+    "team": "Racing 92",
+    "season": "2024-2025",
+    "matches": 33,
+    "total_tries": 103,
+    "total_penalties": 67,
+    "total_conversions": 75,
+    "total_points": 20056,
+    "avg_points_per_match": 26.424242424242426
+  },
+  {
+    "team": "Pau",
+    "season": "2024-2025",
+    "matches": 31,
+    "total_tries": 86,
+    "total_penalties": 72,
+    "total_conversions": 71,
+    "total_points": 18975,
+    "avg_points_per_match": 26.612903225806452
+  },
+  {
+    "team": "Clermont",
+    "season": "2024-2025",
+    "matches": 32,
+    "total_tries": 94,
+    "total_penalties": 43,
+    "total_conversions": 71,
+    "total_points": 18170,
+    "avg_points_per_match": 24.6875
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2024-2025",
+    "matches": 36,
+    "total_tries": 158,
+    "total_penalties": 58,
+    "total_conversions": 113,
+    "total_points": 27692,
+    "avg_points_per_match": 33.44444444444444
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2024-2025",
+    "matches": 30,
+    "total_tries": 74,
+    "total_penalties": 58,
+    "total_conversions": 58,
+    "total_points": 15479,
+    "avg_points_per_match": 22.433333333333334
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2024-2025",
+    "matches": 31,
+    "total_tries": 87,
+    "total_penalties": 51,
+    "total_conversions": 62,
+    "total_points": 16997,
+    "avg_points_per_match": 23.838709677419356
+  },
+  {
+    "team": "Toulon",
+    "season": "2024-2025",
+    "matches": 34,
+    "total_tries": 109,
+    "total_penalties": 66,
+    "total_conversions": 92,
+    "total_points": 21620,
+    "avg_points_per_match": 27.647058823529413
+  },
+  {
+    "team": "Toulouse",
+    "season": "2024-2025",
+    "matches": 35,
+    "total_tries": 162,
+    "total_penalties": 56,
+    "total_conversions": 131,
+    "total_points": 29072,
+    "avg_points_per_match": 36.114285714285714
+  },
+  {
+    "team": "Vannes",
+    "season": "2024-2025",
+    "matches": 30,
+    "total_tries": 89,
+    "total_penalties": 55,
+    "total_conversions": 78,
+    "total_points": 17848,
+    "avg_points_per_match": 25.866666666666667
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2024-2025",
+    "matches": 26,
+    "total_tries": 99,
+    "total_penalties": 21,
+    "total_conversions": 74,
+    "total_points": 16399,
+    "avg_points_per_match": 27.423076923076923
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2024-2025",
+    "matches": 28,
+    "total_tries": 126,
+    "total_penalties": 22,
+    "total_conversions": 87,
+    "total_points": 20815,
+    "avg_points_per_match": 32.32142857142857
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2024-2025",
+    "matches": 22,
+    "total_tries": 48,
+    "total_penalties": 20,
+    "total_conversions": 33,
+    "total_points": 8556,
+    "avg_points_per_match": 16.90909090909091
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 75,
+    "total_penalties": 9,
+    "total_conversions": 45,
+    "total_points": 11960,
+    "avg_points_per_match": 22.608695652173914
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2024-2025",
+    "matches": 27,
+    "total_tries": 132,
+    "total_penalties": 17,
+    "total_conversions": 108,
+    "total_points": 21643,
+    "avg_points_per_match": 34.851851851851855
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2024-2025",
+    "matches": 26,
+    "total_tries": 107,
+    "total_penalties": 23,
+    "total_conversions": 79,
+    "total_points": 17917,
+    "avg_points_per_match": 29.96153846153846
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2024-2025",
+    "matches": 22,
+    "total_tries": 47,
+    "total_penalties": 11,
+    "total_conversions": 38,
+    "total_points": 7981,
+    "avg_points_per_match": 15.772727272727273
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2024-2025",
+    "matches": 24,
+    "total_tries": 109,
+    "total_penalties": 11,
+    "total_conversions": 80,
+    "total_points": 17135,
+    "avg_points_per_match": 31.041666666666668
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2024-2025",
+    "matches": 22,
+    "total_tries": 51,
+    "total_penalties": 23,
+    "total_conversions": 36,
+    "total_points": 9108,
+    "avg_points_per_match": 18.0
+  },
+  {
+    "team": "Ospreys",
+    "season": "2024-2025",
+    "matches": 24,
+    "total_tries": 83,
+    "total_penalties": 20,
+    "total_conversions": 57,
+    "total_points": 13846,
+    "avg_points_per_match": 25.083333333333332
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2024-2025",
+    "matches": 21,
+    "total_tries": 66,
+    "total_penalties": 12,
+    "total_conversions": 48,
+    "total_points": 10626,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 100,
+    "total_penalties": 21,
+    "total_conversions": 76,
+    "total_points": 16744,
+    "avg_points_per_match": 29.12
+  },
+  {
+    "team": "Saracens",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 91,
+    "total_penalties": 27,
+    "total_conversions": 58,
+    "total_points": 15065,
+    "avg_points_per_match": 28.47826086956522
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2024-2025",
+    "matches": 24,
+    "total_tries": 99,
+    "total_penalties": 5,
+    "total_conversions": 66,
+    "total_points": 14927,
+    "avg_points_per_match": 27.041666666666668
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2024-2025",
+    "matches": 26,
+    "total_tries": 91,
+    "total_penalties": 15,
+    "total_conversions": 58,
+    "total_points": 14766,
+    "avg_points_per_match": 24.692307692307693
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 100,
+    "total_penalties": 12,
+    "total_conversions": 67,
+    "total_points": 15571,
+    "avg_points_per_match": 29.434782608695652
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 65,
+    "total_penalties": 31,
+    "total_conversions": 44,
+    "total_points": 11799,
+    "avg_points_per_match": 22.304347826086957
+  },
+  {
+    "team": "Scarlets",
+    "season": "2024-2025",
+    "matches": 24,
+    "total_tries": 67,
+    "total_penalties": 37,
+    "total_conversions": 50,
+    "total_points": 12857,
+    "avg_points_per_match": 23.291666666666668
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2024-2025",
+    "matches": 26,
+    "total_tries": 98,
+    "total_penalties": 5,
+    "total_conversions": 75,
+    "total_points": 15387,
+    "avg_points_per_match": 25.73076923076923
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2024-2025",
+    "matches": 22,
+    "total_tries": 69,
+    "total_penalties": 14,
+    "total_conversions": 47,
+    "total_points": 11385,
+    "avg_points_per_match": 22.5
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2024-2025",
+    "matches": 24,
+    "total_tries": 81,
+    "total_penalties": 34,
+    "total_conversions": 55,
+    "total_points": 14743,
+    "avg_points_per_match": 26.708333333333332
+  },
+  {
+    "team": "Harlequins",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 76,
+    "total_penalties": 16,
+    "total_conversions": 60,
+    "total_points": 12604,
+    "avg_points_per_match": 23.82608695652174
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 72,
+    "total_penalties": 25,
+    "total_conversions": 47,
+    "total_points": 12328,
+    "avg_points_per_match": 23.304347826086957
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2024-2025",
+    "matches": 27,
+    "total_tries": 98,
+    "total_penalties": 33,
+    "total_conversions": 75,
+    "total_points": 17480,
+    "avg_points_per_match": 28.14814814814815
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2024-2025",
+    "matches": 25,
+    "total_tries": 72,
+    "total_penalties": 29,
+    "total_conversions": 58,
+    "total_points": 13110,
+    "avg_points_per_match": 22.8
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2024-2025",
+    "matches": 23,
+    "total_tries": 79,
+    "total_penalties": 28,
+    "total_conversions": 55,
+    "total_points": 14191,
+    "avg_points_per_match": 26.82608695652174
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2024-2025",
+    "matches": 1,
+    "total_tries": 6,
+    "total_penalties": 0,
+    "total_conversions": 4,
+    "total_points": 874,
+    "avg_points_per_match": 38.0
+  },
+  {
+    "team": "Black Lion",
+    "season": "2024-2025",
+    "matches": 4,
+    "total_tries": 6,
+    "total_penalties": 11,
+    "total_conversions": 4,
+    "total_points": 1633,
+    "avg_points_per_match": 17.75
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2024-2025",
+    "matches": 4,
+    "total_tries": 10,
+    "total_penalties": 3,
+    "total_conversions": 7,
+    "total_points": 1679,
+    "avg_points_per_match": 18.25
+  },
+  {
+    "team": "Wales",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 25,
+    "total_penalties": 6,
+    "total_conversions": 20,
+    "total_points": 4692,
+    "avg_points_per_match": 18.545454545454547
+  },
+  {
+    "team": "France",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 49,
+    "total_penalties": 18,
+    "total_conversions": 39,
+    "total_points": 8740,
+    "avg_points_per_match": 34.54545454545455
+  },
+  {
+    "team": "Italy",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 30,
+    "total_penalties": 21,
+    "total_conversions": 25,
+    "total_points": 6371,
+    "avg_points_per_match": 25.181818181818183
+  },
+  {
+    "team": "Scotland",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 51,
+    "total_penalties": 7,
+    "total_conversions": 38,
+    "total_points": 8096,
+    "avg_points_per_match": 32.0
+  },
+  {
+    "team": "England",
+    "season": "2025-2026",
+    "matches": 12,
+    "total_tries": 55,
+    "total_penalties": 10,
+    "total_conversions": 41,
+    "total_points": 9177,
+    "avg_points_per_match": 33.25
+  },
+  {
+    "team": "Ireland",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 50,
+    "total_penalties": 18,
+    "total_conversions": 37,
+    "total_points": 8924,
+    "avg_points_per_match": 35.27272727272727
+  },
+  {
+    "team": "Hurricanes",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 52,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 8372,
+    "avg_points_per_match": 33.09090909090909
+  },
+  {
+    "team": "Crusaders",
+    "season": "2025-2026",
+    "matches": 12,
+    "total_tries": 55,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 8579,
+    "avg_points_per_match": 31.083333333333332
+  },
+  {
+    "team": "Highlanders",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 33,
+    "total_penalties": 13,
+    "total_conversions": 0,
+    "total_points": 6279,
+    "avg_points_per_match": 24.818181818181817
+  },
+  {
+    "team": "Waratahs",
+    "season": "2025-2026",
+    "matches": 12,
+    "total_tries": 38,
+    "total_penalties": 5,
+    "total_conversions": 0,
+    "total_points": 6279,
+    "avg_points_per_match": 22.75
+  },
+  {
+    "team": "Drua",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 30,
+    "total_penalties": 11,
+    "total_conversions": 0,
+    "total_points": 5911,
+    "avg_points_per_match": 23.363636363636363
+  },
+  {
+    "team": "Brumbies",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 49,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 7981,
+    "avg_points_per_match": 31.545454545454547
+  },
+  {
+    "team": "Moana Pasifika",
+    "season": "2025-2026",
+    "matches": 12,
+    "total_tries": 40,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 7866,
+    "avg_points_per_match": 28.5
+  },
+  {
+    "team": "Force",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 41,
+    "total_penalties": 4,
+    "total_conversions": 0,
+    "total_points": 6417,
+    "avg_points_per_match": 25.363636363636363
+  },
+  {
+    "team": "Blues",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 38,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 6716,
+    "avg_points_per_match": 26.545454545454547
+  },
+  {
+    "team": "Chiefs",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 56,
+    "total_penalties": 14,
+    "total_conversions": 0,
+    "total_points": 9499,
+    "avg_points_per_match": 37.54545454545455
+  },
+  {
+    "team": "Reds",
+    "season": "2025-2026",
+    "matches": 11,
+    "total_tries": 49,
+    "total_penalties": 2,
+    "total_conversions": 0,
+    "total_points": 7521,
+    "avg_points_per_match": 29.727272727272727
+  },
+  {
+    "team": "23px",
+    "season": "2025-2026",
+    "matches": 4,
+    "total_tries": 12,
+    "total_penalties": 3,
+    "total_conversions": 8,
+    "total_points": 2116,
+    "avg_points_per_match": 23.0
+  },
+  {
+    "team": "Argentina",
+    "season": "2025-2026",
+    "matches": 7,
+    "total_tries": 28,
+    "total_penalties": 8,
+    "total_conversions": 23,
+    "total_points": 4991,
+    "avg_points_per_match": 31.0
+  },
+  {
+    "team": "",
+    "season": "2025-2026",
+    "matches": 2,
+    "total_tries": 16,
+    "total_penalties": 1,
+    "total_conversions": 11,
+    "total_points": 2415,
+    "avg_points_per_match": 27.5
+  },
+  {
+    "team": "Namibia",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 0,
+    "total_penalties": 2,
+    "total_conversions": 0,
+    "total_points": 138,
+    "avg_points_per_match": 6.0
+  },
+  {
+    "team": "South Africa",
+    "season": "2025-2026",
+    "matches": 9,
+    "total_tries": 58,
+    "total_penalties": 5,
+    "total_conversions": 44,
+    "total_points": 9614,
+    "avg_points_per_match": 46.44444444444444
+  },
+  {
+    "team": "Barbarians",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 1,
+    "total_penalties": 0,
+    "total_conversions": 1,
+    "total_points": 161,
+    "avg_points_per_match": 7.0
+  },
+  {
+    "team": "Japan",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 10,
+    "total_penalties": 2,
+    "total_conversions": 9,
+    "total_points": 1978,
+    "avg_points_per_match": 17.2
+  },
+  {
+    "team": "Chile",
+    "season": "2025-2026",
+    "matches": 2,
+    "total_tries": 8,
+    "total_penalties": 3,
+    "total_conversions": 5,
+    "total_points": 1357,
+    "avg_points_per_match": 29.5
+  },
+  {
+    "team": "Romania",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 9,
+    "total_penalties": 10,
+    "total_conversions": 6,
+    "total_points": 2162,
+    "avg_points_per_match": 18.8
+  },
+  {
+    "team": "New Zealand",
+    "season": "2025-2026",
+    "matches": 7,
+    "total_tries": 31,
+    "total_penalties": 6,
+    "total_conversions": 25,
+    "total_points": 5175,
+    "avg_points_per_match": 32.142857142857146
+  },
+  {
+    "team": "Georgia",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 13,
+    "total_penalties": 5,
+    "total_conversions": 11,
+    "total_points": 2737,
+    "avg_points_per_match": 23.8
+  },
+  {
+    "team": "Fiji",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 16,
+    "total_penalties": 6,
+    "total_conversions": 11,
+    "total_points": 2921,
+    "avg_points_per_match": 25.4
+  },
+  {
+    "team": "Australia",
+    "season": "2025-2026",
+    "matches": 9,
+    "total_tries": 27,
+    "total_penalties": 4,
+    "total_conversions": 17,
+    "total_points": 4255,
+    "avg_points_per_match": 20.555555555555557
+  },
+  {
+    "team": "Uruguay",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 23,
+    "total_penalties": 6,
+    "total_conversions": 16,
+    "total_points": 3795,
+    "avg_points_per_match": 33.0
+  },
+  {
+    "team": "Portugal",
+    "season": "2025-2026",
+    "matches": 4,
+    "total_tries": 14,
+    "total_penalties": 6,
+    "total_conversions": 9,
+    "total_points": 2438,
+    "avg_points_per_match": 26.5
+  },
+  {
+    "team": "United States",
+    "season": "2025-2026",
+    "matches": 5,
+    "total_tries": 8,
+    "total_penalties": 8,
+    "total_conversions": 7,
+    "total_points": 1863,
+    "avg_points_per_match": 16.2
+  },
+  {
+    "team": "Spain",
+    "season": "2025-2026",
+    "matches": 3,
+    "total_tries": 9,
+    "total_penalties": 8,
+    "total_conversions": 6,
+    "total_points": 2024,
+    "avg_points_per_match": 29.333333333333332
+  },
+  {
+    "team": "Canada",
+    "season": "2025-2026",
+    "matches": 4,
+    "total_tries": 7,
+    "total_penalties": 9,
+    "total_conversions": 6,
+    "total_points": 2024,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "Samoa",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 2,
+    "total_penalties": 0,
+    "total_conversions": 1,
+    "total_points": 276,
+    "avg_points_per_match": 12.0
+  },
+  {
+    "team": "Auckland",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 31,
+    "total_penalties": 5,
+    "total_conversions": 0,
+    "total_points": 5819,
+    "avg_points_per_match": 25.3
+  },
+  {
+    "team": "Waikato",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 29,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 5382,
+    "avg_points_per_match": 23.4
+  },
+  {
+    "team": "North Harbour",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 21,
+    "total_penalties": 6,
+    "total_conversions": 0,
+    "total_points": 4738,
+    "avg_points_per_match": 20.6
+  },
+  {
+    "team": "Manawatu",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 38,
+    "total_penalties": 2,
+    "total_conversions": 0,
+    "total_points": 5681,
+    "avg_points_per_match": 24.7
+  },
+  {
+    "team": "Canterbury",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 52,
+    "total_penalties": 0,
+    "total_conversions": 0,
+    "total_points": 7498,
+    "avg_points_per_match": 32.6
+  },
+  {
+    "team": "Wellington",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 40,
+    "total_penalties": 5,
+    "total_conversions": 0,
+    "total_points": 7383,
+    "avg_points_per_match": 32.1
+  },
+  {
+    "team": "Otago",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 41,
+    "total_penalties": 0,
+    "total_conversions": 0,
+    "total_points": 7774,
+    "avg_points_per_match": 33.8
+  },
+  {
+    "team": "Southland",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 28,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 4853,
+    "avg_points_per_match": 21.1
+  },
+  {
+    "team": "Northland",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 30,
+    "total_penalties": 8,
+    "total_conversions": 0,
+    "total_points": 5106,
+    "avg_points_per_match": 22.2
+  },
+  {
+    "team": "Taranaki",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 44,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 7314,
+    "avg_points_per_match": 31.8
+  },
+  {
+    "team": "Tasman",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 46,
+    "total_penalties": 2,
+    "total_conversions": 0,
+    "total_points": 7452,
+    "avg_points_per_match": 32.4
+  },
+  {
+    "team": "Bay of Plenty",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 47,
+    "total_penalties": 9,
+    "total_conversions": 0,
+    "total_points": 7360,
+    "avg_points_per_match": 32.0
+  },
+  {
+    "team": "Counties Manukau",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 49,
+    "total_penalties": 5,
+    "total_conversions": 0,
+    "total_points": 7705,
+    "avg_points_per_match": 33.5
+  },
+  {
+    "team": "Hawke's Bay",
+    "season": "2025-2026",
+    "matches": 10,
+    "total_tries": 43,
+    "total_penalties": 4,
+    "total_conversions": 0,
+    "total_points": 7406,
+    "avg_points_per_match": 32.2
+  },
+  {
+    "team": "Beziers",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 61,
+    "total_penalties": 40,
+    "total_conversions": 40,
+    "total_points": 12397,
+    "avg_points_per_match": 21.56
+  },
+  {
+    "team": "Biarritz",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 72,
+    "total_penalties": 50,
+    "total_conversions": 52,
+    "total_points": 14444,
+    "avg_points_per_match": 25.12
+  },
+  {
+    "team": "Valence-Romans",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 71,
+    "total_penalties": 62,
+    "total_conversions": 54,
+    "total_points": 14927,
+    "avg_points_per_match": 25.96
+  },
+  {
+    "team": "Provence",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 91,
+    "total_penalties": 38,
+    "total_conversions": 67,
+    "total_points": 16399,
+    "avg_points_per_match": 28.52
+  },
+  {
+    "team": "Soyaux Angouleme",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 48,
+    "total_penalties": 51,
+    "total_conversions": 36,
+    "total_points": 10994,
+    "avg_points_per_match": 19.12
+  },
+  {
+    "team": "Aurillac",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 69,
+    "total_penalties": 51,
+    "total_conversions": 51,
+    "total_points": 13869,
+    "avg_points_per_match": 24.12
+  },
+  {
+    "team": "Carcassonne",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 50,
+    "total_penalties": 37,
+    "total_conversions": 44,
+    "total_points": 10488,
+    "avg_points_per_match": 18.24
+  },
+  {
+    "team": "Dax",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 67,
+    "total_penalties": 40,
+    "total_conversions": 48,
+    "total_points": 13386,
+    "avg_points_per_match": 23.28
+  },
+  {
+    "team": "Nevers",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 79,
+    "total_penalties": 30,
+    "total_conversions": 60,
+    "total_points": 14214,
+    "avg_points_per_match": 24.72
+  },
+  {
+    "team": "Colomiers",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 86,
+    "total_penalties": 43,
+    "total_conversions": 63,
+    "total_points": 15893,
+    "avg_points_per_match": 27.64
+  },
+  {
+    "team": "Agen",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 77,
+    "total_penalties": 40,
+    "total_conversions": 64,
+    "total_points": 14881,
+    "avg_points_per_match": 25.88
+  },
+  {
+    "team": "Mont-de-Marsan",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 64,
+    "total_penalties": 42,
+    "total_conversions": 54,
+    "total_points": 12949,
+    "avg_points_per_match": 22.52
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 98,
+    "total_penalties": 42,
+    "total_conversions": 78,
+    "total_points": 17917,
+    "avg_points_per_match": 31.16
+  },
+  {
+    "team": "Grenoble",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 72,
+    "total_penalties": 43,
+    "total_conversions": 55,
+    "total_points": 14007,
+    "avg_points_per_match": 24.36
+  },
+  {
+    "team": "Brive",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 85,
+    "total_penalties": 46,
+    "total_conversions": 71,
+    "total_points": 16514,
+    "avg_points_per_match": 28.72
+  },
+  {
+    "team": "Vannes",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 117,
+    "total_penalties": 24,
+    "total_conversions": 96,
+    "total_points": 19688,
+    "avg_points_per_match": 34.24
+  },
+  {
+    "team": "Montauban",
+    "season": "2025-2026",
+    "matches": 30,
+    "total_tries": 72,
+    "total_penalties": 31,
+    "total_conversions": 60,
+    "total_points": 13248,
+    "avg_points_per_match": 19.2
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2025-2026",
+    "matches": 33,
+    "total_tries": 138,
+    "total_penalties": 38,
+    "total_conversions": 118,
+    "total_points": 25047,
+    "avg_points_per_match": 33.0
+  },
+  {
+    "team": "Perpignan",
+    "season": "2025-2026",
+    "matches": 31,
+    "total_tries": 76,
+    "total_penalties": 53,
+    "total_conversions": 57,
+    "total_points": 15502,
+    "avg_points_per_match": 21.741935483870968
+  },
+  {
+    "team": "Bayonne",
+    "season": "2025-2026",
+    "matches": 30,
+    "total_tries": 99,
+    "total_penalties": 44,
+    "total_conversions": 77,
+    "total_points": 18515,
+    "avg_points_per_match": 26.833333333333332
+  },
+  {
+    "team": "Castres",
+    "season": "2025-2026",
+    "matches": 31,
+    "total_tries": 100,
+    "total_penalties": 49,
+    "total_conversions": 76,
+    "total_points": 18377,
+    "avg_points_per_match": 25.774193548387096
+  },
+  {
+    "team": "Racing 92",
+    "season": "2025-2026",
+    "matches": 32,
+    "total_tries": 118,
+    "total_penalties": 55,
+    "total_conversions": 96,
+    "total_points": 22080,
+    "avg_points_per_match": 30.0
+  },
+  {
+    "team": "Lyon",
+    "season": "2025-2026",
+    "matches": 30,
+    "total_tries": 105,
+    "total_penalties": 39,
+    "total_conversions": 88,
+    "total_points": 18883,
+    "avg_points_per_match": 27.366666666666667
+  },
+  {
+    "team": "Pau",
+    "season": "2025-2026",
+    "matches": 32,
+    "total_tries": 119,
+    "total_penalties": 65,
+    "total_conversions": 88,
+    "total_points": 22379,
+    "avg_points_per_match": 30.40625
+  },
+  {
+    "team": "Montpellier",
+    "season": "2025-2026",
+    "matches": 36,
+    "total_tries": 146,
+    "total_penalties": 63,
+    "total_conversions": 110,
+    "total_points": 26749,
+    "avg_points_per_match": 32.30555555555556
+  },
+  {
+    "team": "Toulon",
+    "season": "2025-2026",
+    "matches": 33,
+    "total_tries": 118,
+    "total_penalties": 33,
+    "total_conversions": 98,
+    "total_points": 20976,
+    "avg_points_per_match": 27.636363636363637
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2025-2026",
+    "matches": 34,
+    "total_tries": 162,
+    "total_penalties": 39,
+    "total_conversions": 117,
+    "total_points": 26864,
+    "avg_points_per_match": 34.35294117647059
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2025-2026",
+    "matches": 33,
+    "total_tries": 127,
+    "total_penalties": 45,
+    "total_conversions": 98,
+    "total_points": 22540,
+    "avg_points_per_match": 29.696969696969695
+  },
+  {
+    "team": "Clermont",
+    "season": "2025-2026",
+    "matches": 30,
+    "total_tries": 106,
+    "total_penalties": 42,
+    "total_conversions": 84,
+    "total_points": 19987,
+    "avg_points_per_match": 28.966666666666665
+  },
+  {
+    "team": "Toulouse",
+    "season": "2025-2026",
+    "matches": 34,
+    "total_tries": 182,
+    "total_penalties": 34,
+    "total_conversions": 155,
+    "total_points": 30406,
+    "avg_points_per_match": 38.88235294117647
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 91,
+    "total_penalties": 16,
+    "total_conversions": 70,
+    "total_points": 14996,
+    "avg_points_per_match": 27.166666666666668
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2025-2026",
+    "matches": 22,
+    "total_tries": 72,
+    "total_penalties": 11,
+    "total_conversions": 53,
+    "total_points": 11477,
+    "avg_points_per_match": 22.681818181818183
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 85,
+    "total_penalties": 45,
+    "total_conversions": 61,
+    "total_points": 16169,
+    "avg_points_per_match": 28.12
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2025-2026",
+    "matches": 29,
+    "total_tries": 129,
+    "total_penalties": 16,
+    "total_conversions": 96,
+    "total_points": 20355,
+    "avg_points_per_match": 30.517241379310345
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 60,
+    "total_penalties": 12,
+    "total_conversions": 41,
+    "total_points": 9614,
+    "avg_points_per_match": 18.17391304347826
+  },
+  {
+    "team": "Saracens",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 104,
+    "total_penalties": 16,
+    "total_conversions": 72,
+    "total_points": 17089,
+    "avg_points_per_match": 32.30434782608695
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 140,
+    "total_penalties": 10,
+    "total_conversions": 104,
+    "total_points": 21896,
+    "avg_points_per_match": 36.61538461538461
+  },
+  {
+    "team": "Harlequins",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 92,
+    "total_penalties": 14,
+    "total_conversions": 70,
+    "total_points": 14927,
+    "avg_points_per_match": 28.217391304347824
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 86,
+    "total_penalties": 11,
+    "total_conversions": 58,
+    "total_points": 13478,
+    "avg_points_per_match": 25.47826086956522
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 105,
+    "total_penalties": 10,
+    "total_conversions": 81,
+    "total_points": 16813,
+    "avg_points_per_match": 29.24
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 99,
+    "total_penalties": 2,
+    "total_conversions": 78,
+    "total_points": 15916,
+    "avg_points_per_match": 26.615384615384617
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 67,
+    "total_penalties": 20,
+    "total_conversions": 53,
+    "total_points": 12167,
+    "avg_points_per_match": 21.16
+  },
+  {
+    "team": "Ospreys",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 73,
+    "total_penalties": 6,
+    "total_conversions": 56,
+    "total_points": 11546,
+    "avg_points_per_match": 21.82608695652174
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 109,
+    "total_penalties": 18,
+    "total_conversions": 79,
+    "total_points": 17802,
+    "avg_points_per_match": 29.76923076923077
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 69,
+    "total_penalties": 7,
+    "total_conversions": 41,
+    "total_points": 10626,
+    "avg_points_per_match": 20.08695652173913
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 63,
+    "total_penalties": 21,
+    "total_conversions": 48,
+    "total_points": 10902,
+    "avg_points_per_match": 19.75
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 78,
+    "total_penalties": 10,
+    "total_conversions": 50,
+    "total_points": 12190,
+    "avg_points_per_match": 22.083333333333332
+  },
+  {
+    "team": "Scarlets",
+    "season": "2025-2026",
+    "matches": 22,
+    "total_tries": 64,
+    "total_penalties": 15,
+    "total_conversions": 46,
+    "total_points": 10672,
+    "avg_points_per_match": 21.09090909090909
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 71,
+    "total_penalties": 14,
+    "total_conversions": 45,
+    "total_points": 11201,
+    "avg_points_per_match": 20.291666666666668
+  },
+  {
+    "team": "Fidelity SecureDrive Lions",
+    "season": "2025-2026",
+    "matches": 21,
+    "total_tries": 76,
+    "total_penalties": 23,
+    "total_conversions": 53,
+    "total_points": 12926,
+    "avg_points_per_match": 26.761904761904763
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2025-2026",
+    "matches": 25,
+    "total_tries": 97,
+    "total_penalties": 15,
+    "total_conversions": 78,
+    "total_points": 15939,
+    "avg_points_per_match": 27.72
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 75,
+    "total_penalties": 30,
+    "total_conversions": 55,
+    "total_points": 13524,
+    "avg_points_per_match": 24.5
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 149,
+    "total_penalties": 12,
+    "total_conversions": 111,
+    "total_points": 23230,
+    "avg_points_per_match": 38.84615384615385
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 106,
+    "total_penalties": 24,
+    "total_conversions": 81,
+    "total_points": 17963,
+    "avg_points_per_match": 28.925925925925927
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2025-2026",
+    "matches": 24,
+    "total_tries": 105,
+    "total_penalties": 24,
+    "total_conversions": 71,
+    "total_points": 17158,
+    "avg_points_per_match": 31.083333333333332
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2025-2026",
+    "matches": 23,
+    "total_tries": 101,
+    "total_penalties": 12,
+    "total_conversions": 75,
+    "total_points": 16215,
+    "avg_points_per_match": 30.652173913043477
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 104,
+    "total_penalties": 20,
+    "total_conversions": 66,
+    "total_points": 16767,
+    "avg_points_per_match": 28.03846153846154
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 96,
+    "total_penalties": 9,
+    "total_conversions": 66,
+    "total_points": 14697,
+    "avg_points_per_match": 24.576923076923077
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2025-2026",
+    "matches": 29,
+    "total_tries": 153,
+    "total_penalties": 6,
+    "total_conversions": 106,
+    "total_points": 22885,
+    "avg_points_per_match": 34.310344827586206
+  },
+  {
+    "team": "Coventry",
+    "season": "2025-2026",
+    "matches": 28,
+    "total_tries": 159,
+    "total_penalties": 16,
+    "total_conversions": 124,
+    "total_points": 25415,
+    "avg_points_per_match": 39.464285714285715
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 116,
+    "total_penalties": 4,
+    "total_conversions": 82,
+    "total_points": 17710,
+    "avg_points_per_match": 29.615384615384617
+  },
+  {
+    "team": "Hartpury",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 106,
+    "total_penalties": 30,
+    "total_conversions": 85,
+    "total_points": 18331,
+    "avg_points_per_match": 29.51851851851852
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 104,
+    "total_penalties": 17,
+    "total_conversions": 74,
+    "total_points": 16698,
+    "avg_points_per_match": 26.88888888888889
+  },
+  {
+    "team": "Cambridge",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 65,
+    "total_penalties": 6,
+    "total_conversions": 38,
+    "total_points": 10281,
+    "avg_points_per_match": 17.192307692307693
+  },
+  {
+    "team": "Ampthill",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 122,
+    "total_penalties": 10,
+    "total_conversions": 86,
+    "total_points": 19044,
+    "avg_points_per_match": 31.846153846153847
+  },
+  {
+    "team": "London Scottish",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 69,
+    "total_penalties": 12,
+    "total_conversions": 42,
+    "total_points": 11178,
+    "avg_points_per_match": 18.0
+  },
+  {
+    "team": "Caldy",
+    "season": "2025-2026",
+    "matches": 26,
+    "total_tries": 86,
+    "total_penalties": 7,
+    "total_conversions": 51,
+    "total_points": 13202,
+    "avg_points_per_match": 22.076923076923077
+  },
+  {
+    "team": "Richmond",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 81,
+    "total_penalties": 12,
+    "total_conversions": 59,
+    "total_points": 12857,
+    "avg_points_per_match": 20.703703703703702
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2025-2026",
+    "matches": 28,
+    "total_tries": 125,
+    "total_penalties": 17,
+    "total_conversions": 92,
+    "total_points": 20102,
+    "avg_points_per_match": 31.214285714285715
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2025-2026",
+    "matches": 27,
+    "total_tries": 179,
+    "total_penalties": 9,
+    "total_conversions": 116,
+    "total_points": 26542,
+    "avg_points_per_match": 42.74074074074074
+  },
+  {
+    "team": "All Blacks XV",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 7,
+    "total_penalties": 0,
+    "total_conversions": 5,
+    "total_points": 1035,
+    "avg_points_per_match": 45.0
+  },
+  {
+    "team": "JAP",
+    "season": "2025-2026",
+    "matches": 2,
+    "total_tries": 3,
+    "total_penalties": 0,
+    "total_conversions": 2,
+    "total_points": 920,
+    "avg_points_per_match": 20.0
+  },
+  {
+    "team": "Hong Kong",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 0,
+    "total_penalties": 0,
+    "total_conversions": 0,
+    "total_points": 36,
+    "avg_points_per_match": 12.0
+  },
+  {
+    "team": "Tonga",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 0,
+    "total_penalties": 0,
+    "total_conversions": 0,
+    "total_points": 0,
+    "avg_points_per_match": 0.0
+  },
+  {
+    "team": "Emirates Lions",
+    "season": "2025-2026",
+    "matches": 2,
+    "total_tries": 9,
+    "total_penalties": 3,
+    "total_conversions": 8,
+    "total_points": 1610,
+    "avg_points_per_match": 35.0
+  },
+  {
+    "team": "Black Lion",
+    "season": "2025-2026",
+    "matches": 4,
+    "total_tries": 7,
+    "total_penalties": 2,
+    "total_conversions": 5,
+    "total_points": 1334,
+    "avg_points_per_match": 14.5
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2025-2026",
+    "matches": 3,
+    "total_tries": 8,
+    "total_penalties": 1,
+    "total_conversions": 6,
+    "total_points": 1426,
+    "avg_points_per_match": 20.666666666666668
+  },
+  {
+    "team": "Kobe Steelers",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 1,
+    "total_penalties": 5,
+    "total_conversions": 1,
+    "total_points": 506,
+    "avg_points_per_match": 22.0
+  },
+  {
+    "team": "Kubota Spears",
+    "season": "2025-2026",
+    "matches": 1,
+    "total_tries": 1,
+    "total_penalties": 2,
+    "total_conversions": 1,
+    "total_points": 299,
+    "avg_points_per_match": 13.0
+  },
+  {
+    "team": "France",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 28,
+    "total_penalties": 3,
+    "total_conversions": 24,
+    "total_points": 4853,
+    "avg_points_per_match": 42.2
+  },
+  {
+    "team": "Ireland",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 20,
+    "total_penalties": 6,
+    "total_conversions": 14,
+    "total_points": 3358,
+    "avg_points_per_match": 29.2
+  },
+  {
+    "team": "Scotland",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 20,
+    "total_penalties": 3,
+    "total_conversions": 17,
+    "total_points": 3289,
+    "avg_points_per_match": 28.6
+  },
+  {
+    "team": "Italy",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 9,
+    "total_penalties": 8,
+    "total_conversions": 5,
+    "total_points": 1817,
+    "avg_points_per_match": 15.8
+  },
+  {
+    "team": "England",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 20,
+    "total_penalties": 6,
+    "total_conversions": 14,
+    "total_points": 3519,
+    "avg_points_per_match": 30.6
+  },
+  {
+    "team": "Wales",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 11,
+    "total_penalties": 4,
+    "total_conversions": 10,
+    "total_points": 2070,
+    "avg_points_per_match": 18.0
+  },
+  {
+    "team": "Biarritz",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 24,
+    "total_penalties": 14,
+    "total_conversions": 17,
+    "total_points": 4899,
+    "avg_points_per_match": 30.428571428571427
+  },
+  {
+    "team": "Nissa Rugby",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 25,
+    "total_penalties": 6,
+    "total_conversions": 14,
+    "total_points": 3933,
+    "avg_points_per_match": 24.428571428571427
+  },
+  {
+    "team": "Aurillac",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 31,
+    "total_penalties": 10,
+    "total_conversions": 26,
+    "total_points": 5520,
+    "avg_points_per_match": 34.285714285714285
+  },
+  {
+    "team": "Grenoble",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 24,
+    "total_penalties": 19,
+    "total_conversions": 18,
+    "total_points": 4899,
+    "avg_points_per_match": 30.428571428571427
+  },
+  {
+    "team": "Nevers",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 18,
+    "total_penalties": 10,
+    "total_conversions": 13,
+    "total_points": 3358,
+    "avg_points_per_match": 20.857142857142858
+  },
+  {
+    "team": "Montauban",
+    "season": "2026-2027",
+    "matches": 8,
+    "total_tries": 26,
+    "total_penalties": 9,
+    "total_conversions": 21,
+    "total_points": 4738,
+    "avg_points_per_match": 25.75
+  },
+  {
+    "team": "Colomiers",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 30,
+    "total_penalties": 8,
+    "total_conversions": 23,
+    "total_points": 5060,
+    "avg_points_per_match": 31.428571428571427
+  },
+  {
+    "team": "Beziers",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 17,
+    "total_penalties": 9,
+    "total_conversions": 14,
+    "total_points": 3381,
+    "avg_points_per_match": 21.0
+  },
+  {
+    "team": "Soyaux Angouleme",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 28,
+    "total_penalties": 14,
+    "total_conversions": 19,
+    "total_points": 5060,
+    "avg_points_per_match": 31.428571428571427
+  },
+  {
+    "team": "Oyonnax",
+    "season": "2026-2027",
+    "matches": 8,
+    "total_tries": 42,
+    "total_penalties": 15,
+    "total_conversions": 37,
+    "total_points": 7728,
+    "avg_points_per_match": 42.0
+  },
+  {
+    "team": "Narbonne",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 24,
+    "total_penalties": 8,
+    "total_conversions": 21,
+    "total_points": 4278,
+    "avg_points_per_match": 26.571428571428573
+  },
+  {
+    "team": "Dax",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 35,
+    "total_penalties": 9,
+    "total_conversions": 29,
+    "total_points": 6187,
+    "avg_points_per_match": 38.42857142857143
+  },
+  {
+    "team": "Provence",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 27,
+    "total_penalties": 15,
+    "total_conversions": 21,
+    "total_points": 5106,
+    "avg_points_per_match": 31.714285714285715
+  },
+  {
+    "team": "Agen",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 24,
+    "total_penalties": 6,
+    "total_conversions": 22,
+    "total_points": 4347,
+    "avg_points_per_match": 27.0
+  },
+  {
+    "team": "Valence-Romans",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 23,
+    "total_penalties": 12,
+    "total_conversions": 17,
+    "total_points": 4416,
+    "avg_points_per_match": 27.428571428571427
+  },
+  {
+    "team": "Brive",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 22,
+    "total_penalties": 17,
+    "total_conversions": 19,
+    "total_points": 4738,
+    "avg_points_per_match": 29.428571428571427
+  },
+  {
+    "team": "Clermont",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 20,
+    "total_penalties": 11,
+    "total_conversions": 15,
+    "total_points": 3749,
+    "avg_points_per_match": 23.285714285714285
+  },
+  {
+    "team": "Bayonne",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 29,
+    "total_penalties": 10,
+    "total_conversions": 22,
+    "total_points": 5037,
+    "avg_points_per_match": 31.285714285714285
+  },
+  {
+    "team": "Perpignan",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 22,
+    "total_penalties": 10,
+    "total_conversions": 20,
+    "total_points": 4140,
+    "avg_points_per_match": 25.714285714285715
+  },
+  {
+    "team": "Toulon",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 18,
+    "total_penalties": 13,
+    "total_conversions": 14,
+    "total_points": 3611,
+    "avg_points_per_match": 22.428571428571427
+  },
+  {
+    "team": "Pau",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 37,
+    "total_penalties": 11,
+    "total_conversions": 31,
+    "total_points": 6440,
+    "avg_points_per_match": 40.0
+  },
+  {
+    "team": "Stade Francais",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 21,
+    "total_penalties": 9,
+    "total_conversions": 14,
+    "total_points": 3841,
+    "avg_points_per_match": 23.857142857142858
+  },
+  {
+    "team": "Montpellier",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 27,
+    "total_penalties": 10,
+    "total_conversions": 15,
+    "total_points": 4485,
+    "avg_points_per_match": 27.857142857142858
+  },
+  {
+    "team": "Lyon",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 30,
+    "total_penalties": 10,
+    "total_conversions": 23,
+    "total_points": 5198,
+    "avg_points_per_match": 32.285714285714285
+  },
+  {
+    "team": "Vannes",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 18,
+    "total_penalties": 5,
+    "total_conversions": 14,
+    "total_points": 3128,
+    "avg_points_per_match": 19.428571428571427
+  },
+  {
+    "team": "Castres",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 16,
+    "total_penalties": 11,
+    "total_conversions": 12,
+    "total_points": 3312,
+    "avg_points_per_match": 20.571428571428573
+  },
+  {
+    "team": "Racing 92",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 21,
+    "total_penalties": 11,
+    "total_conversions": 15,
+    "total_points": 3864,
+    "avg_points_per_match": 24.0
+  },
+  {
+    "team": "Bordeaux-Begles",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 36,
+    "total_penalties": 7,
+    "total_conversions": 25,
+    "total_points": 5773,
+    "avg_points_per_match": 35.857142857142854
+  },
+  {
+    "team": "Toulouse",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 35,
+    "total_penalties": 4,
+    "total_conversions": 23,
+    "total_points": 5520,
+    "avg_points_per_match": 34.285714285714285
+  },
+  {
+    "team": "La Rochelle",
+    "season": "2026-2027",
+    "matches": 7,
+    "total_tries": 23,
+    "total_penalties": 8,
+    "total_conversions": 18,
+    "total_points": 4025,
+    "avg_points_per_match": 25.0
+  },
+  {
+    "team": "Nottingham Rugby",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 19,
+    "total_penalties": 1,
+    "total_conversions": 15,
+    "total_points": 2944,
+    "avg_points_per_match": 25.6
+  },
+  {
+    "team": "Blackheath",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 19,
+    "total_penalties": 6,
+    "total_conversions": 13,
+    "total_points": 3358,
+    "avg_points_per_match": 29.2
+  },
+  {
+    "team": "Caldy",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 26,
+    "total_penalties": 0,
+    "total_conversions": 22,
+    "total_points": 4002,
+    "avg_points_per_match": 34.8
+  },
+  {
+    "team": "Rotherham Titans",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 24,
+    "total_penalties": 1,
+    "total_conversions": 15,
+    "total_points": 3680,
+    "avg_points_per_match": 32.0
+  },
+  {
+    "team": "Worcester Warriors",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 37,
+    "total_penalties": 1,
+    "total_conversions": 29,
+    "total_points": 5658,
+    "avg_points_per_match": 49.2
+  },
+  {
+    "team": "Coventry",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 36,
+    "total_penalties": 1,
+    "total_conversions": 30,
+    "total_points": 5589,
+    "avg_points_per_match": 48.6
+  },
+  {
+    "team": "Bedford Blues",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 22,
+    "total_penalties": 1,
+    "total_conversions": 15,
+    "total_points": 3289,
+    "avg_points_per_match": 28.6
+  },
+  {
+    "team": "Hartpury",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 15,
+    "total_penalties": 4,
+    "total_conversions": 11,
+    "total_points": 2668,
+    "avg_points_per_match": 23.2
+  },
+  {
+    "team": "Chinnor RFC Thame",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 28,
+    "total_penalties": 0,
+    "total_conversions": 20,
+    "total_points": 4140,
+    "avg_points_per_match": 36.0
+  },
+  {
+    "team": "Ealing Trailfinders",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 38,
+    "total_penalties": 0,
+    "total_conversions": 26,
+    "total_points": 5566,
+    "avg_points_per_match": 48.4
+  },
+  {
+    "team": "Richmond",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 19,
+    "total_penalties": 0,
+    "total_conversions": 14,
+    "total_points": 2829,
+    "avg_points_per_match": 24.6
+  },
+  {
+    "team": "Ampthill",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 29,
+    "total_penalties": 0,
+    "total_conversions": 24,
+    "total_points": 4439,
+    "avg_points_per_match": 38.6
+  },
+  {
+    "team": "Cornish Pirates",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 26,
+    "total_penalties": 1,
+    "total_conversions": 21,
+    "total_points": 4186,
+    "avg_points_per_match": 36.4
+  },
+  {
+    "team": "Doncaster Knights",
+    "season": "2026-2027",
+    "matches": 5,
+    "total_tries": 23,
+    "total_penalties": 1,
+    "total_conversions": 18,
+    "total_points": 3703,
+    "avg_points_per_match": 32.2
+  },
+  {
+    "team": "Benetton Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 10,
+    "total_penalties": 3,
+    "total_conversions": 7,
+    "total_points": 1679,
+    "avg_points_per_match": 18.25
+  },
+  {
+    "team": "Connacht Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 16,
+    "total_penalties": 1,
+    "total_conversions": 9,
+    "total_points": 2323,
+    "avg_points_per_match": 25.25
+  },
+  {
+    "team": "Newcastle Falcons",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 13,
+    "total_penalties": 0,
+    "total_conversions": 11,
+    "total_points": 2001,
+    "avg_points_per_match": 21.75
+  },
+  {
+    "team": "Northampton Saints",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 28,
+    "total_penalties": 0,
+    "total_conversions": 22,
+    "total_points": 4232,
+    "avg_points_per_match": 46.0
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 12,
+    "total_penalties": 5,
+    "total_conversions": 11,
+    "total_points": 2231,
+    "avg_points_per_match": 24.25
+  },
+  {
+    "team": "Ulster Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 19,
+    "total_penalties": 1,
+    "total_conversions": 15,
+    "total_points": 2944,
+    "avg_points_per_match": 32.0
+  },
+  {
+    "team": "DHL Stormers",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 18,
+    "total_penalties": 4,
+    "total_conversions": 14,
+    "total_points": 2990,
+    "avg_points_per_match": 32.5
+  },
+  {
+    "team": "Dragons RFC",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 16,
+    "total_penalties": 2,
+    "total_conversions": 12,
+    "total_points": 2691,
+    "avg_points_per_match": 29.25
+  },
+  {
+    "team": "Harlequins",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 16,
+    "total_penalties": 0,
+    "total_conversions": 9,
+    "total_points": 2254,
+    "avg_points_per_match": 24.5
+  },
+  {
+    "team": "Bath Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 19,
+    "total_penalties": 1,
+    "total_conversions": 15,
+    "total_points": 3105,
+    "avg_points_per_match": 33.75
+  },
+  {
+    "team": "Leinster Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 18,
+    "total_penalties": 2,
+    "total_conversions": 10,
+    "total_points": 2829,
+    "avg_points_per_match": 30.75
+  },
+  {
+    "team": "10bet Lions",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 13,
+    "total_penalties": 4,
+    "total_conversions": 7,
+    "total_points": 2093,
+    "avg_points_per_match": 22.75
+  },
+  {
+    "team": "Ospreys",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 20,
+    "total_penalties": 0,
+    "total_conversions": 10,
+    "total_points": 2760,
+    "avg_points_per_match": 30.0
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 18,
+    "total_penalties": 3,
+    "total_conversions": 15,
+    "total_points": 2967,
+    "avg_points_per_match": 32.25
+  },
+  {
+    "team": "Exeter Chiefs",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 20,
+    "total_penalties": 2,
+    "total_conversions": 13,
+    "total_points": 3036,
+    "avg_points_per_match": 33.0
+  },
+  {
+    "team": "Gloucester Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 24,
+    "total_penalties": 2,
+    "total_conversions": 17,
+    "total_points": 3680,
+    "avg_points_per_match": 40.0
+  },
+  {
+    "team": "Bristol Bears",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 13,
+    "total_penalties": 2,
+    "total_conversions": 8,
+    "total_points": 2162,
+    "avg_points_per_match": 23.5
+  },
+  {
+    "team": "Sale Sharks",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 13,
+    "total_penalties": 2,
+    "total_conversions": 11,
+    "total_points": 2300,
+    "avg_points_per_match": 25.0
+  },
+  {
+    "team": "Munster Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 15,
+    "total_penalties": 2,
+    "total_conversions": 12,
+    "total_points": 2415,
+    "avg_points_per_match": 26.25
+  },
+  {
+    "team": "Vodacom Bulls",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 26,
+    "total_penalties": 1,
+    "total_conversions": 21,
+    "total_points": 4186,
+    "avg_points_per_match": 45.5
+  },
+  {
+    "team": "Zebre Parma",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 10,
+    "total_penalties": 3,
+    "total_conversions": 7,
+    "total_points": 1679,
+    "avg_points_per_match": 18.25
+  },
+  {
+    "team": "Glasgow Warriors",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 20,
+    "total_penalties": 1,
+    "total_conversions": 16,
+    "total_points": 3266,
+    "avg_points_per_match": 35.5
+  },
+  {
+    "team": "Scarlets",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 17,
+    "total_penalties": 2,
+    "total_conversions": 12,
+    "total_points": 2645,
+    "avg_points_per_match": 28.75
+  },
+  {
+    "team": "Cardiff Rugby",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 12,
+    "total_penalties": 0,
+    "total_conversions": 9,
+    "total_points": 1794,
+    "avg_points_per_match": 19.5
+  },
+  {
+    "team": "Saracens",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 18,
+    "total_penalties": 2,
+    "total_conversions": 10,
+    "total_points": 2829,
+    "avg_points_per_match": 30.75
+  },
+  {
+    "team": "Leicester Tigers",
+    "season": "2026-2027",
+    "matches": 4,
+    "total_tries": 16,
+    "total_penalties": 3,
+    "total_conversions": 14,
+    "total_points": 2691,
+    "avg_points_per_match": 29.25
+  },
+  {
+    "team": "Black Lion",
+    "season": "2026-2027",
+    "matches": 1,
+    "total_tries": 2,
+    "total_penalties": 0,
+    "total_conversions": 2,
+    "total_points": 322,
+    "avg_points_per_match": 14.0
+  },
+  {
+    "team": "Cheetahs",
+    "season": "2026-2027",
+    "matches": 1,
+    "total_tries": 3,
+    "total_penalties": 2,
+    "total_conversions": 3,
+    "total_points": 621,
+    "avg_points_per_match": 27.0
+  }
+]

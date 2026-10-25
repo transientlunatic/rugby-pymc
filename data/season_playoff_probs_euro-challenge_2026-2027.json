@@ -1,0 +1,78 @@
+[
+  {
+    "team": "Ospreys",
+    "playoff_probability": 0.922
+  },
+  {
+    "team": "Ulster Rugby",
+    "playoff_probability": 0.871
+  },
+  {
+    "team": "Hollywoodbets Sharks",
+    "playoff_probability": 0.854
+  },
+  {
+    "team": "Scarlets",
+    "playoff_probability": 0.794
+  },
+  {
+    "team": "Dragons RFC",
+    "playoff_probability": 0.731
+  },
+  {
+    "team": "Harlequins",
+    "playoff_probability": 0.591
+  },
+  {
+    "team": "Toulon",
+    "playoff_probability": 0.517
+  },
+  {
+    "team": "Bayonne",
+    "playoff_probability": 0.516
+  },
+  {
+    "team": "Cheetahs",
+    "playoff_probability": 0.444
+  },
+  {
+    "team": "Newcastle Falcons",
+    "playoff_probability": 0.324
+  },
+  {
+    "team": "Castres",
+    "playoff_probability": 0.323
+  },
+  {
+    "team": "Edinburgh Rugby",
+    "playoff_probability": 0.244
+  },
+  {
+    "team": "Benetton Rugby",
+    "playoff_probability": 0.196
+  },
+  {
+    "team": "Perpignan",
+    "playoff_probability": 0.188
+  },
+  {
+    "team": "Lyon",
+    "playoff_probability": 0.186
+  },
+  {
+    "team": "Black Lion",
+    "playoff_probability": 0.132
+  },
+  {
+    "team": "Vannes",
+    "playoff_probability": 0.094
+  },
+  {
+    "team": "Zebre Parma",
+    "playoff_probability": 0.073
+  },
+  {
+    "team": "TBC",
+    "playoff_probability": 0.0
+  }
+]

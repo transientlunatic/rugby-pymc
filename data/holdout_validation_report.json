@@ -1,0 +1,77 @@
+{
+  "generated_at": "2026-10-25T08:02:06.207250+00:00",
+  "as_of": "2026-10-25T07:56:55.914282+00:00",
+  "data_slice": {
+    "recent_season_start_years": [
+      2024,
+      2025,
+      2026
+    ],
+    "n_rows_total": 106651,
+    "n_train_matches": 1974,
+    "n_test_matches": 348
+  },
+  "fit": {
+    "method": "vi/advi",
+    "n_iterations": 20000,
+    "fit_seconds": 308.57046914100647
+  },
+  "n_test_rows_known_to_model": 6969,
+  "n_test_rows_total": 16008,
+  "out_of_sample_calibration": {
+    "tries": {
+      "n_observations": 6880,
+      "mean_predicted": 0.16538393895348838,
+      "mean_observed": 0.18691860465116278,
+      "mean_absolute_calibration_error": 0.021489334006746724
+    },
+    "penalties": {
+      "n_observations": 6880,
+      "mean_predicted": 0.05736453488372093,
+      "mean_observed": 0.03604651162790698,
+      "mean_absolute_calibration_error": 0.021079626095615218
+    },
+    "conversions": {
+      "n_observations": 6880,
+      "mean_predicted": 0.12705101744186048,
+      "mean_observed": 0.13924418604651162,
+      "mean_absolute_calibration_error": 0.04126933802990161
+    },
+    "drop_goals": {
+      "n_observations": 6880,
+      "mean_predicted": 0.001527761627906977,
+      "mean_observed": 0.00029069767441860465,
+      "mean_absolute_calibration_error": 0.002148688270556605
+    }
+  },
+  "match_level_test": {
+    "n_matches": 348,
+    "n_predicted_ok": 319,
+    "n_predicted_failed": 29,
+    "model": {
+      "win_accuracy": 0.658307210031348,
+      "brier_score": 0.43359370532915364,
+      "score_rmse": 12.866018520770227,
+      "score_mae": 10.279210031347963
+    },
+    "baseline_always_predict_mode_outcome": {
+      "computed_from": "training set only (no test-set leakage)",
+      "outcome_predicted": "home",
+      "win_accuracy": 0.6666666666666666,
+      "brier_score": 0.45705392723580746,
+      "score_rmse_predicting_mean_score": 14.128153278417827,
+      "home_win_rate": 0.6651469098277609,
+      "away_win_rate": 0.31560283687943264,
+      "draw_rate": 0.019250253292806486
+    },
+    "elo_baseline": {
+      "computed_from": "training set only, k/home_advantage calibrated on an inner split of training data, ratings frozen at end of training (not updated sequentially through the test set)",
+      "k": 32.0,
+      "home_advantage": 120.0,
+      "win_accuracy": 0.6666666666666666,
+      "brier_score": 0.4456418403694585,
+      "score_rmse": 13.745009664483902
+    }
+  },
+  "total_wall_seconds": 330.5688407421112
+}
